@@ -1,0 +1,165 @@
+.hand-header{
+  height:140px;
+  background:linear-gradient(180deg,#0a1f3f 0%,#0b1734 100%);
+  color:#f8fafc;
+  font-size:44px;
+  font-weight:800;
+  letter-spacing:.16em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-bottom:4px solid #2fb7ff;
+  text-shadow:0 4px 10px rgba(0,0,0,0.5);
+}
+
+.mockup-frame{
+  position:relative;
+}
+
+.hand-body{
+  height:calc(1920px - 140px);
+  padding:60px 70px 200px;
+  display:flex;
+  flex-direction:column;
+  gap:46px;
+  color:#e2e8f0;
+}
+
+.hand-form{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+
+.hand-row{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  align-items:center;
+  gap:26px;
+}
+
+.hand-row label{
+  font-size:34px;
+  font-weight:700;
+}
+
+.hand-row input,
+.hand-row select{
+  height:82px;
+  border-radius:36px;
+  border:2px solid rgba(255,255,255,0.35);
+  background:linear-gradient(180deg,rgba(255,255,255,0.28) 0%,rgba(255,255,255,0.12) 100%);
+  color:#f1f5f9;
+  font-size:30px;
+  font-weight:700;
+  padding:0 26px;
+  box-shadow:
+  inset 0 4px 10px rgba(0,0,0,0.35),
+  0 3px 8px rgba(0,0,0,0.35);
+}
+
+.hand-row input::placeholder{
+  color:rgba(248,250,252,0.7);
+}
+
+.hand-right{
+  text-align:right;
+  padding-right:32px;
+}
+
+.hand-actions{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:26px 36px;
+  margin-top:auto;
+}
+
+.hand-btn{
+  height:140px;
+  border-radius:24px;
+  border:none;
+  font-size:40px;
+  font-weight:800;
+  color:white;
+  text-shadow:0 4px 10px rgba(0,0,0,0.35);
+  box-shadow:
+  0 16px 34px rgba(0,0,0,0.35),
+  inset 0 2px 0 rgba(255,255,255,0.3);
+}
+
+.hand-primary{
+  background:linear-gradient(180deg,#4aa3ff 0%,#1e4fb8 100%);
+}
+
+.hand-warning{
+  background:linear-gradient(180deg,#f3b439 0%,#b56c12 100%);
+}
+
+.hand-footer{
+  margin-top:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#cbd5f5;
+  font-size:24px;
+}
+
+.hand-footer-left{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.hand-pill{
+  padding:6px 18px;
+  border-radius:12px;
+  background:#1f2a44;
+  border:1px solid #4a5b77;
+  font-weight:800;
+}
+
+.hand-footer-right{
+  font-weight:700;
+}
+
+/* MATCH MAIN FOOTER */
+
+.mockup-footer{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:24px 80px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+  font-size:28px;
+}
+
+.mockup-footer-left{
+  display:flex;
+  gap:20px;
+}
+
+.mockup-status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:110px;
+  height:50px;
+  padding:0 16px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.5);
+  background:
+  linear-gradient(
+  180deg,
+  rgba(255,255,255,.3),
+  rgba(255,255,255,.05)
+  );
+}
+
+.mockup-footer-right{
+  font-size:30px;
+  text-shadow:0 3px 8px rgba(0,0,0,.8);
+}
