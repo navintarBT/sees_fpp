@@ -61,22 +61,6 @@ const SetRegisterHandInputPage = () => {
                 戻る
               </button>
             </div>
-
-            <div className='mockup-footer'>
-              <div className='mockup-footer-left'>
-                <div className='mockup-status'>
-                  <BsBatteryHalf />
-                  <span>85%</span>
-                </div>
-                <div className='mockup-status'>
-                  <FaWifi />
-                </div>
-                <div className='mockup-status'>
-                  <FaSignal />
-                </div>
-              </div>
-              <div className='mockup-footer-right'>2019/10/08 11:09</div>
-            </div>
           </div>
         </div>
       </div>

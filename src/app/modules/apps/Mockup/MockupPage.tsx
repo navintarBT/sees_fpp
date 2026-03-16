@@ -50,22 +50,6 @@ const MockupMain = () => {
             </div>
 
             <button className='mockup-exit'>終了</button>
-
-            <div className='mockup-footer'>
-              <div className='mockup-footer-left'>
-            <div className='mockup-status'>
-              <BsBatteryHalf />
-              <span>85%</span>
-            </div>
-            <div className='mockup-status'>
-              <FaWifi />
-            </div>
-            <div className='mockup-status'>
-              <FaSignal />
-            </div>
-          </div>
-              <div className='mockup-footer-right'>2020/01/09 20:28</div>
-            </div>
           </div>
         </div>
       </div>

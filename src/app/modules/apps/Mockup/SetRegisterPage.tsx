@@ -50,6 +50,7 @@ const SetRegisterPage = () => {
       if (event.key === 'F2') {
         event.preventDefault()
         setShowHandInput((prev) => !prev)
+
       }
     }
     window.addEventListener('keydown', onKeyDown)
@@ -61,7 +62,7 @@ const SetRegisterPage = () => {
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
           <div className='set-header'>セット構成登録</div>
-          <div className={`set-body${showHandInput ? ' set-body-center' : ''}`}>
+          <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
                 <label>倉庫（親）</label>
@@ -114,9 +115,6 @@ const SetRegisterPage = () => {
 
             <div className='set-table-wrap'>
               <div className='set-table-tools'>
-                <button className='set-clear' onClick={clearRows}>
-                  クリア
-                </button>
               </div>
               <div className='set-table'>
                 <div className='set-table-scroll'>
@@ -205,21 +203,6 @@ const SetRegisterPage = () => {
               </div>
             )}
 
-            <div className='mockup-footer'>
-              <div className='mockup-footer-left'>
-                <div className='mockup-status'>
-                  <BsBatteryHalf />
-                  <span>85%</span>
-                </div>
-                <div className='mockup-status'>
-                  <FaWifi />
-                </div>
-                <div className='mockup-status'>
-                  <FaSignal />
-                </div>
-              </div>
-              <div className='mockup-footer-right'>2019/10/08 11:38</div>
-            </div>
           </div>
         </div>
       </div>
