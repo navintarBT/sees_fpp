@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaWifi, FaSignal} from 'react-icons/fa'
 import {BsBatteryHalf} from 'react-icons/bs'
@@ -5,6 +6,13 @@ import './SetRegisterHandInputPage.scss'
 
 const SetRegisterHandInputPage = () => {
   const navigate = useNavigate()
+  const [parentWarehouse, setParentWarehouse] = useState('')
+  const [parentItem, setParentItem] = useState('')
+  const [parentSerial, setParentSerial] = useState('')
+  const [moveStorage, setMoveStorage] = useState('')
+  const [quantity, setQuantity] = useState('1')
+
+  const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
     <div className='mockup-page'>
@@ -12,46 +20,51 @@ const SetRegisterHandInputPage = () => {
         <div className='mockup-frame'>
           <div className='hand-header'>セット構成登録手入力</div>
           <div className='hand-body'>
-            <div className='hand-form'>
+            <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
                 <label>倉庫（親）</label>
-                <select defaultValue='羽田製品倉庫：W0040'>
-                  <option>羽田製品倉庫：W0040</option>
+                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                  <option value=''></option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                 </select>
               </div>
               <div className='hand-row'>
                 <label>品目No.(親)</label>
-                <input value='0193090' readOnly />
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>シリアル(親)</label>
-                <input value='2NY21038' readOnly />
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>移動倉庫</label>
-                <select defaultValue='千葉倉庫（WMS）：W002'>
+                <select disabled={!isEnabled}>
                   <option>千葉倉庫（WMS）：W002</option>
+                  <option>千葉倉庫（WMS）：W003</option>
+                  <option>千葉倉庫（WMS）：W004</option>
                 </select>
               </div>
               <div className='hand-row'>
                 <label>移動保管場所</label>
-                <input value='' readOnly />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
               </div>
               <div className='hand-row'>
                 <label>数量</label>
-                <input value='1' readOnly className='hand-right' />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input defaultValue='' placeholder=' ' />
+                <input readOnly={!isEnabled} placeholder=' ' />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input defaultValue='' placeholder=' ' />
+                <input readOnly={!isEnabled} placeholder=' ' />
               </div>
               <div className='hand-row'>
                 <label>シリアル</label>
-                <input defaultValue='' placeholder=' ' />
+                <input readOnly={!isEnabled} placeholder=' ' />
               </div>
             </div>
 

@@ -6,18 +6,128 @@ import {BsBatteryHalf} from 'react-icons/bs'
 
 const SetRegisterPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState(
-    Array.from({length: 12}).map((_, i) => ({
-      id: i + 1,
-      status: '構成中',
+  const [rows, setRows] = useState([
+    {
+      id: 1,
+      item: 'A01', // 品目No.
+      lot: 'L01', // ロットシリアル
+      status: '中', // 状態
+      build: 2, // 構成数
+      release: 1, // 解除数
+      move: 'W1', // 移動倉
+      moveStorage: 'S1', // 移動保管場所
+      name: '部品A', // 品名
+      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
+    },
+    {
+      id: 2,
+      item: 'B02',
+      lot: 'L02',
+      status: '済',
       build: 1,
       release: 0,
-      move: 'W1041',
-      item: `ITM-${(i + 1).toString().padStart(3, '0')}`,
-      lot: `LOT-${(100 + i).toString()}`,
-      serial: `SR-${(9000 + i).toString()}`,
-    }))
-  )
+      move: 'W2',
+      moveStorage: 'S2',
+      name: '部品B',
+      moveStorage2: '棚B',
+    },
+    {
+      id: 3,
+      item: 'C03',
+      lot: 'L03',
+      status: '中',
+      build: 3,
+      release: 2,
+      move: 'W3',
+      moveStorage: 'S3',
+      name: '部品C',
+      moveStorage2: '棚C',
+    },
+    {
+      id: 4,
+      item: 'D04',
+      lot: 'L04',
+      status: '済',
+      build: 4,
+      release: 1,
+      move: 'W1',
+      moveStorage: 'S4',
+      name: '部品D',
+      moveStorage2: '棚D',
+    },
+    {
+      id: 5,
+      item: 'E05',
+      lot: 'L05',
+      status: '中',
+      build: 2,
+      release: 0,
+      move: 'W2',
+      moveStorage: 'S5',
+      name: '部品E',
+      moveStorage2: '棚E',
+    },
+    {
+      id: 6,
+      item: 'F06',
+      lot: 'L06',
+      status: '済',
+      build: 5,
+      release: 3,
+      move: 'W3',
+      moveStorage: 'S6',
+      name: '部品F',
+      moveStorage2: '棚F',
+    },
+    {
+      id: 7,
+      item: 'G07',
+      lot: 'L07',
+      status: '中',
+      build: 1,
+      release: 0,
+      move: 'W1',
+      moveStorage: 'S7',
+      name: '部品G',
+      moveStorage2: '棚G',
+    },
+    {
+      id: 8,
+      item: 'H08',
+      lot: 'L08',
+      status: '済',
+      build: 3,
+      release: 1,
+      move: 'W2',
+      moveStorage: 'S8',
+      name: '部品H',
+      moveStorage2: '棚H',
+    },
+    {
+      id: 9,
+      item: 'I09',
+      lot: 'L09',
+      status: '中',
+      build: 2,
+      release: 2,
+      move: 'W3',
+      moveStorage: 'S9',
+      name: '部品I',
+      moveStorage2: '棚I',
+    },
+    {
+      id: 10,
+      item: 'J10',
+      lot: 'L10',
+      status: '済',
+      build: 6,
+      release: 2,
+      move: 'W1',
+      moveStorage: 'S10',
+      name: '部品J',
+      moveStorage2: '棚J',
+    },
+  ])
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
     parentItemNo: '0193090',
@@ -72,10 +182,12 @@ const SetRegisterPage = () => {
                 >
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                 </select>
               </div>
               <div className='set-row'>
-                <label>品目No.(親)</label>
+                <label>JANコード(親)</label>
                 <input
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
@@ -89,6 +201,8 @@ const SetRegisterPage = () => {
                 >
                   <option value=''></option>
                   <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
+                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
+                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
                 </select>
               </div>
               <div className='set-row'>
@@ -119,14 +233,14 @@ const SetRegisterPage = () => {
               <div className='set-table'>
                 <div className='set-table-scroll'>
                   <div className='set-table-head'>
-                    <span className='col-icon'></span>
+                    <span className='col-item'>品目No.</span>
+                    <span className='col-lot'>ロットシリアル</span>
                     <span className='col-status'>状態</span>
                     <span className='col-num'>構成数</span>
                     <span className='col-num'>解除数</span>
-                    <span className='col-move'>移動倉</span>
-                    <span className='col-item'>品目</span>
-                    <span className='col-lot'>ロット</span>
-                    <span className='col-serial'>シリアル</span>
+                    <span className='col-move'>移動倉庫</span>
+                    <span className='col-move'>移動保管場所</span>
+                    <span className='col-name'>品名</span>
                   </div>
                   <div className='set-table-body'>
                     {rows.length === 0 ? (
@@ -134,14 +248,14 @@ const SetRegisterPage = () => {
                     ) : (
                       rows.map((row) => (
                         <div className='set-table-row' key={row.id}>
-                          <span className='col-icon'>{'>'}</span>
+                          <span className='col-item'>{row.item}</span>
+                          <span className='col-lot'>{row.lot}</span>
                           <span className='col-status'>{row.status}</span>
                           <span className='col-num'>{row.build}</span>
                           <span className='col-num'>{row.release}</span>
                           <span className='col-move'>{row.move}</span>
-                          <span className='col-item'>{row.item}</span>
-                          <span className='col-lot'>{row.lot}</span>
-                          <span className='col-serial'>{row.serial}</span>
+                          <span className='col-move'>{row.moveStorage}</span>
+                          <span className='col-name'>{row.name}</span>
                         </div>
                       ))
                     )}
@@ -150,32 +264,34 @@ const SetRegisterPage = () => {
               </div>
             </div>
 
-            {showHandInput ? (
-              <div className='set-actions set-actions-hand'>
-                <button
-                  className='set-btn set-success'
-                  onClick={() => setShowHandInputConfirm(true)}
-                >
-                  手入力
-                </button>
-              </div>
-            ) : (
-              <div className='set-actions set-actions-row'>
-                <button className='set-btn set-danger' onClick={clearFormAndRows}>
-                  クリア
-                </button>
-                <button className='set-btn set-primary'>完了</button>
-                <button className='set-btn set-success' onClick={clearRows}>
-                  解除
-                </button>
-                <button
-                  className='set-btn set-warning'
-                  onClick={() => navigate('/apps/mockup/mockups')}
-                >
-                  戻る
-                </button>
-              </div>
-            )}
+            <div className='set-actions set-actions-row'>
+              <button
+                className='set-btn set-danger'
+                onClick={clearFormAndRows}
+                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
+              >
+                破棄
+              </button>
+              <button
+                className='set-btn set-primary'
+                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
+              >
+                完了
+              </button>
+              <button
+                className='set-btn set-success'
+                onClick={showHandInput ? () => setShowHandInputConfirm(true) : clearRows}
+              >
+                {showHandInput ? '手入力' : '解除'}
+              </button>
+              <button
+                className='set-btn set-warning'
+                onClick={() => navigate('/apps/mockup/mockups')}
+                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
+              >
+                戻る
+              </button>
+            </div>
 
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
