@@ -7,7 +7,7 @@ import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
-import MockupPage from '../modules/apps/Mockup/MockupPage'
+import MockupPage from '../modules/apps/Registration_09/MockupPage'
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -15,7 +15,7 @@ const PrivateRoutes = () => {
   const AccountPage = lazy(() => import('../modules/accounts/AccountPage'))
   const WidgetsPage = lazy(() => import('../modules/widgets/WidgetsPage'))
   const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
-  const MockupPage = lazy(() => import('../modules/apps/Mockup/MockupPage'))
+  const MockupPage = lazy(() => import('../modules/apps/Registration_09/MockupPage'))
 
   return (
     <Routes>

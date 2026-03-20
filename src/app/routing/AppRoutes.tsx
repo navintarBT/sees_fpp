@@ -11,6 +11,7 @@ import {PrivateRoutes} from './PrivateRoutes'
 import {ErrorsPage} from '../modules/errors/ErrorsPage'
 import {Logout, AuthPage, useAuth} from '../modules/auth'
 import {App} from '../App'
+import {LoadingPage} from '../modules/apps/Registration_09/LoadingPage'
 
 /**
  * Base URL of the website.
@@ -26,6 +27,7 @@ const AppRoutes: FC = () => {
       <Routes>
         <Route element={<App />}>
           <Route path='error/*' element={<ErrorsPage />} />
+          <Route path='loading' element={<LoadingPage />} />
           <Route path='logout' element={<Logout />} />
           {currentUser ? (
             <>
@@ -35,6 +37,7 @@ const AppRoutes: FC = () => {
           ) : (
             <>
               <Route path='auth/*' element={<AuthPage />} />
+              <Route index element={<Navigate to='/auth' />} />
               <Route path='*' element={<Navigate to='/auth' />} />
             </>
           )}
