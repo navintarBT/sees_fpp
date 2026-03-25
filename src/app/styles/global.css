@@ -1,0 +1,51 @@
+.mockup-stage-dark{
+  background: white;
+  border:1px solid #1a2a4a;
+  box-shadow:
+  0 40px 90px rgba(0,0,0,0.45),
+  inset 0 1px 0 rgba(0,0,0,0.05);
+}
+
+.mockup-frame{
+  position:relative;
+}
+
+.mockup-footer{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:24px 80px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:black;
+  font-size:28px;
+}
+
+.mockup-footer-left{
+  display:flex;
+  gap:20px;
+}
+
+.mockup-status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:110px;
+  height:50px;
+  padding:0 16px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.5);
+  background:
+  linear-gradient(
+  180deg,
+  rgba(255,255,255,.3),
+  rgba(255,255,255,.05)
+  );
+}
+
+.mockup-footer-right{
+  font-size:30px;
+  text-shadow:0 3px 8px rgba(0,0,0,.8);
+}
