@@ -3,7 +3,8 @@ import './mainPage.scss'
 import {SetRegisterPage} from '../app/apps/Registration/SetRegisterPage'
 import {SetRegisterHandInputPage} from '../app/apps/Registration/SetRegisterHandInputPage'
 import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegistrationPage'
-
+import { Mockup_12_Page } from '../app/apps/Mockup-12/SetRegisterPage'
+import { Mockup_11_Page } from '../app/apps/Mockup-11/SetRegisterPage'
 const MainPage = () => {
   return (
     <Routes>
@@ -12,6 +13,8 @@ const MainPage = () => {
         <Route path='set-register' element={<SetRegisterPage />} />
         <Route path='set-register-hand' element={<SetRegisterHandInputPage />} />
         <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
+        <Route path='mockup-12/*' element={<Mockup_12_Page />} />
+        <Route path='mockup-11/*' element={<Mockup_11_Page />} />
       </Route>
     </Routes>
   )
@@ -40,7 +43,9 @@ const MainPageDetail = () => {
                 出庫
               </button>
               <button className='mockup-btn mockup-blue'>入庫</button>
-              <button className='mockup-btn mockup-green'>配送伝票</button>
+              <button className='mockup-btn mockup-green'
+                onClick={() => navigate('mockup-11')}
+              >配送伝票</button>
               <button className='mockup-btn mockup-yellow'>戻り構成</button>
               <button
                 className='mockup-btn mockup-gray'
@@ -49,7 +54,9 @@ const MainPageDetail = () => {
                 セット登録
               </button>
               <button className='mockup-btn mockup-gray'>雑入出庫</button>
-              <button className='mockup-btn mockup-orange'>伝票振分</button>
+              <button className='mockup-btn mockup-orange'
+              onClick={() => navigate('mockup-12')}
+              >伝票振分</button>
               <button className='mockup-btn mockup-pink'>販売セット</button>
             </div>
 
