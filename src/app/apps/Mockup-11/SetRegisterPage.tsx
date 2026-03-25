@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HandInputModal from './HandInputModal'
-import { DeliveryRow, FormData, RowStatus } from './types.ts'
+import { DeliveryRow, FormData, RowStatus } from './types'
 import './SetRegisterPage-11.css'
 
 type ModalAction = {
