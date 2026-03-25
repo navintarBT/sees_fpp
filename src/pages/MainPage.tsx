@@ -5,6 +5,7 @@ import {SetRegisterHandInputPage} from '../app/apps/Registration/SetRegisterHand
 import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegistrationPage'
 import { Mockup_12_Page } from '../app/apps/Mockup-12/SetRegisterPage'
 import { Mockup_11_Page } from '../app/apps/Mockup-11/SetRegisterPage'
+import { SetRegister_12_HandInputPage } from '../app/apps/Mockup-12/SetRegisterHandInputPage'
 const MainPage = () => {
   return (
     <Routes>
@@ -15,6 +16,7 @@ const MainPage = () => {
         <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
         <Route path='mockup-12/*' element={<Mockup_12_Page />} />
         <Route path='mockup-11/*' element={<Mockup_11_Page />} />
+        <Route path='mockup-12-hand/*' element={<SetRegister_12_HandInputPage />} />
       </Route>
     </Routes>
   )

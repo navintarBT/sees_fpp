@@ -312,7 +312,7 @@ const Mockup_12_Page: React.FC = () => {
                     className='set-modal-btn'
                     onClick={() => {
                       setShowHandInputConfirm(false)
-                      navigate('/apps/mockup/set-register-hand-function12', {
+                      navigate('/factory/mockup-12-hand', {
                         state: { allocationForm: form },
                       })
                     }}

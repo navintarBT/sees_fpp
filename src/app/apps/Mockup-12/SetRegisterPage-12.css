@@ -235,6 +235,16 @@
   padding: 0 10px;
   }
 
+  .set-table-head .col-lot,
+  .set-table-row .col-lot {
+  padding-right: 28px;
+  }
+
+  .set-table-head .col-qty,
+  .set-table-row .col-qty {
+  padding-left: 28px;
+  }
+
   .set-error {
   color: #d11f2f;
   font-weight: 700;

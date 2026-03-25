@@ -168,7 +168,7 @@ const SetRegister_12_HandInputPage: React.FC = () => {
                 読込
               </button>
               <div className='hand-action-placeholder' aria-hidden='true' />
-              <button className='hand-btn hand-warning' onClick={() => navigate('/apps/mockup/set-register-function12')}>
+              <button className='hand-btn hand-warning' onClick={() => navigate('/factory/mockup-12')}>
                 戻る
               </button>
             </div>
