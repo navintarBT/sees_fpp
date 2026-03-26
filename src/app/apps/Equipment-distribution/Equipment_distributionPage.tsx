@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { FaPlay } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import './Equipment_distributionPage.css'
 
@@ -82,6 +83,11 @@ const Equipment_distributionPage: React.FC = () => {
   const [showHandInputButton, setShowHandInputButton] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [activeRowId, setActiveRowId] = useState<number | null>(null)
+
+  const handleRowClick = (rowId: number) => {
+    setActiveRowId(rowId)
+  }
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -246,14 +252,16 @@ const Equipment_distributionPage: React.FC = () => {
               <div className='set-table'>
                 <div className='set-table-scroll'>
                   <div className='set-table-head'>
-                    <span className='col-error' />
-                    <span className='col-moveType'>From/To</span>
-                    <span className='col-name'>品名</span>
-                    <span className='col-itemNo'>品目No.</span>
+                    <span className='col-arrow-head'></span>
+                    <span className='col-error'>エラー</span>
+                    <span className='col-item'>品目No.</span>
                     <span className='col-lot'>ロットシリアル</span>
-                    <span className='col-qty'>数量</span>
-                    <span className='col-warehouse'>倉庫</span>
-                    <span className='col-storage'>保管場所</span>
+                    <span className='col-status'>状態</span>
+                    <span className='col-num'>構成数</span>
+                    <span className='col-num'>解除数</span>
+                    <span className='col-move'>移動倉庫</span>
+                    <span className='col-move'>移動保管場所</span>
+                    <span className='col-name'>品名</span>
                   </div>
 
                   <div className='set-table-body'>
@@ -261,15 +269,32 @@ const Equipment_distributionPage: React.FC = () => {
                       <div className='set-empty'>読込データはありません</div>
                     ) : (
                       rows.map((row) => (
-                        <div className='set-table-row' key={row.id}>
+                        <div
+                          className={`set-table-row ${activeRowId === row.id ? 'active' : ''}`}
+                          key={row.id}
+                          role='button'
+                          tabIndex={0}
+                          onClick={() => handleRowClick(row.id)}
+                          onFocus={() => setActiveRowId(row.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault()
+                              handleRowClick(row.id)
+                            }
+                          }}
+                        >
+                          <span className='col-arrow'>
+                            {activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null}
+                          </span>
                           <span className={`col-error ${row.error === 'E' ? 'set-error' : ''}`}>{row.error}</span>
-                          <span className='col-moveType'>{row.moveType}</span>
-                          <span className='col-name'>{row.itemName}</span>
-                          <span className='col-itemNo'>{row.itemNo}</span>
+                          <span className='col-item'>{row.itemNo}</span>
                           <span className='col-lot'>{row.lotSerial}</span>
-                          <span className='col-qty'>{row.quantity}</span>
-                          <span className='col-warehouse'>{row.warehouse}</span>
-                          <span className='col-storage'>{row.storageLocation}</span>
+                          <span className='col-status'>{row.moveType === 'F' ? 'From' : 'To'}</span>
+                          <span className='col-num'>{row.quantity}</span>
+                          <span className='col-num'>-</span>
+                          <span className='col-move'>{row.warehouse}</span>
+                          <span className='col-move'>{row.storageLocation}</span>
+                          <span className='col-name'>{row.itemName}</span>
                         </div>
                       ))
                     )}
@@ -374,7 +399,7 @@ const Equipment_distributionPage: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+   </div>
   )
 }
 
