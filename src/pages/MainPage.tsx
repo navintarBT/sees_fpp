@@ -3,9 +3,9 @@ import './mainPage.scss'
 import {SetRegisterPage} from '../app/apps/Registration/SetRegisterPage'
 import {SetRegisterHandInputPage} from '../app/apps/Registration/SetRegisterHandInputPage'
 import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegistrationPage'
-import { Mockup_12_Page } from '../app/apps/Mockup-12/SetRegisterPage'
+import { Equipment_distributionPage } from '../app/apps/Equipment-distribution/Equipment_distributionPage'
 import { Mockup_11_Page } from '../app/apps/Mockup-11/SetRegisterPage'
-import { SetRegister_12_HandInputPage } from '../app/apps/Mockup-12/SetRegisterHandInputPage'
+import { Equipment_distributionInputPage } from '../app/apps/Equipment-distribution/Equipment_distributionHandInputPage'
 const MainPage = () => {
   return (
     <Routes>
@@ -14,9 +14,9 @@ const MainPage = () => {
         <Route path='set-register' element={<SetRegisterPage />} />
         <Route path='set-register-hand' element={<SetRegisterHandInputPage />} />
         <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
-        <Route path='mockup-12/*' element={<Mockup_12_Page />} />
+        <Route path='mockup-12/*' element={<Equipment_distributionPage />} />
         <Route path='mockup-11/*' element={<Mockup_11_Page />} />
-        <Route path='mockup-12-hand/*' element={<SetRegister_12_HandInputPage />} />
+        <Route path='mockup-12-hand/*' element={<Equipment_distributionInputPage />} />
       </Route>
     </Routes>
   )

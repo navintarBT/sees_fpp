@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './SetRegisterPage-12.css'
+import './Equipment_distributionPage.css'
 
 type MoveType = 'From' | 'To'
 
@@ -75,7 +75,7 @@ const createInitialForm = (): AllocationForm => ({
   reason: '',
 })
 
-const Mockup_12_Page: React.FC = () => {
+const Equipment_distributionPage: React.FC = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<AllocationRow[]>(initialRows)
   const [form, setForm] = useState<AllocationForm>(createInitialForm)
@@ -378,4 +378,4 @@ const Mockup_12_Page: React.FC = () => {
   )
 }
 
-export { Mockup_12_Page }
+export { Equipment_distributionPage }

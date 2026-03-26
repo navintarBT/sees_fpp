@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import './SetRegisterHandInputPage-12.css'
+import './Equipment_distributionHandInputPage.css'
 
 type MoveType = 'From' | 'To'
 
@@ -15,7 +15,7 @@ type AllocationFormState = {
 const fromWarehouseOptions = ['FR-0040', 'FR-0041', 'FR-0042']
 const toWarehouseOptions = ['TO-MS-002', 'TO-MS-003', 'TO-MS-004']
 
-const SetRegister_12_HandInputPage: React.FC = () => {
+const Equipment_distributionInputPage: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const state = (location.state as AllocationFormState | null)?.allocationForm
@@ -179,4 +179,4 @@ const SetRegister_12_HandInputPage: React.FC = () => {
   )
 }
 
-export { SetRegister_12_HandInputPage }
+export { Equipment_distributionInputPage }

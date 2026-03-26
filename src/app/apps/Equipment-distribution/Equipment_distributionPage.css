@@ -114,13 +114,13 @@
   }
 
   .set-radio-input {
-  width: 50px;
-  height: 50px;
-  min-width: 50px;
-  min-height: 50px;
-  max-width: 50px;
-  max-height: 50px;
-  flex: 0 0 60px;
+  width: 35px;
+  height: 35px;
+  min-width: 35px;
+  min-height: 35px;
+  max-width: 35px;
+  max-height: 35px;
+  flex: 0 0 35px;
   padding: 0;
   margin: 15px 10px 12px 60px;
   appearance: none;
@@ -153,7 +153,7 @@
 
   .set-radio-label {
   font-size: 45px;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1;
   color: #111111;
   }
@@ -182,6 +182,8 @@
   overflow: hidden;
   background: white;
   box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08);
+  width: fit-content;
+  max-width: 100%;
 }
 
 .set-table-scroll {
@@ -197,11 +199,12 @@
 .set-table-head,
 .set-table-row {
   display: grid;
-  grid-template-columns: 50px 30px 220px 170px 100px 100px 150px 150px 150px 150px;
-  column-gap: 20px;
+  grid-template-columns: 56px 120px 260px 160px 200px 110px 170px 190px;
+  column-gap: 12px;
   align-items: center;
   text-align: center;
-  min-width: 1530px;
+  width: fit-content;
+  min-width: fit-content;
 }
 
 .set-table-head {
@@ -232,7 +235,7 @@
 
   .set-table-row span,
   .set-table-head span {
-  padding: 0 10px;
+  padding: 0 8px;
   }
 
   .set-table-head .col-lot,
