@@ -317,7 +317,7 @@ const Equipment_distributionPage: React.FC = () => {
                   手入力
                 </button>
               ) : (
-                <div className='set-handinput-hint'>F2で手入力ボタン表示</div>
+                <div className='set-handinput-hint'></div>
               )}
 
               <button className='set-btn set-warning' onClick={handleBack}>
