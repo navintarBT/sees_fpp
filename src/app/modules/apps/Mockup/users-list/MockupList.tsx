@@ -1,3 +1,0 @@
-const UsersListWrapper = () => <></>
-
-export {UsersListWrapper}
