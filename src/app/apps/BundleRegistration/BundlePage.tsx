@@ -1,8 +1,7 @@
 import {useEffect,useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './BundlePage.css'
-import {FaWifi, FaSignal, FaPlay} from 'react-icons/fa'
-import {BsBatteryHalf} from 'react-icons/bs'
+import {FaPlay} from 'react-icons/fa'
 
 const BundlePage = () => {
   const navigate = useNavigate()
@@ -337,7 +336,7 @@ const BundlePage = () => {
                       ) : (
                         rows.map((row) => (
                           <div
-                            className='set-table-row'
+                            className='set-table-row bundle-row'
                             key={row.id}
                             role='button'
                             tabIndex={0}

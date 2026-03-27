@@ -1,7 +1,6 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './SetRegisterHandInputPage.css'
-import './SetRegisterPage.css'
 
 const SetRegisterHandInputPage = () => {
   const navigate = useNavigate()

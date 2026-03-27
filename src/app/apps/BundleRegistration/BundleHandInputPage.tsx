@@ -1,7 +1,6 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './BundleHandInputPage.css'
-import './BundlePage.css'
 
 const BundleHandInputPage = () => {
   const navigate = useNavigate()

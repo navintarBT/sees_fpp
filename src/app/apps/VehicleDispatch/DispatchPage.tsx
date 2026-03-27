@@ -1,8 +1,7 @@
 import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './DispatchPage.css'
-import {FaWifi, FaSignal, FaPlay} from 'react-icons/fa'
-import {BsBatteryHalf} from 'react-icons/bs'
+import {FaPlay} from 'react-icons/fa'
 
 const DispatchPage = () => {
   const navigate = useNavigate()

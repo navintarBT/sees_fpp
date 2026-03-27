@@ -1,7 +1,6 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-// import './DispatchHandInputPage.css'
-// import './DispatchPage.css'
+import './DispatchHandInputPage.css'
 
 const DispatchHandInputPage = () => {
 const navigate = useNavigate()

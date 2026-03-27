@@ -1,8 +1,7 @@
 import {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './SetRegisterPage.css'
-import {FaWifi, FaSignal, FaPlay} from 'react-icons/fa'
-import {BsBatteryHalf} from 'react-icons/bs'
+import {FaPlay} from 'react-icons/fa'
 
 const SetRegisterPage = () => {
   const navigate = useNavigate()
@@ -309,7 +308,7 @@ const SetRegisterPage = () => {
                     ) : (
                       rows.map((row) => (
                         <div
-                          className='set-table-row'
+                          className='set-table-row set-register-row'
                           key={row.id}
                           role='button'
                           tabIndex={0}

@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-// import './VehicleInboundHandInputPage.css'
-// import './VehicleInboundPage.css'
+import './VehicleInboundHandInputPage.css'
+
 
 const VehicleInboundHandInputPage = () => {
 const navigate = useNavigate()

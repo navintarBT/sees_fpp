@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
+import {FaPlay} from 'react-icons/fa'
 import './VehicleInboundPage.css'
-import {FaWifi, FaSignal, FaPlay} from 'react-icons/fa'
-import {BsBatteryHalf} from 'react-icons/bs'
+
 
 const VehicleInboundPage = () => {
   const navigate = useNavigate()
