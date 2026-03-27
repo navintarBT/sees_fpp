@@ -213,14 +213,29 @@
   border-radius:10px;
 }
 
+/*
+  FIXED: sized to fit whichever is longer — header text OR data content
+  ─────────────────────────────────────────────────────────────────────
+  col           header            longest data        width
+  arrow         —                 icon                50px
+  エラー         3JP ≈ 90px        "E"                 110px
+  From/To       "From/To" ≈105px  "From"              120px
+  品名           2JP ≈ 60px        "ハンディ端末" ≈170px  190px  ← data wins
+  品目No.        ≈135px            "0193090" ≈130px    160px
+  ロットシリアル   7JP ≈215px        "LS240301" ≈145px   230px  ← header wins
+  数量           2JP ≈ 60px        "1"                 100px
+  倉庫           2JP ≈ 60px        "TO-MS-002" ≈165px  190px  ← data wins
+  移動保管場所    6JP ≈185px        "A-01-01" ≈130px    200px  ← header wins
+  total: 50+110+120+190+160+230+100+190+200 = 1350px
+*/
 .set-table-head,
 .set-table-row {
   display: grid;
-  grid-template-columns: 50px 30px 220px 170px 100px 100px 150px 150px 150px 150px;
-  column-gap: 20px;
+  grid-template-columns: 50px 110px 120px 190px 160px 230px 100px 190px 200px;
+  column-gap: 0;
   align-items: center;
   text-align: center;
-  min-width: 1530px;
+  min-width: 1350px;
 }
 
 .set-table-head{
@@ -228,24 +243,50 @@
   color:black;
   font-size:28px;
   font-weight:400;
-  height:78px;
+  min-height:78px;
   position:sticky;
   top:0;
   z-index:2;
-  box-shadow:
-    0 3px 15px rgba(0,0,0,0.30),
+  box-shadow: 0 3px 15px rgba(0,0,0,0.30);
 }
 
+.set-table-head > span,
+.set-table-row > span {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  border-right: 1px solid rgba(88, 106, 132, 0.35);
+  /* FIXED: ทั้ง header และ data ห้ามตัดบรรทัด — column กว้างพอแล้ว */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.set-table-head > span:last-child,
+.set-table-row > span:last-child {
+  border-right: none;
+}
+
+/* header only: line-height */
 .set-table-head span {
-  white-space: nowrap; /* Prevent text from wrapping in column headers */
+  line-height: 1.15;
 }
 
 .col-lot {
-  padding-right: 12px;
+  padding-inline: 12px;
 }
 
-.col-status {
-  padding-left: 35px;
+.col-arrow,
+.col-error,
+.col-type,
+.col-qty {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .set-table-body{
@@ -254,12 +295,16 @@
 }
 
 .set-table-row{
-  height:82px;
+  min-height:82px;
   font-size:26px;
   font-weight:400;
   color:black;
-  border-top:1px solid rgba(0,0,0,0.2);
+  border-bottom:1px solid rgba(0,0,0,0.2);
   cursor: pointer;
+}
+
+.set-table-row:last-child {
+  border-bottom: none;
 }
 
 .col-row-arrow{
@@ -315,11 +360,12 @@
   font-weight: 400;
   color: white;
   border: none;
-  box-shadow:
-    0 12px 26px rgba(0, 0, 0, 0.22),
-    inset 0 2px 0 rgba(255, 255, 255, 0.18);
+  box-shadow: none;
   }
-
+.set-btn:focus {
+  border: none;
+  outline: none;
+}
   .set-danger{
   background:linear-gradient(180deg,#ff5a65 0%,#d31728 100%);
   }

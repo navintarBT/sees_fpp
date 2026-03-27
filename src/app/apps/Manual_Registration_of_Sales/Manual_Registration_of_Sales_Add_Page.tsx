@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { HandInputModalProps } from './types'
-import './HandInputModal-11.css'
+import './Manual_Registration_of_Sales_Add_Page.css'
 
 const HandInputModal: React.FC<HandInputModalProps> = ({ isOpen, onClose, onAddDeliverySlip }) => {
   const [manualDeliveryNo, setManualDeliveryNo] = useState<string>('')

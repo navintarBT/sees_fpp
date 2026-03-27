@@ -254,14 +254,14 @@ const Equipment_distributionPage: React.FC = () => {
                   <div className='set-table-head'>
                     <span className='col-arrow-head'></span>
                     <span className='col-error'>エラー</span>
-                    <span className='col-item'>品目No.</span>
-                    <span className='col-lot'>ロットシリアル</span>
-                    <span className='col-status'>状態</span>
-                    <span className='col-num'>構成数</span>
-                    <span className='col-num'>解除数</span>
-                    <span className='col-move'>移動倉庫</span>
+                    <span className='col-item'>From/To</span>
+                    <span className='col-lot'>品名</span>
+                    <span className='col-status'>品目No.</span>
+                    <span className='col-num'>ロットシリアル</span>
+                    <span className='col-num'>数量</span>
+                    <span className='col-move'>倉庫</span>
                     <span className='col-move'>移動保管場所</span>
-                    <span className='col-name'>品名</span>
+                    
                   </div>
 
                   <div className='set-table-body'>
@@ -291,7 +291,7 @@ const Equipment_distributionPage: React.FC = () => {
                           <span className='col-lot'>{row.lotSerial}</span>
                           <span className='col-status'>{row.moveType === 'F' ? 'From' : 'To'}</span>
                           <span className='col-num'>{row.quantity}</span>
-                          <span className='col-num'>-</span>
+                          {/* <span className='col-num'>-</span> */}
                           <span className='col-move'>{row.warehouse}</span>
                           <span className='col-move'>{row.storageLocation}</span>
                           <span className='col-name'>{row.itemName}</span>

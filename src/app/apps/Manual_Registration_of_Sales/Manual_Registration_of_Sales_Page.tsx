@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import HandInputModal from './HandInputModal'
+
 import { DeliveryRow, FormData, RowStatus } from './types'
-import './SetRegisterPage-11.css'
+import './Manual_Registration_of_Sales_Page.css'
 
 type ModalAction = {
   label: string
@@ -17,16 +17,16 @@ type ModalState = {
 }
 
 const initialRows: DeliveryRow[] = [
-  { id: 1, deliveryNo: 'D00001', status: 'Blank' },
-  { id: 2, deliveryNo: 'D00002', status: 'Blank' },
-  { id: 3, deliveryNo: 'D00003', status: 'Blank' },
-  { id: 4, deliveryNo: 'D00004', status: 'Blank' },
-  { id: 5, deliveryNo: 'D00005', status: 'Blank' },
-  { id: 6, deliveryNo: 'D00006', status: 'Blank' },
-  { id: 7, deliveryNo: 'D00007', status: 'Blank' },
-  { id: 8, deliveryNo: 'D00008', status: 'Blank' },
-  { id: 9, deliveryNo: 'D00009', status: 'Blank' },
-  { id: 10, deliveryNo: 'D00010', status: 'Blank' },
+  { id: 1, deliveryNo: 'D00001', status: ' ' },
+  { id: 2, deliveryNo: 'D00002', status: ' ' },
+  { id: 3, deliveryNo: 'D00003', status: ' ' },
+  { id: 4, deliveryNo: 'D00004', status: ' ' },
+  { id: 5, deliveryNo: 'D00005', status: ' ' },
+  { id: 6, deliveryNo: 'D00006', status: ' ' },
+  { id: 7, deliveryNo: 'D00007', status: ' ' },
+  { id: 8, deliveryNo: 'D00008', status: ' ' },
+  { id: 9, deliveryNo: 'D00009', status: ' ' },
+  { id: 10, deliveryNo: 'D00010', status: ' ' },
 ]
 
 const createInitialForm = (): FormData => ({
@@ -220,7 +220,7 @@ const Mockup_11_Page: React.FC = () => {
             console.log('Shipment No.:', form.shipmentNo)
 
             setRows((prev) =>
-              prev.map((row) => (row.status === 'Add' ? { ...row, status: 'Blank' } : row)),
+              prev.map((row) => (row.status === 'Add' ? { ...row, status: ' ' } : row)),
             )
 
             openModal(
@@ -263,7 +263,7 @@ const handleBack = (): void => {
 };
   const getStatusIndicator = (status: RowStatus): string => {
     switch (status) {
-      case 'Blank':
+      case ' ':
         return ''
       case 'Add':
         return ''
@@ -378,11 +378,11 @@ const handleBack = (): void => {
               </button>
             </div>
 
-            <HandInputModal
+            {/* <HandInputModal
               isOpen={showHandInput}
               onClose={() => setShowHandInput(false)}
               onAddDeliverySlip={addDeliverySlip}
-            />
+            /> */}
 
             {modalState && (
               <div className='set-modal-backdrop' role='presentation'>

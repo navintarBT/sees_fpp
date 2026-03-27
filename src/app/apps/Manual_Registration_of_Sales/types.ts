@@ -1,5 +1,5 @@
 // Row status types
-export type RowStatus = 'Blank' | 'Add' | 'Delete';
+export type RowStatus = ' ' | 'Add' | 'Delete';
 
 export interface DeliveryRow {
   id: number;

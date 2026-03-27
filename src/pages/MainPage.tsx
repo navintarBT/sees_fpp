@@ -4,7 +4,7 @@ import {SetRegisterPage} from '../app/apps/Registration/SetRegisterPage'
 import {SetRegisterHandInputPage} from '../app/apps/Registration/SetRegisterHandInputPage'
 import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegistrationPage'
 import { Equipment_distributionPage } from '../app/apps/Equipment-distribution/Equipment_distributionPage'
-import { Mockup_11_Page } from '../app/apps/Mockup-11/SetRegisterPage'
+import { Mockup_11_Page } from '../app/apps/Manual_Registration_of_Sales/Manual_Registration_of_Sales_Page'
 import { Equipment_distributionInputPage } from '../app/apps/Equipment-distribution/Equipment_distributionHandInputPage'
 const MainPage = () => {
   return (
