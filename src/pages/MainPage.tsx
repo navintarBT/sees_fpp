@@ -1,8 +1,13 @@
-import {Route, Routes, Outlet, Navigate, useNavigate} from 'react-router-dom'
+import { Route, Routes, Outlet, Navigate, useNavigate } from 'react-router-dom'
 import './mainPage.scss'
-import {SetRegisterPage} from '../app/apps/Registration/SetRegisterPage'
-import {SetRegisterHandInputPage} from '../app/apps/Registration/SetRegisterHandInputPage'
+import { SetRegisterPage } from '../app/apps/Registration/SetRegisterPage'
+import { SetRegisterHandInputPage } from '../app/apps/Registration/SetRegisterHandInputPage'
 import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegistrationPage'
+// kongchanß
+import MiscellaneousInAndOutBound7 from '../app/apps/Function7/MiscellaneousInAndOutBound'
+import SetMiscellaneousInAndOutBound7 from '../app/apps/Function7/SetMiscellaneousInAndOutBound'
+import MiscellaneousInAndOutBound5 from '../app/apps/Function5/MiscellaneousInAndOutBound'
+import SetMiscellaneousInAndOutBound5 from '../app/apps/Function5/SetMiscellaneousInAndOutBound'
 
 const MainPage = () => {
   return (
@@ -12,6 +17,11 @@ const MainPage = () => {
         <Route path='set-register' element={<SetRegisterPage />} />
         <Route path='set-register-hand' element={<SetRegisterHandInputPage />} />
         <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
+        {/* kongchan */}
+        <Route path='MiscellaneousInAndOutBound7' element={<MiscellaneousInAndOutBound7 />} />
+        <Route path='SetMiscellaneousInAndOutBound7' element={<SetMiscellaneousInAndOutBound7 />} />
+        <Route path='MiscellaneousInAndOutBound5' element={<MiscellaneousInAndOutBound5 />} />
+        <Route path='SetMiscellaneousInAndOutBound5' element={<SetMiscellaneousInAndOutBound5 />} />
       </Route>
     </Routes>
   )
@@ -41,14 +51,14 @@ const MainPageDetail = () => {
               </button>
               <button className='mockup-btn mockup-blue'>入庫</button>
               <button className='mockup-btn mockup-green'>配送伝票</button>
-              <button className='mockup-btn mockup-yellow'>戻り構成</button>
+              <button className='mockup-btn mockup-yellow' onClick={()=> navigate('MiscellaneousInAndOutBound5')}>戻り構成</button>
               <button
                 className='mockup-btn mockup-gray'
                 onClick={() => navigate('set-register')}
               >
                 セット登録
               </button>
-              <button className='mockup-btn mockup-gray'>雑入出庫</button>
+              <button className='mockup-btn mockup-gray' onClick={() => navigate('MiscellaneousInAndOutBound7')}>雑入出庫</button>
               <button className='mockup-btn mockup-orange'>伝票振分</button>
               <button className='mockup-btn mockup-pink'>販売セット</button>
             </div>
