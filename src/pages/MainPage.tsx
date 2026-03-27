@@ -1,17 +1,19 @@
-import {Route, Routes, Outlet, Navigate, useNavigate} from 'react-router-dom'
+import {Route, Routes, Outlet, useNavigate} from 'react-router-dom'
 import './mainPage.scss'
-import {SetRegisterPage} from '../app/apps/Registration/SetRegisterPage'
-import {SetRegisterHandInputPage} from '../app/apps/Registration/SetRegisterHandInputPage'
+import RegistrationRegistrationPage from '../app/apps/Registration/RegistrationRegistrationPage'
 import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegistrationPage'
+import VehicleInboundRegistrationPage from '../app/apps/VehicleInbound/VehicleInboundRegistrationPage'
+import BundleRegistrationPage from '../app/apps/BundleRegistration/BundleRegistrationPage'
 
 const MainPage = () => {
   return (
     <Routes>
       <Route element={<Outlet />}>
         <Route index element={<MainPageDetail />} />
-        <Route path='set-register' element={<SetRegisterPage />} />
-        <Route path='set-register-hand' element={<SetRegisterHandInputPage />} />
+        <Route path='set-register/*' element={<RegistrationRegistrationPage />} />
         <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
+        <Route path='vehicle-inbound/*' element={<VehicleInboundRegistrationPage />} />
+        <Route path='bundle/*' element={<BundleRegistrationPage />} />
       </Route>
     </Routes>
   )
@@ -39,7 +41,12 @@ const MainPageDetail = () => {
               >
                 出庫
               </button>
-              <button className='mockup-btn mockup-blue'>入庫</button>
+              <button
+                className='mockup-btn mockup-blue'
+                onClick={() => navigate('vehicle-inbound')}
+              >
+                入庫
+              </button>
               <button className='mockup-btn mockup-green'>配送伝票</button>
               <button className='mockup-btn mockup-yellow'>戻り構成</button>
               <button
@@ -50,7 +57,9 @@ const MainPageDetail = () => {
               </button>
               <button className='mockup-btn mockup-gray'>雑入出庫</button>
               <button className='mockup-btn mockup-orange'>伝票振分</button>
-              <button className='mockup-btn mockup-pink'>販売セット</button>
+              <button className='mockup-btn mockup-pink'
+              onClick={() => navigate('bundle')}
+              >販売セット</button>
             </div>
 
             <button className='mockup-exit'>終了</button>
