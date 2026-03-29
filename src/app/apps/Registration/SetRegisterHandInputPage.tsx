@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './SetRegisterHandInputPage.css'
 import './SetRegisterPage.css'
@@ -12,8 +12,27 @@ const SetRegisterHandInputPage = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const isAnyModalOpen = showReadConfirm || showBackConfirm
 
+  const closeAllModals = () => {
+    setShowReadConfirm(false)
+    setShowBackConfirm(false)
+  }
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isAnyModalOpen) {
+        return
+      }
+      if (event.key === 'F4') {
+        event.preventDefault()
+        closeAllModals()
+        setShowBackConfirm(true)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isAnyModalOpen])
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 

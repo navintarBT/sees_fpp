@@ -162,6 +162,23 @@ const SetRegisterPage = () => {
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
+  const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
+  const isAnyModalOpen =
+    showHandInputConfirm ||
+    showDeleteConfirm ||
+    showNoSelectionConfirm ||
+    showClearConfirm ||
+    showCompleteConfirm ||
+    showBackConfirm
+
+  const closeAllModals = () => {
+    setShowHandInputConfirm(false)
+    setShowDeleteConfirm(false)
+    setShowNoSelectionConfirm(false)
+    setShowClearConfirm(false)
+    setShowCompleteConfirm(false)
+    setShowBackConfirm(false)
+  }
 
 
   const clearRows = () => setRows([])
@@ -198,16 +215,26 @@ const SetRegisterPage = () => {
     setActiveRowId(rowId)
   }
 
-    const handleReleaseClick = () => {
-    if (showHandInput) {
+  const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
+    if (isAnyModalOpen) return
+    if (options?.forceHandInput) {
+      closeAllModals()
+      setShowHandInput(true)
+      setShowHandInputConfirm(true)
+      return
+    }
+    if (!options?.forceRelease && showHandInput) {
+      closeAllModals()
       setShowHandInputConfirm(true)
       return
     }
     if (!activeRow) {
+      closeAllModals()
       setShowNoSelectionConfirm(true)
       return
     }
     if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
+      closeAllModals()
       setShowDeleteConfirm(true)
       return
     }
@@ -216,15 +243,69 @@ const SetRegisterPage = () => {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (isAnyModalOpen) {
+        return
+      }
+      if (event.key === 'F1') {
+        pressedKeysRef.current.f1 = true
+      }
+      if (event.key === 'F8') {
+        pressedKeysRef.current.f8 = true
+      }
+      if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
+        event.preventDefault()
+        handleReleaseClick({forceHandInput: true})
+        return
+      }
+
+      if (event.key === 'F6') {
+        event.preventDefault()
+        closeAllModals()
+        setShowHandInput((prev) => !prev)
+        return
+      }
+
+      if (event.key === 'F1') {
+        event.preventDefault()
+        closeAllModals()
+        setShowClearConfirm(true)
+        return
+      }
+
       if (event.key === 'F2') {
         event.preventDefault()
-        setShowHandInput((prev) => !prev)
+        closeAllModals()
+        setShowCompleteConfirm(true)
+        return
+      }
 
+      if (event.key === 'F3') {
+        event.preventDefault()
+        handleReleaseClick({forceRelease: true})
+        return
+      }
+
+      if (event.key === 'F4') {
+        event.preventDefault()
+        closeAllModals()
+        setShowBackConfirm(true)
+      }
+    }
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key === 'F1') {
+        pressedKeysRef.current.f1 = false
+      }
+      if (event.key === 'F8') {
+        pressedKeysRef.current.f8 = false
       }
     }
     window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+    window.addEventListener('keyup', onKeyUp)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+    }
+  }, [activeRow, showHandInput, isAnyModalOpen])
 
   return (
     <div className='mockup-page'>
@@ -361,7 +442,7 @@ const SetRegisterPage = () => {
               </button>
               <button
                 className='set-btn set-success'
-                onClick={handleReleaseClick}
+                onClick={() => handleReleaseClick()}
               >
                 {showHandInput ? '手入力' : '解除'}
               </button>
@@ -384,6 +465,7 @@ const SetRegisterPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
+                        setShowHandInput(false)
                         navigate('/factory/set-register/hand-input')
                       }}
                     >
@@ -391,7 +473,10 @@ const SetRegisterPage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowHandInputConfirm(false)}
+                      onClick={() => {
+                        setShowHandInputConfirm(false)
+                        setShowHandInput(false)
+                      }}
                     >
                       いいえ
                     </button>
