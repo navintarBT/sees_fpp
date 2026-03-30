@@ -12,15 +12,15 @@ const MiscellaneousInAndOutBound = () => {
         {
             id: 1,
             error: '',
-            item: 'A01', // 品目No.
-            lot: 'L01', // ロットシリアル
-            status: '追加', // 状態
-            build: 2, // 構成数
-            release: 1, // 解除数
-            move: 'W1', // 移動倉
-            moveStorage: 'S1', // 移動保管場所
-            name: '部品A', // 品名
-            moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
+            item: 'A01',
+            lot: 'L01',
+            status: '追加',
+            build: 2,
+            release: 1,
+            move: 'W1',
+            moveStorage: 'S1', 
+            name: '部品A',
+            moveStorage2: '棚A', 
         },
         {
             id: 2,
@@ -155,17 +155,9 @@ const MiscellaneousInAndOutBound = () => {
     const [showClearConfirm, setShowClearConfirm] = useState(false)
     const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
     const tableScrollRef = useRef<HTMLDivElement | null>(null)
-
     const [showBackConfirm, setShowBackConfirm] = useState(false)
-
-
-
-
-
     const [activeRowId, setActiveRowId] = useState<number | null>(null)
     const activeRow = rows.find((row) => row.id === activeRowId) ?? null
-
-
     const clearRows = () => setRows([])
     const clearForm = () =>
         setForm({
