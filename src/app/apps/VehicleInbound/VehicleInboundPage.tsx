@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import './DispatchPage.css'
 import {FaPlay} from 'react-icons/fa'
+import './VehicleInboundPage.css'
 
-const DispatchPage = () => {
+
+const VehicleInboundPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState([
     {
@@ -243,7 +244,7 @@ const DispatchPage = () => {
               <>
             <div className='set-form'>
               <div className='set-row'>
-                <label>出荷No.</label>
+                <label>出荷/発注No.</label>
                 <input
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
@@ -268,6 +269,13 @@ const DispatchPage = () => {
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
               </div>
+              <div className='set-row'>
+                <label>ロット状況</label>
+                <input
+                  value={form.parentItemNo}
+                  onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                />
+              </div>
                 <div className='set-row set-row-inline'>
                 <label>数量</label>
                 <input
@@ -282,7 +290,7 @@ const DispatchPage = () => {
                 />
               </div>
               <div className='set-row'>
-                <label>移動先</label>
+                <label>移動元</label>
                 <input
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
@@ -386,7 +394,7 @@ const DispatchPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('hand-input')
+                        navigate('vehicle-inbound-hand-input')
                       }}
                     >
                       はい
@@ -434,4 +442,4 @@ const DispatchPage = () => {
   )
 }
 
-export {DispatchPage}
+export {VehicleInboundPage}

@@ -1,9 +1,9 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import './DispatchHandInputPage.css'
+import './BundleHandInputPage.css'
 
-const DispatchHandInputPage = () => {
-const navigate = useNavigate()
+const BundleHandInputPage = () => {
+  const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
@@ -20,7 +20,7 @@ const navigate = useNavigate()
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
-                <label>倉庫</label>
+                <label>倉庫（親）</label>
                 <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
@@ -29,27 +29,39 @@ const navigate = useNavigate()
                 </select>
               </div>
               <div className='hand-row'>
-                <label>保管場所</label>
+                <label>品目No.(親)</label>
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
               <div className='hand-row'>
-                <label>数量</label>
+                <label>シリアル(親)</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row'>
-                <label>品目No.</label>
+                <label>移動倉庫</label>
+                <select disabled={!isEnabled}>
+                  <option>千葉倉庫（WMS）：W002</option>
+                  <option>千葉倉庫（WMS）：W003</option>
+                  <option>千葉倉庫（WMS）：W004</option>
+                </select>
+              </div>
+              <div className='hand-row'>
+                <label>移動保管場所</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
               </div>
               <div className='hand-row'>
-                <label>ロット</label>
+                <label>数量</label>
                 <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
               </div>
               <div className='hand-row'>
-                <label>シリアル</label>
+                <label>品目No.</label>
                 <input readOnly={!isEnabled} placeholder=' ' />
               </div>
               <div className='hand-row'>
-                <label>有効期限(yymm)</label>
+                <label>ロット</label>
+                <input readOnly={!isEnabled} placeholder=' ' />
+              </div>
+              <div className='hand-row'>
+                <label>シリアル</label>
                 <input readOnly={!isEnabled} placeholder=' ' />
               </div>
             </div>
@@ -70,7 +82,7 @@ const navigate = useNavigate()
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => navigate('/apps/vehicle-registration')}
+                onClick={() => navigate('/factory/set-register')}
               >
                 {'\u623B\u308B'}
               </button>
@@ -82,4 +94,4 @@ const navigate = useNavigate()
   )
 }
 
-export {DispatchHandInputPage}
+export {BundleHandInputPage}

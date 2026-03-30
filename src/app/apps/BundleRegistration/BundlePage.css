@@ -1,0 +1,36 @@
+.set-table-head,
+.bundle-row {
+  display: grid;
+  grid-template-columns: 30px 30px 220px 170px 150px 100px 150px 150px 150px 150px;
+  column-gap: 20px;
+  align-items: center;
+  text-align: center;
+  min-width: 1530px;
+}
+
+.bundle-group{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  
+}
+
+.set-radio{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:50px;
+  color:black;
+  padding-right: 10px;
+}
+
+.set-radio input{
+  width:32px;
+  height:32px;
+  accent-color:#2a5bd6;
+  transform: translateY(1px);
+}
+
+.set-row-radio{
+  grid-template-columns:240px 1fr;
+}

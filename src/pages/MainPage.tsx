@@ -3,11 +3,14 @@ import './mainPage.scss'
 import { SetRegisterPage } from '../app/apps/Registration/SetRegisterPage'
 import { SetRegisterHandInputPage } from '../app/apps/Registration/SetRegisterHandInputPage'
 import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegistrationPage'
+import RegistrationRegistrationPage from '../app/apps/Registration/RegistrationRegistrationPage'
+import VehicleInboundRegistrationPage from '../app/apps/VehicleInbound/VehicleInboundRegistrationPage'
+import BundleRegistrationPage from '../app/apps/BundleRegistration/BundleRegistrationPage'
 // kongchanß
-import MiscellaneousInAndOutBound7 from '../app/apps/Function7/MiscellaneousInAndOutBound'
-import SetMiscellaneousInAndOutBound7 from '../app/apps/Function7/SetMiscellaneousInAndOutBound'
-import MiscellaneousInAndOutBound5 from '../app/apps/Function5/MiscellaneousInAndOutBound'
-import SetMiscellaneousInAndOutBound5 from '../app/apps/Function5/SetMiscellaneousInAndOutBound'
+import { ReturnConfiguration } from '../app/apps/ReturnConfiguration/ReturnConfiguration'
+import { SetReturnConfiguration } from '../app/apps/ReturnConfiguration/SetReturnConfiguration'
+import { MiscellaneousInAndOutBound } from '../app/apps/MiscellaneousInAndOutBound/MiscellaneousInAndOutBound'
+import { SetMiscellaneousInAndOutBound } from '../app/apps/MiscellaneousInAndOutBound/SetMiscellaneousInAndOutBound'
 
 const MainPage = () => {
   return (
@@ -17,11 +20,15 @@ const MainPage = () => {
         <Route path='set-register' element={<SetRegisterPage />} />
         <Route path='set-register-hand' element={<SetRegisterHandInputPage />} />
         <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
+        <Route path='set-register/*' element={<RegistrationRegistrationPage />} />
+        <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
+        <Route path='vehicle-inbound/*' element={<VehicleInboundRegistrationPage />} />
+        <Route path='bundle/*' element={<BundleRegistrationPage />} />
         {/* kongchan */}
-        <Route path='MiscellaneousInAndOutBound7' element={<MiscellaneousInAndOutBound7 />} />
-        <Route path='SetMiscellaneousInAndOutBound7' element={<SetMiscellaneousInAndOutBound7 />} />
-        <Route path='MiscellaneousInAndOutBound5' element={<MiscellaneousInAndOutBound5 />} />
-        <Route path='SetMiscellaneousInAndOutBound5' element={<SetMiscellaneousInAndOutBound5 />} />
+        <Route path='return-configuration/*' element={<ReturnConfiguration />} />
+        <Route path='setReturnConfiguration/*' element={<SetReturnConfiguration />} />
+        <Route path='miscellaneousInAndOutBound/*' element={<MiscellaneousInAndOutBound />} />
+        <Route path='setMiscellaneousInAndOutBound/*' element={<SetMiscellaneousInAndOutBound />} />
       </Route>
     </Routes>
   )
@@ -49,18 +56,25 @@ const MainPageDetail = () => {
               >
                 出庫
               </button>
-              <button className='mockup-btn mockup-blue'>入庫</button>
+              <button
+                className='mockup-btn mockup-blue'
+                onClick={() => navigate('vehicle-inbound')}
+              >
+                入庫
+              </button>
               <button className='mockup-btn mockup-green'>配送伝票</button>
-              <button className='mockup-btn mockup-yellow' onClick={()=> navigate('MiscellaneousInAndOutBound5')}>戻り構成</button>
+              <button className='mockup-btn mockup-yellow' onClick={() => navigate('return-configuration')}>戻り構成</button>
               <button
                 className='mockup-btn mockup-gray'
                 onClick={() => navigate('set-register')}
               >
                 セット登録
               </button>
-              <button className='mockup-btn mockup-gray' onClick={() => navigate('MiscellaneousInAndOutBound7')}>雑入出庫</button>
+              <button className='mockup-btn mockup-gray' onClick={() => navigate('miscellaneousInAndOutBound')}>雑入出庫</button>
               <button className='mockup-btn mockup-orange'>伝票振分</button>
-              <button className='mockup-btn mockup-pink'>販売セット</button>
+              <button className='mockup-btn mockup-pink'
+                onClick={() => navigate('bundle')}
+              >販売セット</button>
             </div>
 
             <button className='mockup-exit'>終了</button>

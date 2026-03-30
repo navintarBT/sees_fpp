@@ -1,11 +1,10 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { FaWifi, FaSignal } from 'react-icons/fa'
-import { BsBatteryHalf } from 'react-icons/bs'
-import './SetMiscellaneousInAndOutBound.css'
+import {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import './VehicleInboundHandInputPage.css'
 
-const SetMiscellaneousInAndOutBound = () => {
-  const navigate = useNavigate()
+
+const VehicleInboundHandInputPage = () => {
+const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
@@ -18,7 +17,7 @@ const SetMiscellaneousInAndOutBound = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='hand-header'>手入力</div>
+          <div className='hand-header'>セット構成登録手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
@@ -35,24 +34,33 @@ const SetMiscellaneousInAndOutBound = () => {
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
               <div className='hand-row'>
-                <label>引当数</label>
+                <label>ロット状況</label>
+                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                  <option value=''></option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                </select>
+              </div>
+              <div className='hand-row'>
+                <label>数量</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
-              <div className='hand-row uph-nocolorbackground'>
+              <div className='hand-row'>
                 <label>品目No.</label>
-                <input />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
               </div>
               <div className='hand-row'>
                 <label>シリアル</label>
-                <input />
+                <input readOnly={!isEnabled} placeholder=' ' />
               </div>
-              <div className='hand-row lastInputDate'>
+              <div className='hand-row'>
                 <label>有効期限(yymm)</label>
-                <input />
+                <input readOnly={!isEnabled} placeholder=' ' />
               </div>
             </div>
 
@@ -72,7 +80,7 @@ const SetMiscellaneousInAndOutBound = () => {
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => navigate('/apps/mockup/set-register')}
+                onClick={() => navigate('/apps/vehicle-registration')}
               >
                 {'\u623B\u308B'}
               </button>
@@ -84,4 +92,4 @@ const SetMiscellaneousInAndOutBound = () => {
   )
 }
 
-export default SetMiscellaneousInAndOutBound
+export {VehicleInboundHandInputPage}
