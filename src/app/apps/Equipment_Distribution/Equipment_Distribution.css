@@ -1,7 +1,7 @@
 .set-table-head,
 .bundle-row {
   display: grid;
-  grid-template-columns: 30px 30px 220px 170px 150px 100px 150px 150px 150px 150px;
+  grid-template-columns: 30px 30px 220px 170px 150px 200px 150px 150px 150px 150px;
   column-gap: 20px;
   align-items: center;
   text-align: center;
@@ -33,4 +33,24 @@
 
 .set-row-radio{
   grid-template-columns:240px 1fr;
+}
+
+.equipment-distribution-table-head,
+.equipment-distribution-row {
+  border-bottom: 2px solid #bfbfbf;
+  align-items: stretch;
+}
+
+.equipment-distribution-table-head > span,
+.equipment-distribution-row > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border-right: 2px solid #a1a1a1;
+}
+
+.equipment-distribution-table-head > span:last-child,
+.equipment-distribution-row > span:last-child {
+  border-right: none;
 }

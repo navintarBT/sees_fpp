@@ -11,18 +11,48 @@ type DeliverySlipRow = {
   status: DeliverySlipStatus
 }
 
-const MOCK_REGISTERED_SLIPS: Record<string, string[]> = {
-  '12345678': ['202603310000000000000000000001', '202603310000000000000000000002'],
-  '87654321': ['202603310000000000000000000101', '202603310000000000000000000102'],
+type DeliverySlipMockRow = Omit<DeliverySlipRow, 'id'>
+
+const MOCK_REGISTERED_ROWS: Record<string, DeliverySlipMockRow[]> = {
+  '12345678': [
+    {slipNo: '202603310000000000000000000001', status: ''},
+    {slipNo: '202603310000000000000000000002', status: ''},
+    {slipNo: '202603310000000000000000000003', status: ''},
+    {slipNo: '202603310000000000000000000004', status: ''},
+    {slipNo: '202603310000000000000000000005', status: ''},
+    {slipNo: '202603310000000000000000000006', status: ''},
+    {slipNo: '202603310000000000000000000007', status: ''},
+    {slipNo: '202603310000000000000000000008', status: ''},
+    {slipNo: '202603310000000000000000000009', status: ''},
+    {slipNo: '202603310000000000000000000010', status: ''},
+    {slipNo: '202603310000000000000000000011', status: ''},
+    {slipNo: '202603310000000000000000000012', status: ''},
+    {slipNo: '202603310000000000000000000013', status: ''},
+  ],
+  '87654321': [
+    {slipNo: '202603310000000000000000000101', status: ''},
+    {slipNo: '202603310000000000000000000102', status: ''},
+    {slipNo: '202603310000000000000000000103', status: ''},
+    {slipNo: '202603310000000000000000000104', status: ''},
+    {slipNo: '202603310000000000000000000105', status: ''},
+    {slipNo: '202603310000000000000000000106', status: ''},
+    {slipNo: '202603310000000000000000000107', status: ''},
+    {slipNo: '202603310000000000000000000108', status: ''},
+    {slipNo: '202603310000000000000000000109', status: ''},
+    {slipNo: '202603310000000000000000000110', status: ''},
+    {slipNo: '202603310000000000000000000111', status: ''},
+    {slipNo: '202603310000000000000000000112', status: ''},
+    {slipNo: '202603310000000000000000000113', status: ''},
+  ],
 }
 
 const DEFAULT_SHIPMENT_NO = '12345678'
 
 const buildRegisteredRows = (shipmentNo: string): DeliverySlipRow[] =>
-  (MOCK_REGISTERED_SLIPS[shipmentNo] ?? []).map((slipNo, index) => ({
+  (MOCK_REGISTERED_ROWS[shipmentNo] ?? []).map((row, index) => ({
     id: index + 1,
-    slipNo,
-    status: '',
+    slipNo: row.slipNo,
+    status: row.status,
   }))
 
 const isValidDigits = (value: string, length: number) => new RegExp(`^\\d{${length}}$`).test(value)
@@ -233,7 +263,7 @@ const DeliverySlipRegistration = () => {
               {message ? <div className='delivery-slip-message'>{message}</div> : null}
             </div>
 
-            <div className='set-table-wrap'>
+            <div className='set-table-wrap delivery-slip-table-wrap'>
               <div className='set-table'>
                 <div
                   ref={tableScrollRef}

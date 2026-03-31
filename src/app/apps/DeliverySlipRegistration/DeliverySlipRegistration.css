@@ -4,6 +4,10 @@
   color: #1f2937;
 }
 
+.delivery-slip-table-wrap {
+  --set-table-height: 1045px;
+}
+
 .delivery-slip-table-head,
 .delivery-slip-row {
   grid-template-columns: 50px 180px 1fr;
@@ -25,14 +29,35 @@
 }
 
 .col-status-delivery {
-  text-align: center;
+  justify-content: center;  /* เปลี่ยนจาก text-align */
 }
 
 .col-slip-delivery {
-  text-align: left;
+  justify-content: flex-start;  /* เปลี่ยนจาก text-align */
   padding-right: 24px;
 }
 
 .delivery-slip-back-actions {
   grid-template-columns: 1fr 1fr;
+}
+
+/* ─── Grid lines ─── */
+/* ─── Grid lines ─── */
+.delivery-slip-table-head,
+.delivery-slip-row {
+  border-bottom: 2px solid #bfbfbf;
+  align-items: stretch;   /* ← override align-items ของ parent grid */
+}
+
+.delivery-slip-table-head > span,
+.delivery-slip-row > span {
+  display: flex;
+  align-items: center;
+  height: 100%;           /* ← ยืดเต็มความสูงแถว */
+  border-right: 2px solid #a1a1a1;
+}
+
+.delivery-slip-table-head > span:last-child,
+.delivery-slip-row > span:last-child {
+  border-right: none;
 }

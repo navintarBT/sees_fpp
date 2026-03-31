@@ -319,7 +319,7 @@ const Equipment_Distribution = () => {
                 </div>
                 <div className='set-table'>
                   <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                    <div className='set-table-head'>
+                    <div className='set-table-head equipment-distribution-table-head'>
                       <span className='col-arrow-head'></span>
                       <span className='col-error'></span>
                       <span className='col-item'>From/To</span>
@@ -337,7 +337,7 @@ const Equipment_Distribution = () => {
                       ) : (
                         rows.map((row) => (
                           <div
-                            className='set-table-row bundle-row'
+                            className='set-table-row bundle-row equipment-distribution-row'
                             key={row.id}
                             role='button'
                             tabIndex={0}
