@@ -1,6 +1,5 @@
 import {useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {FaPlay} from 'react-icons/fa'
 import './DeliverySlipRegistration.css'
 
 type DeliverySlipStatus = '' | '追加' | '削除'
@@ -67,7 +66,10 @@ const DeliverySlipRegistration = () => {
   const [shipmentNo, setShipmentNo] = useState(DEFAULT_SHIPMENT_NO)
   const [deliverySlipNo, setDeliverySlipNo] = useState('')
   const [rows, setRows] = useState<DeliverySlipRow[]>(initialRows)
-  const [activeRowId, setActiveRowId] = useState<number | null>(initialRows[0]?.id ?? null)
+  // Changed: support multiple selected row IDs
+  const [selectedRowIds, setSelectedRowIds] = useState<Set<number>>(
+    new Set(initialRows[0]?.id != null ? [initialRows[0].id] : [])
+  )
   const [message, setMessage] = useState('')
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
@@ -75,12 +77,14 @@ const DeliverySlipRegistration = () => {
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [showCompleteNotice, setShowCompleteNotice] = useState(false)
 
-  const activeRow = rows.find((row) => row.id === activeRowId) ?? null
+  // Derived: rows currently checked
+  const selectedRows = rows.filter((row) => selectedRowIds.has(row.id))
+  const allChecked = rows.length > 0 && rows.every((row) => selectedRowIds.has(row.id))
+  const someChecked = rows.some((row) => selectedRowIds.has(row.id))
 
   const resetTableScroll = () => {
     const el = tableScrollRef.current
     if (!el) return
-
     requestAnimationFrame(() => {
       el.scrollTop = 0
       el.scrollLeft = 0
@@ -88,13 +92,12 @@ const DeliverySlipRegistration = () => {
   }
 
   const clearScreen = () => {
-    const restoredRows = buildRegisteredRows(DEFAULT_SHIPMENT_NO)
-    setShipmentNo(DEFAULT_SHIPMENT_NO)
+    setShipmentNo('')
     setDeliverySlipNo('')
-    setRows(restoredRows)
-    setActiveRowId(restoredRows[0]?.id ?? null)
+    setRows([])
+    setSelectedRowIds(new Set())
     setMessage('')
-    nextRowIdRef.current = restoredRows.length + 1
+    nextRowIdRef.current = 1
     resetTableScroll()
   }
 
@@ -107,7 +110,7 @@ const DeliverySlipRegistration = () => {
     const registeredRows = buildRegisteredRows(shipmentNo)
     nextRowIdRef.current = registeredRows.length + 1
     setRows(registeredRows)
-    setActiveRowId(registeredRows[0]?.id ?? null)
+    setSelectedRowIds(new Set(registeredRows[0]?.id != null ? [registeredRows[0].id] : []))
     setDeliverySlipNo('')
     setMessage('')
     resetTableScroll()
@@ -134,10 +137,10 @@ const DeliverySlipRegistration = () => {
         setRows((prevRows) =>
           prevRows.map((row) => (row.id === existingRow.id ? {...row, status: ''} : row))
         )
-        setActiveRowId(existingRow.id)
+        setSelectedRowIds(new Set([existingRow.id]))
         setMessage('')
       } else {
-        setActiveRowId(existingRow.id)
+        setSelectedRowIds(new Set([existingRow.id]))
         setMessage('')
       }
       setDeliverySlipNo('')
@@ -152,7 +155,7 @@ const DeliverySlipRegistration = () => {
 
     nextRowIdRef.current += 1
     setRows((prevRows) => [...prevRows, newRow])
-    setActiveRowId(newRow.id)
+    setSelectedRowIds(new Set([newRow.id]))
     setDeliverySlipNo('')
     setMessage('')
 
@@ -163,34 +166,60 @@ const DeliverySlipRegistration = () => {
     })
   }
 
+  // Toggle a single row checkbox
+  const toggleRowCheckbox = (id: number) => {
+    setSelectedRowIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
+
+  // Toggle all rows (header checkbox)
+  const toggleAllCheckboxes = () => {
+    if (allChecked) {
+      setSelectedRowIds(new Set())
+    } else {
+      setSelectedRowIds(new Set(rows.map((row) => row.id)))
+    }
+  }
+
   const handleDelete = () => {
-    if (!activeRow) {
+    if (selectedRows.length === 0) {
       setShowNoSelectionConfirm(true)
       return
     }
-
     setShowDeleteConfirm(true)
   }
 
   const confirmDelete = () => {
-    if (!activeRow) {
+    if (selectedRows.length === 0) {
       setShowDeleteConfirm(false)
       return
     }
 
-    if (activeRow.status === '追加') {
-      setRows((prevRows) => prevRows.filter((row) => row.id !== activeRow.id))
-      setActiveRowId(null)
-      setMessage('')
-    } else if (activeRow.status === '') {
-      setRows((prevRows) =>
-        prevRows.map((row) => (row.id === activeRow.id ? {...row, status: '削除'} : row))
-      )
-      setMessage('')
-    } else {
-      setMessage('')
-    }
+    setRows((prevRows) => {
+      let updated = [...prevRows]
+      for (const activeRow of selectedRows) {
+        if (activeRow.status === '追加') {
+          // Remove newly added rows entirely
+          updated = updated.filter((row) => row.id !== activeRow.id)
+        } else if (activeRow.status === '') {
+          // Mark existing rows as 削除
+          updated = updated.map((row) =>
+            row.id === activeRow.id ? {...row, status: '削除'} : row
+          )
+        }
+      }
+      return updated
+    })
 
+    setSelectedRowIds(new Set())
+    setMessage('')
     setShowDeleteConfirm(false)
   }
 
@@ -207,13 +236,26 @@ const DeliverySlipRegistration = () => {
 
     const committedRows = rows
       .filter((row) => row.status !== '削除')
-      .map((row) => ({...row, status: ''}))
+      .map((row) => ({...row, status: '' as DeliverySlipStatus}))
 
     setRows(committedRows)
-    setActiveRowId(committedRows[0]?.id ?? null)
+    setSelectedRowIds(new Set(committedRows[0]?.id != null ? [committedRows[0].id] : []))
     setMessage('')
     setShowCompleteNotice(true)
     resetTableScroll()
+  }
+
+  // Build delete confirmation message based on selected rows
+  const deleteConfirmMessage = () => {
+    const hasAdded = selectedRows.some((r) => r.status === '追加')
+    const hasExisting = selectedRows.some((r) => r.status === '')
+    if (hasAdded && hasExisting) {
+      return '選択した配送伝票No.を削除（追加行は完全削除、既存行は削除予定）しますか？'
+    }
+    if (hasAdded) {
+      return '追加した配送伝票No.を削除しますか？'
+    }
+    return '選択した配送伝票No.を削除予定にしますか？'
   }
 
   return (
@@ -269,8 +311,20 @@ const DeliverySlipRegistration = () => {
                   ref={tableScrollRef}
                   className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}
                 >
+                  {/* Header with select-all checkbox */}
                   <div className='set-table-head delivery-slip-table-head'>
-                    <span className='col-arrow-head'></span>
+                    <span className='col-checkbox-head' style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '52px', minWidth: '52px', boxSizing: 'border-box'}}>
+                      <input
+                        type='checkbox'
+                        aria-label='すべて選択'
+                        checked={allChecked}
+                        ref={(el) => {
+                          if (el) el.indeterminate = someChecked && !allChecked
+                        }}
+                        onChange={toggleAllCheckboxes}
+                        style={{width: '30px', height: '30px', cursor: 'pointer', accentColor: '#1976d2'}}
+                      />
+                    </span>
                     <span className='col-status-delivery'>状態</span>
                     <span className='col-slip-delivery'>配送伝票No.</span>
                   </div>
@@ -279,28 +333,45 @@ const DeliverySlipRegistration = () => {
                     {rows.length === 0 ? (
                       <div className='set-empty'>表示する配送伝票No.がありません。</div>
                     ) : (
-                      rows.map((row) => (
-                        <div
-                          className={`set-table-row delivery-slip-row${activeRowId === row.id ? ' is-active' : ''}`}
-                          key={row.id}
-                          role='button'
-                          tabIndex={0}
-                          onClick={() => setActiveRowId(row.id)}
-                          onFocus={() => setActiveRowId(row.id)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault()
-                              setActiveRowId(row.id)
-                            }
-                          }}
-                        >
-                          <span className='col-arrow'>
-                            {activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null}
-                          </span>
-                          <span className='col-status-delivery'>{row.status}</span>
-                          <span className='col-slip-delivery'>{row.slipNo}</span>
-                        </div>
-                      ))
+                      rows.map((row) => {
+                        const isChecked = selectedRowIds.has(row.id)
+                        return (
+                          <div
+                            className={`set-table-row delivery-slip-row${isChecked ? ' is-active' : ''}`}
+                            key={row.id}
+                            role='button'
+                            tabIndex={0}
+                            onClick={() => toggleRowCheckbox(row.id)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault()
+                                toggleRowCheckbox(row.id)
+                              }
+                            }}
+                            style={{
+                              minHeight: '44px',
+                              backgroundColor: isChecked ? '#e3f2fd' : '#ffffff',
+                              boxShadow: isChecked ? 'inset 3px 0 0 #1976d2' : 'none',
+                              color: isChecked ? '#1565c0' : 'inherit',
+                              cursor: 'pointer',
+                              transition: 'background-color 0.15s ease, box-shadow 0.15s ease',
+                            }}
+                          >
+                            <span className='col-checkbox' style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '52px', minWidth: '52px', boxSizing: 'border-box'}}>
+                              <input
+                                type='checkbox'
+                                aria-label={`行 ${row.slipNo} を選択`}
+                                checked={isChecked}
+                                onChange={() => toggleRowCheckbox(row.id)}
+                                onClick={(e) => e.stopPropagation()}
+                                style={{width: '30px', height: '30px', cursor: 'pointer', accentColor: '#1976d2'}}
+                              />
+                            </span>
+                            <span className='col-status-delivery'>{row.status}</span>
+                            <span className='col-slip-delivery'>{row.slipNo}</span>
+                          </div>
+                        )
+                      })
                     )}
                   </div>
                 </div>
@@ -308,7 +379,13 @@ const DeliverySlipRegistration = () => {
             </div>
 
             <div className='set-actions set-actions-row'>
-              <button className='set-btn set-danger' onClick={() => setShowClearConfirm(true)}>
+              <button className='set-btn set-danger' onClick={() => {
+                setShowDeleteConfirm(false)
+                setShowNoSelectionConfirm(false)
+                setShowBackConfirm(false)
+                setShowCompleteNotice(false)
+                setShowClearConfirm(true)
+              }}>
                 破棄
               </button>
               <button className='set-btn set-primary' onClick={handleComplete}>
@@ -317,7 +394,13 @@ const DeliverySlipRegistration = () => {
               <button className='set-btn set-success' onClick={handleDelete}>
                 削除
               </button>
-              <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>
+              <button className='set-btn set-warning' onClick={() => {
+                setShowDeleteConfirm(false)
+                setShowNoSelectionConfirm(false)
+                setShowClearConfirm(false)
+                setShowCompleteNotice(false)
+                setShowBackConfirm(true)
+              }}>
                 戻る
               </button>
             </div>
@@ -326,11 +409,7 @@ const DeliverySlipRegistration = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>
-                    {activeRow?.status === '追加'
-                      ? '追加した配送伝票No.を削除しますか？'
-                      : '選択した配送伝票No.を削除予定にしますか？'}
-                  </div>
+                  <div className='set-modal-body'>{deleteConfirmMessage()}</div>
                   <div className='set-modal-actions'>
                     <button className='set-modal-btn set-modal-yes' onClick={confirmDelete}>
                       はい
