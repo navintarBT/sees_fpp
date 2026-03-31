@@ -1,0 +1,38 @@
+.delivery-slip-message {
+  min-height: 44px;
+  font-size: 26px;
+  color: #1f2937;
+}
+
+.delivery-slip-table-head,
+.delivery-slip-row {
+  grid-template-columns: 50px 180px 1fr;
+  min-width: 0;
+}
+
+.delivery-slip-row {
+  text-align: left;
+}
+
+.delivery-slip-row span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delivery-slip-row.is-active {
+  background: #e8f4ff;
+}
+
+.col-status-delivery {
+  text-align: center;
+}
+
+.col-slip-delivery {
+  text-align: left;
+  padding-right: 24px;
+}
+
+.delivery-slip-back-actions {
+  grid-template-columns: 1fr 1fr;
+}
