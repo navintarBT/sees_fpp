@@ -5,14 +5,23 @@ import './Equipment_Distribution_Manual.css'
 const SetRegisterHandInputPage = () => {
   const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
+  const [toWarehouse, setToWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
   const [quantity, setQuantity] = useState('1')
+  const [expirationDate, setExpirationDate] = useState('')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-
-
+  const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
+    const [form, setForm] = useState({
+      parentWarehouse: '羽田製品倉庫：W0040',
+      parentItemNo: '0193090',
+      moveWarehouse: '千葉倉庫（WMS）：W002',
+      moveStorage: '',
+      qty: '1',
+      janCode: '',
+    })
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -20,11 +29,20 @@ const SetRegisterHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='hand-header'>セット構成登録手入力</div>
+          <div className='hand-header'>備品振分手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
-                <label>倉庫（親）</label>
+                <label> FR倉庫 </label>
+                <select value={toWarehouse} onChange={(e) => setToWarehouse(e.target.value)}>
+                  <option value=''></option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                </select>
+              </div>
+                  <div className='hand-row'>
+                <label> TO倉庫 </label>
                 <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
@@ -32,44 +50,53 @@ const SetRegisterHandInputPage = () => {
                   <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                 </select>
               </div>
+                
               <div className='hand-row'>
-                <label>品目No.(親)</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                <label> 保管場所 </label>
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
-              <div className='hand-row'>
-                <label>シリアル(親)</label>
+                     <div className='hand-row equipment-distribution-manual__clear-input-row'>
+                <label> 数量 </label>
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+              </div>
+                          <div className='hand-row equipment-distribution-manual__clear-input-row'>
+                <label> 品目No. </label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
-              <div className='hand-row'>
-                <label>移動倉庫</label>
-                <select disabled={!isEnabled}>
-                  <option>千葉倉庫（WMS）：W002</option>
-                  <option>千葉倉庫（WMS）：W003</option>
-                  <option>千葉倉庫（WMS）：W004</option>
-                </select>
+                  <div className='hand-row equipment-distribution-manual__clear-input-row'>
+                <label> ロットシリアル </label>
+                <input value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} />
               </div>
-              <div className='hand-row'>
-                <label>移動保管場所</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
-              </div>
-              <div className='hand-row'>
-                <label>数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
-              </div>
-              <div className='hand-row'>
-                <label>品目No.</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
-              <div className='hand-row'>
-                <label>ロット</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
-              <div className='hand-row'>
-                <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
+              
+       <div className='set-radio-group bundle-group equipment-distribution-manual__quantity-range'>
+                  <label className='set-radio center'>
+                    
+                    <input
+                      type='radio'
+                      name='quantityRange'
+                      value='from'
+                      checked={quantityRange === 'from'}
+                      onChange={() => setQuantityRange('from')}
+                    />
+                    From
+                  </label>
+                  <label className='set-radio'>
+                    <input
+                      type='radio'
+                      name='quantityRange'
+                      value='to'
+                      checked={quantityRange === 'to'}
+                      onChange={() => setQuantityRange('to')}
+                    />
+                    To
+                  </label>
+                </div>
+    
             </div>
-
+            <div className='hand-row'>
+                <label> 有効日付(yymm)  </label>
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+              </div>
             <div className='set-actions set-actions-row'>
               <button
                 className='set-btn set-danger'

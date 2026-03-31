@@ -306,7 +306,7 @@ const Equipment_Distribution = () => {
               </div>
             
               <div className='set-row'>
-                <label>移動保管場所</label>
+                <label> 理由 </label>
                 <input
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
@@ -322,13 +322,13 @@ const Equipment_Distribution = () => {
                     <div className='set-table-head'>
                       <span className='col-arrow-head'></span>
                       <span className='col-error'></span>
-                      <span className='col-item'>品目No.</span>
-                      <span className='col-lot'>ロットシリアル</span>
-                      <span className='col-status'>状態</span>
-                      <span className='col-num'>構成数</span>
-                      <span className='col-num'>解除数</span>
-                      <span className='col-move'>移動倉庫</span>
-                      <span className='col-move'>移動保管場所</span>
+                      <span className='col-item'>From/To</span>
+                      <span className='col-lot'>品名</span>
+                      <span className='col-status'>品目No.</span>
+                      <span className='col-num'>ロットシリアル</span>
+                      <span className='col-num'>数量</span>
+                      <span className='col-move'>	倉庫</span>
+                      <span className='col-move'>	保管場所</span>
                       <span className='col-name'>品名</span>
                     </div>
                     <div className='set-table-body'>
@@ -376,13 +376,11 @@ const Equipment_Distribution = () => {
                 <button
                   className='set-btn set-danger'
                   onClick={() => setShowClearConfirm(true)}
-                  style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                 >
                   破棄
                 </button>
                 <button
                   className='set-btn set-primary'
-                  style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                   onClick={() => setShowCompleteConfirm(true)}
                 >
                   完了
@@ -390,13 +388,15 @@ const Equipment_Distribution = () => {
                 <button
                   className='set-btn set-success'
                   onClick={handleReleaseClick}
+                  style={{ visibility: showHandInput ? 'visible' : 'hidden' }}
+                  disabled={!showHandInput}
+                  aria-hidden={!showHandInput}
                 >
-                  {showHandInput ? '手入力' : '解除'}
+                  {showHandInput ? '手入力' : ''}
                 </button>
                 <button
                   className='set-btn set-warning'
                   onClick={() => setShowBackConfirm(true)}
-                  style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                 >
                   戻る
                 </button>

@@ -5,6 +5,7 @@ import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegist
 import VehicleInboundRegistrationPage from '../app/apps/VehicleInbound/VehicleInboundRegistrationPage'
 import BundleRegistrationPage from '../app/apps/BundleRegistration/BundleRegistrationPage'
 import Equipment_Distribution_Page from '../app/apps/Equipment_Distribution/Equipment_Distribution_Page'
+
 const MainPage = () => {
   return (
     <Routes>
@@ -15,6 +16,7 @@ const MainPage = () => {
         <Route path='vehicle-inbound/*' element={<VehicleInboundRegistrationPage />} />
         <Route path='bundle/*' element={<BundleRegistrationPage />} />
         <Route path='equipment-distribution/*' element={<Equipment_Distribution_Page />} />
+
       </Route>
     </Routes>
   )
