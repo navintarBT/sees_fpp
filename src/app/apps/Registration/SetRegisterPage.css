@@ -1,9 +1,13 @@
 .set-table-head,
-.set-register-row {
-  display: grid;
-  grid-template-columns: 30px 30px 220px 170px 150px 100px 150px 150px 150px 150px;
-  column-gap: 20px;
-  align-items: center;
-  text-align: center;
-  min-width: 1530px;
+.set-table-grid {
+  display:grid;
+  grid-template-columns: 50px 30px 220px 200px 130px 100px 150px 150px 180px 150px;
+  column-gap:20px;
+  align-items:center;
+  text-align:center;
+  min-width:1530px;
+  box-sizing:border-box;
+  font-size:28px;
 }
+
+

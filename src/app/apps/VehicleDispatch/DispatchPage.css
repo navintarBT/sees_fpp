@@ -1,0 +1,41 @@
+.set-head-dispatch,
+.set-table-dispatch {
+  display: grid;
+  grid-template-columns: 50px 50px 220px 220px 180px 150px 150px;
+  column-gap: 0;
+  align-items: center;
+  text-align: center;
+  min-width: 900px;
+  box-sizing: border-box;
+  font-size: 28px;
+}
+
+.set-head-dispatch span,
+.set-table-dispatch span {
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.set-table-head-detail,
+.set-table-row-detail {
+  display: grid;
+  grid-template-columns: 100px 110px 214px 200px 200px 200px 1fr;
+  column-gap: 0;
+  align-items: center;
+  text-align: center;
+  min-width: 900px;
+  box-sizing: border-box;
+}
+
+.set-table-head-detail span,
+.set-table-row-detail span {
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.set-table-row-detail input[type='checkbox'] {
+  width: 40px;
+  height: 40px;
+  accent-color: #2a5bd6;
+  cursor: pointer;
+}

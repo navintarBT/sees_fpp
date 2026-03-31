@@ -318,7 +318,7 @@ const BundlePage = () => {
                 </div>
                 <div className='set-table'>
                   <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                    <div className='set-table-head'>
+                    <div className='set-table-head set-table-bundle'>
                       <span className='col-arrow-head'></span>
                       <span className='col-error'></span>
                       <span className='col-item'>品目No.</span>
