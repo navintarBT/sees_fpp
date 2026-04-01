@@ -305,10 +305,10 @@ const DispatchPage = () => {
               <div className='set-table-wrap'>
                 <div className='set-table-tools'>
                 </div>
-                <div className='set-table'>
+                <div className='set-table-dis'>
                   <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                    <div className='set-table-grid-dispatch set-table-register'>
-                      <div className='set-table-head'>
+                    <div className='set-table-grid-dispatch'>
+                      <div className='set-table-head-dis'>
                         <span className='col-arrow-head'></span>
                         <span className='col-error'></span>
                         <span className='col-item'>品目No.</span>
@@ -317,14 +317,14 @@ const DispatchPage = () => {
                         <span className='col-num'>読込</span>
                         <span className='col-num'>品名</span>
                       </div>
-                      <div className='set-table-head-divider' aria-hidden='true'></div>
-                      <div className='set-table-body'>
+                      <div className='set-table-head-divider-re' aria-hidden='true'></div>
+                      <div className='set-table-body-dis'>
                         {rows.length === 0 ? (
                           <div className='set-empty'></div>
                         ) : (
                           rows.map((row) => (
                             <div
-                              className='set-table-row'
+                              className='set-table-dis-row'
                               key={row.id}
                               role='button'
                               tabIndex={0}

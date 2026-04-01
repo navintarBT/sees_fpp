@@ -350,10 +350,10 @@ const SetRegisterPage = () => {
             <div className='set-table-wrap'>
               <div className='set-table-tools'>
               </div>
-              <div className='set-table'>
+              <div className='set-table-re'>
                 <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                  <div className='set-table-grid set-table-register'>
-                    <div className='set-table-head'>
+                  <div className='set-table-regis'>
+                    <div className='set-table-head-re'>
                       <span className='col-arrow-head'></span>
                       <span className='col-error'></span>
                       <span className='col-item'>品目No.</span>
@@ -365,14 +365,14 @@ const SetRegisterPage = () => {
                       <span className='col-move'>移動保管場所</span>
                       <span className='col-name'>品名</span>
                     </div>
-                    <div className='set-table-head-divider' aria-hidden='true'></div>
-                    <div className='set-table-body'>
+                    <div className='set-table-head-divider-re' aria-hidden='true'></div>
+                    <div className='set-table-body-re'>
                       {rows.length === 0 ? (
                         <div className='set-empty'></div>
                       ) : (
                         rows.map((row) => (
                           <div
-                            className='set-table-row'
+                            className='set-table-re-row'
                             key={row.id}
                             role='button'
                             tabIndex={0}
