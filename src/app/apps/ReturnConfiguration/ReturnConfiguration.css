@@ -52,7 +52,7 @@
 .set-register-row {
   display: grid;
   grid-template-columns: 50px 90px 150px 210px 150px 120px 120px 140px 180px 150px;
-  column-gap:20px;
+  /* column-gap:20px; */
   align-items:center;
   text-align:center;
   min-width: 1630px;
@@ -60,18 +60,3 @@
   font-size:28px;
   text-align: center;
 }
-
-/* Column borders */
-/* .set-table-head > span,
-.set-table-row > span {
-  border-right: 1px solid #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-}
-
-.set-table-head > span:last-child,
-.set-table-row > span:last-child {
-  border-right: none;
-} */
