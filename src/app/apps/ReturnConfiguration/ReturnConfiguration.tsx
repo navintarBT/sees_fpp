@@ -292,10 +292,10 @@ const ReturnConfiguration = () => {
                             </div>
                         </div>
 
-                        <div className='set-table-wrap'>
+                        <div className='set-table-wrap-returnConfiguration'>
                             <div className='set-table-tools'>
                             </div>
-                            <div className='set-table'>
+                            <div className='set-table-returnConfiguration'>
                                 <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
                                     <div className='set-table-head-returnConfiguration'>
                                         <span className='col-arrow-head'></span>

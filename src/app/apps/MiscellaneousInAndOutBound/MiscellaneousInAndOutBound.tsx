@@ -264,10 +264,10 @@ const MiscellaneousInAndOutBound = () => {
                             </div>
                         </div>
 
-                        <div className='set-table-wrap'>
+                        <div className='set-table-wrap-miscellaneous'>
                             <div className='set-table-tools'>
                             </div>
-                            <div className='set-table'>
+                            <div className='set-table-miscellaneous'>
                                 <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
                                     <div className='set-table-head-miscellaneous'>
                                         <span className='gc-arrow-head'></span>
