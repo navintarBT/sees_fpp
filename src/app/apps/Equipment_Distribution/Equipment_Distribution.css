@@ -1,77 +1,74 @@
-.set-table-head,
-.bundle-row {
+.set-table-head.equipment-distribution-table-head-eq,
+.bundle-row-eq {
   display: grid;
-  grid-template-columns: 30px 30px 220px 170px 220px 200px 150px 150px 150px 150px;
+  
   column-gap: 20px;
   align-items: center;
   text-align: center;
   min-width: 1655px;
 }
 
-.bundle-group{
-  display:flex;
-  align-items:center;
-  gap:20px;
-  
+.bundle-group-eq {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 20px;
 }
-.col-item{
-  justify-content: flex-start;
-  /* background-color: red; */
-  margin-left: -19px;
-}
-.col-lot{
-  justify-content: flex-start;
-  /* background-color: red; */
-  margin-left: -19px;
 
+.set-row-eq-1 {
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
-.col-num{
+
+.set-radio-group-eq {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.col-item-eq,
+.col-lot-eq,
+.col-num-eq,
+.col-move-eq,
+.col-name-eq {
   justify-content: flex-start;
-  /* background-color: red; */
   margin-left: -19px;
 }
-.col-move{
-  justify-content: flex-start;
-  /* background-color: red; */
-  margin-left: -19px;
-}
-.col-name{
-  justify-content: flex-start;
-  /* background-color: red; */
-  margin-left: -19px;
-}
-.set-radio{
-  display:flex;
-  align-items:center;
-  gap:5px;
-  font-size:50px;
-  color:black;
+
+.set-radio-eq {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  font-size: 40px;
+  color: black;
   padding-right: 10px;
-  background-color: none;
+  background-color: transparent;
+  white-space: nowrap;
 }
 
-.set-radio input{
-  width:32px;
-  height:32px;
-  accent-color:#2a5bd6;
+.set-radio-eq input {
+  width: 32px;
+  height: 32px;
+  accent-color: #2a5bd6;
   transform: translateY(1px);
-    background-color: red;
 }
 
-.set-row-radio{
-  grid-template-columns:240px 1fr;
-  background-color: red;
-
+.set-row-bundle-eq {
+  grid-template-columns: 240px 1fr;
 }
 
-.equipment-distribution-table-head,
-.equipment-distribution-row {
+.equipment-distribution-table-head-eq,
+.equipment-distribution-row-eq {
   border-bottom: 2px solid #bfbfbf;
   align-items: stretch;
 }
 
-.equipment-distribution-table-head > span,
-.equipment-distribution-row > span {
+.equipment-distribution-table-head-eq > span,
+.equipment-distribution-row-eq > span {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,25 +77,25 @@
   text-align: center;
 }
 
-.equipment-distribution-table-head > span:last-child,
-.equipment-distribution-row > span:last-child {
+.equipment-distribution-table-head-eq > span:last-child,
+.equipment-distribution-row-eq > span:last-child {
   border-right: none;
 }
-.col-status-1 {
-  /* background-color: red; */
+
+.col-status-1-eq {
   margin-left: -19px;
 }
-/* Fix: use higher-specificity selectors so these columns aren't overridden */
-.equipment-distribution-table-head .col-status-1,
-.equipment-distribution-table-head .col-error-1,
-.equipment-distribution-row .col-status-1,
-.equipment-distribution-row .col-error-1 {
+
+.equipment-distribution-table-head-eq .col-status-1-eq,
+.equipment-distribution-table-head-eq .col-error-1-eq,
+.equipment-distribution-row-eq .col-status-1-eq,
+.equipment-distribution-row-eq .col-error-1-eq {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
 }
-.col-error-1 {
-  /* background-color: red; */
-    margin-left: -19px;
+
+.col-error-1-eq {
+  margin-left: -19px;
 }
