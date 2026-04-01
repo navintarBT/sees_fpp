@@ -1,0 +1,17 @@
+.set-table-inbound,
+.set-table-row-inbound {
+  display: grid;
+  grid-template-columns: 50px 50px 220px 220px 180px 150px 150px;
+  column-gap: 0;
+  align-items: center;
+  text-align: center;
+  min-width: 900px;
+  box-sizing: border-box;
+  font-size: 28px;
+}
+
+.set-table-inbound span,
+.set-table-row-inbound span {
+  padding: 0 10px;
+  box-sizing: border-box;
+}

@@ -111,6 +111,7 @@ const DispatchPage = () => {
   const [showDetail, setShowDetail] = useState(false)
   const [selectedRowId, setSelectedRowId] = useState<number | null>(null)
   const [showRowConfirm, setShowRowConfirm] = useState(false)
+  const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
 
   const clearRows = () => setRows([])
   const clearForm = () =>
@@ -139,6 +140,12 @@ const DispatchPage = () => {
   const handleRowConfirm = (rowId: number) => {
     setSelectedRowId(rowId)
     setShowRowConfirm(true)
+  }
+
+  const toggleRowChecked = (rowId: number) => {
+    setCheckedRowIds((prev) =>
+      prev.includes(rowId) ? prev.filter((id) => id !== rowId) : [...prev, rowId]
+    )
   }
 
   const selectedRow = rows.find((row) => row.id === selectedRowId) ?? null
@@ -185,26 +192,31 @@ const DispatchPage = () => {
                     <div className='set-table-scroll'>
                       <div className='set-table-head set-table-head-detail'>
                         <span className='col-check'>削除</span>
+                        <span className='col-name'> </span>
                         <span className='col-lot'>ロットシリアル</span>
                         <span className='col-num'>読込</span>
                         <span className='col-move'>倉庫</span>
                         <span className='col-move'>保管場所</span>
-                        <span className='col-name'> </span>
                       </div>
                       <div className='set-table-body'>
                         {rows.length === 0 ? (
-                          <div className='set-empty'>No Data</div>
+                          <div className='set-empty'></div>
                         ) : (
                           rows.map((row) => (
                             <div className='set-table-row set-table-row-detail' key={row.id}>
                               <span className='col-check'>
-                                <input type='checkbox' />
+                                <input
+                                  type='checkbox'
+                                  checked={checkedRowIds.includes(row.id)}
+                                  onChange={() => toggleRowChecked(row.id)}
+                                  onClick={(e) => e.stopPropagation()}
+                                />
                               </span>
+                              <span className='col-name'> </span>
                               <span className='col-lot'>{row.lot}</span>
                               <span className='col-num'>{row.release}</span>
                               <span className='col-move'>{row.item}</span>
                               <span className='col-move'>{row.item}</span>
-                              <span className='col-name'> </span>
                             </div>
                           ))
                         )}
@@ -295,9 +307,9 @@ const DispatchPage = () => {
               </div>
               <div className='set-table'>
                 <div className='set-table-scroll'>
-                  <div className='set-table-head'>
+                  <div className='set-table-head set-table-dispatch'>
                     <span className='col-arrow-head'></span>
-                    <span className='col-error'>エラー</span>
+                    <span className='col-error'></span>
                     <span className='col-item'>品目No.</span>
                     <span className='col-lot'>ロットシリアル</span>
                     <span className='col-status'>指示</span>
@@ -306,11 +318,11 @@ const DispatchPage = () => {
                   </div>
                   <div className='set-table-body'>
                     {rows.length === 0 ? (
-                      <div className='set-empty'>No Data</div>
+                      <div className='set-empty'></div>
                     ) : (
                       rows.map((row) => (
                         <div
-                          className='set-table-row'
+                          className='set-table-row set-table-dispatch'
                           key={row.id}
                           role='button'
                           tabIndex={0}

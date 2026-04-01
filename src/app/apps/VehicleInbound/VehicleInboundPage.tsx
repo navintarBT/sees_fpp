@@ -186,11 +186,11 @@ const VehicleInboundPage = () => {
                     <div className='set-table-scroll'>
                       <div className='set-table-head set-table-head-detail'>
                         <span className='col-check'>削除</span>
+                        <span className='col-name'> </span>
                         <span className='col-lot'>ロットシリアル</span>
                         <span className='col-num'>読込</span>
                         <span className='col-move'>倉庫</span>
                         <span className='col-move'>保管場所</span>
-                        <span className='col-name'> </span>
                       </div>
                       <div className='set-table-body'>
                         {rows.length === 0 ? (
@@ -202,10 +202,10 @@ const VehicleInboundPage = () => {
                                 <input type='checkbox' />
                               </span>
                               <span className='col-lot'>{row.lot}</span>
+                              <span className='col-name'> </span>
                               <span className='col-num'>{row.release}</span>
                               <span className='col-move'>{row.item}</span>
                               <span className='col-move'>{row.item}</span>
-                              <span className='col-name'> </span>
                             </div>
                           ))
                         )}
@@ -303,9 +303,9 @@ const VehicleInboundPage = () => {
               </div>
               <div className='set-table'>
                 <div className='set-table-scroll'>
-                  <div className='set-table-head'>
+                  <div className='set-table-head set-table-inbound'>
                     <span className='col-arrow-head'></span>
-                    <span className='col-error'>エラー</span>
+                    <span className='col-error'></span>
                     <span className='col-item'>品目No.</span>
                     <span className='col-lot'>ロットシリアル</span>
                     <span className='col-status'>指示</span>
@@ -314,11 +314,11 @@ const VehicleInboundPage = () => {
                   </div>
                   <div className='set-table-body'>
                     {rows.length === 0 ? (
-                      <div className='set-empty'>No Data</div>
+                      <div className='set-empty'></div>
                     ) : (
                       rows.map((row) => (
                         <div
-                          className='set-table-row'
+                          className='set-table-row set-table-row-inbound'
                           key={row.id}
                           role='button'
                           tabIndex={0}
