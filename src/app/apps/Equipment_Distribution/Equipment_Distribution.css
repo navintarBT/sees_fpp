@@ -1,0 +1,104 @@
+.set-table-head,
+.bundle-row {
+  display: grid;
+  grid-template-columns: 30px 30px 220px 170px 220px 200px 150px 150px 150px 150px;
+  column-gap: 20px;
+  align-items: center;
+  text-align: center;
+  min-width: 1655px;
+}
+
+.bundle-group{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  
+}
+.col-item{
+  justify-content: flex-start;
+  /* background-color: red; */
+  margin-left: -19px;
+}
+.col-lot{
+  justify-content: flex-start;
+  /* background-color: red; */
+  margin-left: -19px;
+
+}
+.col-num{
+  justify-content: flex-start;
+  /* background-color: red; */
+  margin-left: -19px;
+}
+.col-move{
+  justify-content: flex-start;
+  /* background-color: red; */
+  margin-left: -19px;
+}
+.col-name{
+  justify-content: flex-start;
+  /* background-color: red; */
+  margin-left: -19px;
+}
+.set-radio{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:50px;
+  color:black;
+  padding-right: 10px;
+  background-color: none;
+}
+
+.set-radio input{
+  width:32px;
+  height:32px;
+  accent-color:#2a5bd6;
+  transform: translateY(1px);
+    background-color: red;
+}
+
+.set-row-radio{
+  grid-template-columns:240px 1fr;
+  background-color: red;
+
+}
+
+.equipment-distribution-table-head,
+.equipment-distribution-row {
+  border-bottom: 2px solid #bfbfbf;
+  align-items: stretch;
+}
+
+.equipment-distribution-table-head > span,
+.equipment-distribution-row > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border-right: 2px solid #a1a1a1;
+  text-align: center;
+}
+
+.equipment-distribution-table-head > span:last-child,
+.equipment-distribution-row > span:last-child {
+  border-right: none;
+}
+.col-status-1 {
+  /* background-color: red; */
+  margin-left: -19px;
+}
+/* Fix: use higher-specificity selectors so these columns aren't overridden */
+.equipment-distribution-table-head .col-status-1,
+.equipment-distribution-table-head .col-error-1,
+.equipment-distribution-row .col-status-1,
+.equipment-distribution-row .col-error-1 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+.col-error-1 {
+  /* background-color: red; */
+    margin-left: -19px;
+}

@@ -6,12 +6,17 @@ import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegist
 import RegistrationRegistrationPage from '../app/apps/Registration/RegistrationRegistrationPage'
 import VehicleInboundRegistrationPage from '../app/apps/VehicleInbound/VehicleInboundRegistrationPage'
 import BundleRegistrationPage from '../app/apps/BundleRegistration/BundleRegistrationPage'
+<<<<<<< HEAD
 // kongchanß
 import { ReturnConfiguration } from '../app/apps/ReturnConfiguration/ReturnConfiguration'
 import { SetReturnConfiguration } from '../app/apps/ReturnConfiguration/SetReturnConfiguration'
 import { MiscellaneousInAndOutBound } from '../app/apps/MiscellaneousInAndOutBound/MiscellaneousInAndOutBound'
 import { SetMiscellaneousInAndOutBound } from '../app/apps/MiscellaneousInAndOutBound/SetMiscellaneousInAndOutBound'
+=======
+import Equipment_Distribution_Page from '../app/apps/Equipment_Distribution/Equipment_Distribution_Page'
+>>>>>>> origin/zang
 
+import DeliverySlipRegistrationPage from '../app/apps/DeliverySlipRegistration/DeliverySlipRegistrationPage'
 const MainPage = () => {
   return (
     <Routes>
@@ -24,11 +29,16 @@ const MainPage = () => {
         <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
         <Route path='vehicle-inbound/*' element={<VehicleInboundRegistrationPage />} />
         <Route path='bundle/*' element={<BundleRegistrationPage />} />
+<<<<<<< HEAD
         {/* kongchan */}
         <Route path='return-configuration/*' element={<ReturnConfiguration />} />
         <Route path='setReturnConfiguration/*' element={<SetReturnConfiguration />} />
         <Route path='miscellaneousInAndOutBound/*' element={<MiscellaneousInAndOutBound />} />
         <Route path='setMiscellaneousInAndOutBound/*' element={<SetMiscellaneousInAndOutBound />} />
+=======
+        <Route path='equipment-distribution/*' element={<Equipment_Distribution_Page />} />
+        <Route path='deliveryslipregistration/*' element={<DeliverySlipRegistrationPage />} />
+>>>>>>> origin/zang
       </Route>
     </Routes>
   )
@@ -62,16 +72,30 @@ const MainPageDetail = () => {
               >
                 入庫
               </button>
+<<<<<<< HEAD
               <button className='mockup-btn mockup-green'>配送伝票</button>
               <button className='mockup-btn mockup-yellow' onClick={() => navigate('return-configuration')}>戻り構成</button>
+=======
+              <button className='mockup-btn mockup-green'
+              onClick={() => navigate('deliveryslipregistration')}
+              >配送伝票</button>
+              <button className='mockup-btn mockup-yellow'>戻り構成</button>
+>>>>>>> origin/zang
               <button
                 className='mockup-btn mockup-gray'
                 onClick={() => navigate('set-register')}
               >
                 セット登録
               </button>
+<<<<<<< HEAD
               <button className='mockup-btn mockup-gray' onClick={() => navigate('miscellaneousInAndOutBound')}>雑入出庫</button>
               <button className='mockup-btn mockup-orange'>伝票振分</button>
+=======
+              <button className='mockup-btn mockup-gray'>雑入出庫</button>
+              <button className='mockup-btn mockup-orange'
+              onClick={() => navigate('equipment-distribution')}
+              >伝票振分</button>
+>>>>>>> origin/zang
               <button className='mockup-btn mockup-pink'
                 onClick={() => navigate('bundle')}
               >販売セット</button>

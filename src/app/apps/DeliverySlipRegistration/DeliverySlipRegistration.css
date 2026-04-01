@@ -1,0 +1,74 @@
+.delivery-slip-message {
+  min-height: 44px;
+  font-size: 26px;
+  color: #1f2937;
+}
+
+.delivery-slip-table-wrap {
+  --set-table-height: 1045px;
+}
+
+.delivery-slip-table-head,
+.delivery-slip-row {
+  grid-template-columns: 50px 180px 1fr;
+  min-width: 0;
+}
+
+.delivery-slip-row {
+  text-align: left;
+}
+
+.delivery-slip-row span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delivery-slip-row.is-active {
+  background: #e8f4ff;
+}
+
+.col-status-delivery {
+  justify-content: center; 
+  /* background-color: red; */
+  margin-left: -19px;
+}
+
+.col-slip-delivery {
+  /* justify-content: flex-start;  */
+  justify-content: center;
+  /* background-color: red; */
+  margin-left: -19px;
+}
+
+.delivery-slip-back-actions {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ─── Grid lines ─── */
+/* ─── Grid lines ─── */
+.delivery-slip-table-head,
+.delivery-slip-row {
+  border-bottom: 2px solid #bfbfbf;
+  align-items: stretch;   /* ← override align-items ของ parent grid */
+}
+
+.delivery-slip-table-head > span,
+.delivery-slip-row > span {
+  display: flex;
+  align-items: center;
+  height: 100%;           /* ← ยืดเต็มความสูงแถว */
+  border-right: 2px solid #a1a1a1;
+}
+
+.delivery-slip-table-head > span:last-child,
+.delivery-slip-row > span:last-child {
+  border-right: none;
+}
+.set-input-2{
+  background-color: #5b6d86;
+    display:grid;
+  grid-template-columns:240px 1fr;
+  align-items:center;
+  gap:24px;
+}
