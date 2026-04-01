@@ -297,7 +297,7 @@ const ReturnConfiguration = () => {
                             </div>
                             <div className='set-table'>
                                 <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                                    <div className='set-table-head set-register-row'>
+                                    <div className='set-table-head-returnConfiguration'>
                                         <span className='col-arrow-head'></span>
                                         <span className='col-error'>エラー</span>
                                         <span className='col-item'>品目No.</span>
@@ -315,7 +315,7 @@ const ReturnConfiguration = () => {
                                         ) : (
                                             rows.map((row) => (
                                                 <div
-                                                    className='set-table-row set-register-row'
+                                                    className='set-table-row-returnConfiguration'
                                                     key={row.id}
                                                     role='button'
                                                     tabIndex={0}
