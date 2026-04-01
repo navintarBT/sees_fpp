@@ -38,7 +38,7 @@ const Equipment_Distribution = () => {
         error: '',
         item: 'C03',
         lot: 'L03',
-        status: 'OV対応要',
+        status: 'OV対応htyht要',
         build: 3,
         release: 2,
         move: 'W3',
@@ -321,10 +321,10 @@ const Equipment_Distribution = () => {
                   <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
                     <div className='set-table-head equipment-distribution-table-head'>
                       <span className='col-arrow-head'></span>
-                      <span className='col-error'></span>
+                      <span className='col-error-1'></span>
                       <span className='col-item'>From/To</span>
                       <span className='col-lot'>品名</span>
-                      <span className='col-status'>品目No.</span>
+                      <span className='col-status-1'>品目No</span>
                       <span className='col-num'>ロットシリアル</span>
                       <span className='col-num'>数量</span>
                       <span className='col-move'>	倉庫</span>
@@ -355,10 +355,10 @@ const Equipment_Distribution = () => {
                                 <FaPlay className='col-row-arrow' />
                               ) : null}
                             </span>
-                            <span className='col-error'>{row.error}</span>
+                            <span className='col-error-1'>{row.error}</span>
                             <span className='col-item'>{row.item}</span>
                             <span className='col-lot'>{row.lot}</span>
-                            <span className='col-status'>{row.status}</span>
+                            <span className='col-status-1'>{row.status}</span>
                             <span className='col-num'>{row.build}</span>
                             <span className='col-num'>{row.release}</span>
                             <span className='col-move'>{row.move}</span>

@@ -67,9 +67,7 @@ const DeliverySlipRegistration = () => {
   const [deliverySlipNo, setDeliverySlipNo] = useState('')
   const [rows, setRows] = useState<DeliverySlipRow[]>(initialRows)
   // Changed: support multiple selected row IDs
-  const [selectedRowIds, setSelectedRowIds] = useState<Set<number>>(
-    new Set(initialRows[0]?.id != null ? [initialRows[0].id] : [])
-  )
+  const [selectedRowIds, setSelectedRowIds] = useState<Set<number>>(new Set())
   const [message, setMessage] = useState('')
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
@@ -110,7 +108,7 @@ const DeliverySlipRegistration = () => {
     const registeredRows = buildRegisteredRows(shipmentNo)
     nextRowIdRef.current = registeredRows.length + 1
     setRows(registeredRows)
-    setSelectedRowIds(new Set(registeredRows[0]?.id != null ? [registeredRows[0].id] : []))
+    setSelectedRowIds(new Set())
     setDeliverySlipNo('')
     setMessage('')
     resetTableScroll()
@@ -286,6 +284,7 @@ const DeliverySlipRegistration = () => {
               <div className='set-row'>
                 <label htmlFor='deliverySlipNo'>配送伝票No.</label>
                 <input
+                  className='set-input-2'
                   id='deliverySlipNo'
                   ref={deliverySlipInputRef}
                   value={deliverySlipNo}

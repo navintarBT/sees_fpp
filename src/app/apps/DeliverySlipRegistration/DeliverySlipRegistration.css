@@ -29,12 +29,16 @@
 }
 
 .col-status-delivery {
-  justify-content: center;  /* เปลี่ยนจาก text-align */
+  justify-content: center; 
+  /* background-color: red; */
+  margin-left: -19px;
 }
 
 .col-slip-delivery {
-  justify-content: flex-start;  /* เปลี่ยนจาก text-align */
-  padding-right: 24px;
+  /* justify-content: flex-start;  */
+  justify-content: center;
+  /* background-color: red; */
+  margin-left: -19px;
 }
 
 .delivery-slip-back-actions {
@@ -60,4 +64,11 @@
 .delivery-slip-table-head > span:last-child,
 .delivery-slip-row > span:last-child {
   border-right: none;
+}
+.set-input-2{
+  background-color: #5b6d86;
+    display:grid;
+  grid-template-columns:240px 1fr;
+  align-items:center;
+  gap:24px;
 }
