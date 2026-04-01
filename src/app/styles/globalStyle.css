@@ -102,6 +102,9 @@
   font-weight:700;
 }
 
+.set-actions-row-5{
+  grid-template-columns:repeat(5,1fr);
+}
 
 .set-table-scroll{
   height:var(--set-table-height);

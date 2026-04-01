@@ -65,7 +65,7 @@
   overflow:visible;
 }
 
-.set-table-head-divider-re{
+.set-table-head-divider-dis{
   grid-column: 1 / -1;
   height: 1px;
   background: rgba(0, 0, 0, 0.2);

@@ -317,7 +317,7 @@ const DispatchPage = () => {
                         <span className='col-num'>読込</span>
                         <span className='col-num'>品名</span>
                       </div>
-                      <div className='set-table-head-divider-re' aria-hidden='true'></div>
+                      <div className='set-table-head-divider-dis' aria-hidden='true'></div>
                       <div className='set-table-body-dis'>
                         {rows.length === 0 ? (
                           <div className='set-empty'></div>
