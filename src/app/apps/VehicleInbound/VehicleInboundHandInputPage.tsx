@@ -7,9 +7,9 @@ const VehicleInboundHandInputPage = () => {
 const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
-  const [parentSerial, setParentSerial] = useState('')
+  const [parentSerial, setParentSerial] = useState('1')
   const [moveStorage, setMoveStorage] = useState('')
-  const [quantity, setQuantity] = useState('1')
+  const [quantity, setQuantity] = useState('')
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
@@ -41,23 +41,23 @@ const navigate = useNavigate()
                   <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                 </select>
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>数量</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>品目No.</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>ロット</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>シリアル</label>
                 <input readOnly={!isEnabled} placeholder=' ' />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>有効期限(yymm)</label>
                 <input readOnly={!isEnabled} placeholder=' ' />
               </div>

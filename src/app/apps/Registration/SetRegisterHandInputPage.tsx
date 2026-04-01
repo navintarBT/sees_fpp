@@ -52,9 +52,9 @@ const SetRegisterHandInputPage = () => {
                 <label>移動保管場所</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row '>
                 <label>数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
@@ -70,7 +70,7 @@ const SetRegisterHandInputPage = () => {
               </div>
             </div>
 
-            <div className='set-actions set-actions-row'>
+            <div className='set-actions set-actions-row set-actions-row-5'>
               <button
                 className='set-btn set-danger'
                 style={{ visibility: 'hidden' }}
@@ -83,6 +83,12 @@ const SetRegisterHandInputPage = () => {
                 style={{ visibility: 'hidden' }}
               >
                 {'\u89E3\u9664'}
+              </button>
+              <button
+                className='set-btn set-primary'
+                style={{ visibility: 'hidden' }}
+              >
+                {'\u624b\u5165\u529b'}
               </button>
               <button
                 className='set-btn set-warning'

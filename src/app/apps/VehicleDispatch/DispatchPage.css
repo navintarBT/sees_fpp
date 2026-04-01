@@ -1,41 +1,79 @@
-.set-head-dispatch,
-.set-table-dispatch {
+.set-table-grid-dispatch{
   display: grid;
-  grid-template-columns: 50px 50px 220px 220px 180px 150px 150px;
+  grid-template-columns: repeat(7, max-content);
+  grid-auto-rows: max-content;
   column-gap: 0;
+  width: 100%;
+  min-width: max-content;
   align-items: center;
   text-align: center;
-  min-width: 900px;
-  box-sizing: border-box;
-  font-size: 28px;
 }
 
-.set-head-dispatch span,
-.set-table-dispatch span {
+.set-table-head,
+.set-table-body,
+.set-table-row{
+  display: contents;
+}
+
+.set-table-register span{
   padding: 0 10px;
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
-.set-table-head-detail,
-.set-table-row-detail {
-  display: grid;
-  grid-template-columns: 100px 110px 214px 200px 200px 200px 1fr;
-  column-gap: 0;
-  align-items: center;
-  text-align: center;
-  min-width: 900px;
-  box-sizing: border-box;
+.set-table-head span{
+  height: 78px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: white;
 }
 
-.set-table-head-detail span,
-.set-table-row-detail span {
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-
-.set-table-row-detail input[type='checkbox'] {
-  width: 40px;
-  height: 40px;
-  accent-color: #2a5bd6;
+.set-table-row span{
+  height: 82px;
   cursor: pointer;
+  border-top: 1px solid rgba(0,0,0,0.2);
+}
+
+/* minimum column widths (auto expands if content is longer) */
+.set-table-grid-dispatch .col-arrow-head,
+.set-table-grid-dispatch .col-arrow{
+  min-width: 50px;
+}
+
+.set-table-grid-dispatch .col-error{
+  min-width: 50px;
+}
+
+.set-table-grid-dispatch .col-item{
+  min-width: 180px;
+}
+
+.set-table-grid-dispatch .col-lot{
+  min-width: 220px;
+}
+
+.set-table-grid-dispatch .col-status{
+  min-width: 180px;
+}
+
+.set-table-grid-dispatch .col-num{
+  min-width: 170px;
+}
+
+.set-table-head-divider{
+  grid-column: 1 / -1;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 78px;
+  z-index: 2;
+}
+
+.set-table-grid-dispatch .set-empty{
+  grid-column: 1 / -1;
+}
+
+.set-actions-row-5{
+  grid-template-columns:repeat(5,1fr);
 }

@@ -9,6 +9,8 @@ const BundleHandInputPage = () => {
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
   const [quantity, setQuantity] = useState('1')
+    const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
+
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -20,7 +22,7 @@ const BundleHandInputPage = () => {
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
-                <label>倉庫（親）</label>
+                <label>FR倉庫</label>
                 <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
@@ -29,39 +31,55 @@ const BundleHandInputPage = () => {
                 </select>
               </div>
               <div className='hand-row'>
-                <label>品目No.(親)</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
-              </div>
-              <div className='hand-row'>
-                <label>シリアル(親)</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
-              </div>
-              <div className='hand-row'>
-                <label>移動倉庫</label>
+                <label>TO倉庫</label>
                 <select disabled={!isEnabled}>
                   <option>千葉倉庫（WMS）：W002</option>
                   <option>千葉倉庫（WMS）：W003</option>
                   <option>千葉倉庫（WMS）：W004</option>
                 </select>
               </div>
-              <div className='hand-row'>
-                <label>移動保管場所</label>
+              <div className='hand-row hand-row-always'>
+                <label>保管場所</label>
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+              </div>
+                <div className='hand-row hand-row-always'>
+                <label>数量</label>
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
+              </div>
+              <div className='hand-row hand-row-always'>
+                <label>品目No.</label>
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+              </div>
+              <div className='hand-row hand-row-always'>
+                <label>ロット</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
               </div>
-              <div className='hand-row'>
-                <label>数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
-              </div>
-              <div className='hand-row'>
-                <label>品目No.</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
-              <div className='hand-row'>
-                <label>ロット</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
-              <div className='hand-row'>
-                <label>シリアル</label>
+              <div className='set-row'>
+              <div className='set-radio-group bundle-group'>
+                  <label className='set-radio'>
+                    <input
+                      type='radio'
+                      name='quantityRange'
+                      value='from'
+                      checked={quantityRange === 'from'}
+                      onChange={() => setQuantityRange('from')}
+                    />
+                    From
+                  </label>
+                  <label className='set-radio'>
+                    <input
+                      type='radio'
+                      name='quantityRange'
+                      value='to'
+                      checked={quantityRange === 'to'}
+                      onChange={() => setQuantityRange('to')}
+                    />
+                    To
+                  </label>
+                </div>
+                </div>
+              <div className='hand-row hand-row-always'>
+                <label>有効日付(yymm)</label>
                 <input readOnly={!isEnabled} placeholder=' ' />
               </div>
             </div>
@@ -82,7 +100,7 @@ const BundleHandInputPage = () => {
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => navigate('/factory/set-register')}
+                onClick={() => navigate('/factory/bundle')}
               >
                 {'\u623B\u308B'}
               </button>

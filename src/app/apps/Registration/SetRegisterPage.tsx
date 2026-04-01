@@ -145,19 +145,13 @@ const SetRegisterPage = () => {
     qty: '1',
     janCode: '',
   })
-  const [showHandInput, setShowHandInput] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
-
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-
-
-
-
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
@@ -218,12 +212,6 @@ const SetRegisterPage = () => {
     if (isAnyModalOpen) return
     if (options?.forceHandInput) {
       closeAllModals()
-      setShowHandInput(true)
-      setShowHandInputConfirm(true)
-      return
-    }
-    if (!options?.forceRelease && showHandInput) {
-      closeAllModals()
       setShowHandInputConfirm(true)
       return
     }
@@ -254,13 +242,6 @@ const SetRegisterPage = () => {
       if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
         event.preventDefault()
         handleReleaseClick({forceHandInput: true})
-        return
-      }
-
-      if (event.key === 'F6') {
-        event.preventDefault()
-        closeAllModals()
-        setShowHandInput((prev) => !prev)
         return
       }
 
@@ -304,7 +285,7 @@ const SetRegisterPage = () => {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
     }
-  }, [activeRow, showHandInput, isAnyModalOpen])
+  }, [activeRow, isAnyModalOpen])
 
   return (
     <div className='mockup-page'>
@@ -371,88 +352,95 @@ const SetRegisterPage = () => {
               </div>
               <div className='set-table'>
                 <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                  <div className='set-table-head set-table-grids'>
-                    <span className='col-arrow-head'></span>
-                    <span className='col-error'></span>
-                    <span className='col-item'>品目No.</span>
-                    <span className='col-lot'>ロットシリアル</span>
-                    <span className='col-status'>状態</span>
-                    <span className='col-num'>構成数</span>
-                    <span className='col-num'>解除数</span>
-                    <span className='col-move'>移動倉庫</span>
-                    <span className='col-move'>移動保管場所</span>
-                    <span className='col-name'>品名</span>
-                  </div>
-                  <div className='set-table-body'>
-                    {rows.length === 0 ? (
-                      <div className='set-empty'></div>
-                    ) : (
-                      rows.map((row) => (
-                        <div
-                          className='set-table-row set-table-grid'
-                          key={row.id}
-                          role='button'
-                          tabIndex={0}
-                          onClick={() => handleRowClick(row.id)}
-                          onFocus={() => setActiveRowId(row.id)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault()
-                              handleRowClick(row.id)
-                            }
-                          }}
-                        >
-                          <span className='col-arrow'>
-                            {activeRowId === row.id ? (
-                              <FaPlay className='col-row-arrow' />
-                            ) : null}
-                          </span>
-                          <span className='col-error'>{row.error}</span>
-                          <span className='col-item'>{row.item}</span>
-                          <span className='col-lot'>{row.lot}</span>
-                          <span className='col-status'>{row.status}</span>
-                          <span className='col-num'>{row.build}</span>
-                          <span className='col-num'>{row.release}</span>
-                          <span className='col-move'>{row.move}</span>
-                          <span className='col-move'>{row.moveStorage}</span>
-                          <span className='col-name'>{row.name}</span>
-                        </div>
-                      ))
-                    )}
+                  <div className='set-table-grid set-table-register'>
+                    <div className='set-table-head'>
+                      <span className='col-arrow-head'></span>
+                      <span className='col-error'></span>
+                      <span className='col-item'>品目No.</span>
+                      <span className='col-lot'>ロットシリアル</span>
+                      <span className='col-status'>状態</span>
+                      <span className='col-num'>構成数</span>
+                      <span className='col-num'>解除数</span>
+                      <span className='col-move'>移動倉庫</span>
+                      <span className='col-move'>移動保管場所</span>
+                      <span className='col-name'>品名</span>
+                    </div>
+                    <div className='set-table-head-divider' aria-hidden='true'></div>
+                    <div className='set-table-body'>
+                      {rows.length === 0 ? (
+                        <div className='set-empty'></div>
+                      ) : (
+                        rows.map((row) => (
+                          <div
+                            className='set-table-row'
+                            key={row.id}
+                            role='button'
+                            tabIndex={0}
+                            onClick={() => handleRowClick(row.id)}
+                            onFocus={() => setActiveRowId(row.id)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault()
+                                handleRowClick(row.id)
+                              }
+                            }}
+                          >
+                            <span className='col-arrow'>
+                              {activeRowId === row.id ? (
+                                <FaPlay className='col-row-arrow' />
+                              ) : null}
+                            </span>
+                            <span className='col-error'>{row.error}</span>
+                            <span className='col-item'>{row.item}</span>
+                            <span className='col-lot'>{row.lot}</span>
+                            <span className='col-status'>{row.status}</span>
+                            <span className='col-num'>{row.build}</span>
+                            <span className='col-num'>{row.release}</span>
+                            <span className='col-move'>{row.move}</span>
+                            <span className='col-move'>{row.moveStorage}</span>
+                            <span className='col-name'>{row.name}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className='set-actions set-actions-row'>
+            <div className='set-actions set-actions-row set-actions-row-5'>
               <button
                 className='set-btn set-danger'
                 onClick={() => setShowClearConfirm(true)}
-                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
               >
                 破棄
               </button>
               <button
                 className='set-btn set-primary'
-                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
               </button>
               <button
+                className='set-btn set-primary set-hand-input-btn'
+                onClick={() => handleReleaseClick({forceHandInput: true})}
+              >
+                手入力
+              </button>
+              <button
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
               >
-                {showHandInput ? '手入力' : '解除'}
+                解除
               </button>
               <button
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
-                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
               >
                 戻る
               </button>
             </div>
+</div>
 
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -464,7 +452,6 @@ const SetRegisterPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        setShowHandInput(false)
                         navigate('/factory/set-register/hand-input')
                       }}
                     >
@@ -474,7 +461,6 @@ const SetRegisterPage = () => {
                       className='set-modal-btn set-modal-no'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        setShowHandInput(false)
                       }}
                     >
                       いいえ
@@ -598,7 +584,6 @@ const SetRegisterPage = () => {
           </div>
         </div>
       </div>
-    </div>
   )
 }
 

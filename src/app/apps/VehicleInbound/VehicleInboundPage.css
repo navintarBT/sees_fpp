@@ -1,17 +1,40 @@
-.set-table-inbound,
-.set-table-row-inbound {
-  display: grid;
-  grid-template-columns: 50px 50px 220px 220px 180px 150px 150px;
-  column-gap: 0;
-  align-items: center;
-  text-align: center;
-  min-width: 900px;
-  box-sizing: border-box;
-  font-size: 28px;
+.set-table-grid{
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
-.set-table-inbound span,
-.set-table-row-inbound span {
+.set-table-inbound th,
+.set-table-inbound td{
   padding: 0 10px;
   box-sizing: border-box;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.set-table-inbound th:last-child,
+.set-table-inbound td:last-child{
+  border-right: none;
+}
+
+.set-table-inbound thead th{
+  height: 78px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.set-table-inbound tbody td{
+  height: 82px;
+  cursor: pointer;
+  border-top: 1px solid rgba(0,0,0,0.2);
+}
+
+.set-empty-row td{
+  padding: 0;
 }

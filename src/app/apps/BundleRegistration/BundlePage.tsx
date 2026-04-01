@@ -4,7 +4,7 @@ import './BundlePage.css'
 import {FaPlay} from 'react-icons/fa'
 
 const BundlePage = () => {
-  const navigate = useNavigate()
+      const navigate = useNavigate()
     const [rows, setRows] = useState([
       {
         id: 1,
@@ -14,10 +14,6 @@ const BundlePage = () => {
         status: '追加', // 状態
         build: 2, // 構成数
         release: 1, // 解除数
-        move: 'W1', // 移動倉
-        moveStorage: 'S1', // 移動保管場所
-        name: '部品A', // 品名
-        moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
       },
       {
         id: 2,
@@ -27,10 +23,6 @@ const BundlePage = () => {
         status: '解除',
         build: 1,
         release: 0,
-        move: 'W2',
-        moveStorage: 'S2',
-        name: '部品B',
-        moveStorage2: '棚B',
       },
       {
         id: 3,
@@ -40,10 +32,6 @@ const BundlePage = () => {
         status: 'OV対応要',
         build: 3,
         release: 2,
-        move: 'W3',
-        moveStorage: 'S3',
-        name: '部品C',
-        moveStorage2: '棚C',
       },
       {
         id: 4,
@@ -53,10 +41,6 @@ const BundlePage = () => {
         status: '構成中',
         build: 4,
         release: 1,
-        move: 'W1',
-        moveStorage: 'S4',
-        name: '部品D',
-        moveStorage2: '棚D',
       },
       {
         id: 5,
@@ -66,10 +50,6 @@ const BundlePage = () => {
         status: '構成中',
         build: 2,
         release: 0,
-        move: 'W2',
-        moveStorage: 'S5',
-        name: '部品E',
-        moveStorage2: '棚E',
       },
       {
         id: 6,
@@ -79,10 +59,6 @@ const BundlePage = () => {
         status: '構成中',
         build: 5,
         release: 3,
-        move: 'W3',
-        moveStorage: 'S6',
-        name: '部品F',
-        moveStorage2: '棚F',
       },
       {
         id: 7,
@@ -92,10 +68,6 @@ const BundlePage = () => {
         status: '構成中',
         build: 1,
         release: 0,
-        move: 'W1',
-        moveStorage: 'S7',
-        name: '部品G',
-        moveStorage2: '棚G',
       },
       {
         id: 8,
@@ -105,10 +77,6 @@ const BundlePage = () => {
         status: '構成中',
         build: 3,
         release: 1,
-        move: 'W2',
-        moveStorage: 'S8',
-        name: '部品H',
-        moveStorage2: '棚H',
       },
       {
         id: 9,
@@ -118,10 +86,6 @@ const BundlePage = () => {
         status: '構成中',
         build: 2,
         release: 2,
-        move: 'W3',
-        moveStorage: 'S9',
-        name: '部品I',
-        moveStorage2: '棚I',
       },
       {
         id: 10,
@@ -131,10 +95,6 @@ const BundlePage = () => {
         status: '構成中',
         build: 6,
         release: 2,
-        move: 'W1',
-        moveStorage: 'S10',
-        name: '部品J',
-        moveStorage2: '棚J',
       },
     ])
     const [form, setForm] = useState({
@@ -146,22 +106,33 @@ const BundlePage = () => {
       janCode: '',
     })
     const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
-    const [showHandInput, setShowHandInput] = useState(false)
     const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
     const [showClearConfirm, setShowClearConfirm] = useState(false)
     const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
     const tableScrollRef = useRef<HTMLDivElement | null>(null)
-  
     const [showBackConfirm, setShowBackConfirm] = useState(false)
-  
-  
-  
-  
   
     const [activeRowId, setActiveRowId] = useState<number | null>(null)
     const activeRow = rows.find((row) => row.id === activeRowId) ?? null
+    const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
+    const isAnyModalOpen =
+      showHandInputConfirm ||
+      showDeleteConfirm ||
+      showNoSelectionConfirm ||
+      showClearConfirm ||
+      showCompleteConfirm ||
+      showBackConfirm
+  
+    const closeAllModals = () => {
+      setShowHandInputConfirm(false)
+      setShowDeleteConfirm(false)
+      setShowNoSelectionConfirm(false)
+      setShowClearConfirm(false)
+      setShowCompleteConfirm(false)
+      setShowBackConfirm(false)
+    }
   
   
     const clearRows = () => setRows([])
@@ -198,16 +169,20 @@ const BundlePage = () => {
       setActiveRowId(rowId)
     }
   
-      const handleReleaseClick = () => {
-      if (showHandInput) {
+    const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
+      if (isAnyModalOpen) return
+      if (options?.forceHandInput) {
+        closeAllModals()
         setShowHandInputConfirm(true)
         return
       }
       if (!activeRow) {
+        closeAllModals()
         setShowNoSelectionConfirm(true)
         return
       }
       if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
+        closeAllModals()
         setShowDeleteConfirm(true)
         return
       }
@@ -216,15 +191,62 @@ const BundlePage = () => {
   
     useEffect(() => {
       const onKeyDown = (event: KeyboardEvent) => {
+        if (isAnyModalOpen) {
+          return
+        }
+        if (event.key === 'F1') {
+          pressedKeysRef.current.f1 = true
+        }
+        if (event.key === 'F8') {
+          pressedKeysRef.current.f8 = true
+        }
+        if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
+          event.preventDefault()
+          handleReleaseClick({forceHandInput: true})
+          return
+        }
+  
+        if (event.key === 'F1') {
+          event.preventDefault()
+          closeAllModals()
+          setShowClearConfirm(true)
+          return
+        }
+  
         if (event.key === 'F2') {
           event.preventDefault()
-          setShowHandInput((prev) => !prev)
+          closeAllModals()
+          setShowCompleteConfirm(true)
+          return
+        }
   
+        if (event.key === 'F3') {
+          event.preventDefault()
+          handleReleaseClick({forceRelease: true})
+          return
+        }
+  
+        if (event.key === 'F4') {
+          event.preventDefault()
+          closeAllModals()
+          setShowBackConfirm(true)
+        }
+      }
+      const onKeyUp = (event: KeyboardEvent) => {
+        if (event.key === 'F1') {
+          pressedKeysRef.current.f1 = false
+        }
+        if (event.key === 'F8') {
+          pressedKeysRef.current.f8 = false
         }
       }
       window.addEventListener('keydown', onKeyDown)
-      return () => window.removeEventListener('keydown', onKeyDown)
-    }, [])
+      window.addEventListener('keyup', onKeyUp)
+      return () => {
+        window.removeEventListener('keydown', onKeyDown)
+        window.removeEventListener('keyup', onKeyUp)
+      }
+    }, [activeRow, isAnyModalOpen])
   
     return (
       <div className='mockup-page'>
@@ -318,54 +340,51 @@ const BundlePage = () => {
                 </div>
                 <div className='set-table'>
                   <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                    <div className='set-table-head set-table-bundle'>
-                      <span className='col-arrow-head'></span>
-                      <span className='col-error'></span>
-                      <span className='col-item'>品目No.</span>
-                      <span className='col-lot'>ロットシリアル</span>
-                      <span className='col-status'>状態</span>
-                      <span className='col-num'>構成数</span>
-                      <span className='col-num'>解除数</span>
-                      <span className='col-move'>移動倉庫</span>
-                      <span className='col-move'>移動保管場所</span>
-                      <span className='col-name'>品名</span>
-                    </div>
-                    <div className='set-table-body'>
-                      {rows.length === 0 ? (
-                        <div className='set-empty'></div>
-                      ) : (
-                        rows.map((row) => (
-                          <div
-                            className='set-table-row bundle-row'
-                            key={row.id}
-                            role='button'
-                            tabIndex={0}
-                            onClick={() => handleRowClick(row.id)}
-                            onFocus={() => setActiveRowId(row.id)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault()
-                                handleRowClick(row.id)
-                              }
-                            }}
-                          >
-                            <span className='col-arrow'>
-                              {activeRowId === row.id ? (
-                                <FaPlay className='col-row-arrow' />
-                              ) : null}
-                            </span>
-                            <span className='col-error'>{row.error}</span>
-                            <span className='col-item'>{row.item}</span>
-                            <span className='col-lot'>{row.lot}</span>
-                            <span className='col-status'>{row.status}</span>
-                            <span className='col-num'>{row.build}</span>
-                            <span className='col-num'>{row.release}</span>
-                            <span className='col-move'>{row.move}</span>
-                            <span className='col-move'>{row.moveStorage}</span>
-                            <span className='col-name'>{row.name}</span>
-                          </div>
-                        ))
-                      )}
+                    <div className='set-table-grid-dispatch set-table-register'>
+                      <div className='set-table-head'>
+                        <span className='col-arrow-head'></span>
+                        <span className='col-error'></span>
+                        <span className='col-item'>品目No.</span>
+                        <span className='col-lot'>ロットシリアル</span>
+                        <span className='col-status'>指示</span>
+                        <span className='col-num'>読込</span>
+                        <span className='col-num'>品名</span>
+                      </div>
+                      <div className='set-table-head-divider' aria-hidden='true'></div>
+                      <div className='set-table-body'>
+                        {rows.length === 0 ? (
+                          <div className='set-empty'></div>
+                        ) : (
+                          rows.map((row) => (
+                            <div
+                              className='set-table-row'
+                              key={row.id}
+                              role='button'
+                              tabIndex={0}
+                              onClick={() => handleRowClick(row.id)}
+                              onFocus={() => setActiveRowId(row.id)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault()
+                                  handleRowClick(row.id)
+                                }
+                              }}
+                            >
+                              <span className='col-arrow'>
+                                {activeRowId === row.id ? (
+                                  <FaPlay className='col-row-arrow' />
+                                ) : null}
+                              </span>
+                              <span className='col-error'>{row.error}</span>
+                              <span className='col-item'>{row.item}</span>
+                              <span className='col-lot'>{row.lot}</span>
+                              <span className='col-status'>{row.status}</span>
+                              <span className='col-num'>{row.build}</span>
+                              <span className='col-num'>{row.release}</span>
+                            </div>
+                          ))
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -375,32 +394,29 @@ const BundlePage = () => {
                 <button
                   className='set-btn set-danger'
                   onClick={() => setShowClearConfirm(true)}
-                  style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                 >
                   破棄
                 </button>
                 <button
                   className='set-btn set-primary'
-                  style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                   onClick={() => setShowCompleteConfirm(true)}
                 >
                   完了
                 </button>
                 <button
-                  className='set-btn set-success'
-                  onClick={handleReleaseClick}
+                  className='set-btn set-primary set-success'
+                  onClick={() => handleReleaseClick({forceHandInput: true})}
                 >
-                  {showHandInput ? '手入力' : '解除'}
+                  手入力
                 </button>
                 <button
                   className='set-btn set-warning'
                   onClick={() => setShowBackConfirm(true)}
-                  style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                 >
                   戻る
                 </button>
               </div>
-  
+            </div>
               {showHandInputConfirm && (
                 <div className='set-modal-backdrop' role='presentation'>
                   <div className='set-modal' role='dialog' aria-modal='true'>
@@ -411,14 +427,16 @@ const BundlePage = () => {
                         className='set-modal-btn set-modal-yes'
                         onClick={() => {
                           setShowHandInputConfirm(false)
-                          navigate('/factory/set-register/hand-input')
+                          navigate('/factory/bundle/hand-input')
                         }}
                       >
                         はい
                       </button>
                       <button
                         className='set-modal-btn set-modal-no'
-                        onClick={() => setShowHandInputConfirm(false)}
+                        onClick={() => {
+                          setShowHandInputConfirm(false)
+                        }}
                       >
                         いいえ
                       </button>
@@ -541,7 +559,6 @@ const BundlePage = () => {
             </div>
           </div>
         </div>
-      </div>
     )
 }
 

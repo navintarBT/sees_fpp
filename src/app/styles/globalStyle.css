@@ -362,6 +362,9 @@
 .set-warning{
   background:linear-gradient(180deg,#f7bb45 0%,#c67a18 100%);
 }
+.set-hand-input-btn {
+  background: linear-gradient(180deg, #ff9ecb 0%, #d63384 100%);
+}
 
 .set-footer{
   margin-top:auto;
@@ -403,7 +406,6 @@
   align-items: center;
   justify-content: center;
 }
-*****************************************************************
 
 
 .hand-body{
@@ -436,6 +438,8 @@
 
 .hand-row-quantity label{
   text-align:right;
+  justify-self:end;
+  padding-right:8px;
 }
 
 .hand-row input,
@@ -457,6 +461,12 @@
 .hand-form-disabled .hand-row:nth-child(n+4) select{
   background:#e5e7eb;
   color:#111827;
+}
+
+.hand-form-disabled .hand-row.hand-row-always input,
+.hand-form-disabled .hand-row.hand-row-always select{
+  background:#ffffff;
+  color:#000000;
 }
 
 .hand-form-disabled .hand-row:nth-child(n+4) input::placeholder{

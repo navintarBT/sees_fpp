@@ -6,9 +6,9 @@ const DispatchHandInputPage = () => {
 const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
-  const [parentSerial, setParentSerial] = useState('')
+  const [parentSerial, setParentSerial] = useState('1')
   const [moveStorage, setMoveStorage] = useState('')
-  const [quantity, setQuantity] = useState('1')
+  const [quantity, setQuantity] = useState('')
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -38,19 +38,19 @@ const navigate = useNavigate()
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>ロット</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>有効期限(yymm)</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
             </div>
 
