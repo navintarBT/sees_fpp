@@ -6,6 +6,13 @@
   box-shadow:inset 0 1px 0 rgba(0,0,0,0.08);
 }
 
+.set-table-wrap-in{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  --set-table-height:740px;
+}
+
 .set-table-inbound{
   display: grid;
   grid-template-columns: repeat(7, max-content);

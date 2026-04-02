@@ -126,6 +126,18 @@ const Equipment_Distribution = () => {
         move: 'W1',
         moveStorage: 'S10',
         name: '部品J',
+      },   
+         {
+        id: 11,
+        error: 'E',
+        item: 'J11',
+        lot: 'L11',
+        status: '構成中',
+        build: 6,
+        release: 2,
+        move: 'W1',
+        moveStorage: 'S10',
+        name: '部品J',
       },
     ])
     const [form, setForm] = useState({

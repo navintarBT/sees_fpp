@@ -27,6 +27,8 @@ const MOCK_REGISTERED_ROWS: Record<string, DeliverySlipMockRow[]> = {
     {slipNo: '202603310000000000000000000011', status: ''},
     {slipNo: '202603310000000000000000000012', status: ''},
     {slipNo: '202603310000000000000000000013', status: ''},
+    {slipNo: '202603310000000000000000000014', status: ''},
+    {slipNo: '202603310000000000000000000015', status: ''},
   ],
   '87654321': [
     {slipNo: '202603310000000000000000000101', status: ''},
@@ -42,6 +44,8 @@ const MOCK_REGISTERED_ROWS: Record<string, DeliverySlipMockRow[]> = {
     {slipNo: '202603310000000000000000000111', status: ''},
     {slipNo: '202603310000000000000000000112', status: ''},
     {slipNo: '202603310000000000000000000113', status: ''},
+    {slipNo: '202603310000000000000000000114', status: ''},
+    {slipNo: '202603310000000000000000000115', status: ''},
   ],
 }
 

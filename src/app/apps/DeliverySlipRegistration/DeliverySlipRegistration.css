@@ -225,7 +225,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  --set-table-height: 1045px;
+  --set-table-height: 1240px;
 }
 
 .set-table-tools-de {
@@ -297,7 +297,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 26px 36px;
   margin-top: auto;
-  transform: translateY(35px);
+  transform: translateY(15px);
 }
 
 .set-actions-row-de {

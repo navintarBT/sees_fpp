@@ -102,7 +102,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  --set-table-height: 735px;
+  --set-table-height: 945px;
 }
 
 .set-table-eq {
@@ -269,9 +269,9 @@
 .set-actions-eq {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 26px 36px;
+  gap: 2px 3px;
   margin-top: auto;
-  transform: translateY(35px);
+  transform: translateY(15px);
 }
 
 .set-actions-row-eq {
