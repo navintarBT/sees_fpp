@@ -5,22 +5,19 @@ import { FaPlay } from 'react-icons/fa'
 
 const MiscellaneousInAndOutBound = () => {
     const navigate = useNavigate()
-    const [qty, setQty] = useState(1);
-    const [parentSerial, setParentSerial] = useState('')
-    const isEnabled = parentSerial
     const [rows, setRows] = useState([
         {
             id: 1,
             error: '',
-            item: 'A01',
-            lot: 'L01',
-            status: '追加',
-            build: 2,
-            release: 1,
-            move: 'W1',
-            moveStorage: 'S1', 
-            name: '部品A',
-            moveStorage2: '棚A', 
+            item: 'A01', // 品目No.
+            lot: 'L01', // ロットシリアル
+            status: '追加', // 状態
+            build: 2, // 構成数
+            release: 1, // 解除数
+            move: 'W1', // 移動倉
+            moveStorage: 'S1', // 移動保管場所
+            name: '部品A', // 品名
+            moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
         },
         {
             id: 2,
@@ -145,10 +142,9 @@ const MiscellaneousInAndOutBound = () => {
         parentItemNo: '0193090',
         moveWarehouse: '千葉倉庫（WMS）：W002',
         moveStorage: '',
-        qty: '',
+        qty: '1',
         janCode: '',
     })
-    const [showHandInput, setShowHandInput] = useState(false)
     const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
@@ -156,8 +152,28 @@ const MiscellaneousInAndOutBound = () => {
     const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
     const tableScrollRef = useRef<HTMLDivElement | null>(null)
     const [showBackConfirm, setShowBackConfirm] = useState(false)
+
     const [activeRowId, setActiveRowId] = useState<number | null>(null)
     const activeRow = rows.find((row) => row.id === activeRowId) ?? null
+    const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({ f1: false, f8: false })
+    const isAnyModalOpen =
+        showHandInputConfirm ||
+        showDeleteConfirm ||
+        showNoSelectionConfirm ||
+        showClearConfirm ||
+        showCompleteConfirm ||
+        showBackConfirm
+
+    const closeAllModals = () => {
+        setShowHandInputConfirm(false)
+        setShowDeleteConfirm(false)
+        setShowNoSelectionConfirm(false)
+        setShowClearConfirm(false)
+        setShowCompleteConfirm(false)
+        setShowBackConfirm(false)
+    }
+
+
     const clearRows = () => setRows([])
     const clearForm = () =>
         setForm({
@@ -192,16 +208,20 @@ const MiscellaneousInAndOutBound = () => {
         setActiveRowId(rowId)
     }
 
-    const handleReleaseClick = () => {
-        if (showHandInput) {
+    const handleReleaseClick = (options?: { forceRelease?: boolean; forceHandInput?: boolean }) => {
+        if (isAnyModalOpen) return
+        if (options?.forceHandInput) {
+            closeAllModals()
             setShowHandInputConfirm(true)
             return
         }
         if (!activeRow) {
+            closeAllModals()
             setShowNoSelectionConfirm(true)
             return
         }
         if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
+            closeAllModals()
             setShowDeleteConfirm(true)
             return
         }
@@ -210,15 +230,62 @@ const MiscellaneousInAndOutBound = () => {
 
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
+            if (isAnyModalOpen) {
+                return
+            }
+            if (event.key === 'F1') {
+                pressedKeysRef.current.f1 = true
+            }
+            if (event.key === 'F8') {
+                pressedKeysRef.current.f8 = true
+            }
+            if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
+                event.preventDefault()
+                handleReleaseClick({ forceHandInput: true })
+                return
+            }
+
+            if (event.key === 'F1') {
+                event.preventDefault()
+                closeAllModals()
+                setShowClearConfirm(true)
+                return
+            }
+
             if (event.key === 'F2') {
                 event.preventDefault()
-                setShowHandInput((prev) => !prev)
+                closeAllModals()
+                setShowCompleteConfirm(true)
+                return
+            }
 
+            if (event.key === 'F3') {
+                event.preventDefault()
+                handleReleaseClick({ forceRelease: true })
+                return
+            }
+
+            if (event.key === 'F4') {
+                event.preventDefault()
+                closeAllModals()
+                setShowBackConfirm(true)
+            }
+        }
+        const onKeyUp = (event: KeyboardEvent) => {
+            if (event.key === 'F1') {
+                pressedKeysRef.current.f1 = false
+            }
+            if (event.key === 'F8') {
+                pressedKeysRef.current.f8 = false
             }
         }
         window.addEventListener('keydown', onKeyDown)
-        return () => window.removeEventListener('keydown', onKeyDown)
-    }, [])
+        window.addEventListener('keyup', onKeyUp)
+        return () => {
+            window.removeEventListener('keydown', onKeyDown)
+            window.removeEventListener('keyup', onKeyUp)
+        }
+    }, [activeRow, isAnyModalOpen])
 
     return (
         <div className='mockup-page'>
@@ -318,31 +385,34 @@ const MiscellaneousInAndOutBound = () => {
                             </div>
                         </div>
 
-                        <div className='set-actions set-actions-row'>
+                        <div className='set-actions set-actions-row set-actions-row-5'>
                             <button
                                 className='set-btn set-danger'
                                 onClick={() => setShowClearConfirm(true)}
-                                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                             >
                                 破棄
                             </button>
                             <button
                                 className='set-btn set-primary'
-                                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                                 onClick={() => setShowCompleteConfirm(true)}
                             >
                                 完了
                             </button>
                             <button
-                                className='set-btn set-success'
-                                onClick={handleReleaseClick}
+                                className='set-btn set-primary set-hand-input-btn'
+                                onClick={() => handleReleaseClick({ forceHandInput: true })}
                             >
-                                {showHandInput ? '手入力' : '解除'}
+                                手入力
+                            </button>
+                            <button
+                                className='set-btn set-success'
+                                onClick={() => handleReleaseClick()}
+                            >
+                                解除
                             </button>
                             <button
                                 className='set-btn set-warning'
                                 onClick={() => setShowBackConfirm(true)}
-                                style={{ visibility: showHandInput ? 'hidden' : 'visible' }}
                             >
                                 戻る
                             </button>
