@@ -1,7 +1,6 @@
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './SetRegisterHandInputPage.css'
-import './SetRegisterPage.css'
 
 const SetRegisterHandInputPage = () => {
   const navigate = useNavigate()
@@ -12,27 +11,8 @@ const SetRegisterHandInputPage = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const isAnyModalOpen = showReadConfirm || showBackConfirm
 
-  const closeAllModals = () => {
-    setShowReadConfirm(false)
-    setShowBackConfirm(false)
-  }
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (isAnyModalOpen) {
-        return
-      }
-      if (event.key === 'F4') {
-        event.preventDefault()
-        closeAllModals()
-        setShowBackConfirm(true)
-      }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [isAnyModalOpen])
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -40,7 +20,7 @@ const SetRegisterHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='hand-header'>セット構成登録手入力</div>
+          <div className='set-header'>セット構成登録手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
@@ -72,9 +52,9 @@ const SetRegisterHandInputPage = () => {
                 <label>移動保管場所</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row '>
                 <label>数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
@@ -90,7 +70,7 @@ const SetRegisterHandInputPage = () => {
               </div>
             </div>
 
-            <div className='set-actions set-actions-row'>
+            <div className='set-actions set-actions-row set-actions-row-5'>
               <button
                 className='set-btn set-danger'
                 style={{ visibility: 'hidden' }}
@@ -103,6 +83,12 @@ const SetRegisterHandInputPage = () => {
                 style={{ visibility: 'hidden' }}
               >
                 {'\u89E3\u9664'}
+              </button>
+              <button
+                className='set-btn set-primary'
+                style={{ visibility: 'hidden' }}
+              >
+                {'\u624b\u5165\u529b'}
               </button>
               <button
                 className='set-btn set-warning'

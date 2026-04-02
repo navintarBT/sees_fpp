@@ -1,0 +1,17 @@
+.pg-sign-group2 {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin-left: 22px;
+}
+
+.pg-sign-group2 .input-pag2 {
+    width: 82%;
+}
+
+.hand-row2 {
+    display: grid;
+    grid-template-columns: 265px 1fr;
+    align-items: center;
+    gap: 26px;
+}

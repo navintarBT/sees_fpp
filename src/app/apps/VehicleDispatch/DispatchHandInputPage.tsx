@@ -1,15 +1,14 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-// import './DispatchHandInputPage.css'
-// import './DispatchPage.css'
+import './DispatchHandInputPage.css'
 
 const DispatchHandInputPage = () => {
 const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
-  const [parentSerial, setParentSerial] = useState('')
+  const [parentSerial, setParentSerial] = useState('1')
   const [moveStorage, setMoveStorage] = useState('')
-  const [quantity, setQuantity] = useState('1')
+  const [quantity, setQuantity] = useState('')
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -17,7 +16,7 @@ const navigate = useNavigate()
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='hand-header'>セット構成登録手入力</div>
+          <div className='set-header'>セット構成登録手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
@@ -39,19 +38,19 @@ const navigate = useNavigate()
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>ロット</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} className='hand-row' />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>有効期限(yymm)</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
             </div>
 
@@ -71,7 +70,7 @@ const navigate = useNavigate()
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => navigate('/apps/vehicle-registration')}
+                onClick={() => navigate('/factory/dispatch')}
               >
                 {'\u623B\u308B'}
               </button>
