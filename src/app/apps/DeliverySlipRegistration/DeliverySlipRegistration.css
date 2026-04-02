@@ -1,3 +1,5 @@
+/* ========== DeliverySlipRegistration Main Styles ========== */
+
 .delivery-slip-message-de {
   min-height: 44px;
   font-size: 26px;
@@ -8,75 +10,125 @@
   --set-table-height: 1045px;
 }
 
-.delivery-slip-table-head-de,
-.delivery-slip-row-de {
-  grid-template-columns: 50px 180px 1fr;
-  min-width: 0;
-}
-
-.delivery-slip-row-de {
-  text-align: left;
-}
-
-.delivery-slip-row-de span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.delivery-slip-row-de.is-active-de {
-  background: #e8f4ff;
-}
-
-.col-status-delivery-de {
-  justify-content: center; 
-  /* background-color: red; */
-  margin-left: -19px;
-}
-
-.col-slip-delivery-de {
-  /* justify-content: flex-start;  */
-  
-  /* background-color: red; */
-  margin-left: 10px;
-}
-.set-row-left{
-  display: flex;
-  justify-content: center;
-}
 .delivery-slip-back-actions-de {
   grid-template-columns: 1fr 1fr;
 }
 
-/* ─── Grid lines ─── */
-/* ─── Grid lines ─── */
-.delivery-slip-table-head-de,
-.delivery-slip-row-de {
-  border-bottom: 2px solid #bfbfbf;
-  align-items: stretch;   /* ← override align-items ของ parent grid */
+/* ========== NEW: Grid System using display: contents ========== */
+.set-table-grid-delivery {
+  display: grid;
+  grid-template-columns: 52px 180px 1fr;
+  grid-auto-rows: max-content;
+  min-width: max-content;
+  align-items: center;
 }
 
-.delivery-slip-table-head-de > span,
-.delivery-slip-row-de > span {
+.set-table-head-delivery,
+.set-table-body-delivery,
+.set-table-row-delivery {
+  display: contents;
+}
+
+.set-table-head-delivery span,
+.set-table-row-delivery span {
   display: flex;
   align-items: center;
-  height: 100%;           /* ← ยืดเต็มความสูงแถว */
   border-right: 2px solid #a1a1a1;
+  font-size: 28px;
+  height: 100%;
 }
 
-.delivery-slip-table-head-de > span:last-child,
-.delivery-slip-row-de > span:last-child {
+.set-table-head-delivery span:last-child,
+.set-table-row-delivery span:last-child {
   border-right: none;
 }
 
-.set-input-2-de {
-  background-color: #5b6d86;
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  align-items: center;
-  gap: 24px;
+/* Header styling */
+.set-table-head-delivery {
+  color: black;
+  font-size: 28px;
+  font-weight: 400;
 }
 
+.set-table-head-delivery span {
+  height: 78px;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.30);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Divider between header and body */
+.set-table-head-divider-delivery {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 78px;
+  z-index: 2;
+}
+
+/* Row styling */
+.set-table-row-delivery {
+  cursor: pointer;
+}
+
+.set-table-row-delivery span {
+  height: 82px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  background: white;
+  transition: background-color 0.15s ease;
+}
+
+.set-table-row-delivery.is-active-delivery span {
+  background: #e8f4ff;
+}
+
+/* Empty state */
+.set-empty-delivery {
+  grid-column: 1 / -1;
+  height: var(--set-table-height, 1045px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+/* Checkbox column styling */
+.col-checkbox-head-delivery,
+.col-checkbox-delivery {
+  justify-content: center !important;
+  text-align: center;
+  min-width: 52px;
+}
+
+.col-checkbox-head-delivery input,
+.col-checkbox-delivery input {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  accent-color: #1976d2;
+}
+
+/* Status column - center alignment */
+.col-status-delivery-de {
+  justify-content: center !important;
+  text-align: center;
+}
+
+/* Slip No column - left alignment */
+.col-slip-delivery-de {
+  justify-content: flex-start !important;
+  text-align: left;
+  padding-left: 10px;
+}
+
+/* ========== Base Component Styles ========== */
 .set-header-de {
   height: 140px;
   background: linear-gradient(90deg, #e3f0fa 0%, #b6d0e2 100%);
@@ -138,6 +190,14 @@
     0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
+.set-input-2-de {
+  background-color: #5b6d86;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
 .set-row-inline-de {
   grid-template-columns: 240px 200px 200px 1fr;
 }
@@ -160,6 +220,7 @@
   width: 200px;
 }
 
+/* ========== Table Container Styles ========== */
 .set-table-wrap-de {
   display: flex;
   flex-direction: column;
@@ -224,70 +285,13 @@
   display: none;
 }
 
+/* Override old table styles */
 .set-table-head-de,
 .set-table-row-de {
-  display: grid;
-  grid-template-columns: 50px 200px  750px;
-  column-gap: 20px;
-  align-items: center;
-  text-align: center;
-  min-width: 1000px;
+  display: contents !important;
 }
 
-.set-table-head-de {
-  background: white;
-  color: black;
-  font-size: 28px;
-  font-weight: 400;
-  height: 78px;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.30);
-}
-
-.set-table-head-de span {
-  white-space: nowrap;
-}
-
-.col-lot-de {
-  padding-right: 12px;
-}
-
-.col-status-de {
-  padding-left: 35px;
-}
-
-.set-table-body-de {
-  min-height: var(--set-table-height);
-  overflow: visible;
-}
-
-.set-table-row-de {
-  height: 82px;
-  font-size: 26px;
-  font-weight: 400;
-  color: black;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-}
-
-.col-row-arrow-de {
-  display: inline-block;
-  font-size: 20px;
-  transform: translateX(2px);
-}
-
-.set-empty-de {
-  height: var(--set-table-height);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: black;
-  font-size: 24px;
-  font-weight: 400;
-}
-
+/* ========== Actions / Buttons ========== */
 .set-actions-de {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -323,15 +327,57 @@
   margin-top: 0;
 }
 
+/* ========== Button Styles ========== */
+.set-btn-de {
+  height: 140px;
+  border-radius: 24px;
+  font-size: 40px;
+  font-weight: 400;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22), inset 0 2px 0 rgba(255, 255, 255, 0.18);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.04em;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+
+.set-btn-de:hover {
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22), inset 0 2px 0 rgba(255, 255, 255, 0.8);
+}
+
+.set-btn-de:active {
+  transform: translateY(1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.7);
+}
+
+.set-danger-de {
+  background: linear-gradient(180deg, #ff5a65 0%, #d31728 100%);
+}
+
+.set-primary-de {
+  background: linear-gradient(180deg, #56b4ff 0%, #2a5bd6 100%);
+}
+
+.set-success-de {
+  background: linear-gradient(180deg, #3fe17f 0%, #1a9a4b 100%);
+}
+
+.set-warning-de {
+  background: linear-gradient(180deg, #f7bb45 0%, #c67a18 100%);
+}
+
+/* ========== Modal Styles ========== */
 .set-modal-backdrop-de {
   position: absolute;
   inset: 0;
   background: transparent;
   display: flex;
   align-items: center;
-  justify-content: center; /* เปลี่ยนจาก left เป็น center */
+  justify-content: center;
   z-index: 40;
 }
+
 .set-modal-de {
   width: 520px;
   background: white;
@@ -386,6 +432,11 @@
   font-weight: 400;
   color: black;
   box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2), 0 6px 12px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.set-modal-btn-de:hover {
+  background: #f5f5f5;
 }
 
 .set-modal-yes-de {
@@ -393,44 +444,7 @@
   outline: none;
 }
 
-.set-btn-de {
-  height: 140px;
-  border-radius: 24px;
-  font-size: 40px;
-  font-weight: 400;
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22), inset 0 2px 0 rgba(255, 255, 255, 0.18);
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-  letter-spacing: 0.04em;
-  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-}
-
-.set-btn-de:hover {
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22), inset 0 2px 0 rgba(255, 255, 255, 0.8);
-}
-
-.set-btn-de:active {
-  transform: translateY(1px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.7);
-}
-
-.set-danger-de {
-  background: linear-gradient(180deg, #ff5a65 0%, #d31728 100%);
-}
-
-.set-primary-de {
-  background: linear-gradient(180deg, #56b4ff 0%, #2a5bd6 100%);
-}
-
-.set-success-de {
-  background: linear-gradient(180deg, #3fe17f 0%, #1a9a4b 100%);
-}
-
-.set-warning-de {
-  background: linear-gradient(180deg, #f7bb45 0%, #c67a18 100%);
-}
-
+/* ========== Footer Styles ========== */
 .set-footer-de {
   margin-top: auto;
   display: flex;
@@ -458,6 +472,7 @@
   font-weight: 400;
 }
 
+/* ========== Utility Classes ========== */
 .col-arrow-de,
 .col-arrow-head-de {
   display: flex;
@@ -485,8 +500,7 @@
   justify-content: center;
 }
 
-/* ***************************************************************** */
-
+/* ========== Hand Input Styles ========== */
 .hand-header-de {
   height: 140px;
   background: linear-gradient(90deg, #e3f0fa 0%, #b6d0e2 100%);
@@ -587,6 +601,7 @@
   color: white;
   text-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35), inset 0 2px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
 .hand-primary-de {

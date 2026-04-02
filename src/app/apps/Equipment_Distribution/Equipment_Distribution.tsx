@@ -10,17 +10,15 @@ const Equipment_Distribution = () => {
       {
         id: 1,
         error: '',
-        item: 'A01', // 品目No.
-        lot: 'L01', // ロットシリアル
-        status: '追加', // 状態
-        build: 2, // 構成数
-        release: 1, // 解除数
-        move: 'W1', // 移動倉
-        moveStorage: 'S1', // 移動保管場所
-        name: '部品A', // 品名
-        moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
+        item: 'A01',
+        lot: 'L01',
+        status: '追加',
+        build: 2,
+        release: 1,
+        move: 'W1',
+        moveStorage: 'S1',
+        name: '部品A',
       },
-      
       {
         id: 2,
         error: '',
@@ -32,7 +30,6 @@ const Equipment_Distribution = () => {
         move: 'W2',
         moveStorage: 'S2',
         name: '部品B',
-        moveStorage2: '棚B',
       },
       {
         id: 3,
@@ -45,7 +42,6 @@ const Equipment_Distribution = () => {
         move: 'W3',
         moveStorage: 'S3',
         name: '部品C',
-        moveStorage2: '棚C',
       },
       {
         id: 4,
@@ -58,7 +54,6 @@ const Equipment_Distribution = () => {
         move: 'W1',
         moveStorage: 'S4',
         name: '部品D',
-        moveStorage2: '棚D',
       },
       {
         id: 5,
@@ -71,7 +66,6 @@ const Equipment_Distribution = () => {
         move: 'W2',
         moveStorage: 'S5',
         name: '部品E',
-        moveStorage2: '棚E',
       },
       {
         id: 6,
@@ -84,7 +78,6 @@ const Equipment_Distribution = () => {
         move: 'W3',
         moveStorage: 'S6',
         name: '部品F',
-        moveStorage2: '棚F',
       },
       {
         id: 7,
@@ -97,7 +90,6 @@ const Equipment_Distribution = () => {
         move: 'W1',
         moveStorage: 'S7',
         name: '部品G',
-        moveStorage2: '棚G',
       },
       {
         id: 8,
@@ -110,7 +102,6 @@ const Equipment_Distribution = () => {
         move: 'W2',
         moveStorage: 'S8',
         name: '部品H',
-        moveStorage2: '棚H',
       },
       {
         id: 9,
@@ -123,7 +114,6 @@ const Equipment_Distribution = () => {
         move: 'W3',
         moveStorage: 'S9',
         name: '部品I',
-        moveStorage2: '棚I',
       },
       {
         id: 10,
@@ -136,7 +126,6 @@ const Equipment_Distribution = () => {
         move: 'W1',
         moveStorage: 'S10',
         name: '部品J',
-        moveStorage2: '棚J',
       },
     ])
     const [form, setForm] = useState({
@@ -307,58 +296,64 @@ const Equipment_Distribution = () => {
             </div>
   
               <div className='set-table-wrap-eq'>
-                <div className='set-table-tools-eq'>
-                </div>
                 <div className='set-table-eq'>
                   <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll-eq set-table-scroll-empty-eq' : 'set-table-scroll-eq'}>
-                    <div className='set-table-head-eq equipment-distribution-table-head-eq'>
-                      <span className='col-arrow-head-eq'></span>
-                      <span className='col-error-1-eq'></span>
-                      <span className='col-item-eq'>From/To</span>
-                      <span className='col-lot-eq'>品名</span>
-                      <span className='col-status-1-eq'>品目No</span>
-                      <span className='col-num-eq'>ロットシリアル</span>
-                      <span className='col-num-eq'>数量</span>
-                      <span className='col-move-eq'>	倉庫</span>
-                      <span className='col-move-eq'>	保管場所</span>
-                      <span className='col-name-eq'>品名</span>
-                    </div>
-                    <div className='set-table-body-eq'>
-                      {rows.length === 0 ? (
-                        <div className='set-empty-eq'></div>
-                      ) : (
-                        rows.map((row) => (
-                          <div
-                            className='set-table-row-eq bundle-row-eq equipment-distribution-row-eq'
-                            key={row.id}
-                            role='button'
-                            tabIndex={0}
-                            onClick={() => handleRowClick(row.id)}
-                            onFocus={() => setActiveRowId(row.id)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault()
-                                handleRowClick(row.id)
-                              }
-                            }}
-                          >
-                            <span className='col-arrow-eq'>
-                              {activeRowId === row.id ? (
-                                <FaPlay className='col-row-arrow-eq' />
-                              ) : null}
-                            </span>
-                            <span className='col-error-1-eq'>{row.error}</span>
-                            <span className='col-item-eq'>{row.item}</span>
-                            <span className='col-lot-eq'>{row.lot}</span>
-                            <span className='col-status-1-eq'>{row.status}</span>
-                            <span className='col-num-eq'>{row.build}</span>
-                            <span className='col-num-eq'>{row.release}</span>
-                            <span className='col-move-eq'>{row.move}</span>
-                            <span className='col-move-eq'>{row.moveStorage}</span>
-                            <span className='col-name-eq'>{row.name}</span>
-                          </div>
-                        ))
-                      )}
+                    <div className='set-table-grid-equipment'>
+                      {/* Header */}
+                      <div className='set-table-head-equipment'>
+                        <span className='col-arrow-head-eq'></span>
+                        <span className='col-error-1-eq'></span>
+                        <span className='col-item-eq'>From/To</span>
+                        <span className='col-lot-eq'>品名</span>
+                        <span className='col-status-1-eq'>品目No</span>
+                        <span className='col-num-eq'>ロットシリアル</span>
+                        <span className='col-num-eq'>数量</span>
+                        <span className='col-move-eq'>倉庫</span>
+                        <span className='col-move-eq'>保管場所</span>
+                        <span className='col-name-eq'>品名</span>
+                      </div>
+                      
+                      {/* Divider */}
+                      <div className='set-table-head-divider-equipment' aria-hidden='true'></div>
+                      
+                      {/* Body */}
+                      <div className='set-table-body-equipment'>
+                        {rows.length === 0 ? (
+                          <div className='set-empty-equipment'>データがありません</div>
+                        ) : (
+                          rows.map((row) => (
+                            <div
+                              className='set-table-row-equipment'
+                              key={row.id}
+                              role='button'
+                              tabIndex={0}
+                              onClick={() => handleRowClick(row.id)}
+                              onFocus={() => setActiveRowId(row.id)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault()
+                                  handleRowClick(row.id)
+                                }
+                              }}
+                            >
+                              <span className='col-arrow-eq'>
+                                {activeRowId === row.id ? (
+                                  <FaPlay className='col-row-arrow-eq' />
+                                ) : null}
+                              </span>
+                              <span className='col-error-1-eq'>{row.error}</span>
+                              <span className='col-item-eq'>{row.item}</span>
+                              <span className='col-lot-eq'>{row.lot}</span>
+                              <span className='col-status-1-eq'>{row.status}</span>
+                              <span className='col-num-eq'>{row.build}</span>
+                              <span className='col-num-eq'>{row.release}</span>
+                              <span className='col-move-eq'>{row.move}</span>
+                              <span className='col-move-eq'>{row.moveStorage}</span>
+                              <span className='col-name-eq'>{row.name}</span>
+                            </div>
+                          ))
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -420,8 +415,8 @@ const Equipment_Distribution = () => {
               {showDeleteConfirm && (
                 <div className='set-modal-backdrop-eq' role='presentation'>
                   <div className='set-modal-eq' role='dialog' aria-modal='true'>
-                    <div className='set-modal-header-eq'>{'\u78ba\u8a8d'}</div>
-                    <div className='set-modal-body-eq'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
+                    <div className='set-modal-header-eq'>確認</div>
+                    <div className='set-modal-body-eq'>{activeRow?.status === '解除' ? (<>選択品目の0を<br />取り消しますか？</>) : activeRow?.status === '構成中' ? (<>選択品目を4個、<br />セット解除しますか？</>) : (<>セット追加品です。<br />削除しますか？</>)}</div>
                     <div className='set-modal-actions-eq'>
                       <button
                         className='set-modal-btn-eq set-modal-yes-eq'
@@ -429,13 +424,13 @@ const Equipment_Distribution = () => {
                           setShowDeleteConfirm(false)
                         }}
                       >
-                        {'\u306f\u3044'}
+                        はい
                       </button>
                       <button
                         className='set-modal-btn-eq set-modal-no-eq'
                         onClick={() => setShowDeleteConfirm(false)}
                       >
-                        {'\u3044\u3044\u3048'}
+                        いいえ
                       </button>
                     </div>
                   </div>
@@ -445,14 +440,14 @@ const Equipment_Distribution = () => {
               {showNoSelectionConfirm && (
                 <div className='set-modal-backdrop-eq' role='presentation'>
                   <div className='set-modal-eq' role='dialog' aria-modal='true'>
-                    <div className='set-modal-header-eq'>{'\u78ba\u8a8d'}</div>
-                    <div className='set-modal-body-eq'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
+                    <div className='set-modal-header-eq'>確認</div>
+                    <div className='set-modal-body-eq'>選択行がありません。</div>
                     <div className='set-modal-actions-eq'>
                       <button
                         className='set-modal-btn-eq set-modal-yes-eq'
                         onClick={() => setShowNoSelectionConfirm(false)}
                       >
-                        {'\u004f\u004b'}
+                        OK
                       </button>
                     </div>
                   </div>
@@ -462,8 +457,8 @@ const Equipment_Distribution = () => {
               {showClearConfirm && (
                 <div className='set-modal-backdrop-eq' role='presentation'>
                   <div className='set-modal-eq' role='dialog' aria-modal='true'>
-                    <div className='set-modal-header-eq'>{'\u78ba\u8a8d'}</div>
-                    <div className='set-modal-body-eq'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                    <div className='set-modal-header-eq'>確認</div>
+                    <div className='set-modal-body-eq'>読込データを破棄します。<br />宜しいですか？</div>
                     <div className='set-modal-actions-eq'>
                       <button
                         className='set-modal-btn-eq set-modal-yes-eq'
@@ -472,13 +467,13 @@ const Equipment_Distribution = () => {
                           clearFormAndRows()
                         }}
                       >
-                        {'\u306f\u3044'}
+                        はい
                       </button>
                       <button
                         className='set-modal-btn-eq set-modal-no-eq'
                         onClick={() => setShowClearConfirm(false)}
                       >
-                        {'\u3044\u3044\u3048'}
+                        いいえ
                       </button>
                     </div>
                   </div>
@@ -488,14 +483,14 @@ const Equipment_Distribution = () => {
               {showCompleteConfirm && (
                 <div className='set-modal-backdrop-eq' role='presentation'>
                   <div className='set-modal-eq' role='dialog' aria-modal='true'>
-                    <div className='set-modal-header-eq'>{'\u78ba\u8a8d'}</div>
-                    <div className='set-modal-body-eq'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                    <div className='set-modal-header-eq'>確認</div>
+                    <div className='set-modal-body-eq'>セット構成を登録しました。</div>
                     <div className='set-modal-actions-eq'>
                       <button
                         className='set-modal-btn-eq set-modal-yes-eq'
                         onClick={() => setShowCompleteConfirm(false)}
                       >
-                        {'\u004f\u004b'}
+                        OK
                       </button>
                     </div>
                   </div>
@@ -505,8 +500,8 @@ const Equipment_Distribution = () => {
               {showBackConfirm && (
                 <div className='set-modal-backdrop-eq' role='presentation'>
                   <div className='set-modal-eq' role='dialog' aria-modal='true'>
-                    <div className='set-modal-header-eq'>{'\u78ba\u8a8d'}</div>
-                    <div className='set-modal-body-eq'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                    <div className='set-modal-header-eq'>確認</div>
+                    <div className='set-modal-body-eq'>メニューに戻ります。<br />読込データを破棄しますか？</div>
                     <div className='set-modal-actions-eq'>
                       <button
                         className='set-modal-btn-eq set-modal-yes-eq'
@@ -515,13 +510,13 @@ const Equipment_Distribution = () => {
                           navigate('/factory')
                         }}
                       >
-                        {'\u306f\u3044'}
+                        はい
                       </button>
                       <button
                         className='set-modal-btn-eq set-modal-no-eq'
                         onClick={() => setShowBackConfirm(false)}
                       >
-                        {'\u3044\u3044\u3048'}
+                        いいえ
                       </button>
                     </div>
                   </div>
