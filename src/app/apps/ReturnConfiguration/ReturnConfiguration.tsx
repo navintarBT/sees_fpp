@@ -337,14 +337,16 @@ const ReturnConfiguration = () => {
                                 </div>
                             </div>
 
-                            <div className='set-row set-row-inline'>
+                            <div className='set-row box-colorbackInput'>
                                 <label>数量</label>
                                 <input
                                     onChange={(e) => setForm({ ...form, qty: e.target.value })}
                                     className='set-small nocolorbackground'
                                     readOnly={!isEnabled} placeholder=' '
                                 />
-                                <span className='set-inline-label'>JANコード</span>
+                            </div>
+                            <div className='set-row box-colorbackInput'>
+                                <label>JANコード</label>
                                 <input
                                     className='nocolorbackground'
                                     value={form.janCode}
