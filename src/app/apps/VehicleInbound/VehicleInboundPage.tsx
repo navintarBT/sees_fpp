@@ -316,28 +316,27 @@ const VehicleInboundPage = () => {
                 </div>
     
                 <div className='set-table-wrap'>
-                  <div className='set-table-tools'>
-                  </div>
-                  <div className='set-table'>
+                  <div className='set-table-tools'></div>
+                  <div className='set-table-in'>
                     <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                      <div className='set-table-grid-dispatch set-table-register'>
-                        <div className='set-table-head'>
+                      <div className='set-table-inbound'>
+                        <div className='set-table-head-in'>
                           <span className='col-arrow-head'></span>
                           <span className='col-error'></span>
                           <span className='col-item'>品目No.</span>
                           <span className='col-lot'>ロットシリアル</span>
                           <span className='col-status'>指示</span>
-                          <span className='col-num'>読込</span>
-                          <span className='col-num'>品名</span>
+                          <span className='col-num'>構成数</span>
+                          <span className='col-num'>解除数</span>
                         </div>
-                        <div className='set-table-head-divider' aria-hidden='true'></div>
-                        <div className='set-table-body'>
+                        <div className='set-table-head-divider-in' aria-hidden='true'></div>
+                        <div className='set-table-body-in'>
                           {rows.length === 0 ? (
                             <div className='set-empty'></div>
                           ) : (
                             rows.map((row) => (
                               <div
-                                className='set-table-row'
+                                className='set-table-in-row'
                                 key={row.id}
                                 role='button'
                                 tabIndex={0}
