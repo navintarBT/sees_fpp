@@ -382,7 +382,7 @@
 
 .hand-body{
   height:calc(1920px - 140px);
-  padding:60px 70px 200px;
+  padding:60px 70px 100px;
   display:flex;
   flex-direction:column;
   gap:46px;

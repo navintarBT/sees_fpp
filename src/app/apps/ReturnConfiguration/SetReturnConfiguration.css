@@ -1,12 +1,3 @@
-.hand-body {
-  height: calc(1920px - 140px);
-  padding: 60px 70px 200px;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  color: black;
-  position: relative;
-}
 
 .hand-row2 {
   display: grid;
