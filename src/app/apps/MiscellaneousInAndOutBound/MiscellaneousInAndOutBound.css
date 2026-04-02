@@ -88,8 +88,7 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  box-shadow:
-    0 3px 15px rgba(0, 0, 0, 0.30),
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.30);
 }
 
 .set-table-head-miscellaneous span {
