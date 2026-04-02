@@ -136,6 +136,32 @@ const MiscellaneousInAndOutBound = () => {
             name: '部品J',
             moveStorage2: '棚J',
         },
+        {
+            id: 11,
+            error: 'E',
+            item: 'J10',
+            lot: 'L10',
+            status: '構成中',
+            build: 6,
+            release: 2,
+            move: 'W1',
+            moveStorage: 'S10',
+            name: '部品J',
+            moveStorage2: '棚J',
+        },
+        {
+            id: 12,
+            error: 'E',
+            item: 'J10',
+            lot: 'L10',
+            status: '構成中',
+            build: 6,
+            release: 2,
+            move: 'W1',
+            moveStorage: 'S10',
+            name: '部品J',
+            moveStorage2: '棚J',
+        },
     ])
     const [form, setForm] = useState({
         parentWarehouse: '羽田製品倉庫：W0040',
@@ -336,50 +362,53 @@ const MiscellaneousInAndOutBound = () => {
                             </div>
                             <div className='set-table-miscellaneous'>
                                 <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                                    <div className='set-table-head-miscellaneous'>
-                                        <span className='gc-arrow-head'></span>
-                                        <span className='gc-error'>エラー</span>
-                                        <span className='gc-item'>品目No.</span>
-                                        <span className='gc-lot'>ロットシリアル</span>
-                                        <span className='gc-warehouse'>倉庫</span>
-                                        <span className='gc-storage'>保管場所</span>
-                                        <span className='gc-alloc'>引当数</span>
-                                        <span className='gc-partname'>品名</span>
-                                    </div>
-                                    <div className='set-table-body'>
-                                        {rows.length === 0 ? (
-                                            <div className='set-empty'></div>
-                                        ) : (
-                                            rows.map((row) => (
-                                                <div
-                                                    className='set-table-row-miscellaneous'
-                                                    key={row.id}
-                                                    role='button'
-                                                    tabIndex={0}
-                                                    onClick={() => handleRowClick(row.id)}
-                                                    onFocus={() => setActiveRowId(row.id)}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter' || e.key === ' ') {
-                                                            e.preventDefault()
-                                                            handleRowClick(row.id)
-                                                        }
-                                                    }}
-                                                >
-                                                    <span className='col-arrow'>
-                                                        {activeRowId === row.id ? (
-                                                            <FaPlay className='col-row-arrow' />
-                                                        ) : null}
-                                                    </span>
-                                                    <span className='gc-error'>{row.error}</span>
-                                                    <span className='gc-item'>{row.item}</span>
-                                                    <span className='gc-lot'>{row.lot}</span>
-                                                    <span className='gc-status'>{row.status}</span>
-                                                    <span className='gc-num'>{row.build}</span>
-                                                    <span className='gc-num'>{row.release}</span>
-                                                    <span className='gc-move'>{row.move}</span>
-                                                </div>
-                                            ))
-                                        )}
+                                    <div className='set-table-regis-miscellaneous'>
+                                        <div className='set-table-head-miscellaneous'>
+                                            <span className='col-arrow-head'></span>
+                                            <span className='col-error'>エラー</span>
+                                            <span className='col-item'>品目No.</span>
+                                            <span className='col-lot'>ロットシリアル</span>
+                                            <span className='col-status'>倉庫</span>
+                                            <span className='col-num'>構成数</span>
+                                            <span className='col-num'>解除数</span>
+                                            <span className='col-move'>移動倉</span>
+                                        </div>
+                                        <div className='set-table-head-divider-miscellaneous' aria-hidden='true'></div>
+                                        <div className='set-table-body-miscellaneous'>
+                                            {rows.length === 0 ? (
+                                                <div className='set-empty'></div>
+                                            ) : (
+                                                rows.map((row) => (
+                                                    <div
+                                                        className='set-table-re-row-miscellaneous'
+                                                        key={row.id}
+                                                        role='button'
+                                                        tabIndex={0}
+                                                        onClick={() => handleRowClick(row.id)}
+                                                        onFocus={() => setActiveRowId(row.id)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                                e.preventDefault()
+                                                                handleRowClick(row.id)
+                                                            }
+                                                        }}
+                                                    >
+                                                        <span className='col-arrow'>
+                                                            {activeRowId === row.id ? (
+                                                                <FaPlay className='col-row-arrow' />
+                                                            ) : null}
+                                                        </span>
+                                                        <span className='col-error'>{row.error}</span>
+                                                        <span className='col-item'>{row.item}</span>
+                                                        <span className='col-lot'>{row.lot}</span>
+                                                        <span className='col-status'>{row.status}</span>
+                                                        <span className='col-num'>{row.build}</span>
+                                                        <span className='col-num'>{row.release}</span>
+                                                        <span className='col-move'>{row.move}</span>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

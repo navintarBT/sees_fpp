@@ -25,7 +25,7 @@ const SetMiscellaneousInAndOutBound = () => {
                             <div className='hand-row'>
                                 <label>倉庫</label>
                                 <select>
-                                    <option value=''>-----</option>
+                                    <option value=''></option>
                                     <option value='羽田製品倉庫：W0040'>倉庫A : W0040</option>
                                     <option value='羽田製品倉庫：W0041'>倉庫A : W0041</option>
                                     <option value='羽田製品倉庫：W0042'>倉庫A : W0043</option>
