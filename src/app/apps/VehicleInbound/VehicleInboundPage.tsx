@@ -293,14 +293,16 @@ const VehicleInboundPage = () => {
                       <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
                     </select>
                   </div>
-                    <div className='set-row set-row-inline'>
+                  <div className='set-row'>
                     <label>数量</label>
                     <input
                       value={form.qty}
                       onChange={(e) => setForm({...form, qty: e.target.value})}
                       className='set-small'
                     />
-                    <span className='set-inline-label'>JANコード</span>
+                  </div>
+                  <div className='set-row'>
+                    <label>JANコード</label>
                     <input
                       value={form.janCode}
                       onChange={(e) => setForm({...form, janCode: e.target.value})}
@@ -315,7 +317,7 @@ const VehicleInboundPage = () => {
                   </div>
                 </div>
     
-                <div className='set-table-wrap'>
+                <div className='set-table-wrap-in'>
                   <div className='set-table-tools'></div>
                   <div className='set-table-in'>
                     <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
@@ -383,7 +385,7 @@ const VehicleInboundPage = () => {
                     完了
                   </button>
                   <button
-                    className='set-btn set-primary set-success'
+                    className='set-btn set-primary set-hand-input-btn'
                     onClick={() => handleReleaseClick({forceHandInput: true})}
                   >
                     手入力
