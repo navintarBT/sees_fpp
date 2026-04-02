@@ -141,6 +141,36 @@
 }
 
 
+.set-table-head span,
+.set-table-row span{
+  display:flex;   
+  align-items:center; 
+  height:100%;
+  border-right:1px solid rgba(0, 0, 0, 0.2);
+}
+
+
+.set-table-head{
+  background: white;
+  color:black;
+  font-size:28px;
+  font-weight:400;
+  height:78px;
+  position:sticky;
+  top:0;
+  z-index:2;
+  box-shadow:
+    0 3px 15px rgba(0,0,0,0.30),
+}
+
+.set-table-head {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.set-table-head span {
+  white-space: nowrap; 
+}
+
 .col-lot {
   padding-right: 12px;
 }
