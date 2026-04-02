@@ -331,7 +331,7 @@ const Equipment_Distribution = () => {
                       {/* Body */}
                       <div className='set-table-body-equipment'>
                         {rows.length === 0 ? (
-                          <div className='set-empty-equipment'>データがありません</div>
+                          <div className='set-empty-equipment'></div>
                         ) : (
                           rows.map((row) => (
                             <div
