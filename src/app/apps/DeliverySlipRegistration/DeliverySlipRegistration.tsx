@@ -472,9 +472,9 @@ const DeliverySlipRegistration = () => {
                 <div className='set-modal-de' role='dialog' aria-modal='true'>
                   <div className='set-modal-header-de'>確認</div>
                   <div className='set-modal-body-de'>
-                    メインメニューに戻ります。
+                    メニューに戻ります。
                     <br />
-                    読込データをクリアしますか？
+                    読込データを破棄しますか？
                   </div>
                   <div className='set-modal-actions-de delivery-slip-back-actions-de'>
                     <button
@@ -485,7 +485,7 @@ const DeliverySlipRegistration = () => {
                         navigate('/factory')
                       }}
                     >
-                      クリアして戻る
+                      はい
                     </button>
                     <button
                       className='set-modal-btn-de set-modal-no-de'
@@ -494,7 +494,7 @@ const DeliverySlipRegistration = () => {
                         navigate('/factory')
                       }}
                     >
-                      残して戻る
+                      いいえ
                     </button>
                   </div>
                 </div>
