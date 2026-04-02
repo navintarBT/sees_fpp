@@ -27,6 +27,8 @@ const MOCK_REGISTERED_ROWS: Record<string, DeliverySlipMockRow[]> = {
     {slipNo: '202603310000000000000000000011', status: ''},
     {slipNo: '202603310000000000000000000012', status: ''},
     {slipNo: '202603310000000000000000000013', status: ''},
+    {slipNo: '202603310000000000000000000014', status: ''},
+    {slipNo: '202603310000000000000000000015', status: ''},
   ],
   '87654321': [
     {slipNo: '202603310000000000000000000101', status: ''},
@@ -42,6 +44,8 @@ const MOCK_REGISTERED_ROWS: Record<string, DeliverySlipMockRow[]> = {
     {slipNo: '202603310000000000000000000111', status: ''},
     {slipNo: '202603310000000000000000000112', status: ''},
     {slipNo: '202603310000000000000000000113', status: ''},
+    {slipNo: '202603310000000000000000000114', status: ''},
+    {slipNo: '202603310000000000000000000115', status: ''},
   ],
 }
 
@@ -66,7 +70,6 @@ const DeliverySlipRegistration = () => {
   const [shipmentNo, setShipmentNo] = useState(DEFAULT_SHIPMENT_NO)
   const [deliverySlipNo, setDeliverySlipNo] = useState('')
   const [rows, setRows] = useState<DeliverySlipRow[]>(initialRows)
-  // Changed: support multiple selected row IDs
   const [selectedRowIds, setSelectedRowIds] = useState<Set<number>>(new Set())
   const [message, setMessage] = useState('')
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -75,7 +78,6 @@ const DeliverySlipRegistration = () => {
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [showCompleteNotice, setShowCompleteNotice] = useState(false)
 
-  // Derived: rows currently checked
   const selectedRows = rows.filter((row) => selectedRowIds.has(row.id))
   const allChecked = rows.length > 0 && rows.every((row) => selectedRowIds.has(row.id))
   const someChecked = rows.some((row) => selectedRowIds.has(row.id))
@@ -164,7 +166,6 @@ const DeliverySlipRegistration = () => {
     })
   }
 
-  // Toggle a single row checkbox
   const toggleRowCheckbox = (id: number) => {
     setSelectedRowIds((prev) => {
       const next = new Set(prev)
@@ -177,7 +178,6 @@ const DeliverySlipRegistration = () => {
     })
   }
 
-  // Toggle all rows (header checkbox)
   const toggleAllCheckboxes = () => {
     if (allChecked) {
       setSelectedRowIds(new Set())
@@ -204,10 +204,8 @@ const DeliverySlipRegistration = () => {
       let updated = [...prevRows]
       for (const activeRow of selectedRows) {
         if (activeRow.status === '追加') {
-          // Remove newly added rows entirely
           updated = updated.filter((row) => row.id !== activeRow.id)
         } else if (activeRow.status === '') {
-          // Mark existing rows as 削除
           updated = updated.map((row) =>
             row.id === activeRow.id ? {...row, status: '削除'} : row
           )
@@ -243,7 +241,6 @@ const DeliverySlipRegistration = () => {
     resetTableScroll()
   }
 
-  // Build delete confirmation message based on selected rows
   const deleteConfirmMessage = () => {
     const hasAdded = selectedRows.some((r) => r.status === '追加')
     const hasExisting = selectedRows.some((r) => r.status === '')
@@ -310,68 +307,65 @@ const DeliverySlipRegistration = () => {
                   ref={tableScrollRef}
                   className={rows.length === 0 ? 'set-table-scroll-de set-table-scroll-empty-de' : 'set-table-scroll-de'}
                 >
-                  {/* Header with select-all checkbox */}
-                  <div className='set-table-head-de delivery-slip-table-head-de'>
-                    <span className='col-checkbox-head-de' style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '52px', minWidth: '52px', boxSizing: 'border-box'}}>
-                      <input
-                        type='checkbox'
-                        aria-label='すべて選択'
-                        checked={allChecked}
-                        ref={(el) => {
-                          if (el) el.indeterminate = someChecked && !allChecked
-                        }}
-                        onChange={toggleAllCheckboxes}
-                        style={{width: '30px', height: '30px', cursor: 'pointer', accentColor: '#1976d2'}}
-                      />
-                    </span>
-                    <span className='col-status-delivery-de'>状態</span>
-                    <span className='col-slip-delivery-de set-row-left'>配送伝票No.</span>
-                  </div>
+                  {/* ใช้ Grid System แบบ display: contents */}
+                  <div className='set-table-grid-delivery'>
+                    {/* Header */}
+                    <div className='set-table-head-delivery'>
+                      <span className='col-checkbox-head-delivery'>
+                        <input
+                          type='checkbox'
+                          aria-label='すべて選択'
+                          checked={allChecked}
+                          ref={(el) => {
+                            if (el) el.indeterminate = someChecked && !allChecked
+                          }}
+                          onChange={toggleAllCheckboxes}
+                        />
+                      </span>
+                      <span className='col-status-delivery-de'>状態</span>
+                      <span className='col-slip-delivery-de'>配送伝票No.</span>
+                    </div>
 
-                  <div className='set-table-body-de'>
-                    {rows.length === 0 ? (
-                      <div className='set-empty-de'>表示する配送伝票No.がありません。</div>
-                    ) : (
-                      rows.map((row) => {
-                        const isChecked = selectedRowIds.has(row.id)
-                        return (
-                          <div
-                            className={`set-table-row-de delivery-slip-row-de${isChecked ? ' is-active-de' : ''}`}
-                            key={row.id}
-                            role='button'
-                            tabIndex={0}
-                            onClick={() => toggleRowCheckbox(row.id)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault()
-                                toggleRowCheckbox(row.id)
-                              }
-                            }}
-                            style={{
-                              minHeight: '44px',
-                              backgroundColor: isChecked ? '#e3f2fd' : '#ffffff',
-                              boxShadow: isChecked ? 'inset 3px 0 0 #1976d2' : 'none',
-                              color: isChecked ? '#1565c0' : 'inherit',
-                              cursor: 'pointer',
-                              transition: 'background-color 0.15s ease, box-shadow 0.15s ease',
-                            }}
-                          >
-                            <span className='col-checkbox-de' style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '52px', minWidth: '52px', boxSizing: 'border-box'}}>
-                              <input
-                                type='checkbox'
-                                aria-label={`行 ${row.slipNo} を選択`}
-                                checked={isChecked}
-                                onChange={() => toggleRowCheckbox(row.id)}
-                                onClick={(e) => e.stopPropagation()}
-                                style={{width: '30px', height: '30px', cursor: 'pointer', accentColor: '#1976d2'}}
-                              />
-                            </span>
-                            <span className='col-status-delivery-de'>{row.status}</span>
-                            <span className='col-slip-delivery-de'>{row.slipNo}</span>
-                          </div>
-                        )
-                      })
-                    )}
+                    {/* Divider */}
+                    <div className='set-table-head-divider-delivery' aria-hidden='true'></div>
+
+                    {/* Body */}
+                    <div className='set-table-body-delivery'>
+                      {rows.length === 0 ? (
+                        <div className='set-empty-delivery'>表示する配送伝票No.がありません。</div>
+                      ) : (
+                        rows.map((row) => {
+                          const isChecked = selectedRowIds.has(row.id)
+                          return (
+                            <div
+                              className={`set-table-row-delivery${isChecked ? ' is-active-delivery' : ''}`}
+                              key={row.id}
+                              role='button'
+                              tabIndex={0}
+                              onClick={() => toggleRowCheckbox(row.id)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault()
+                                  toggleRowCheckbox(row.id)
+                                }
+                              }}
+                            >
+                              <span className='col-checkbox-delivery'>
+                                <input
+                                  type='checkbox'
+                                  aria-label={`行 ${row.slipNo} を選択`}
+                                  checked={isChecked}
+                                  onChange={() => toggleRowCheckbox(row.id)}
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              </span>
+                              <span className='col-status-delivery-de'>{row.status}</span>
+                              <span className='col-slip-delivery-de'>{row.slipNo}</span>
+                            </div>
+                          )
+                        })
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -404,6 +398,7 @@ const DeliverySlipRegistration = () => {
               </button>
             </div>
 
+            {/* Modals - unchanged */}
             {showDeleteConfirm && (
               <div className='set-modal-backdrop-de' role='presentation'>
                 <div className='set-modal-de' role='dialog' aria-modal='true'>
@@ -481,9 +476,9 @@ const DeliverySlipRegistration = () => {
                 <div className='set-modal-de' role='dialog' aria-modal='true'>
                   <div className='set-modal-header-de'>確認</div>
                   <div className='set-modal-body-de'>
-                    メインメニューに戻ります。
+                    メニューに戻ります。
                     <br />
-                    読込データをクリアしますか？
+                    読込データを破棄しますか？
                   </div>
                   <div className='set-modal-actions-de delivery-slip-back-actions-de'>
                     <button
@@ -494,7 +489,7 @@ const DeliverySlipRegistration = () => {
                         navigate('/factory')
                       }}
                     >
-                      クリアして戻る
+                      はい
                     </button>
                     <button
                       className='set-modal-btn-de set-modal-no-de'
@@ -503,7 +498,7 @@ const DeliverySlipRegistration = () => {
                         navigate('/factory')
                       }}
                     >
-                      残して戻る
+                      いいえ
                     </button>
                   </div>
                 </div>
