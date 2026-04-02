@@ -260,10 +260,10 @@ const DeliverySlipRegistration = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>配送伝票登録</div>
-          <div className='set-body'>
-            <div className='set-form'>
-              <div className='set-row'>
+          <div className='set-header-de'>配送伝票登録</div>
+          <div className='set-body-de'>
+            <div className='set-form-de'>
+              <div className='set-row-de'>
                 <label htmlFor='shipmentNo'>出荷No.</label>
                 <input
                   id='shipmentNo'
@@ -281,10 +281,10 @@ const DeliverySlipRegistration = () => {
                 />
               </div>
 
-              <div className='set-row'>
+              <div className='set-row-de'>
                 <label htmlFor='deliverySlipNo'>配送伝票No.</label>
                 <input
-                  className='set-input-2'
+                  className='set-input-2-de'
                   id='deliverySlipNo'
                   ref={deliverySlipInputRef}
                   value={deliverySlipNo}
@@ -301,18 +301,18 @@ const DeliverySlipRegistration = () => {
                 />
               </div>
 
-              {message ? <div className='delivery-slip-message'>{message}</div> : null}
+              {message ? <div className='delivery-slip-message-de'>{message}</div> : null}
             </div>
 
-            <div className='set-table-wrap delivery-slip-table-wrap'>
-              <div className='set-table'>
+            <div className='set-table-wrap-de delivery-slip-table-wrap-de'>
+              <div className='set-table-de'>
                 <div
                   ref={tableScrollRef}
-                  className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}
+                  className={rows.length === 0 ? 'set-table-scroll-de set-table-scroll-empty-de' : 'set-table-scroll-de'}
                 >
                   {/* Header with select-all checkbox */}
-                  <div className='set-table-head delivery-slip-table-head'>
-                    <span className='col-checkbox-head' style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '52px', minWidth: '52px', boxSizing: 'border-box'}}>
+                  <div className='set-table-head-de delivery-slip-table-head-de'>
+                    <span className='col-checkbox-head-de' style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '52px', minWidth: '52px', boxSizing: 'border-box'}}>
                       <input
                         type='checkbox'
                         aria-label='すべて選択'
@@ -324,19 +324,19 @@ const DeliverySlipRegistration = () => {
                         style={{width: '30px', height: '30px', cursor: 'pointer', accentColor: '#1976d2'}}
                       />
                     </span>
-                    <span className='col-status-delivery'>状態</span>
-                    <span className='col-slip-delivery'>配送伝票No.</span>
+                    <span className='col-status-delivery-de'>状態</span>
+                    <span className='col-slip-delivery-de set-row-left'>配送伝票No.</span>
                   </div>
 
-                  <div className='set-table-body'>
+                  <div className='set-table-body-de'>
                     {rows.length === 0 ? (
-                      <div className='set-empty'>表示する配送伝票No.がありません。</div>
+                      <div className='set-empty-de'>表示する配送伝票No.がありません。</div>
                     ) : (
                       rows.map((row) => {
                         const isChecked = selectedRowIds.has(row.id)
                         return (
                           <div
-                            className={`set-table-row delivery-slip-row${isChecked ? ' is-active' : ''}`}
+                            className={`set-table-row-de delivery-slip-row-de${isChecked ? ' is-active-de' : ''}`}
                             key={row.id}
                             role='button'
                             tabIndex={0}
@@ -356,7 +356,7 @@ const DeliverySlipRegistration = () => {
                               transition: 'background-color 0.15s ease, box-shadow 0.15s ease',
                             }}
                           >
-                            <span className='col-checkbox' style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '52px', minWidth: '52px', boxSizing: 'border-box'}}>
+                            <span className='col-checkbox-de' style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '52px', minWidth: '52px', boxSizing: 'border-box'}}>
                               <input
                                 type='checkbox'
                                 aria-label={`行 ${row.slipNo} を選択`}
@@ -366,8 +366,8 @@ const DeliverySlipRegistration = () => {
                                 style={{width: '30px', height: '30px', cursor: 'pointer', accentColor: '#1976d2'}}
                               />
                             </span>
-                            <span className='col-status-delivery'>{row.status}</span>
-                            <span className='col-slip-delivery'>{row.slipNo}</span>
+                            <span className='col-status-delivery-de'>{row.status}</span>
+                            <span className='col-slip-delivery-de'>{row.slipNo}</span>
                           </div>
                         )
                       })
@@ -377,8 +377,8 @@ const DeliverySlipRegistration = () => {
               </div>
             </div>
 
-            <div className='set-actions set-actions-row'>
-              <button className='set-btn set-danger' onClick={() => {
+            <div className='set-actions-de set-actions-row-de'>
+              <button className='set-btn-de set-danger-de' onClick={() => {
                 setShowDeleteConfirm(false)
                 setShowNoSelectionConfirm(false)
                 setShowBackConfirm(false)
@@ -387,13 +387,13 @@ const DeliverySlipRegistration = () => {
               }}>
                 破棄
               </button>
-              <button className='set-btn set-primary' onClick={handleComplete}>
+              <button className='set-btn-de set-primary-de' onClick={handleComplete}>
                 完了
               </button>
-              <button className='set-btn set-success' onClick={handleDelete}>
+              <button className='set-btn-de set-success-de' onClick={handleDelete}>
                 削除
               </button>
-              <button className='set-btn set-warning' onClick={() => {
+              <button className='set-btn-de set-warning-de' onClick={() => {
                 setShowDeleteConfirm(false)
                 setShowNoSelectionConfirm(false)
                 setShowClearConfirm(false)
@@ -405,15 +405,15 @@ const DeliverySlipRegistration = () => {
             </div>
 
             {showDeleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>{deleteConfirmMessage()}</div>
-                  <div className='set-modal-actions'>
-                    <button className='set-modal-btn set-modal-yes' onClick={confirmDelete}>
+              <div className='set-modal-backdrop-de' role='presentation'>
+                <div className='set-modal-de' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header-de'>確認</div>
+                  <div className='set-modal-body-de'>{deleteConfirmMessage()}</div>
+                  <div className='set-modal-actions-de'>
+                    <button className='set-modal-btn-de set-modal-yes-de' onClick={confirmDelete}>
                       はい
                     </button>
-                    <button className='set-modal-btn set-modal-no' onClick={() => setShowDeleteConfirm(false)}>
+                    <button className='set-modal-btn-de set-modal-no-de' onClick={() => setShowDeleteConfirm(false)}>
                       いいえ
                     </button>
                   </div>
@@ -422,12 +422,12 @@ const DeliverySlipRegistration = () => {
             )}
 
             {showNoSelectionConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>削除する行を選択してください。</div>
-                  <div className='set-modal-actions'>
-                    <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoSelectionConfirm(false)}>
+              <div className='set-modal-backdrop-de' role='presentation'>
+                <div className='set-modal-de' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header-de'>確認</div>
+                  <div className='set-modal-body-de'>削除する行を選択してください。</div>
+                  <div className='set-modal-actions-de'>
+                    <button className='set-modal-btn-de set-modal-yes-de' onClick={() => setShowNoSelectionConfirm(false)}>
                       OK
                     </button>
                   </div>
@@ -436,17 +436,17 @@ const DeliverySlipRegistration = () => {
             )}
 
             {showClearConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>
+              <div className='set-modal-backdrop-de' role='presentation'>
+                <div className='set-modal-de' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header-de'>確認</div>
+                  <div className='set-modal-body-de'>
                     読込データをクリアして
                     <br />
                     画面を初期化しますか？
                   </div>
-                  <div className='set-modal-actions'>
+                  <div className='set-modal-actions-de'>
                     <button
-                      className='set-modal-btn set-modal-yes'
+                      className='set-modal-btn-de set-modal-yes-de'
                       onClick={() => {
                         setShowClearConfirm(false)
                         clearScreen()
@@ -454,7 +454,7 @@ const DeliverySlipRegistration = () => {
                     >
                       はい
                     </button>
-                    <button className='set-modal-btn set-modal-no' onClick={() => setShowClearConfirm(false)}>
+                    <button className='set-modal-btn-de set-modal-no-de' onClick={() => setShowClearConfirm(false)}>
                       いいえ
                     </button>
                   </div>
@@ -463,12 +463,12 @@ const DeliverySlipRegistration = () => {
             )}
 
             {showCompleteNotice && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>配送伝票No.を登録しました。</div>
-                  <div className='set-modal-actions'>
-                    <button className='set-modal-btn set-modal-yes' onClick={() => setShowCompleteNotice(false)}>
+              <div className='set-modal-backdrop-de' role='presentation'>
+                <div className='set-modal-de' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header-de'>確認</div>
+                  <div className='set-modal-body-de'>配送伝票No.を登録しました。</div>
+                  <div className='set-modal-actions-de'>
+                    <button className='set-modal-btn-de set-modal-yes-de' onClick={() => setShowCompleteNotice(false)}>
                       OK
                     </button>
                   </div>
@@ -477,17 +477,17 @@ const DeliverySlipRegistration = () => {
             )}
 
             {showBackConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>
+              <div className='set-modal-backdrop-de' role='presentation'>
+                <div className='set-modal-de' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header-de'>確認</div>
+                  <div className='set-modal-body-de'>
                     メインメニューに戻ります。
                     <br />
                     読込データをクリアしますか？
                   </div>
-                  <div className='set-modal-actions delivery-slip-back-actions'>
+                  <div className='set-modal-actions-de delivery-slip-back-actions-de'>
                     <button
-                      className='set-modal-btn set-modal-yes'
+                      className='set-modal-btn-de set-modal-yes-de'
                       onClick={() => {
                         clearScreen()
                         setShowBackConfirm(false)
@@ -497,7 +497,7 @@ const DeliverySlipRegistration = () => {
                       クリアして戻る
                     </button>
                     <button
-                      className='set-modal-btn set-modal-no'
+                      className='set-modal-btn-de set-modal-no-de'
                       onClick={() => {
                         setShowBackConfirm(false)
                         navigate('/factory')

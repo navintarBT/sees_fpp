@@ -1,4 +1,4 @@
-import {useEffect,useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './Equipment_Distribution.css'
 import './Equipment_Distribution_Main.css'
@@ -39,7 +39,7 @@ const Equipment_Distribution = () => {
         error: '',
         item: 'C03',
         lot: 'L03',
-        status: 'OV対応htyht要',
+        status: 'OV対応要',
         build: 3,
         release: 2,
         move: 'W3',
@@ -148,7 +148,6 @@ const Equipment_Distribution = () => {
       janCode: '',
     })
     const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
-    const [showHandInput, setShowHandInput] = useState(false)
     const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
@@ -195,26 +194,26 @@ const Equipment_Distribution = () => {
       setActiveRowId(rowId)
     }
   
-      const handleReleaseClick = () => {
-      if (showHandInput) {
-        setShowHandInputConfirm(true)
-        return
-      }
+    const handleReleaseClick = () => {
       if (!activeRow) {
         setShowNoSelectionConfirm(true)
         return
       }
-      if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
+      if (activeRow?.status === '追加' || activeRow?.status === 'OV対応htyht要' || activeRow?.status === '解除' || activeRow?.status === '構成中') {
         setShowDeleteConfirm(true)
         return
       }
+    }
+  
+    const handleHandInputClick = () => {
+      setShowHandInputConfirm(true)
     }
   
     useEffect(() => {
       const onKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'F2') {
           event.preventDefault()
-          setShowHandInput((prev) => !prev)
+          setShowHandInputConfirm(true)
         }
       }
       window.addEventListener('keydown', onKeyDown)
@@ -379,13 +378,10 @@ const Equipment_Distribution = () => {
                   完了
                 </button>
                 <button
-                  className='set-btn-eq set-success-eq'
-                  onClick={handleReleaseClick}
-                  style={{ visibility: showHandInput ? 'visible' : 'hidden' }}
-                  disabled={!showHandInput}
-                  aria-hidden={!showHandInput}
+                  className='set-btn-eq set-hand-input-btn'
+                  onClick={handleHandInputClick}
                 >
-                  {showHandInput ? '手入力' : ''}
+                  手入力
                 </button>
                 <button
                   className='set-btn-eq set-warning-eq'
@@ -538,4 +534,4 @@ const Equipment_Distribution = () => {
     )
 }
 
-export {Equipment_Distribution }
+export {Equipment_Distribution}

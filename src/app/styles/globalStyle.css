@@ -362,7 +362,9 @@
 .set-warning{
   background:linear-gradient(180deg,#f7bb45 0%,#c67a18 100%);
 }
-
+.set-hand-input-btn {
+  background: linear-gradient(180deg, #ff9ecb 0%, #d63384 100%);
+}
 .set-footer{
   margin-top:auto;
   display:flex;
