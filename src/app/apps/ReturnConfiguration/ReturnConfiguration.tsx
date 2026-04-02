@@ -303,7 +303,7 @@ const ReturnConfiguration = () => {
                                     value={form.parentWarehouse}
                                     onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
                                 >
-                                    <option value=''>-----</option>
+                                    <option value=''></option>
                                     <option value='羽田製品倉庫：W0040'>倉庫A : W0040</option>
                                     <option value='羽田製品倉庫：W0041'>倉庫A : W0041</option>
                                     <option value='羽田製品倉庫：W0042'>倉庫A : W0042</option>
@@ -359,54 +359,57 @@ const ReturnConfiguration = () => {
                             </div>
                             <div className='set-table-returnConfiguration'>
                                 <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                                    <div className='set-table-head-returnConfiguration'>
-                                        <span className='col-arrow-head'></span>
-                                        <span className='col-error'>エラー</span>
-                                        <span className='col-item'>品目No.</span>
-                                        <span className='col-lot'>ロットシリアル</span>
-                                        <span className='col-status'>状態</span>
-                                        <span className='col-num'>構成数</span>
-                                        <span className='col-num'>解除数</span>
-                                        <span className='col-move'>移動倉庫</span>
-                                        <span className='col-move'>移動保管場所</span>
-                                        <span className='col-name'>品名</span>
-                                    </div>
-                                    <div className='set-table-body'>
-                                        {rows.length === 0 ? (
-                                            <div className='set-empty'></div>
-                                        ) : (
-                                            rows.map((row) => (
-                                                <div
-                                                    className='set-table-row-returnConfiguration'
-                                                    key={row.id}
-                                                    role='button'
-                                                    tabIndex={0}
-                                                    onClick={() => handleRowClick(row.id)}
-                                                    onFocus={() => setActiveRowId(row.id)}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter' || e.key === ' ') {
-                                                            e.preventDefault()
-                                                            handleRowClick(row.id)
-                                                        }
-                                                    }}
-                                                >
-                                                    <span className='col-arrow'>
-                                                        {activeRowId === row.id ? (
-                                                            <FaPlay className='col-row-arrow' />
-                                                        ) : null}
-                                                    </span>
-                                                    <span className='col-error'>{row.error}</span>
-                                                    <span className='col-item'>{row.item}</span>
-                                                    <span className='col-lot'>{row.lot}</span>
-                                                    <span className='col-status'>{row.status}</span>
-                                                    <span className='col-num'>{row.build}</span>
-                                                    <span className='col-num'>{row.release}</span>
-                                                    <span className='col-move'>{row.move}</span>
-                                                    <span className='col-move'>{row.moveStorage}</span>
-                                                    <span className='col-name'>{row.name}</span>
-                                                </div>
-                                            ))
-                                        )}
+                                    <div className='set-table-regis-returnConfiguration'>
+                                        <div className='set-table-head-returnConfiguration'>
+                                            <span className='col-arrow-head'></span>
+                                            <span className='col-error'>エラー</span>
+                                            <span className='col-item'>品目No.</span>
+                                            <span className='col-lot'>ロットシリアル</span>
+                                            <span className='col-status'>状態</span>
+                                            <span className='col-num'>構成数</span>
+                                            <span className='col-num'>解除数</span>
+                                            <span className='col-move'>移動倉庫</span>
+                                            <span className='col-move'>移動保管場所</span>
+                                            <span className='col-name'>品名</span>
+                                        </div>
+                                        <div className='set-table-head-divider-returnConfiguration' aria-hidden='true'></div>
+                                        <div className='set-table-body-returnConfiguration'>
+                                            {rows.length === 0 ? (
+                                                <div className='set-empty'></div>
+                                            ) : (
+                                                rows.map((row) => (
+                                                    <div
+                                                        className='set-table-re-row-returnConfiguration'
+                                                        key={row.id}
+                                                        role='button'
+                                                        tabIndex={0}
+                                                        onClick={() => handleRowClick(row.id)}
+                                                        onFocus={() => setActiveRowId(row.id)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                                e.preventDefault()
+                                                                handleRowClick(row.id)
+                                                            }
+                                                        }}
+                                                    >
+                                                        <span className='col-arrow'>
+                                                            {activeRowId === row.id ? (
+                                                                <FaPlay className='col-row-arrow' />
+                                                            ) : null}
+                                                        </span>
+                                                        <span className='col-error'>{row.error}</span>
+                                                        <span className='col-item'>{row.item}</span>
+                                                        <span className='col-lot'>{row.lot}</span>
+                                                        <span className='col-status'>{row.status}</span>
+                                                        <span className='col-num'>{row.build}</span>
+                                                        <span className='col-num'>{row.release}</span>
+                                                        <span className='col-move'>{row.move}</span>
+                                                        <span className='col-move'>{row.moveStorage}</span>
+                                                        <span className='col-name'>{row.name}</span>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
