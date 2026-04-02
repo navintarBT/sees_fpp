@@ -15,6 +15,14 @@
   text-align: center;
 }
 
+.set-table-wrap-bun{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  --set-table-height:940px;
+}
+
+
 .set-table-bundle span{
   padding: 0 10px;
   box-sizing: border-box;
@@ -113,7 +121,6 @@
   display:flex;
   align-items:center;
   gap:5px;
-  font-size:50px;
   color:black;
   padding-right: 10px;
 }

@@ -96,6 +96,15 @@ const BundlePage = () => {
         build: 6,
         release: 2,
       },
+      {
+        id: 11,
+        error: 'E',
+        item: 'J10',
+        lot: 'L10',
+        status: '構成中',
+        build: 6,
+        release: 2,
+      },
     ])
     const [form, setForm] = useState({
       parentWarehouse: '羽田製品倉庫：W0040',
@@ -335,7 +344,7 @@ const BundlePage = () => {
               </div>
             </div>
   
-              <div className='set-table-wrap'>
+              <div className='set-table-wrap-bun'>
                 <div className='set-table-tools'>
                 </div>
                 <div className='set-table-bun'>
@@ -404,7 +413,7 @@ const BundlePage = () => {
                   完了
                 </button>
                 <button
-                  className='set-btn set-primary set-success'
+                  className='set-btn set-primary set-hand-input-btn'
                   onClick={() => handleReleaseClick({forceHandInput: true})}
                 >
                   手入力

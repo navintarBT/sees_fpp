@@ -280,15 +280,17 @@ const DispatchPage = () => {
                     onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                   />
                 </div>
-                  <div className='set-row set-row-inline'>
+                <div className='set-row'>
                   <label>数量</label>
                   <input
                     value={form.qty}
                     onChange={(e) => setForm({...form, qty: e.target.value})}
                     className='set-small'
                   />
-                  <span className='set-inline-label'>JANコード</span>
-                  <input
+                </div>
+                <div className='set-row'>
+                  <label>JANコード</label>
+                   <input
                     value={form.janCode}
                     onChange={(e) => setForm({...form, janCode: e.target.value})}
                   />
@@ -302,7 +304,7 @@ const DispatchPage = () => {
                 </div>
               </div>
   
-              <div className='set-table-wrap'>
+              <div className='set-table-wrap-dis'>
                 <div className='set-table-tools'>
                 </div>
                 <div className='set-table-dis'>
@@ -371,7 +373,7 @@ const DispatchPage = () => {
                   完了
                 </button>
                 <button
-                  className='set-btn set-primary set-success'
+                  className='set-btn set-primary set-hand-input-btn'
                   onClick={() => handleReleaseClick({forceHandInput: true})}
                 >
                   手入力

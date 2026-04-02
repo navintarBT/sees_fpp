@@ -332,14 +332,18 @@ const SetRegisterPage = () => {
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                 />
               </div>
-              <div className='set-row set-row-inline'>
+
+              <div className='set-row'>
                 <label>数量</label>
                 <input
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
                 />
-                <span className='set-inline-label'>JANコード</span>
+              </div>
+
+              <div className='set-row'>
+                <label>JANコード</label>
                 <input
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
@@ -347,7 +351,7 @@ const SetRegisterPage = () => {
               </div>
             </div>
 
-            <div className='set-table-wrap'>
+            <div className='set-table-wrap-re'>
               <div className='set-table-tools'>
               </div>
               <div className='set-table-re'>
