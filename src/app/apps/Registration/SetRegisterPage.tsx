@@ -426,16 +426,16 @@ const SetRegisterPage = () => {
                 完了
               </button>
               <button
-                className='set-btn set-primary set-hand-input-btn'
-                onClick={() => handleReleaseClick({forceHandInput: true})}
-              >
-                手入力
-              </button>
-              <button
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
               >
                 解除
+              </button>
+              <button
+                className='set-btn set-primary set-hand-input-btn'
+                onClick={() => handleReleaseClick({forceHandInput: true})}
+              >
+                手入力
               </button>
               <button
                 className='set-btn set-warning'
