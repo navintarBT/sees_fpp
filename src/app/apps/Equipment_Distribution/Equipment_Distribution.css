@@ -365,6 +365,11 @@
   background: white;
 }
 
+.set-modal-actions-eq .set-modal-btn-eq:only-child {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
 .set-modal-btn-eq {
   height: 64px;
   border-radius: 6px;
