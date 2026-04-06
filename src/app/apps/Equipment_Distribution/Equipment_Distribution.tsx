@@ -15,7 +15,7 @@ const Equipment_Distribution = () => {
         status: '追加',
         build: 2,
         release: 1,
-        move: 'W1',
+        move: 'W3',
         moveStorage: 'S1',
         name: '部品A',
       },
