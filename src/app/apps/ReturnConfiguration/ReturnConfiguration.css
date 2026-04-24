@@ -13,12 +13,6 @@
     box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08);
 }
 
-.rlr-row2 {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    align-items: center;
-    gap: 24px;
-}
 
 .badioBtnFun10 {
     gap: 80px;
@@ -55,7 +49,12 @@
     font-weight: 400;
     padding: 0 22px;
 }
-
+.rlr-row2 {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    align-items: center;
+    gap: 24px;
+}
 
 .box-colorbackInput .nocolorbackground {
     background-color: #e5e7eb;
