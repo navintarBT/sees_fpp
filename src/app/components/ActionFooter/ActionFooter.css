@@ -1,0 +1,20 @@
+.tf-actionFooter{
+  --tf-cols: 4;
+  --tf-gap-x: 22px;
+  --tf-gap-y: 26px;
+
+  display:grid;
+  grid-template-columns: repeat(var(--tf-cols), 1fr);
+  gap: var(--tf-gap-y) var(--tf-gap-x);
+
+  /* When the parent is flex column, this pins the footer to the bottom consistently. */
+  margin-top:auto;
+  width:100%;
+}
+
+/* If there's only one action, make it feel intentional. */
+.tf-actionFooter > :only-child{
+  grid-column: 1 / -1;
+  justify-self:center;
+  width:60%;
+}
