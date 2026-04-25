@@ -819,3 +819,46 @@
     gap: 20px;
 }
 
+/* ########################## + - kongchan ################################# */
+.pg-sign-group {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.pg-sign-group input {
+  width: 100%;
+}
+
+.bundle-group{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  
+}
+
+.set-radio-group{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  
+}
+
+.set-radio{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  color:black;
+  padding-right: 10px;
+}
+
+.set-radio input{
+  width:32px;
+  height:32px;
+  accent-color:#2a5bd6;
+  transform: translateY(1px);
+}
+
+.set-row-radio{
+  grid-template-columns:240px 1fr;
+}

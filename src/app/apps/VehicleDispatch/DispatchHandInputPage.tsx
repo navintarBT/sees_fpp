@@ -12,8 +12,6 @@ const DispatchHandInputPage = () => {
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
-
-
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (

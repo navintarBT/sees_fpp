@@ -31,35 +31,15 @@ const MiscellaneousInAndOutBound = () => {
                 <input readOnly={!isEnabled} placeholder=' ' />
               </div>
               <div className='hand-row'>
-                <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
-              <div className='rlr-row2'>
-                    <label>状態</label>
-                    <div className="rlr-qty-group badioBtnFun10">
-                        <label>
-                            <input
-                                type="radio"
-                                name="status"
-                                value="中"
-                                checked={qty === 1}
-                                onChange={() => setQty(1)}
-                                style={{ marginLeft: '25px' }}
-                            />
-                            正常
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                name="status"
-                                value="済"
-                                checked={qty === 2}
-                                onChange={() => setQty(2)}
-                            />
-                            調査中
-                        </label>
-                    </div>
+                <label>引当数</label>
+                <div className='pg-sign-group'>
+                    <select className='pg-sign-select' >
+                        <option value='+'>+</option>
+                        <option value='-'>-</option>
+                    </select>
+                    <input value="" />
                 </div>
+            </div>
               <div className='hand-row'>
                 <label>品目No.(親)</label>
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
@@ -67,6 +47,10 @@ const MiscellaneousInAndOutBound = () => {
               <div className='hand-row'>
                 <label>シリアル(親)</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+              </div>
+              <div className='hand-row'>
+                <label>移動保管場所</label>
+                <input />
               </div>
               <div className='hand-row'>
                 <label>移動保管場所</label>
@@ -135,7 +119,7 @@ const MiscellaneousInAndOutBound = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/set-return-configuration')
+                        navigate('/factory/set-miscellaneous-in-and-out-bound')
                       }}
                     >
                       {'\u306f\u3044'}

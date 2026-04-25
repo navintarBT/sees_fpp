@@ -11,6 +11,10 @@ import { ReturnConfiguration } from '../app/apps/ReturnConfiguration/ReturnConfi
 import { SetReturnConfiguration } from '../app/apps/ReturnConfiguration/SetReturnConfiguration'
 import { MiscellaneousInAndOutBound } from '../app/apps/MiscellaneousInAndOutBound/MiscellaneousInAndOutBound'
 import { SetMiscellaneousInAndOutBound } from '../app/apps/MiscellaneousInAndOutBound/SetMiscellaneousInAndOutBound'
+import { BundlePage } from '../app/apps/BundleRegistration/BundlePage'
+import { BundleHandInputPage } from '../app/apps/BundleRegistration/BundleHandInputPage'
+import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
+import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
 
 
 
@@ -31,6 +35,12 @@ const MainPage = () => {
         <Route path='set-return-configuration' element={<SetReturnConfiguration />} />
         <Route path='miscellaneous-in-and-out-bound' element={<MiscellaneousInAndOutBound />} />
         <Route path='set-miscellaneous-in-and-out-bound' element={<SetMiscellaneousInAndOutBound />} />
+        <Route path='BundlePage' element={<BundlePage />} />
+        <Route path='BundleHandInputPage' element={<BundleHandInputPage />} />
+        <Route path='Equipment' element={<Equipment/>} />
+        <Route path='EquipmentHandInputPage' element={<EquipmentHandInputPage/>} />
+
+
       </Route>
     </Routes>
   )
@@ -90,12 +100,12 @@ const MainPageDetail = () => {
               </button>
               <button
                 className='mockup-btn mockup-orange'
-                onClick={() => navigate('')}
+                onClick={() => navigate('Equipment')}
               >
                 伝票振分
               </button>
               <button className='mockup-btn mockup-pink'
-                onClick={() => navigate('')}
+                onClick={() => navigate('BundlePage')}
               >販売セット</button>
             </div>
 

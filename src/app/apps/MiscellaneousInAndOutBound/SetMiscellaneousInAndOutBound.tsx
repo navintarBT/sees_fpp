@@ -377,64 +377,41 @@ const SetMiscellaneousInAndOutBound = () => {
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
-                <label>JANコード(親)</label>
-                <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
-                </select>
+                  <label>倉庫</label>
+                  <select
+                      value={form.parentWarehouse}
+                      onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
+                  >
+                      <option value=''></option>
+                      <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                      <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
+                      <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                  </select>
               </div>
-                <div className='rlr-row2'>
-                    <label>状態</label>
-                    <div className="rlr-qty-group badioBtnFun10">
-                        <label>
-                            <input
-                                type="radio"
-                                name="status"
-                                value="中"
-                                checked={qty === 1}
-                                onChange={() => setQty(1)}
-
-                            />
-                            正常
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                name="status"
-                                value="済"
-                                checked={qty === 2}
-                                onChange={() => setQty(2)}
-
-                            />
-                            調査中
-                        </label>
-                    </div>
-                </div>
-
               <div className='set-row'>
-                <label>数量</label>
-                <input
-                  value={form.qty}
-                  onChange={(e) => setForm({...form, qty: e.target.value})}
-                  className='set-small set-input-gray'
-                />
+                  <label>保管場所</label>
+                  <input value={form.moveStorage}
+                      onChange={(e) => setForm({ ...form, moveStorage: e.target.value })} />
               </div>
 
               <div className='set-row'>
-                <label>JANコード</label>
-                <input
-                  value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
-                  className='set-input-gray'
-                />
+                  <label>引当数</label>
+                  <div className='pg-sign-group'>
+                      <select className='pg-sign-select' >
+                          <option value='+'>+</option>
+                          <option value='-'>-</option>
+                      </select>
+                      <input value={form.qty}
+                          onChange={(e) => setForm({ ...form, qty: e.target.value })} />
+                  </div>
               </div>
-            </div>
 
+              <div className='set-row '>
+                  <label>JANコード</label>
+                  <input value={form.janCode}
+                      onChange={(e) => setForm({ ...form, janCode: e.target.value })} />
+              </div>
+          </div>
             <TableSection
               columns={tableColumns}
               rows={rows}
@@ -487,7 +464,7 @@ const SetMiscellaneousInAndOutBound = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/return-configuration')
+                        navigate('/factory/miscellaneous-in-and-out-bound')
                       }}
                     >
                       はい
