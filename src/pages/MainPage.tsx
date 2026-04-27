@@ -2,34 +2,45 @@ import { Route, Routes, Outlet, Navigate, useNavigate } from 'react-router-dom'
 import './mainPage.scss'
 import { SetRegisterPage } from '../app/apps/Registration/SetRegisterPage'
 import { SetRegisterHandInputPage } from '../app/apps/Registration/SetRegisterHandInputPage'
-import DispatchRegistrationPage from '../app/apps/VehicleDispatch/DispatchRegistrationPage'
-import RegistrationRegistrationPage from '../app/apps/Registration/RegistrationRegistrationPage'
-import VehicleInboundRegistrationPage from '../app/apps/VehicleInbound/VehicleInboundRegistrationPage'
-import BundleRegistrationPage from '../app/apps/BundleRegistration/BundleRegistrationPage'
+import { DispatchPage } from '../app/apps/VehicleDispatch/DispatchPage'
+import { DispatchHandInputPage } from '../app/apps/VehicleDispatch/DispatchHandInputPage'
+import { VehicleInboundPage } from '../app/apps/VehicleInbound/VehicleInboundPage'
+import { VehicleInboundHandInputPage } from '../app/apps/VehicleInbound/VehicleInboundHandInputPage'
+import { DeliverySlipRegistration } from '../app/apps/DeliverySlipRegistration/DeliverySlipRegistration'
 import { ReturnConfiguration } from '../app/apps/ReturnConfiguration/ReturnConfiguration'
 import { SetReturnConfiguration } from '../app/apps/ReturnConfiguration/SetReturnConfiguration'
 import { MiscellaneousInAndOutBound } from '../app/apps/MiscellaneousInAndOutBound/MiscellaneousInAndOutBound'
 import { SetMiscellaneousInAndOutBound } from '../app/apps/MiscellaneousInAndOutBound/SetMiscellaneousInAndOutBound'
-import Equipment_Distribution_Page from '../app/apps/Equipment_Distribution/Equipment_Distribution_Page'
+import { BundlePage } from '../app/apps/BundleRegistration/BundlePage'
+import { BundleHandInputPage } from '../app/apps/BundleRegistration/BundleHandInputPage'
+import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
+import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
 
-import DeliverySlipRegistrationPage from '../app/apps/DeliverySlipRegistration/DeliverySlipRegistrationPage'
+
+
+
 const MainPage = () => {
   return (
     <Routes>
       <Route element={<Outlet />}>
         <Route index element={<MainPageDetail />} />
         <Route path='set-register' element={<SetRegisterPage />} />
-        <Route path='set-register-hand' element={<SetRegisterHandInputPage />} />
-        <Route path='dispatch/*' element={<DispatchRegistrationPage />} />
-        <Route path='set-register/*' element={<RegistrationRegistrationPage />} />
-        <Route path='vehicle-inbound/*' element={<VehicleInboundRegistrationPage />} />
-        <Route path='bundle/*' element={<BundleRegistrationPage />} />
-        <Route path='return-configuration/*' element={<ReturnConfiguration />} />
-        <Route path='setReturnConfiguration/*' element={<SetReturnConfiguration />} />
-        <Route path='miscellaneousInAndOutBound/*' element={<MiscellaneousInAndOutBound />} />
-        <Route path='setMiscellaneousInAndOutBound/*' element={<SetMiscellaneousInAndOutBound />} />
-        <Route path='equipment-distribution/*' element={<Equipment_Distribution_Page />} />
-        <Route path='deliveryslipregistration/*' element={<DeliverySlipRegistrationPage />} />
+        <Route path='set-register/hand-input' element={<SetRegisterHandInputPage />} />
+        <Route path='dispatch' element={<DispatchPage />} />
+        <Route path='dispatch/hand-input' element={<DispatchHandInputPage />} />
+        <Route path='inbound' element={<VehicleInboundPage />} />
+        <Route path='inbound/hand-input' element={<VehicleInboundHandInputPage />} />
+        <Route path='delivery-slip-registration' element={<DeliverySlipRegistration />} />
+        <Route path='return-configuration' element={<ReturnConfiguration />} />
+        <Route path='set-return-configuration' element={<SetReturnConfiguration />} />
+        <Route path='miscellaneous-in-and-out-bound' element={<MiscellaneousInAndOutBound />} />
+        <Route path='set-miscellaneous-in-and-out-bound' element={<SetMiscellaneousInAndOutBound />} />
+        <Route path='BundlePage' element={<BundlePage />} />
+        <Route path='BundleHandInputPage' element={<BundleHandInputPage />} />
+        <Route path='Equipment' element={<Equipment/>} />
+        <Route path='EquipmentHandInputPage' element={<EquipmentHandInputPage/>} />
+
+
       </Route>
     </Routes>
   )
@@ -59,19 +70,19 @@ const MainPageDetail = () => {
               </button>
               <button
                 className='mockup-btn mockup-blue'
-                onClick={() => navigate('vehicle-inbound')}
+                onClick={() => navigate('inbound')}
               >
                 入庫
               </button>
               <button
                 className='mockup-btn mockup-green'
-                onClick={() => navigate('deliveryslipregistration')}
+                onClick={() => navigate('delivery-slip-registration')}
               >
                 配送伝票
               </button>
               <button
                 className='mockup-btn mockup-yellow'
-                onClick={() => navigate('return-configuration')}
+                onClick={() => navigate('set-return-configuration')}
               >
                 戻り構成
               </button>
@@ -83,18 +94,18 @@ const MainPageDetail = () => {
               </button>
               <button
                 className='mockup-btn mockup-gray'
-                onClick={() => navigate('miscellaneousInAndOutBound')}
+                onClick={() => navigate('set-miscellaneous-in-and-out-bound')}
               >
                 雑入出庫
               </button>
               <button
                 className='mockup-btn mockup-orange'
-                onClick={() => navigate('equipment-distribution')}
+                onClick={() => navigate('Equipment')}
               >
                 伝票振分
               </button>
               <button className='mockup-btn mockup-pink'
-                onClick={() => navigate('bundle')}
+                onClick={() => navigate('BundlePage')}
               >販売セット</button>
             </div>
 

@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
-const BundleHandInputPage = () => {
+const EquipmentHandInputPage = () => {
   const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
@@ -137,7 +137,7 @@ const BundleHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/BundlePage')
+                        navigate('/factory/Equipment')
                       }}
                     >
                       {'\u306f\u3044'}
@@ -159,4 +159,4 @@ const BundleHandInputPage = () => {
   )
 }
 
-export {BundleHandInputPage}
+export {EquipmentHandInputPage}

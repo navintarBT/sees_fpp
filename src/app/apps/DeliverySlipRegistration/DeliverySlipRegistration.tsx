@@ -1,86 +1,127 @@
-import {useRef, useState} from 'react'
+import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
-import './DeliverySlipRegistration.css'
+import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 
-type DeliverySlipStatus = '' | '追加' | '削除'
-
-type DeliverySlipRow = {
+type Row = {
   id: number
-  slipNo: string
-  status: DeliverySlipStatus
+  error: string
+  item: string
+
 }
 
-type DeliverySlipMockRow = Omit<DeliverySlipRow, 'id'>
-
-const MOCK_REGISTERED_ROWS: Record<string, DeliverySlipMockRow[]> = {
-  '12345678': [
-    {slipNo: '202603310000000000000000000001', status: ''},
-    {slipNo: '202603310000000000000000000002', status: ''},
-    {slipNo: '202603310000000000000000000003', status: ''},
-    {slipNo: '202603310000000000000000000004', status: ''},
-    {slipNo: '202603310000000000000000000005', status: ''},
-    {slipNo: '202603310000000000000000000006', status: ''},
-    {slipNo: '202603310000000000000000000007', status: ''},
-    {slipNo: '202603310000000000000000000008', status: ''},
-    {slipNo: '202603310000000000000000000009', status: ''},
-    {slipNo: '202603310000000000000000000010', status: ''},
-    {slipNo: '202603310000000000000000000011', status: ''},
-    {slipNo: '202603310000000000000000000012', status: ''},
-    {slipNo: '202603310000000000000000000013', status: ''},
-    {slipNo: '202603310000000000000000000014', status: ''},
-    {slipNo: '202603310000000000000000000015', status: ''},
-  ],
-  '87654321': [
-    {slipNo: '202603310000000000000000000101', status: ''},
-    {slipNo: '202603310000000000000000000102', status: ''},
-    {slipNo: '202603310000000000000000000103', status: ''},
-    {slipNo: '202603310000000000000000000104', status: ''},
-    {slipNo: '202603310000000000000000000105', status: ''},
-    {slipNo: '202603310000000000000000000106', status: ''},
-    {slipNo: '202603310000000000000000000107', status: ''},
-    {slipNo: '202603310000000000000000000108', status: ''},
-    {slipNo: '202603310000000000000000000109', status: ''},
-    {slipNo: '202603310000000000000000000110', status: ''},
-    {slipNo: '202603310000000000000000000111', status: ''},
-    {slipNo: '202603310000000000000000000112', status: ''},
-    {slipNo: '202603310000000000000000000113', status: ''},
-    {slipNo: '202603310000000000000000000114', status: ''},
-    {slipNo: '202603310000000000000000000115', status: ''},
-  ],
+type TableColumn = {
+  key: string
+  headClassName: string
+  cellClassName: string
+  header: ReactNode
+  render: (row: Row) => ReactNode
 }
-
-const DEFAULT_SHIPMENT_NO = '12345678'
-
-const buildRegisteredRows = (shipmentNo: string): DeliverySlipRow[] =>
-  (MOCK_REGISTERED_ROWS[shipmentNo] ?? []).map((row, index) => ({
-    id: index + 1,
-    slipNo: row.slipNo,
-    status: row.status,
-  }))
-
-const isValidDigits = (value: string, length: number) => new RegExp(`^\\d{${length}}$`).test(value)
 
 const DeliverySlipRegistration = () => {
   const navigate = useNavigate()
-  const tableScrollRef = useRef<HTMLDivElement | null>(null)
-  const deliverySlipInputRef = useRef<HTMLInputElement | null>(null)
-  const initialRows = buildRegisteredRows(DEFAULT_SHIPMENT_NO)
-  const nextRowIdRef = useRef(initialRows.length + 1)
-
-  const [shipmentNo, setShipmentNo] = useState(DEFAULT_SHIPMENT_NO)
-  const [deliverySlipNo, setDeliverySlipNo] = useState('')
-  const [rows, setRows] = useState<DeliverySlipRow[]>(initialRows)
-  const [selectedRowIds, setSelectedRowIds] = useState<Set<number>>(new Set())
-  const [message, setMessage] = useState('')
+  const [rows, setRows] = useState<Row[]>([
+    {
+      id: 1,
+      error: '',
+      item: '202603310000000000000000000001', // 品目No.
+    },
+    {
+      id: 2,
+      error: '',
+      item: '202603310000000000000000000002', // 品目No.
+    },
+    {
+      id: 3,
+      error: '',
+      item: '202603310000000000000000000003', // 品目No.
+    },
+    {
+      id: 4,
+      error: '',
+      item: '202603310000000000000000000004', // 品目No.
+    },
+    {
+      id: 5,
+      error: '',
+      item: '202603310000000000000000000005', // 品目No.
+    },
+    {
+      id: 6,
+      error: '',
+      item: '202603310000000000000000000006', // 品目No.
+    },
+    {
+      id: 7,
+      error: '',
+      item: '202603310000000000000000000007', // 品目No.
+    },
+    {
+      id: 8,
+      error: '',
+      item: '202603310000000000000000000008', // 品目No.
+    },
+    {
+      id: 9,
+      error: '',
+      item: '202603310000000000000000000009', // 品目No.
+    },
+    {
+      id: 10,
+      error: '',
+      item: '202603310000000000000000000010', // 品目No.
+    },
+  ])
+  const [form, setForm] = useState({
+    parentWarehouse: '羽田製品倉庫：W0040',
+    parentItemNo: '0193090',
+    moveWarehouse: '千葉倉庫（WMS）：W002',
+    moveStorage: '',
+    qty: '1',
+    janCode: '',
+  })
+  const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
+  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const [showCompleteNotice, setShowCompleteNotice] = useState(false)
 
-  const selectedRows = rows.filter((row) => selectedRowIds.has(row.id))
-  const allChecked = rows.length > 0 && rows.every((row) => selectedRowIds.has(row.id))
-  const someChecked = rows.some((row) => selectedRowIds.has(row.id))
+  const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
+  const activeRow = rows.find((row) => row.id === activeRowId) ?? null
+  const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
+  const isAnyModalOpen =
+    showHandInputConfirm ||
+    showDeleteConfirm ||
+    showNoSelectionConfirm ||
+    showClearConfirm ||
+    showCompleteConfirm ||
+    showBackConfirm
+
+  const closeAllModals = () => {
+    setShowHandInputConfirm(false)
+    setShowDeleteConfirm(false)
+    setShowNoSelectionConfirm(false)
+    setShowClearConfirm(false)
+    setShowCompleteConfirm(false)
+    setShowBackConfirm(false)
+  }
+
+  const clearRows = () => {
+    setRows([])
+    setCheckedRowIds([])
+  }
+  const clearForm = () =>
+    setForm({
+      parentWarehouse: '',
+      parentItemNo: '',
+      moveWarehouse: '',
+      moveStorage: '',
+      qty: '',
+      janCode: '',
+    })
 
   const resetTableScroll = () => {
     const el = tableScrollRef.current
@@ -88,328 +129,253 @@ const DeliverySlipRegistration = () => {
     requestAnimationFrame(() => {
       el.scrollTop = 0
       el.scrollLeft = 0
+      requestAnimationFrame(() => {
+        el.scrollTop = 0
+        el.scrollLeft = 0
+      })
     })
   }
 
-  const clearScreen = () => {
-    setShipmentNo('')
-    setDeliverySlipNo('')
-    setRows([])
-    setSelectedRowIds(new Set())
-    setMessage('')
-    nextRowIdRef.current = 1
+  const clearFormAndRows = () => {
+    clearForm()
+    clearRows()
     resetTableScroll()
   }
 
-  const loadShipment = () => {
-    if (!isValidDigits(shipmentNo, 8)) {
-      setMessage('出荷No.は8桁の数字で入力してください。')
-      return
-    }
-
-    const registeredRows = buildRegisteredRows(shipmentNo)
-    nextRowIdRef.current = registeredRows.length + 1
-    setRows(registeredRows)
-    setSelectedRowIds(new Set())
-    setDeliverySlipNo('')
-    setMessage('')
-    resetTableScroll()
-
-    requestAnimationFrame(() => {
-      deliverySlipInputRef.current?.focus()
-    })
+  const handleRowClick = (rowId: number) => {
+    setActiveRowId(rowId)
+    setCheckedRowIds((prev) => (prev.includes(rowId) ? prev.filter((id) => id !== rowId) : [...prev, rowId]))
   }
 
-  const addDeliverySlip = () => {
-    if (!isValidDigits(shipmentNo, 8)) {
-      setMessage('先に8桁の出荷No.を入力してください。')
+  const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
+
+  const toggleAllChecked = (checked: boolean) => {
+    if (checked) {
+      setCheckedRowIds(rows.map((row) => row.id))
       return
     }
+    setCheckedRowIds([])
+  }
 
-    if (!isValidDigits(deliverySlipNo, 30)) {
-      setMessage('配送伝票No.は30桁の数字で入力してください。')
-      return
-    }
-
-    const existingRow = rows.find((row) => row.slipNo === deliverySlipNo)
-    if (existingRow) {
-      if (existingRow.status === '削除') {
-        setRows((prevRows) =>
-          prevRows.map((row) => (row.id === existingRow.id ? {...row, status: ''} : row))
-        )
-        setSelectedRowIds(new Set([existingRow.id]))
-        setMessage('')
-      } else {
-        setSelectedRowIds(new Set([existingRow.id]))
-        setMessage('')
+  const toggleRowChecked = (rowId: number, checked: boolean) => {
+    setCheckedRowIds((prev) => {
+      if (checked) {
+        return prev.includes(rowId) ? prev : [...prev, rowId]
       }
-      setDeliverySlipNo('')
+      return prev.filter((id) => id !== rowId)
+    })
+  }
+
+  const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
+    if (isAnyModalOpen) return
+    if (options?.forceHandInput) {
+      closeAllModals()
+      setShowHandInputConfirm(true)
       return
     }
-
-    const newRow: DeliverySlipRow = {
-      id: nextRowIdRef.current,
-      slipNo: deliverySlipNo,
-      status: '追加',
-    }
-
-    nextRowIdRef.current += 1
-    setRows((prevRows) => [...prevRows, newRow])
-    setSelectedRowIds(new Set([newRow.id]))
-    setDeliverySlipNo('')
-    setMessage('')
-
-    requestAnimationFrame(() => {
-      const el = tableScrollRef.current
-      if (!el) return
-      el.scrollTop = el.scrollHeight
-    })
-  }
-
-  const toggleRowCheckbox = (id: number) => {
-    setSelectedRowIds((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) {
-        next.delete(id)
-      } else {
-        next.add(id)
-      }
-      return next
-    })
-  }
-
-  const toggleAllCheckboxes = () => {
-    if (allChecked) {
-      setSelectedRowIds(new Set())
-    } else {
-      setSelectedRowIds(new Set(rows.map((row) => row.id)))
-    }
-  }
-
-  const handleDelete = () => {
-    if (selectedRows.length === 0) {
+    if (!activeRow) {
+      closeAllModals()
       setShowNoSelectionConfirm(true)
       return
     }
-    setShowDeleteConfirm(true)
   }
 
-  const confirmDelete = () => {
-    if (selectedRows.length === 0) {
-      setShowDeleteConfirm(false)
-      return
-    }
 
-    setRows((prevRows) => {
-      let updated = [...prevRows]
-      for (const activeRow of selectedRows) {
-        if (activeRow.status === '追加') {
-          updated = updated.filter((row) => row.id !== activeRow.id)
-        } else if (activeRow.status === '') {
-          updated = updated.map((row) =>
-            row.id === activeRow.id ? {...row, status: '削除'} : row
-          )
-        }
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isAnyModalOpen) {
+        return
       }
-      return updated
-    })
+      if (event.key === 'F1') {
+        pressedKeysRef.current.f1 = true
+      }
+      if (event.key === 'F8') {
+        pressedKeysRef.current.f8 = true
+      }
+      if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
+        event.preventDefault()
+        handleReleaseClick({forceHandInput: true})
+        return
+      }
 
-    setSelectedRowIds(new Set())
-    setMessage('')
-    setShowDeleteConfirm(false)
-  }
+      if (event.key === 'F1') {
+        event.preventDefault()
+        closeAllModals()
+        setShowClearConfirm(true)
+        return
+      }
 
-  const handleComplete = () => {
-    if (!isValidDigits(shipmentNo, 8)) {
-      setMessage('出荷No.は8桁の数字で入力してください。')
-      return
+      if (event.key === 'F2') {
+        event.preventDefault()
+        closeAllModals()
+        setShowCompleteConfirm(true)
+        return
+      }
+
+      if (event.key === 'F3') {
+        event.preventDefault()
+        handleReleaseClick({forceRelease: true})
+        return
+      }
+
+      if (event.key === 'F4') {
+        event.preventDefault()
+        closeAllModals()
+        setShowBackConfirm(true)
+      }
     }
-
-    if (rows.length === 0) {
-      setMessage('登録対象の配送伝票No.がありません。')
-      return
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key === 'F1') {
+        pressedKeysRef.current.f1 = false
+      }
+      if (event.key === 'F8') {
+        pressedKeysRef.current.f8 = false
+      }
     }
-
-    const committedRows = rows
-      .filter((row) => row.status !== '削除')
-      .map((row) => ({...row, status: '' as DeliverySlipStatus}))
-
-    setRows(committedRows)
-    setSelectedRowIds(new Set(committedRows[0]?.id != null ? [committedRows[0].id] : []))
-    setMessage('')
-    setShowCompleteNotice(true)
-    resetTableScroll()
-  }
-
-  const deleteConfirmMessage = () => {
-    const hasAdded = selectedRows.some((r) => r.status === '追加')
-    const hasExisting = selectedRows.some((r) => r.status === '')
-    if (hasAdded && hasExisting) {
-      return '選択した配送伝票No.を削除（追加行は完全削除、既存行は削除予定）しますか？'
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
     }
-    if (hasAdded) {
-      return '追加した配送伝票No.を削除しますか？'
-    }
-    return '選択した配送伝票No.を削除予定にしますか？'
-  }
+  }, [activeRow, isAnyModalOpen])
+
+  const tableColumns: Array<TFTableColumn<Row>> = [
+    {
+      key: 'check',
+      headClassName: 'col-check',
+      cellClassName: 'col-check',
+      header: (
+        <input
+          type='checkbox'
+          className='tf-tableCheckbox'
+          checked={isAllChecked}
+          onChange={(e) => toggleAllChecked(e.target.checked)}
+          onClick={(e) => e.stopPropagation()}
+          aria-label='Select all rows'
+        />
+      ),
+      render: (row) => (
+        <input
+          type='checkbox'
+          className='tf-tableCheckbox'
+          checked={checkedRowIds.includes(row.id)}
+          onChange={(e) => toggleRowChecked(row.id, e.target.checked)}
+          onClick={(e) => e.stopPropagation()}
+          aria-label={`Select row ${row.id}`}
+        />
+      ),
+    },
+    {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '状態', render: (row) => row.error},
+    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
+  ]
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header-de'>配送伝票登録</div>
-          <div className='set-body-de'>
-            <div className='set-form-de'>
-              <div className='set-row-de'>
-                <label htmlFor='shipmentNo'>出荷No.</label>
-                <input
-                  id='shipmentNo'
-                  value={shipmentNo}
-                  inputMode='numeric'
-                  maxLength={8}
-                  placeholder='8桁'
-                  onChange={(e) => setShipmentNo(e.target.value.slice(0, 8))}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      loadShipment()
-                    }
-                  }}
-                />
-              </div>
+          <div className='set-header'>セット構成登録</div>
+          <div className='set-body'>
+                <div className='set-form'>
+                  <div className='set-row'>
+                    <label>出荷No.</label>
+                    <input
+                      value={form.parentItemNo}
+                      onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                    />
+                  </div>
+                    <div className='set-row'>
+                    <label>配送伝票No.</label>
+                    <input
+                      value={form.parentItemNo}
+                      onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                    />
+                  </div>
+                </div>
 
-              <div className='set-row-de'>
-                <label htmlFor='deliverySlipNo'>配送伝票No.</label>
-                <input
-                  className='set-input-2-de'
-                  id='deliverySlipNo'
-                  ref={deliverySlipInputRef}
-                  value={deliverySlipNo}
-                  inputMode='numeric'
-                  maxLength={30}
-                  placeholder='30桁'
-                  onChange={(e) => setDeliverySlipNo(e.target.value.slice(0, 30))}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      addDeliverySlip()
-                    }
-                  }}
-                />
-              </div>
+            <TableSection
+              columns={tableColumns}
+              rows={rows}
+              scrollRef={tableScrollRef}
+              getRowKey={(row) => row.id}
+              activeRowKey={activeRowId}
+              onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
+            />
 
-              {message ? <div className='delivery-slip-message-de'>{message}</div> : null}
-            </div>
-
-            <div className='set-table-wrap-de delivery-slip-table-wrap-de'>
-              <div className='set-table-de'>
-                <div
-                  ref={tableScrollRef}
-                  className={rows.length === 0 ? 'set-table-scroll-de set-table-scroll-empty-de' : 'set-table-scroll-de'}
-                >
-                  {/* ใช้ Grid System แบบ display: contents */}
-                  <div className='set-table-grid-delivery'>
-                    {/* Header */}
-                    <div className='set-table-head-delivery'>
-                      <span className='col-checkbox-head-delivery'>
-                        <input
-                          type='checkbox'
-                          aria-label='すべて選択'
-                          checked={allChecked}
-                          ref={(el) => {
-                            if (el) el.indeterminate = someChecked && !allChecked
-                          }}
-                          onChange={toggleAllCheckboxes}
-                        />
-                      </span>
-                      <span className='col-status-delivery-de'>状態</span>
-                      <span className='col-slip-delivery-de'>配送伝票No.</span>
-                    </div>
-
-                    {/* Divider */}
-                    <div className='set-table-head-divider-delivery' aria-hidden='true'></div>
-
-                    {/* Body */}
-                    <div className='set-table-body-delivery'>
-                      {rows.length === 0 ? (
-                        <div className='set-empty-delivery'>表示する配送伝票No.がありません。</div>
-                      ) : (
-                        rows.map((row) => {
-                          const isChecked = selectedRowIds.has(row.id)
-                          return (
-                            <div
-                              className={`set-table-row-delivery${isChecked ? ' is-active-delivery' : ''}`}
-                              key={row.id}
-                              role='button'
-                              tabIndex={0}
-                              onClick={() => toggleRowCheckbox(row.id)}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.preventDefault()
-                                  toggleRowCheckbox(row.id)
-                                }
-                              }}
-                            >
-                              <span className='col-checkbox-delivery'>
-                                <input
-                                  type='checkbox'
-                                  aria-label={`行 ${row.slipNo} を選択`}
-                                  checked={isChecked}
-                                  onChange={() => toggleRowCheckbox(row.id)}
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                              </span>
-                              <span className='col-status-delivery-de'>{row.status}</span>
-                              <span className='col-slip-delivery-de'>{row.slipNo}</span>
-                            </div>
-                          )
-                        })
-                      )}
-                    </div>
+            <ActionFooter columns={4}>
+              <button
+                className='set-btn set-danger'
+                onClick={() => setShowClearConfirm(true)}
+              >
+                破棄
+              </button>
+              <button
+                className='set-btn set-primary'
+                onClick={() => setShowCompleteConfirm(true)}
+              >
+                完了
+              </button>     
+              <button
+                className='set-btn set-primary set-success'
+                onClick={() => handleReleaseClick({forceHandInput: true})}
+              >
+                手入力
+              </button>
+              <button
+                className='set-btn set-warning'
+                onClick={() => setShowBackConfirm(true)}
+              >
+                戻る
+              </button>
+            </ActionFooter>
+       </div>
+            {showHandInputConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowHandInputConfirm(false)
+                        navigate('')
+                      }}
+                    >
+                      はい
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => {
+                        setShowHandInputConfirm(false)
+                      }}
+                    >
+                      いいえ
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className='set-actions-de set-actions-row-de'>
-              <button className='set-btn-de set-danger-de' onClick={() => {
-                setShowDeleteConfirm(false)
-                setShowNoSelectionConfirm(false)
-                setShowBackConfirm(false)
-                setShowCompleteNotice(false)
-                setShowClearConfirm(true)
-              }}>
-                破棄
-              </button>
-              <button className='set-btn-de set-primary-de' onClick={handleComplete}>
-                完了
-              </button>
-              <button className='set-btn-de set-success-de' onClick={handleDelete}>
-                削除
-              </button>
-              <button className='set-btn-de set-warning-de' onClick={() => {
-                setShowDeleteConfirm(false)
-                setShowNoSelectionConfirm(false)
-                setShowClearConfirm(false)
-                setShowCompleteNotice(false)
-                setShowBackConfirm(true)
-              }}>
-                戻る
-              </button>
-            </div>
 
-            {/* Modals - unchanged */}
             {showDeleteConfirm && (
-              <div className='set-modal-backdrop-de' role='presentation'>
-                <div className='set-modal-de' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header-de'>確認</div>
-                  <div className='set-modal-body-de'>{deleteConfirmMessage()}</div>
-                  <div className='set-modal-actions-de'>
-                    <button className='set-modal-btn-de set-modal-yes-de' onClick={confirmDelete}>
-                      はい
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowDeleteConfirm(false)
+                      }}
+                    >
+                      {'\u306f\u3044'}
                     </button>
-                    <button className='set-modal-btn-de set-modal-no-de' onClick={() => setShowDeleteConfirm(false)}>
-                      いいえ
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => setShowDeleteConfirm(false)}
+                    >
+                      {'\u3044\u3044\u3048'}
                     </button>
                   </div>
                 </div>
@@ -417,13 +383,16 @@ const DeliverySlipRegistration = () => {
             )}
 
             {showNoSelectionConfirm && (
-              <div className='set-modal-backdrop-de' role='presentation'>
-                <div className='set-modal-de' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header-de'>確認</div>
-                  <div className='set-modal-body-de'>削除する行を選択してください。</div>
-                  <div className='set-modal-actions-de'>
-                    <button className='set-modal-btn-de set-modal-yes-de' onClick={() => setShowNoSelectionConfirm(false)}>
-                      OK
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                  <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => setShowNoSelectionConfirm(false)}
+                    >
+                      {'\u004f\u004b'}
                     </button>
                   </div>
                 </div>
@@ -431,40 +400,42 @@ const DeliverySlipRegistration = () => {
             )}
 
             {showClearConfirm && (
-              <div className='set-modal-backdrop-de' role='presentation'>
-                <div className='set-modal-de' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header-de'>確認</div>
-                  <div className='set-modal-body-de'>
-                    読込データをクリアして
-                    <br />
-                    画面を初期化しますか？
-                  </div>
-                  <div className='set-modal-actions-de'>
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-actions'>
                     <button
-                      className='set-modal-btn-de set-modal-yes-de'
+                      className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowClearConfirm(false)
-                        clearScreen()
+                        clearFormAndRows()
                       }}
                     >
-                      はい
+                      {'\u306f\u3044'}
                     </button>
-                    <button className='set-modal-btn-de set-modal-no-de' onClick={() => setShowClearConfirm(false)}>
-                      いいえ
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => setShowClearConfirm(false)}
+                    >
+                      {'\u3044\u3044\u3048'}
                     </button>
                   </div>
                 </div>
               </div>
             )}
 
-            {showCompleteNotice && (
-              <div className='set-modal-backdrop-de' role='presentation'>
-                <div className='set-modal-de' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header-de'>確認</div>
-                  <div className='set-modal-body-de'>配送伝票No.を登録しました。</div>
-                  <div className='set-modal-actions-de'>
-                    <button className='set-modal-btn-de set-modal-yes-de' onClick={() => setShowCompleteNotice(false)}>
-                      OK
+            {showCompleteConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => setShowCompleteConfirm(false)}
+                    >
+                      {'\u004f\u004b'}
                     </button>
                   </div>
                 </div>
@@ -472,33 +443,25 @@ const DeliverySlipRegistration = () => {
             )}
 
             {showBackConfirm && (
-              <div className='set-modal-backdrop-de' role='presentation'>
-                <div className='set-modal-de' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header-de'>確認</div>
-                  <div className='set-modal-body-de'>
-                    メニューに戻ります。
-                    <br />
-                    読込データを破棄しますか？
-                  </div>
-                  <div className='set-modal-actions-de delivery-slip-back-actions-de'>
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-actions'>
                     <button
-                      className='set-modal-btn-de set-modal-yes-de'
+                      className='set-modal-btn set-modal-yes'
                       onClick={() => {
-                        clearScreen()
                         setShowBackConfirm(false)
                         navigate('/factory')
                       }}
                     >
-                      はい
+                      {'\u306f\u3044'}
                     </button>
                     <button
-                      className='set-modal-btn-de set-modal-no-de'
-                      onClick={() => {
-                        setShowBackConfirm(false)
-                        navigate('/factory')
-                      }}
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => setShowBackConfirm(false)}
                     >
-                      いいえ
+                      {'\u3044\u3044\u3048'}
                     </button>
                   </div>
                 </div>
@@ -507,7 +470,6 @@ const DeliverySlipRegistration = () => {
           </div>
         </div>
       </div>
-    </div>
   )
 }
 

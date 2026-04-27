@@ -1,6 +1,6 @@
-import {useState} from 'react'
+﻿import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import './SetRegisterHandInputPage.css'
+import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
 const SetRegisterHandInputPage = () => {
   const navigate = useNavigate()
@@ -70,7 +70,7 @@ const SetRegisterHandInputPage = () => {
               </div>
             </div>
 
-            <div className='set-actions set-actions-row set-actions-row-5'>
+            <ActionFooter columns={5}>
               <button
                 className='set-btn set-danger'
                 style={{ visibility: 'hidden' }}
@@ -96,7 +96,7 @@ const SetRegisterHandInputPage = () => {
               >
                 {'\u623B\u308B'}
               </button>
-            </div>
+            </ActionFooter>
 
             {showReadConfirm && (
               <div className='set-modal-backdrop' role='presentation'>

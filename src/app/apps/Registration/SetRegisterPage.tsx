@@ -1,11 +1,34 @@
-import {useEffect, useRef, useState} from 'react'
+﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
-import './SetRegisterPage.css'
 import {FaPlay} from 'react-icons/fa'
+import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+
+type Row = {
+  id: number
+  error: string
+  item: string
+  lot: string
+  status: string
+  build: number
+  release: number
+  move: string
+  moveStorage: string
+  name: string
+  moveStorage2?: string
+}
+
+type TableColumn = {
+  key: string
+  headClassName: string
+  cellClassName: string
+  header: ReactNode
+  render: (row: Row) => ReactNode
+}
 
 const SetRegisterPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState([
+  const [rows, setRows] = useState<Row[]>([
     {
       id: 1,
       error: '',
@@ -287,6 +310,38 @@ const SetRegisterPage = () => {
     }
   }, [activeRow, isAnyModalOpen])
 
+  const tableColumns: Array<TFTableColumn<Row>> = [
+    {
+      key: 'arrow',
+      headClassName: 'col-arrow-head',
+      cellClassName: 'col-arrow',
+      header: '',
+      render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
+    },
+    {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
+    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
+    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '状態', render: (row) => row.status},
+    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '構成数', render: (row) => row.build},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '解除数', render: (row) => row.release},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '移動倉庫', render: (row) => row.move},
+    {
+      key: 'moveStorage',
+      headClassName: 'col-move',
+      cellClassName: 'col-move',
+      header: '移動保管場所',
+      render: (row) => row.moveStorage,
+    },
+    {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
+    {
+      key: 'moveStorage2',
+      headClassName: 'col-move',
+      cellClassName: 'col-move',
+      header: '移動保管場所(2)',
+      render: (row) => row.moveStorage2 ?? '',
+    },
+  ]
+
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
@@ -326,6 +381,18 @@ const SetRegisterPage = () => {
                 </select>
               </div>
               <div className='set-row'>
+                <label>移動倉庫</label>
+                <select
+                  value={form.moveWarehouse}
+                  onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
+                >
+                  <option value=''></option>
+                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
+                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
+                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                </select>
+              </div>
+              <div className='set-row'>
                 <label>移動保管場所</label>
                 <input
                   value={form.moveStorage}
@@ -351,68 +418,16 @@ const SetRegisterPage = () => {
               </div>
             </div>
 
-            <div className='set-table-wrap-re'>
-              <div className='set-table-tools'>
-              </div>
-              <div className='set-table-re'>
-                <div ref={tableScrollRef} className={rows.length === 0 ? 'set-table-scroll set-table-scroll-empty' : 'set-table-scroll'}>
-                  <div className='set-table-regis'>
-                    <div className='set-table-head-re'>
-                      <span className='col-arrow-head'></span>
-                      <span className='col-error'></span>
-                      <span className='col-item'>品目No.</span>
-                      <span className='col-lot'>ロットシリアル</span>
-                      <span className='col-status'>状態</span>
-                      <span className='col-num'>構成数</span>
-                      <span className='col-num'>解除数</span>
-                      <span className='col-move'>移動倉庫</span>
-                      <span className='col-move'>移動保管場所</span>
-                      <span className='col-name'>品名</span>
-                    </div>
-                    <div className='set-table-head-divider-re' aria-hidden='true'></div>
-                    <div className='set-table-body-re'>
-                      {rows.length === 0 ? (
-                        <div className='set-empty'></div>
-                      ) : (
-                        rows.map((row) => (
-                          <div
-                            className='set-table-re-row'
-                            key={row.id}
-                            role='button'
-                            tabIndex={0}
-                            onClick={() => handleRowClick(row.id)}
-                            onFocus={() => setActiveRowId(row.id)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault()
-                                handleRowClick(row.id)
-                              }
-                            }}
-                          >
-                            <span className='col-arrow'>
-                              {activeRowId === row.id ? (
-                                <FaPlay className='col-row-arrow' />
-                              ) : null}
-                            </span>
-                            <span className='col-error'>{row.error}</span>
-                            <span className='col-item'>{row.item}</span>
-                            <span className='col-lot'>{row.lot}</span>
-                            <span className='col-status'>{row.status}</span>
-                            <span className='col-num'>{row.build}</span>
-                            <span className='col-num'>{row.release}</span>
-                            <span className='col-move'>{row.move}</span>
-                            <span className='col-move'>{row.moveStorage}</span>
-                            <span className='col-name'>{row.name}</span>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TableSection
+              columns={tableColumns}
+              rows={rows}
+              scrollRef={tableScrollRef}
+              getRowKey={(row) => row.id}
+              activeRowKey={activeRowId}
+              onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
+            />
 
-            <div className='set-actions set-actions-row set-actions-row-5'>
+            <ActionFooter columns={5}>
               <button
                 className='set-btn set-danger'
                 onClick={() => setShowClearConfirm(true)}
@@ -424,6 +439,12 @@ const SetRegisterPage = () => {
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
+              </button>     
+              <button
+                className='set-btn set-success'
+                onClick={() => handleReleaseClick()}
+              >
+                解除
               </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'
@@ -432,20 +453,13 @@ const SetRegisterPage = () => {
                 手入力
               </button>
               <button
-                className='set-btn set-success'
-                onClick={() => handleReleaseClick()}
-              >
-                解除
-              </button>
-              <button
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
               </button>
-            </div>
-</div>
-
+            </ActionFooter>
+       </div>
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>

@@ -1,14 +1,16 @@
-import {useState} from 'react'
+﻿import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import './DispatchHandInputPage.css'
+import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
 const DispatchHandInputPage = () => {
-const navigate = useNavigate()
+  const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
-  const [parentSerial, setParentSerial] = useState('1')
+  const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
-  const [quantity, setQuantity] = useState('')
+  const [quantity, setQuantity] = useState('1')
+  const [showReadConfirm, setShowReadConfirm] = useState(false)
+  const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -54,14 +56,14 @@ const navigate = useNavigate()
               </div>
             </div>
 
-            <div className='set-actions set-actions-row'>
+            <ActionFooter columns={4}>
               <button
                 className='set-btn set-danger'
                 style={{ visibility: 'hidden' }}
               >
                 {'\u7834\u68C4'}
               </button>
-              <button className='set-btn set-primary'>{'\u8AAD\u8FBC'}</button>
+              <button className='set-btn set-primary' onClick={() => setShowReadConfirm(true)}>{'\u8AAD\u8FBC'}</button>
               <button
                 className='set-btn set-success'
                 style={{ visibility: 'hidden' }}
@@ -70,11 +72,60 @@ const navigate = useNavigate()
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => navigate('/factory/dispatch')}
+                onClick={() => setShowBackConfirm(true)}
               >
                 {'\u623B\u308B'}
               </button>
-            </div>
+            </ActionFooter>
+
+            {showReadConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                  <div className='set-modal-body'>{'\u5165\u529b\u5185\u5bb9\u3067\u8aad\u8fbc\u3092'}<br />{'\u5b8c\u4e86\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => setShowReadConfirm(false)}
+                    >
+                      {'\u306f\u3044'}
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => setShowReadConfirm(false)}
+                    >
+                      {'\u3044\u3044\u3048'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showBackConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                  <div className='set-modal-body'>{'\u624b\u5165\u529b\u30c0\u30a4\u30a2\u30ed\u30b0\u3092'}<br />{'\u9589\u3058\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowBackConfirm(false)
+                        navigate('/factory/dispatch')
+                      }}
+                    >
+                      {'\u306f\u3044'}
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => setShowBackConfirm(false)}
+                    >
+                      {'\u3044\u3044\u3048'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

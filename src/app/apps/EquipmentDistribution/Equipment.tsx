@@ -26,7 +26,7 @@ type TableColumn = {
   render: (row: Row) => ReactNode
 }
 
-const BundlePage = () => {
+const Equipment = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
     {
@@ -460,7 +460,7 @@ const BundlePage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/BundleHandInputPage')
+                        navigate('/factory/EquipmentHandInputPage')
                       }}
                     >
                       はい
@@ -595,4 +595,4 @@ const BundlePage = () => {
   )
 }
 
-export {BundlePage}
+export {Equipment}

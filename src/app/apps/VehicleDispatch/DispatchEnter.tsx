@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
-const MiscellaneousInAndOutBound = () => {
+const DispatchHandInputPage = () => {
   const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
@@ -11,7 +11,8 @@ const MiscellaneousInAndOutBound = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const [qty, setQty] = useState(1);
+
+
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -23,38 +24,12 @@ const MiscellaneousInAndOutBound = () => {
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
-                <label>移動保管場所</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
-              </div>
-              <div className='hand-row'>
-                <label>ロット</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
-              <div className='hand-row'>
-                <label>引当数</label>
-                <div className='pg-sign-group'>
-                    <select className='pg-sign-select' >
-                        <option value='+'>+</option>
-                        <option value='-'>-</option>
-                    </select>
-                    <input value="" />
-                </div>
-            </div>
-              <div className='hand-row'>
-                <label>品目No.(親)</label>
+                <label>保管場所</label>
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
               <div className='hand-row'>
-                <label>シリアル(親)</label>
+                <label>数量</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
-              </div>
-              <div className='hand-row'>
-                <label>移動保管場所</label>
-                <input />
-              </div>
-              <div className='hand-row'>
-                <label>移動保管場所</label>
-                <input />
               </div>
             </div>
 
@@ -119,7 +94,7 @@ const MiscellaneousInAndOutBound = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/set-miscellaneous-in-and-out-bound')
+                        navigate('/factory/dispatch')
                       }}
                     >
                       {'\u306f\u3044'}
@@ -141,4 +116,4 @@ const MiscellaneousInAndOutBound = () => {
   )
 }
 
-export {MiscellaneousInAndOutBound}
+export {DispatchHandInputPage}
