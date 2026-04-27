@@ -20,11 +20,11 @@ const EquipmentHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録手入力</div>
+          <div className='set-header'>備品振分手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
-                <label>倉庫</label>
+                <label>FR倉庫</label>
                 <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
@@ -33,23 +33,23 @@ const EquipmentHandInputPage = () => {
                 </select>
               </div>
               <div className='hand-row'>
-                <label>保管場所</label>
+                <label>TO倉庫</label>
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
               <div className='hand-row'>
-                <label>数量</label>
+                <label>保管場所</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row'>
-                <label>品目No.</label>
+                <label>数量</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
-                <label>ロット</label>
+                <label>品目No.</label>
                 <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
-                <label>シリアル</label>
+                <label>ロットシリアル</label>
                 <input placeholder=' ' />
               </div>
               <div className='set-row'>
@@ -77,7 +77,7 @@ const EquipmentHandInputPage = () => {
                 </div>
                 </div>
               <div className='hand-row hand-row-always'>
-                <label>有効期限(yymm)</label>
+                <label>有効日付(yymm)</label>
                 <input placeholder=' ' />
               </div>
             </div>

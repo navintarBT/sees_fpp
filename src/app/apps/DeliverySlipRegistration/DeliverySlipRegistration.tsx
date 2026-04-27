@@ -267,14 +267,14 @@ const DeliverySlipRegistration = () => {
       ),
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '状態', render: (row) => row.error},
-    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
+    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '配送伝票No.', render: (row) => row.item},
   ]
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録</div>
+          <div className='set-header'>配送伝票登録</div>
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>
