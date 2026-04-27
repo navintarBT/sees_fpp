@@ -1,8 +1,8 @@
-import {useEffect, useRef, useState, type ReactNode} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {FaPlay} from 'react-icons/fa'
-import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
-import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FaPlay } from 'react-icons/fa'
+import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 
 type Row = {
   id: number
@@ -205,7 +205,7 @@ const SetMiscellaneousInAndOutBound = () => {
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
-  const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
+  const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({ f1: false, f8: false })
   const isAnyModalOpen =
     showHandInputConfirm ||
     showDeleteConfirm ||
@@ -258,7 +258,7 @@ const SetMiscellaneousInAndOutBound = () => {
     setActiveRowId(rowId)
   }
 
-  const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
+  const handleReleaseClick = (options?: { forceRelease?: boolean; forceHandInput?: boolean }) => {
     if (isAnyModalOpen) return
     if (options?.forceHandInput) {
       closeAllModals()
@@ -291,7 +291,7 @@ const SetMiscellaneousInAndOutBound = () => {
       }
       if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
         event.preventDefault()
-        handleReleaseClick({forceHandInput: true})
+        handleReleaseClick({ forceHandInput: true })
         return
       }
 
@@ -311,7 +311,7 @@ const SetMiscellaneousInAndOutBound = () => {
 
       if (event.key === 'F3') {
         event.preventDefault()
-        handleReleaseClick({forceRelease: true})
+        handleReleaseClick({ forceRelease: true })
         return
       }
 
@@ -345,28 +345,13 @@ const SetMiscellaneousInAndOutBound = () => {
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
-    {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
-    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '状態', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '構成数', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '解除数', render: (row) => row.release},
-    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '移動倉庫', render: (row) => row.move},
-    {
-      key: 'moveStorage',
-      headClassName: 'col-move',
-      cellClassName: 'col-move',
-      header: '移動保管場所',
-      render: (row) => row.moveStorage,
-    },
-    {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
-    {
-      key: 'moveStorage2',
-      headClassName: 'col-move',
-      cellClassName: 'col-move',
-      header: '移動保管場所(2)',
-      render: (row) => row.moveStorage2 ?? '',
-    },
+    { key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error },
+    { key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item },
+    { key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot },
+    { key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '倉庫', render: (row) => row.status },
+    { key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.build },
+    { key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '引当数', render: (row) => row.release },
+    { key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '品名', render: (row) => row.move },
   ]
 
   return (
@@ -377,42 +362,43 @@ const SetMiscellaneousInAndOutBound = () => {
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
-                  <label>倉庫</label>
-                  <select
-                      value={form.parentWarehouse}
-                      onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
-                  >
-                      <option value=''></option>
-                      <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                      <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                      <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
-                  </select>
+                <label>倉庫</label>
+                <select
+                  value={form.parentWarehouse}
+                  onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
+                >
+                  <option value=''></option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                </select>
               </div>
               <div className='set-row'>
-                  <label>保管場所</label>
-                  <input value={form.moveStorage}
-                      onChange={(e) => setForm({ ...form, moveStorage: e.target.value })} />
+                <label>保管場所</label>
+                <input value={form.moveStorage}
+                  onChange={(e) => setForm({ ...form, moveStorage: e.target.value })} />
               </div>
 
               <div className='set-row'>
-                  <label>引当数</label>
-                  <div className='pg-sign-group'>
-                      <select className='pg-sign-select' >
-                          <option value='+'>+</option>
-                          <option value='-'>-</option>
-                      </select>
-                      <input value={form.qty}
-                          onChange={(e) => setForm({ ...form, qty: e.target.value })} />
-                  </div>
+                <label>引当数</label>
+                <div className='pg-sign-group'>
+                  <select className='pg-sign-select' >
+                    <option value='+'>+</option>
+                    <option value='-'>-</option>
+                  </select>
+                  <input value={form.qty}
+                    onChange={(e) => setForm({ ...form, qty: e.target.value })} />
+                </div>
               </div>
 
               <div className='set-row '>
-                  <label>JANコード</label>
-                  <input value={form.janCode}
-                      onChange={(e) => setForm({ ...form, janCode: e.target.value })} />
+                <label>JANコード</label>
+                <input value={form.janCode}
+                  onChange={(e) => setForm({ ...form, janCode: e.target.value })} />
               </div>
-          </div>
+            </div>
             <TableSection
+              className='set-table-miscellaneous'
               columns={tableColumns}
               rows={rows}
               scrollRef={tableScrollRef}
@@ -433,7 +419,7 @@ const SetMiscellaneousInAndOutBound = () => {
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
-              </button>     
+              </button>
               <button
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
@@ -442,7 +428,7 @@ const SetMiscellaneousInAndOutBound = () => {
               </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'
-                onClick={() => handleReleaseClick({forceHandInput: true})}
+                onClick={() => handleReleaseClick({ forceHandInput: true })}
               >
                 手入力
               </button>
@@ -453,152 +439,152 @@ const SetMiscellaneousInAndOutBound = () => {
                 戻る
               </button>
             </ActionFooter>
-       </div>
-            {showHandInputConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                        navigate('/factory/miscellaneous-in-and-out-bound')
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
-                    >
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-
-            {showDeleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowDeleteConfirm(false)
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowDeleteConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showNoSelectionConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowNoSelectionConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showClearConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowClearConfirm(false)
-                        clearFormAndRows()
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowClearConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showCompleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showBackConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowBackConfirm(false)
-                        navigate('/factory')
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
+          {showHandInputConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>品目情報を手入力しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowHandInputConfirm(false)
+                      navigate('/factory/miscellaneous-in-and-out-bound')
+                    }}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => {
+                      setShowHandInputConfirm(false)
+                    }}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+
+          {showDeleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowDeleteConfirm(false)
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowDeleteConfirm(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showNoSelectionConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => setShowNoSelectionConfirm(false)}
+                  >
+                    {'\u004f\u004b'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showClearConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowClearConfirm(false)
+                      clearFormAndRows()
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowClearConfirm(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showCompleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => setShowCompleteConfirm(false)}
+                  >
+                    {'\u004f\u004b'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showBackConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      navigate('/factory')
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowBackConfirm(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+    </div>
   )
 }
 
-export {SetMiscellaneousInAndOutBound}
+export { SetMiscellaneousInAndOutBound }
 
 

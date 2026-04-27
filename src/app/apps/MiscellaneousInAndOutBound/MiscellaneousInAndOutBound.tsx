@@ -1,6 +1,6 @@
-import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
 const MiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
@@ -33,28 +33,28 @@ const MiscellaneousInAndOutBound = () => {
               <div className='hand-row'>
                 <label>引当数</label>
                 <div className='pg-sign-group'>
-                    <select className='pg-sign-select' >
-                        <option value='+'>+</option>
-                        <option value='-'>-</option>
-                    </select>
-                    <input value="" />
+                  <select className='pg-sign-select' >
+                    <option value='+'>+</option>
+                    <option value='-'>-</option>
+                  </select>
+                  <input value="" />
                 </div>
-            </div>
+              </div>
               <div className='hand-row'>
                 <label>品目No.(親)</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} style={{ backgroundColor: 'transparent' }} />
               </div>
               <div className='hand-row'>
                 <label>シリアル(親)</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} style={{ backgroundColor: 'transparent' }} />
               </div>
               <div className='hand-row'>
                 <label>移動保管場所</label>
-                <input />
+                <input style={{ backgroundColor: 'transparent' }} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row' >
                 <label>移動保管場所</label>
-                <input />
+                <input style={{ backgroundColor: 'transparent' }} />
               </div>
             </div>
 
@@ -141,4 +141,4 @@ const MiscellaneousInAndOutBound = () => {
   )
 }
 
-export {MiscellaneousInAndOutBound}
+export { MiscellaneousInAndOutBound }
