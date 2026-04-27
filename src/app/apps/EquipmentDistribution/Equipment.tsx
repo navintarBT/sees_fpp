@@ -16,6 +16,9 @@ type Row = {
   moveStorage: string
   name: string
   moveStorage2?: string
+  unit:string
+  warehouse: string
+  facility:string
 }
 
 type TableColumn = {
@@ -40,7 +43,10 @@ const Equipment = () => {
       move: 'W1', // 移動倉
       moveStorage: 'S1', // 移動保管場所
       name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
+      moveStorage2: '棚A',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 2,
@@ -54,6 +60,9 @@ const Equipment = () => {
       moveStorage: 'S2',
       name: '部品B',
       moveStorage2: '棚B',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 3,
@@ -67,6 +76,9 @@ const Equipment = () => {
       moveStorage: 'S3',
       name: '部品C',
       moveStorage2: '棚C',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 4,
@@ -80,6 +92,9 @@ const Equipment = () => {
       moveStorage: 'S4',
       name: '部品D',
       moveStorage2: '棚D',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 5,
@@ -93,6 +108,9 @@ const Equipment = () => {
       moveStorage: 'S5',
       name: '部品E',
       moveStorage2: '棚E',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 6,
@@ -106,6 +124,9 @@ const Equipment = () => {
       moveStorage: 'S6',
       name: '部品F',
       moveStorage2: '棚F',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 7,
@@ -119,6 +140,9 @@ const Equipment = () => {
       moveStorage: 'S7',
       name: '部品G',
       moveStorage2: '棚G',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 8,
@@ -132,6 +156,9 @@ const Equipment = () => {
       moveStorage: 'S8',
       name: '部品H',
       moveStorage2: '棚H',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 9,
@@ -145,6 +172,9 @@ const Equipment = () => {
       moveStorage: 'S9',
       name: '部品I',
       moveStorage2: '棚I',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
     {
       id: 10,
@@ -158,6 +188,9 @@ const Equipment = () => {
       moveStorage: 'S10',
       name: '部品J',
       moveStorage2: '棚J',
+      unit: 'sss',
+      warehouse: 'AAA',
+      facility:'BBB'
     },
   ])
   const [form, setForm] = useState({
@@ -319,19 +352,23 @@ const Equipment = () => {
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
-    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '指示', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.release},
-    
+    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: 'From/To', render: (row) => row.item},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '品名', render: (row) => row.lot},
+    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '品目No.', render: (row) => row.status},
+    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: 'ロットシリアル', render: (row) => row.build},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '数量', render: (row) => row.release},
+    {key: 'unit', headClassName: 'col-num', cellClassName: 'col-num', header: '数量', render: (row) => row.unit},
+    {key: 'unit', headClassName: 'col-num', cellClassName: 'col-num', header: '倉庫', render: (row) => row.warehouse},
+    {key: 'unit', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.facility},
+  
+ 
   ]
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録</div>
+          <div className='set-header'>備品振分登録</div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
@@ -406,7 +443,7 @@ const Equipment = () => {
               </div>
             
               <div className='set-row'>
-                <label>移動保管場所</label>
+                <label>理由</label>
                 <input
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
