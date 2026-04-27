@@ -10,7 +10,7 @@ const Equipment_Distribution = () => {
       {
         id: 1,
         error: '',
-        item: 'A01',
+        item: 'F',
         lot: 'L01',
         status: '追加',
         build: 2,
@@ -22,7 +22,7 @@ const Equipment_Distribution = () => {
       {
         id: 2,
         error: '',
-        item: 'B02',
+        item: 'T',
         lot: 'L02',
         status: '解除',
         build: 1,
@@ -34,7 +34,7 @@ const Equipment_Distribution = () => {
       {
         id: 3,
         error: '',
-        item: 'C03',
+        item: 'T',
         lot: 'L03',
         status: 'OV対応要',
         build: 3,
@@ -46,7 +46,7 @@ const Equipment_Distribution = () => {
       {
         id: 4,
         error: '',
-        item: 'D04',
+        item: 'F',
         lot: 'L04',
         status: '構成中',
         build: 4,
@@ -58,7 +58,7 @@ const Equipment_Distribution = () => {
       {
         id: 5,
         error: 'E',
-        item: 'E05',
+        item: 'F',
         lot: 'L05',
         status: '構成中',
         build: 2,
@@ -70,7 +70,7 @@ const Equipment_Distribution = () => {
       {
         id: 6,
         error: '',
-        item: 'F06',
+        item: 'F',
         lot: 'L06',
         status: '構成中',
         build: 5,
@@ -82,7 +82,7 @@ const Equipment_Distribution = () => {
       {
         id: 7,
         error: 'E',
-        item: 'G07',
+        item: 'T',
         lot: 'L07',
         status: '構成中',
         build: 1,
@@ -94,7 +94,7 @@ const Equipment_Distribution = () => {
       {
         id: 8,
         error: '',
-        item: 'H08',
+        item: 'T',
         lot: 'L08',
         status: '構成中',
         build: 3,
@@ -106,7 +106,7 @@ const Equipment_Distribution = () => {
       {
         id: 9,
         error: '',
-        item: 'I09',
+        item: 'T',
         lot: 'L09',
         status: '構成中',
         build: 2,
@@ -118,7 +118,7 @@ const Equipment_Distribution = () => {
       {
         id: 10,
         error: 'E',
-        item: 'J10',
+        item: 'F',
         lot: 'L10',
         status: '構成中',
         build: 6,
@@ -130,7 +130,7 @@ const Equipment_Distribution = () => {
          {
         id: 11,
         error: 'E',
-        item: 'J11',
+        item: 'T',
         lot: 'L11',
         status: '構成中',
         build: 6,

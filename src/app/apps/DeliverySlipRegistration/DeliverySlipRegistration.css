@@ -35,7 +35,7 @@
   align-items: center;
   border-right: 2px solid #a1a1a1;
   font-size: 28px;
-  height: 100%;
+  height: 100%;                                                                                                                                                  
 }
 
 .set-table-head-delivery span:last-child,
@@ -191,7 +191,7 @@
 }
 
 .set-input-2-de {
-  background-color: #5b6d86;
+  background-color: #e5e7eb;
   display: grid;
   grid-template-columns: 240px 1fr;
   align-items: center;
