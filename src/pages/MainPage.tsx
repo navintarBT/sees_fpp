@@ -16,9 +16,6 @@ import { BundleHandInputPage } from '../app/apps/BundleRegistration/BundleHandIn
 import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
 import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
 
-
-
-
 const MainPage = () => {
   return (
     <Routes>
@@ -39,15 +36,12 @@ const MainPage = () => {
         <Route path='BundleHandInputPage' element={<BundleHandInputPage />} />
         <Route path='Equipment' element={<Equipment/>} />
         <Route path='EquipmentHandInputPage' element={<EquipmentHandInputPage/>} />
-
-
       </Route>
     </Routes>
   )
 }
 
 export default MainPage
-
 const MainPageDetail = () => {
   const navigate = useNavigate()
   return (
@@ -108,7 +102,6 @@ const MainPageDetail = () => {
                 onClick={() => navigate('BundlePage')}
               >販売セット</button>
             </div>
-
             <button className='mockup-exit'>終了</button>
           </div>
         </div>

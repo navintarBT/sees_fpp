@@ -333,13 +333,7 @@ const SetRegisterPage = () => {
       render: (row) => row.moveStorage,
     },
     {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
-    {
-      key: 'moveStorage2',
-      headClassName: 'col-move',
-      cellClassName: 'col-move',
-      header: '移動保管場所(2)',
-      render: (row) => row.moveStorage2 ?? '',
-    },
+
   ]
 
   return (

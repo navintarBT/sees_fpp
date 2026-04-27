@@ -12,8 +12,6 @@ const BundleHandInputPage = () => {
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
-
-
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
@@ -81,7 +79,6 @@ const BundleHandInputPage = () => {
                 <input placeholder=' ' />
               </div>
             </div>
-
             <ActionFooter columns={4}>
               <button
                 className='set-btn set-danger'

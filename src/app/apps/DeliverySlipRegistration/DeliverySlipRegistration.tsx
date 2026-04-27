@@ -5,7 +5,7 @@ import {TableSection, type TableColumn as TFTableColumn} from '../../components/
 
 type Row = {
   id: number
-  error: string
+  situation: string
   item: string
 
 }
@@ -23,52 +23,77 @@ const DeliverySlipRegistration = () => {
   const [rows, setRows] = useState<Row[]>([
     {
       id: 1,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000001', // 品目No.
     },
     {
       id: 2,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000002', // 品目No.
     },
     {
       id: 3,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000003', // 品目No.
     },
     {
       id: 4,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000004', // 品目No.
     },
     {
       id: 5,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000005', // 品目No.
     },
     {
       id: 6,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000006', // 品目No.
     },
     {
       id: 7,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000007', // 品目No.
     },
     {
       id: 8,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000008', // 品目No.
     },
     {
       id: 9,
-      error: '',
+      situation: '',
       item: '202603310000000000000000000009', // 品目No.
     },
     {
       id: 10,
-      error: '',
+      situation: '',
+      item: '202603310000000000000000000010', // 品目No.
+    },
+    {
+      id: 11,
+      situation: '',
+      item: '202603310000000000000000000010', // 品目No.
+    },
+    {
+      id: 12,
+      situation: '',
+      item: '202603310000000000000000000010', // 品目No.
+    },
+    {
+      id: 13,
+      situation: '',
+      item: '202603310000000000000000000010', // 品目No.
+    },
+    {
+      id: 14,
+      situation: '',
+      item: '202603310000000000000000000010', // 品目No.
+    },
+    {
+      id: 15,
+      situation: '',
       item: '202603310000000000000000000010', // 品目No.
     },
   ])
@@ -266,7 +291,7 @@ const DeliverySlipRegistration = () => {
         />
       ),
     },
-    {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '状態', render: (row) => row.error},
+    {key: 'situation', headClassName: 'col-situation', cellClassName: 'col-situation', header: '状態', render: (row) => row.situation},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
   ]
 
@@ -296,6 +321,7 @@ const DeliverySlipRegistration = () => {
             <TableSection
               columns={tableColumns}
               rows={rows}
+              gridClassName='delivery-table'
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}

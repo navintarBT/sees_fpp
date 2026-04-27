@@ -7,15 +7,13 @@ import {TableSection, type TableColumn as TFTableColumn} from '../../components/
 type Row = {
   id: number
   error: string
+  fromTo: string
   item: string
   lot: string
-  status: string
-  build: number
-  release: number
-  move: string
-  moveStorage: string
-  name: string
-  moveStorage2?: string
+  quantity: string
+  warehouse: number
+  storage: number
+  productName: string
 }
 
 type TableColumn = {
@@ -32,132 +30,134 @@ const BundlePage = () => {
     {
       id: 1,
       error: '',
+      fromTo: 'F',
       item: 'A01', // 品目No.
       lot: 'L01', // ロットシリアル
-      status: '追加', // 状態
-      build: 2, // 構成数
-      release: 1, // 解除数
-      move: 'W1', // 移動倉
-      moveStorage: 'S1', // 移動保管場所
-      name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
+      quantity: '追加', // 状態
+      warehouse: 2, // 構成数
+      storage: 1111, // 解除数
+      productName: 'W1', // 移動倉
     },
     {
       id: 2,
       error: '',
+      fromTo: 'T',
       item: 'B02',
       lot: 'L02',
-      status: '解除',
-      build: 1,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S2',
-      name: '部品B',
-      moveStorage2: '棚B',
+      quantity: '解除',
+      warehouse: 1,
+      storage: 110,
+      productName: 'W2',
     },
     {
       id: 3,
       error: '',
+      fromTo: 'F',
       item: 'C03',
       lot: 'L03',
-      status: 'OV対応要',
-      build: 3,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S3',
-      name: '部品C',
-      moveStorage2: '棚C',
+      quantity: 'OV対応要',
+      warehouse: 3777888,
+      storage: 1112,
+      productName: 'W3',
     },
     {
       id: 4,
       error: '',
+      fromTo: 'F',
       item: 'D04',
       lot: 'L04',
-      status: '構成中',
-      build: 4,
-      release: 1,
-      move: 'W1',
-      moveStorage: 'S4',
-      name: '部品D',
-      moveStorage2: '棚D',
+      quantity: '構成中',
+      warehouse: 4,
+      storage: 1111,
+      productName: 'W1',
     },
     {
       id: 5,
       error: 'E',
+      fromTo: 'T',
       item: 'E05',
       lot: 'L05',
-      status: '構成中',
-      build: 2,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S5',
-      name: '部品E',
-      moveStorage2: '棚E',
+      quantity: '構成中',
+      warehouse: 2,
+      storage: 110,
+      productName: 'W2',
     },
     {
       id: 6,
       error: '',
+      fromTo: 'T',
       item: 'F06',
       lot: 'L06',
-      status: '構成中',
-      build: 5,
-      release: 3,
-      move: 'W3',
-      moveStorage: 'S6',
-      name: '部品F',
-      moveStorage2: '棚F',
+      quantity: '構成中',
+      warehouse: 5,
+      storage: 311,
+      productName: 'W3',
     },
     {
       id: 7,
       error: 'E',
+      fromTo: 'F',
       item: 'G07',
       lot: 'L07',
-      status: '構成中',
-      build: 1,
-      release: 0,
-      move: 'W1',
-      moveStorage: 'S7',
-      name: '部品G',
-      moveStorage2: '棚G',
+      quantity: '構成中',
+      warehouse: 1,
+      storage: 111,
+      productName: 'W1',
     },
     {
       id: 8,
       error: '',
+      fromTo: 'T',
       item: 'H08',
       lot: 'L08',
-      status: '構成中',
-      build: 3,
-      release: 1,
-      move: 'W2',
-      moveStorage: 'S8',
-      name: '部品H',
-      moveStorage2: '棚H',
+      quantity: '構成中',
+      warehouse: 3,
+      storage: 122,
+      productName: 'W2',
     },
     {
       id: 9,
       error: '',
+      fromTo: 'T',
       item: 'I09',
       lot: 'L09',
-      status: '構成中',
-      build: 2,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S9',
-      name: '部品I',
-      moveStorage2: '棚I',
+      quantity: '構成中',
+      warehouse: 2,
+      storage: 222,
+      productName: 'W3',
     },
     {
       id: 10,
       error: 'E',
+      fromTo: 'F',
       item: 'J10',
       lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
+      quantity: '構成中',
+      warehouse: 6,
+      storage: 222,
+      productName: 'W1',
+    },
+     {
+      id: 11,
+      error: 'E',
+      fromTo: 'F',
+      item: 'J10',
+      lot: 'L10',
+      quantity: '構成中',
+      warehouse: 6,
+      storage: 222,
+      productName: 'W1',
+    },
+     {
+      id: 12,
+      error: 'E',
+      fromTo: 'F',
+      item: 'J10',
+      lot: 'L10',
+      quantity: '構成中',
+      warehouse: 6,
+      storage: 222,
+      productName: 'W1',
     },
   ])
   const [form, setForm] = useState({
@@ -238,16 +238,6 @@ const BundlePage = () => {
       setShowHandInputConfirm(true)
       return
     }
-    if (!activeRow) {
-      closeAllModals()
-      setShowNoSelectionConfirm(true)
-      return
-    }
-    if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
-      closeAllModals()
-      setShowDeleteConfirm(true)
-      return
-    }
   }
 
 
@@ -311,7 +301,7 @@ const BundlePage = () => {
   }, [activeRow, isAnyModalOpen])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
-    {
+       {
       key: 'arrow',
       headClassName: 'col-arrow-head',
       cellClassName: 'col-arrow',
@@ -319,12 +309,13 @@ const BundlePage = () => {
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
+    {key: 'fromTo', headClassName: 'col-fromTo', cellClassName: 'col-fromTo', header: 'From/To', render: (row) => row.fromTo},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '指示', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.release},
-    
+    {key: 'Quantity', headClassName: 'col-quantity', cellClassName: 'col-quantity', header: '数量', render: (row) => row.quantity},
+    {key: 'Warehouse', headClassName: 'col-warehouse', cellClassName: 'col-warehouse', header: '倉庫', render: (row) => row.warehouse},
+    {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '保管場所', render: (row) => row.storage},
+    {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
   ]
 
   return (
@@ -483,7 +474,6 @@ const BundlePage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'

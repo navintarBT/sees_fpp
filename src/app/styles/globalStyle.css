@@ -142,6 +142,8 @@
   min-width:0;
   width:100%;
   overflow:auto;
+  /* Keep layout width stable when vertical scrollbar appears/disappears */
+  scrollbar-gutter: stable;
   scrollbar-color:rgba(148,163,184,0.6) transparent;
   scrollbar-width:thin;
 }
@@ -861,4 +863,86 @@
 
 .set-row-radio{
   grid-template-columns:240px 1fr;
+}
+
+/* Shared widths used by other pages */
+.col-status{
+  min-width: 180px;
+}
+
+.col-num{
+  min-width: 170px;
+}
+
+/* ####################################table dispatch ########################################### */
+.dispatch-table .col-arrow-head,
+.dispatch-table .col-arrow{
+  min-width: 50px;
+}
+
+.dispatch-table .col-error{
+  min-width: 50px;
+}
+
+.dispatch-table .col-item{
+  min-width: 180px;
+}
+
+.dispatch-table .col-lot{
+  min-width: 220px;
+}
+
+.dispatch-table .col-instruct{
+  min-width: 180px;
+}
+
+.dispatch-table .col-Load{
+  min-width: 170px;
+}
+
+.dispatch-table .col-ProductName{
+  min-width: 203px;
+}
+
+/* ####################################table inbound ########################################### */
+
+.inbound-table .col-arrow-head,
+.inbound-table .col-arrow{
+  min-width: 50px;
+}
+
+.inbound-table .col-error{
+  min-width: 50px;
+}
+
+.inbound-table .col-item{
+  min-width: 180px;
+}
+
+.inbound-table .col-lot{
+  min-width: 220px;
+}
+
+.inbound-table .col-instruct{
+  min-width: 180px;
+}
+
+.inbound-table .col-components{
+  min-width: 170px;
+}
+
+.inbound-table .col-unlock{
+  min-width: 170px;
+}
+
+/* ####################################table delivery ########################################### */
+
+
+
+.delivery-table .col-situation{
+  min-width: 200px;
+}
+
+.delivery-table .col-item{
+  min-width: 796px;
 }

@@ -9,13 +9,9 @@ type Row = {
   error: string
   item: string
   lot: string
-  status: string
-  build: number
-  release: number
-  move: string
-  moveStorage: string
-  name: string
-  moveStorage2?: string
+  instruct: string
+  components: number
+  unlock: number
 }
 
 type TableColumn = {
@@ -34,130 +30,90 @@ const VehicleInboundPage = () => {
       error: '',
       item: 'A01', // 品目No.
       lot: 'L01', // ロットシリアル
-      status: '追加', // 状態
-      build: 2, // 構成数
-      release: 1, // 解除数
-      move: 'W1', // 移動倉
-      moveStorage: 'S1', // 移動保管場所
-      name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
+      instruct: '追加', // 状態
+      components: 2, // 構成数
+      unlock: 1, // 解除数
     },
     {
       id: 2,
       error: '',
       item: 'B02',
       lot: 'L02',
-      status: '解除',
-      build: 1,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S2',
-      name: '部品B',
-      moveStorage2: '棚B',
+      instruct: '解除',
+      components: 1,
+      unlock: 0,
     },
     {
       id: 3,
       error: '',
       item: 'C03',
       lot: 'L03',
-      status: 'OV対応要',
-      build: 3,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S3',
-      name: '部品C',
-      moveStorage2: '棚C',
+      instruct: 'OV対応要',
+      components: 3,
+      unlock: 2,
     },
     {
       id: 4,
       error: '',
       item: 'D04',
       lot: 'L04',
-      status: '構成中',
-      build: 4,
-      release: 1,
-      move: 'W1',
-      moveStorage: 'S4',
-      name: '部品D',
-      moveStorage2: '棚D',
+      instruct: '構成中',
+      components: 4,
+      unlock: 1,
     },
     {
       id: 5,
       error: 'E',
       item: 'E05',
       lot: 'L05',
-      status: '構成中',
-      build: 2,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S5',
-      name: '部品E',
-      moveStorage2: '棚E',
+      instruct: '構成中',
+      components: 2,
+      unlock: 0,
     },
     {
       id: 6,
       error: '',
       item: 'F06',
       lot: 'L06',
-      status: '構成中',
-      build: 5,
-      release: 3,
-      move: 'W3',
-      moveStorage: 'S6',
-      name: '部品F',
-      moveStorage2: '棚F',
+      instruct: '構成中',
+      components: 5,
+      unlock: 3,
     },
     {
       id: 7,
       error: 'E',
       item: 'G07',
       lot: 'L07',
-      status: '構成中',
-      build: 1,
-      release: 0,
-      move: 'W1',
-      moveStorage: 'S7',
-      name: '部品G',
-      moveStorage2: '棚G',
+      instruct: '構成中',
+      components: 1,
+      unlock: 0,
     },
     {
       id: 8,
       error: '',
       item: 'H08',
       lot: 'L08',
-      status: '構成中',
-      build: 3,
-      release: 1,
-      move: 'W2',
-      moveStorage: 'S8',
-      name: '部品H',
-      moveStorage2: '棚H',
+      instruct: '構成中',
+      components: 3,
+      unlock: 1,
     },
     {
       id: 9,
       error: '',
       item: 'I09',
       lot: 'L09',
-      status: '構成中',
-      build: 2,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S9',
-      name: '部品I',
-      moveStorage2: '棚I',
+      instruct: '構成中',
+      components: 2,
+      unlock: 2,
     },
     {
       id: 10,
       error: 'E',
       item: 'J10',
       lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
+      instruct: '構成中',
+      components: 6,
+      unlock: 2,
     },
   ])
   const [form, setForm] = useState({
@@ -238,18 +194,7 @@ const VehicleInboundPage = () => {
       setShowHandInputConfirm(true)
       return
     }
-    if (!activeRow) {
-      closeAllModals()
-      setShowNoSelectionConfirm(true)
-      return
-    }
-    if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
-      closeAllModals()
-      setShowDeleteConfirm(true)
-      return
-    }
   }
-
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -321,10 +266,9 @@ const VehicleInboundPage = () => {
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '指示', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.release},
-    
+    {key: 'instruct', headClassName: 'col-instruct', cellClassName: 'col-instruct', header: '指示', render: (row) => row.instruct},
+    {key: 'components', headClassName: 'col-components', cellClassName: 'col-components', header: '構成数', render: (row) => row.components},
+    {key: 'unlock', headClassName: 'col-unlock', cellClassName: 'col-unlock', header: '解除数', render: (row) => row.unlock},
   ]
 
   return (
@@ -398,6 +342,7 @@ const VehicleInboundPage = () => {
 
             <TableSection
               columns={tableColumns}
+              gridClassName='inbound-table'
               rows={rows}
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
@@ -465,7 +410,6 @@ const VehicleInboundPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
