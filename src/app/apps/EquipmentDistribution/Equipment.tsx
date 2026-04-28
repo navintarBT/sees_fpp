@@ -190,7 +190,7 @@ const Equipment = () => {
       moveStorage2: '棚J',
       unit: 'sss',
       warehouse: 'AAA',
-      facility:'BBB'
+      facility:'BBB###'
     },
   ])
   const [form, setForm] = useState({
@@ -352,14 +352,14 @@ const Equipment = () => {
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
-    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: 'From/To', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '品名', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '品目No.', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: 'ロットシリアル', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '数量', render: (row) => row.release},
-    {key: 'unit', headClassName: 'col-num', cellClassName: 'col-num', header: '数量', render: (row) => row.unit},
-    {key: 'unit', headClassName: 'col-num', cellClassName: 'col-num', header: '倉庫', render: (row) => row.warehouse},
-    {key: 'unit', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.facility},
+    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
+    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '状態', render: (row) => row.status},
+    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '構成数', render: (row) => row.build},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '解除数', render: (row) => row.release},
+    {key: 'unit', headClassName: 'col-num', cellClassName: 'col-num', header: '単位', render: (row) => row.unit},
+    {key: 'warehouse', headClassName: 'col-num', cellClassName: 'col-num', header: '倉庫', render: (row) => row.warehouse},
+    {key: 'facility', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.facility},
   
  
   ]
