@@ -1,6 +1,6 @@
-﻿import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+﻿import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
 const ReturnConfiguration = () => {
   const navigate = useNavigate()
@@ -23,54 +23,54 @@ const ReturnConfiguration = () => {
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
-                <label>移動保管場所</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
-              </div>
-              <div className='hand-row'>
-                <label>ロット</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
-              <div className='hand-row'>
-                <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
-              </div>
-              <div className='rlr-row2'>
-                    <label>状態</label>
-                    <div className="rlr-qty-group badioBtnFun10">
-                        <label>
-                            <input
-                                type="radio"
-                                name="status"
-                                value="中"
-                                checked={qty === 1}
-                                onChange={() => setQty(1)}
-                                style={{ marginLeft: '25px' }}
-                            />
-                            正常
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                name="status"
-                                value="済"
-                                checked={qty === 2}
-                                onChange={() => setQty(2)}
-                            />
-                            調査中
-                        </label>
-                    </div>
-                </div>
-              <div className='hand-row'>
                 <label>品目No.(親)</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>シリアル(親)</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input />
               </div>
               <div className='hand-row'>
-                <label>移動保管場所</label>
+                <label>数量</label>
                 <input />
+              </div>
+              <div className='rlr-row2'>
+                <label>状態</label>
+                <div className="rlr-qty-group badioBtnFun10">
+                  <label>
+                    <input
+                      type="radio"
+                      name="status"
+                      value="中"
+                      checked={qty === 1}
+                      onChange={() => setQty(1)}
+                      style={{ marginLeft: '25px' }}
+                    />
+                    正常
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="status"
+                      value="済"
+                      checked={qty === 2}
+                      onChange={() => setQty(2)}
+                    />
+                    調査中
+                  </label>
+                </div>
+              </div>
+              <div className='hand-row'>
+                <label>品目No.</label>
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled} />
+              </div>
+              <div className='hand-row'>
+                <label>ロット</label>
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} readOnly={!isEnabled} />
+              </div>
+              <div className='hand-row'>
+                <label>シリアル</label>
+                <input readOnly={!isEnabled} />
               </div>
             </div>
 
@@ -157,4 +157,4 @@ const ReturnConfiguration = () => {
   )
 }
 
-export {ReturnConfiguration}
+export { ReturnConfiguration }

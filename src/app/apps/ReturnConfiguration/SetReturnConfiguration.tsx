@@ -1,8 +1,8 @@
-﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {FaPlay} from 'react-icons/fa'
-import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
-import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FaPlay } from 'react-icons/fa'
+import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 
 type Row = {
   id: number
@@ -28,6 +28,8 @@ type TableColumn = {
 
 const SetReturnConfiguration = () => {
   const navigate = useNavigate()
+  const [parentSerial, setParentSerial] = useState('')
+  const isEnabled = parentSerial
   const [rows, setRows] = useState<Row[]>([
     {
       id: 1,
@@ -205,7 +207,7 @@ const SetReturnConfiguration = () => {
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
-  const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
+  const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({ f1: false, f8: false })
   const isAnyModalOpen =
     showHandInputConfirm ||
     showDeleteConfirm ||
@@ -258,7 +260,7 @@ const SetReturnConfiguration = () => {
     setActiveRowId(rowId)
   }
 
-  const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
+  const handleReleaseClick = (options?: { forceRelease?: boolean; forceHandInput?: boolean }) => {
     if (isAnyModalOpen) return
     if (options?.forceHandInput) {
       closeAllModals()
@@ -291,7 +293,7 @@ const SetReturnConfiguration = () => {
       }
       if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
         event.preventDefault()
-        handleReleaseClick({forceHandInput: true})
+        handleReleaseClick({ forceHandInput: true })
         return
       }
 
@@ -311,7 +313,7 @@ const SetReturnConfiguration = () => {
 
       if (event.key === 'F3') {
         event.preventDefault()
-        handleReleaseClick({forceRelease: true})
+        handleReleaseClick({ forceRelease: true })
         return
       }
 
@@ -345,28 +347,13 @@ const SetReturnConfiguration = () => {
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
-    {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
-    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '状態', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '構成数', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '解除数', render: (row) => row.release},
-    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '移動倉庫', render: (row) => row.move},
-    {
-      key: 'moveStorage',
-      headClassName: 'col-move',
-      cellClassName: 'col-move',
-      header: '移動保管場所',
-      render: (row) => row.moveStorage,
-    },
-    {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
-    {
-      key: 'moveStorage2',
-      headClassName: 'col-move',
-      cellClassName: 'col-move',
-      header: '移動保管場所(2)',
-      render: (row) => row.moveStorage2 ?? '',
-    },
+    { key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error },
+    { key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item },
+    { key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot },
+    { key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '構成', render: (row) => row.status },
+    { key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '戻り', render: (row) => row.build },
+    { key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '状態', render: (row) => row.release },
+    { key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '品名', render: (row) => row.move },
   ]
 
   return (
@@ -380,7 +367,7 @@ const SetReturnConfiguration = () => {
                 <label>JANコード(親)</label>
                 <select
                   value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                  onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
                 >
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
@@ -388,48 +375,50 @@ const SetReturnConfiguration = () => {
                   <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                 </select>
               </div>
-                <div className='rlr-row2'>
-                    <label>状態</label>
-                    <div className="rlr-qty-group badioBtnFun10">
-                        <label>
-                            <input
-                                type="radio"
-                                name="status"
-                                value="中"
-                                checked={qty === 1}
-                                onChange={() => setQty(1)}
+              <div className='rlr-row2'>
+                <label>状態</label>
+                <div className="rlr-qty-group badioBtnFun10">
+                  <label>
+                    <input
+                      type="radio"
+                      name="status"
+                      value="中"
+                      checked={qty === 1}
+                      onChange={() => setQty(1)}
 
-                            />
-                            正常
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                name="status"
-                                value="済"
-                                checked={qty === 2}
-                                onChange={() => setQty(2)}
+                    />
+                    正常
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="status"
+                      value="済"
+                      checked={qty === 2}
+                      onChange={() => setQty(2)}
 
-                            />
-                            調査中
-                        </label>
-                    </div>
+                    />
+                    調査中
+                  </label>
                 </div>
+              </div>
 
               <div className='set-row'>
                 <label>数量</label>
                 <input
                   value={form.qty}
-                  onChange={(e) => setForm({...form, qty: e.target.value})}
+                  readOnly={!isEnabled} placeholder=' '
+                  onChange={(e) => setForm({ ...form, qty: e.target.value })}
                   className='set-small set-input-gray'
                 />
               </div>
 
-              <div className='set-row'>
+              <div className='set-row nocolorbackground'>
                 <label>JANコード</label>
                 <input
                   value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
+                  readOnly={!isEnabled} placeholder=' '
+                  onChange={(e) => setForm({ ...form, janCode: e.target.value })}
                   className='set-input-gray'
                 />
               </div>
@@ -456,7 +445,7 @@ const SetReturnConfiguration = () => {
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
-              </button>     
+              </button>
               <button
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
@@ -465,7 +454,7 @@ const SetReturnConfiguration = () => {
               </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'
-                onClick={() => handleReleaseClick({forceHandInput: true})}
+                onClick={() => handleReleaseClick({ forceHandInput: true })}
               >
                 手入力
               </button>
@@ -476,152 +465,152 @@ const SetReturnConfiguration = () => {
                 戻る
               </button>
             </ActionFooter>
-       </div>
-            {showHandInputConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                        navigate('/factory/return-configuration')
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
-                    >
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-
-            {showDeleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowDeleteConfirm(false)
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowDeleteConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showNoSelectionConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowNoSelectionConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showClearConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowClearConfirm(false)
-                        clearFormAndRows()
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowClearConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showCompleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showBackConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowBackConfirm(false)
-                        navigate('/factory')
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
+          {showHandInputConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>品目情報を手入力しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowHandInputConfirm(false)
+                      navigate('/factory/return-configuration')
+                    }}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => {
+                      setShowHandInputConfirm(false)
+                    }}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+
+          {showDeleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowDeleteConfirm(false)
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowDeleteConfirm(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showNoSelectionConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => setShowNoSelectionConfirm(false)}
+                  >
+                    {'\u004f\u004b'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showClearConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowClearConfirm(false)
+                      clearFormAndRows()
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowClearConfirm(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showCompleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => setShowCompleteConfirm(false)}
+                  >
+                    {'\u004f\u004b'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showBackConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      navigate('/factory')
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowBackConfirm(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+    </div>
   )
 }
 
-export {SetReturnConfiguration}
+export { SetReturnConfiguration }
 
 
