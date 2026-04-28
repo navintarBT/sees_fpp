@@ -28,7 +28,7 @@ const WorkOrderCompletion = () => {
                 <label>WO完了数</label>
                 <span style={{marginTop: '10px',fontSize: '30px', textAlign: 'center'}}>9</span>
               </div>
-       <div className='hand-row' style={{ marginTop: '20px', fontSize: '30px' }}>
+       <div className='hand-row' style={{ marginTop: '23px', fontSize: '30px' }}>
   <label>WO仕損数</label>
   <span style={{ color: '#e05555',marginTop: '10px',fontSize: '30px', textAlign: 'center'  }}>1</span>
 </div>
