@@ -190,7 +190,7 @@ const Equipment = () => {
       moveStorage2: '棚J',
       unit: 'sss',
       warehouse: 'AAA',
-      facility:'BBB'
+      facility:'BBB###'
     },
   ])
   const [form, setForm] = useState({
