@@ -15,9 +15,11 @@ import { BundlePage } from '../app/apps/BundleRegistration/BundlePage'
 import { BundleHandInputPage } from '../app/apps/BundleRegistration/BundleHandInputPage'
 import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
 import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
-import  { WorkOrderCompletion } from '../app/apps/WorkOrderCompletion/WorkOrderCompletion'
+import  { WorkOrderCompletion } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion'
 import { Factory } from './layout/factory'
 import { Warehouse } from './layout/warehouse'
+import { WOPartsIssuance } from '../app/new-high/WOPartsIssuance/WOPartsIssuance'
+import { WOPartsIssuanceHandInputPage } from '../app/new-high/WOPartsIssuance/WOPartsIssuanceHandInputPage'
 
 const MainPage = () => {
   return (
@@ -42,6 +44,8 @@ const MainPage = () => {
         <Route path='Equipment' element={<Equipment/>} />
         <Route path='EquipmentHandInputPage' element={<EquipmentHandInputPage/>} />
         <Route path='WorkOrderCompletion' element={<WorkOrderCompletion/>} />
+        <Route path='WOPartsIssuance' element={<WOPartsIssuance />} />
+        <Route path='WOPartsIssuanceHandInputPage' element={<WOPartsIssuanceHandInputPage />} />
       </Route>
     </Routes>
   )
