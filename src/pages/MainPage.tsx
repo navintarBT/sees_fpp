@@ -19,6 +19,7 @@ import { Factory } from './layout/factory'
 import { Warehouse } from './layout/warehouse'
 import { WOPartsIssuance } from '../app/new-high/WOPartsIssuance/WOPartsIssuance'
 import { WOPartsIssuanceHandInputPage } from '../app/new-high/WOPartsIssuance/WOPartsIssuanceHandInputPage'
+import { WorkOrderTimeRegistration } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistration'
 
 const MainPage = () => {
   return (
@@ -44,6 +45,7 @@ const MainPage = () => {
         <Route path='EquipmentHandInputPage' element={<EquipmentHandInputPage />} />
         <Route path='WOPartsIssuance' element={<WOPartsIssuance />} />
         <Route path='WOPartsIssuanceHandInputPage' element={<WOPartsIssuanceHandInputPage />} />
+        <Route path='workOrderTimeRegistration' element={<WorkOrderTimeRegistration />} />
       </Route>
     </Routes>
   )
