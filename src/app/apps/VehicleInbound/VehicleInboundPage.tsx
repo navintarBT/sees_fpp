@@ -364,7 +364,7 @@ const VehicleInboundPage = () => {
                 完了
               </button>     
               <button
-                className='set-btn set-primary set-success'
+                className='set-btn set-primary set-hand-input-btn'
                 onClick={() => handleReleaseClick({forceHandInput: true})}
               >
                 手入力

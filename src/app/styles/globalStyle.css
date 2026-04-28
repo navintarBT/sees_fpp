@@ -644,12 +644,7 @@
 }
 
 /* ######################### table ############################# */
-.set-body{
-  /* Make: form(auto) + table(remaining space) + actions(fixed footer row) */
-  display:grid;
-  grid-template-rows:auto minmax(0, 1fr) auto;
-  overflow:hidden;
-}
+
 
 .set-actions{
   /* Keep action buttons anchored in the footer row */
@@ -920,7 +915,7 @@
 }
 
 .inbound-table .col-lot{
-  min-width: 220px;
+  min-width: 235px;
 }
 
 .inbound-table .col-instruct{
@@ -928,7 +923,7 @@
 }
 
 .inbound-table .col-components{
-  min-width: 170px;
+  min-width: 180px;
 }
 
 .inbound-table .col-unlock{
@@ -936,8 +931,6 @@
 }
 
 /* ####################################table delivery ########################################### */
-
-
 
 .delivery-table .col-situation{
   min-width: 200px;

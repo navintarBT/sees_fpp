@@ -45,7 +45,7 @@ const Equipment = () => {
       name: '部品A', // 品名
       moveStorage2: '棚A',
       unit: 'sss',
-      warehouse: 'AAA',
+      warehouse:'AAA',
       facility:'BBB'
     },
     {

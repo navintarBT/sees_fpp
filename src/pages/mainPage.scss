@@ -61,7 +61,7 @@
 
 .mockup-body{
   height:calc(1920px - 150px);
-  padding:80px 100px 200px;
+  padding:80px 100px 150px;
   display:flex;
   flex-direction:column;
   gap:70px;
@@ -203,30 +203,23 @@ box-shadow:
 /* EXIT */
 
 .mockup-exit{
-
   width:420px;
   height:140px;
-
   font-size:40px;
   font-weight:400;
   letter-spacing:0.04em;
   align-self:center;
   margin-top:auto;
   transform: translateY(35px);
-
   border-radius:24px;
-
   border:none;
-
   color:white;
   text-shadow:0 2px 6px rgba(0,0,0,0.35);
-
   background:linear-gradient(145deg,#7f8da3,#495564);
   box-shadow:
   0 12px 26px rgba(0,0,0,0.22),
   inset 0 2px 0 rgba(255,255,255,0.18);
 }
-
 /* FOOTER */
 
 .mockup-footer{
