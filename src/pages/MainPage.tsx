@@ -15,7 +15,7 @@ import { BundlePage } from '../app/apps/BundleRegistration/BundlePage'
 import { BundleHandInputPage } from '../app/apps/BundleRegistration/BundleHandInputPage'
 import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
 import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
-
+import  { WorkOrderCompletion } from '../app/apps/WorkOrderCompletion/WorkOrderCompletion'
 const MainPage = () => {
   return (
     <Routes>
@@ -36,6 +36,7 @@ const MainPage = () => {
         <Route path='BundleHandInputPage' element={<BundleHandInputPage />} />
         <Route path='Equipment' element={<Equipment/>} />
         <Route path='EquipmentHandInputPage' element={<EquipmentHandInputPage/>} />
+        <Route path='WorkOrderCompletion' element={<WorkOrderCompletion/>} />
       </Route>
     </Routes>
   )
