@@ -1,4 +1,4 @@
-import { Route, Routes, Outlet, Navigate, useNavigate } from 'react-router-dom'
+﻿import { Route, Routes, Outlet } from 'react-router-dom'
 import './mainPage.scss'
 import { SetRegisterPage } from '../app/apps/Registration/SetRegisterPage'
 import { SetRegisterHandInputPage } from '../app/apps/Registration/SetRegisterHandInputPage'
@@ -16,11 +16,16 @@ import { BundleHandInputPage } from '../app/apps/BundleRegistration/BundleHandIn
 import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
 import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
 import  { WorkOrderCompletion } from '../app/apps/WorkOrderCompletion/WorkOrderCompletion'
+import { Factory } from './layout/factory'
+import { Warehouse } from './layout/warehouse'
+
 const MainPage = () => {
   return (
     <Routes>
       <Route element={<Outlet />}>
-        <Route index element={<MainPageDetail />} />
+        <Route index element={<Warehouse />} />
+        <Route path='warehouse' element={<Warehouse />} />
+        <Route path='factory' element={<Factory />} />
         <Route path='set-register' element={<SetRegisterPage />} />
         <Route path='set-register/hand-input' element={<SetRegisterHandInputPage />} />
         <Route path='dispatch' element={<DispatchPage />} />
@@ -43,70 +48,3 @@ const MainPage = () => {
 }
 
 export default MainPage
-const MainPageDetail = () => {
-  const navigate = useNavigate()
-  return (
-    <div className='mockup-page'>
-      <div className='mockup-stage'>
-        <div className='mockup-frame'>
-          <div className='mockup-header'>メインメニュー</div>
-          <div className='mockup-body'>
-            <div className='mockup-field'>
-              <label className='mockup-label'>グループID</label>
-              <input className='mockup-input' value='ADMIN' readOnly />
-            </div>
-
-            <div className='mockup-grid'>
-              <button
-                className='mockup-btn mockup-red'
-                onClick={() => navigate('dispatch')}
-              >
-                出庫
-              </button>
-              <button
-                className='mockup-btn mockup-blue'
-                onClick={() => navigate('inbound')}
-              >
-                入庫
-              </button>
-              <button
-                className='mockup-btn mockup-green'
-                onClick={() => navigate('delivery-slip-registration')}
-              >
-                配送伝票
-              </button>
-              <button
-                className='mockup-btn mockup-yellow'
-                onClick={() => navigate('set-return-configuration')}
-              >
-                戻り構成
-              </button>
-              <button
-                className='mockup-btn mockup-gray'
-                onClick={() => navigate('set-register')}
-              >
-                セット登録
-              </button>
-              <button
-                className='mockup-btn mockup-gray'
-                onClick={() => navigate('set-miscellaneous-in-and-out-bound')}
-              >
-                雑入出庫
-              </button>
-              <button
-                className='mockup-btn mockup-orange'
-                onClick={() => navigate('Equipment')}
-              >
-                伝票振分
-              </button>
-              <button className='mockup-btn mockup-pink'
-                onClick={() => navigate('BundlePage')}
-              >販売セット</button>
-            </div>
-            <button className='mockup-exit'>終了</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}

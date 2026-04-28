@@ -61,7 +61,7 @@ const WorkOrderCompletion = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/Equipment')
+                        navigate('/factory/factory')
                       }}
                     >
                       {'\u306f\u3044'}
