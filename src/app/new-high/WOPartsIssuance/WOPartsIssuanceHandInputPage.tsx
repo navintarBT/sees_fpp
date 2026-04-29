@@ -1,97 +1,96 @@
-import {useState} from 'react'
+﻿import {useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+
+type Row = {
+  id: number
+  office: string
+  storage: string
+  numOfShipments: string
+  Interior: string
+  lot: string
+}
 
 const WOPartsIssuanceHandInputPage = () => {
   const navigate = useNavigate()
-  const [parentWarehouse, setParentWarehouse] = useState('')
-  const [parentItem, setParentItem] = useState('')
-  const [parentSerial, setParentSerial] = useState('')
-  const [moveStorage, setMoveStorage] = useState('')
-  const [quantity, setQuantity] = useState('1')
-  const [showReadConfirm, setShowReadConfirm] = useState(false)
+  const [rows, setRows] = useState<Row[]>([
+    {
+      id: 1,
+      Interior: '部品001',
+      office:'Fxxxxx', 
+      storage: 'LOC-012',
+      numOfShipments: '8',
+      lot: 'LOT-012', // ロット
+    },
+    {
+      id: 2,
+      Interior: '部品002',
+      office:'Fxxxxx', 
+      storage: 'LOC-013',
+      numOfShipments: '2',
+      lot: 'LOT-013', // ロット
+    },
+  ])
+  const [parentItem, setParentItem] = useState('部品001')
+  const [parentSerial, setParentSerial] = useState('WO-001')
+  const [moveStorage, setMoveStorage] = useState('10')
+  const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
-  const isEnabled = parentWarehouse && parentItem && parentSerial
+  const tableColumns: Array<TFTableColumn<Row>> = [
+    {key: 'Interior', headClassName: 'col-Interior', cellClassName: 'col-Interior', header: '庫内ﾗﾍﾞﾙ', render: (row) => row.Interior},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
+    {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '出庫数', render: (row) => row.numOfShipments},
+    {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '保管場所', render: (row) => row.storage},
+    {key: 'office', headClassName: 'col-office', cellClassName: 'col-office', header: '事業所', render: (row) => row.office},
+  ]
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録手入力</div>
-          <div className='hand-body'>
-            <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
-              <div className='hand-row'>
-                <label>倉庫</label>
-                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
-                </select>
-              </div>
-              <div className='hand-row'>
-                <label>保管場所</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
-              </div>
-              <div className='hand-row'>
-                <label>数量</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
-              </div>
-              <div className='hand-row'>
-                <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
-              </div>
-              <div className='hand-row hand-row-always'>
-                <label>ロット</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-              </div>
-              <div className='hand-row hand-row-always'>
-                <label>シリアル</label>
-                <input placeholder=' ' />
-              </div>
-              <div className='set-row'>
-              <div className='set-radio-group bundle-group'>
-                  <label className='set-radio'>
+          <div className='set-header'>配送伝票登録</div>
+          <div className='set-body'>
+                <div className='set-form'>
+                  <div className='set-row'>
+                    <label>品番</label>
                     <input
-                      type='radio'
-                      name='quantityRange'
-                      value='from'
-                      checked={quantityRange === 'from'}
-                      onChange={() => setQuantityRange('from')}
+                      value={parentItem}
                     />
-                    From
-                  </label>
-                  <label className='set-radio'>
+                  </div>
+                    <div className='set-row'>
+                    <label>WO番号</label>
                     <input
-                      type='radio'
-                      name='quantityRange'
-                      value='to'
-                      checked={quantityRange === 'to'}
-                      onChange={() => setQuantityRange('to')}
+                      value={parentSerial}
                     />
-                    To
-                  </label>
+                  </div>
+                  <div className='set-row'>
+                    <label>必要数</label>
+                    <input
+                      value={moveStorage}
+                    />
+                  </div>
                 </div>
-                </div>
-              <div className='hand-row hand-row-always'>
-                <label>有効期限(yymm)</label>
-                <input placeholder=' ' />
-              </div>
-            </div>
-            <ActionFooter columns={4}>
+
+            <TableSection
+              columns={tableColumns}
+              rows={rows}
+              gridClassName='wOHandInputPage-table'
+              scrollRef={tableScrollRef}
+              getRowKey={(row) => row.id}
+            />
+
+            <ActionFooter columns={3}>
               <button
                 className='set-btn set-danger'
-                style={{ visibility: 'hidden' }}
               >
                 {'\u7834\u68C4'}
               </button>
-              <button className='set-btn set-primary' onClick={() => setShowReadConfirm(true)}>{'\u8AAD\u8FBC'}</button>
               <button
                 className='set-btn set-success'
                 style={{ visibility: 'hidden' }}
               >
-                {'\u89E3\u9664'}
+                {'\u51FA\u5EAB\u767B\u9332'}
               </button>
               <button
                 className='set-btn set-warning'
@@ -100,30 +99,7 @@ const WOPartsIssuanceHandInputPage = () => {
                 {'\u623B\u308B'}
               </button>
             </ActionFooter>
-
-            {showReadConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u5165\u529b\u5185\u5bb9\u3067\u8aad\u8fbc\u3092'}<br />{'\u5b8c\u4e86\u3057\u307e\u3059\u304b\uff1f'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowReadConfirm(false)}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowReadConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
+       </div>
             {showBackConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
@@ -134,7 +110,7 @@ const WOPartsIssuanceHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/BundlePage')
+                        navigate('/factory/button-access')
                       }}
                     >
                       {'\u306f\u3044'}
@@ -152,7 +128,6 @@ const WOPartsIssuanceHandInputPage = () => {
           </div>
         </div>
       </div>
-    </div>
   )
 }
 

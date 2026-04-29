@@ -497,7 +497,7 @@ const Equipment = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/EquipmentHandInputPage')
+                        navigate('/factory/equipment-hand-input')
                       }}
                     >
                       はい

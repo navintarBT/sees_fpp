@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState, type ReactNode} from 'react'
+﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
@@ -6,166 +6,160 @@ import {TableSection, type TableColumn as TFTableColumn} from '../../components/
 
 type Row = {
   id: number
-  error: string
-  fromTo: string
-  item: string
+  woNumber: string
+  partNumber: string
+  reqNumber: string
   lot: string
-  quantity: string
-  warehouse: number
-  storage: number
-  productName: string
+  numOfShipments: string
+  office: string
+  storage: string
 }
 
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
-}
+const initialRows: Row[] = [
+  {
+    id: 1,
+    woNumber: 'WO-001',
+    partNumber: '部品001',
+    reqNumber: '10',
+    storage: 'LOC-001',
+    lot: 'LOT-0130',
+    numOfShipments: '000000000001',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 2,
+    woNumber: 'WO-001',
+    partNumber: '部品002',
+    reqNumber: '10',
+    storage: 'LOC-002',
+    lot: 'LOT-0131',
+    numOfShipments: '000000000002',
+    office: 'Fxxxxxxxx',
+  },
+    {
+    id: 2,
+    woNumber: 'WO-002',
+    partNumber: '部品002',
+    reqNumber: '10',
+    storage: 'LOC-002',
+    lot: 'LOT-0131',
+    numOfShipments: '000000000002',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 3,
+    woNumber: 'WO-003',
+    partNumber: '部品003',
+    reqNumber: '10',
+    storage: 'LOC-003',
+    lot: 'LOT-0132',
+    numOfShipments: '000000000003',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 4,
+    woNumber: 'WO-004',
+    partNumber: '部品004',
+    reqNumber: '10',
+    storage: 'LOC-004',
+    lot: 'LOT-0134',
+    numOfShipments: '000000000004',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 5,
+    woNumber: 'WO-005',
+    partNumber: '部品005',
+    reqNumber: '10',
+    storage: 'LOC-005',
+    lot: 'LOT-0135',
+    numOfShipments: '000000000005',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 6,
+    woNumber: 'WO-006',
+    partNumber: '部品006',
+    reqNumber: '10',
+    storage: 'LOC-006',
+    lot: 'LOT-0136',
+    numOfShipments: '000000000006',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 7,
+    woNumber: 'WO-007',
+    partNumber: '部品007',
+    reqNumber: '10',
+    storage: 'LOC-007',
+    lot: 'LOT-0137',
+    numOfShipments: '000000000007',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 8,
+    woNumber: 'WO-008',
+    partNumber: '部品008',
+    reqNumber: '10',
+    storage: 'LOC-008',
+    lot: 'LOT-0138',
+    numOfShipments: '000000000008',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 9,
+    woNumber: 'WO-009',
+    partNumber: '部品009',
+    reqNumber: '10',
+    storage: 'LOC-009',
+    lot: 'LOT-0139',
+    numOfShipments: '000000000009',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 10,
+    woNumber: 'WO-010',
+    partNumber: '部品010',
+    reqNumber: '10',
+    storage: 'LOC-010',
+    lot: 'LOT-0140',
+    numOfShipments: '000000000010',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 11,
+    woNumber: 'WO-011',
+    partNumber: '部品011',
+    reqNumber: '10',
+    storage: 'LOC-011',
+    lot: 'LOT-0141',
+    numOfShipments: '000000000011',
+    office: 'Fxxxxxxxx',
+  },
+  {
+    id: 12,
+    woNumber: 'WO-012',
+    partNumber: '部品012',
+    reqNumber: '10',
+    storage: 'LOC-012',
+    lot: 'LOT-0142',
+    numOfShipments: '000000000012',
+    office: 'Fxxxxxxxx',
+  },
+]
 
 const WOPartsIssuance = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      error: '',
-      fromTo: 'F',
-      item: 'A01', // 品目No.
-      lot: 'L01', // ロットシリアル
-      quantity: '追加', // 状態
-      warehouse: 2, // 構成数
-      storage: 1111, // 解除数
-      productName: 'W1', // 移動倉
-    },
-    {
-      id: 2,
-      error: '',
-      fromTo: 'T',
-      item: 'B02',
-      lot: 'L02',
-      quantity: '解除',
-      warehouse: 1,
-      storage: 110,
-      productName: 'W2',
-    },
-    {
-      id: 3,
-      error: '',
-      fromTo: 'F',
-      item: 'C03',
-      lot: 'L03',
-      quantity: 'OV対応要',
-      warehouse: 3777888,
-      storage: 1112,
-      productName: 'W3',
-    },
-    {
-      id: 4,
-      error: '',
-      fromTo: 'F',
-      item: 'D04',
-      lot: 'L04',
-      quantity: '構成中',
-      warehouse: 4,
-      storage: 1111,
-      productName: 'W1',
-    },
-    {
-      id: 5,
-      error: 'E',
-      fromTo: 'T',
-      item: 'E05',
-      lot: 'L05',
-      quantity: '構成中',
-      warehouse: 2,
-      storage: 110,
-      productName: 'W2',
-    },
-    {
-      id: 6,
-      error: '',
-      fromTo: 'T',
-      item: 'F06',
-      lot: 'L06',
-      quantity: '構成中',
-      warehouse: 5,
-      storage: 311,
-      productName: 'W3',
-    },
-    {
-      id: 7,
-      error: 'E',
-      fromTo: 'F',
-      item: 'G07',
-      lot: 'L07',
-      quantity: '構成中',
-      warehouse: 1,
-      storage: 111,
-      productName: 'W1',
-    },
-    {
-      id: 8,
-      error: '',
-      fromTo: 'T',
-      item: 'H08',
-      lot: 'L08',
-      quantity: '構成中',
-      warehouse: 3,
-      storage: 122,
-      productName: 'W2',
-    },
-    {
-      id: 9,
-      error: '',
-      fromTo: 'T',
-      item: 'I09',
-      lot: 'L09',
-      quantity: '構成中',
-      warehouse: 2,
-      storage: 222,
-      productName: 'W3',
-    },
-    {
-      id: 10,
-      error: 'E',
-      fromTo: 'F',
-      item: 'J10',
-      lot: 'L10',
-      quantity: '構成中',
-      warehouse: 6,
-      storage: 222,
-      productName: 'W1',
-    },
-     {
-      id: 11,
-      error: 'E',
-      fromTo: 'F',
-      item: 'J10',
-      lot: 'L10',
-      quantity: '構成中',
-      warehouse: 6,
-      storage: 222,
-      productName: 'W1',
-    },
-     {
-      id: 12,
-      error: 'E',
-      fromTo: 'F',
-      item: 'J10',
-      lot: 'L10',
-      quantity: '構成中',
-      warehouse: 6,
-      storage: 222,
-      productName: 'W1',
-    },
-  ])
+  const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
-    moveStorage: '',
-    qty: '1',
+    woNumber: '',
+    internalLabel: '',
+    shipmentQty: '',
+    storage: '',
+    office: '',
     janCode: '',
   })
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -175,9 +169,8 @@ const WOPartsIssuance = () => {
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
-  const activeRow = rows.find((row) => row.id === activeRowId) ?? null
+  const sourceRowsRef = useRef<Row[]>(initialRows)
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
     showHandInputConfirm ||
@@ -203,8 +196,11 @@ const WOPartsIssuance = () => {
       parentWarehouse: '',
       parentItemNo: '',
       moveWarehouse: '',
-      moveStorage: '',
-      qty: '',
+      woNumber: '',
+      internalLabel: '',
+      shipmentQty: '',
+      storage: '',
+      office: '',
       janCode: '',
     })
 
@@ -227,8 +223,23 @@ const WOPartsIssuance = () => {
     resetTableScroll()
   }
 
-  const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
+  const handleSearchWoNumber = () => {
+    const keywords = form.woNumber
+      .split(/[,\.\u3001]+/)
+      .map((v) => v.trim().toUpperCase())
+      .filter(Boolean)
+
+    if (keywords.length === 0) {
+      setRows(sourceRowsRef.current)
+      return
+    }
+
+    const keywordSet = new Set(keywords)
+    const matchedRows = sourceRowsRef.current
+      .filter((row) => keywordSet.has(row.woNumber.toUpperCase()))
+
+    setRows(matchedRows)
+    setActiveRowId(null)
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -282,7 +293,9 @@ const WOPartsIssuance = () => {
         event.preventDefault()
         closeAllModals()
         setShowBackConfirm(true)
+        return
       }
+
     }
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === 'F1') {
@@ -298,7 +311,7 @@ const WOPartsIssuance = () => {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
     }
-  }, [activeRow, isAnyModalOpen])
+  }, [isAnyModalOpen])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
        {
@@ -308,14 +321,13 @@ const WOPartsIssuance = () => {
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
-    {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
-    {key: 'fromTo', headClassName: 'col-fromTo', cellClassName: 'col-fromTo', header: 'From/To', render: (row) => row.fromTo},
-    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'Quantity', headClassName: 'col-quantity', cellClassName: 'col-quantity', header: '数量', render: (row) => row.quantity},
-    {key: 'Warehouse', headClassName: 'col-warehouse', cellClassName: 'col-warehouse', header: '倉庫', render: (row) => row.warehouse},
+    {key: 'woNumber', headClassName: 'col-woNumber', cellClassName: 'col-woNumber', header: 'WO番号', render: (row) => row.woNumber},
+    {key: 'partNumber', headClassName: 'col-partNumber', cellClassName: 'col-partNumber', header: '品番', render: (row) => row.partNumber},
+    {key: 'reqNumber', headClassName: 'col-reqNumber', cellClassName: 'col-reqNumber', header: '必要数', render: (row) => row.reqNumber},
     {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '保管場所', render: (row) => row.storage},
-    {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
+    {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '出庫数', render: (row) => row.numOfShipments},
+    {key: 'office', headClassName: 'col-office', cellClassName: 'col-office', header: '事業所', render: (row) => row.office},
   ]
 
   return (
@@ -325,82 +337,46 @@ const WOPartsIssuance = () => {
           <div className='set-header'>セット構成登録</div>
           <div className='set-body'>
             <div className='set-form'>
-              <div className='set-row'>
-                <label>FR倉庫</label>
-                <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
-                </select>
-              </div>
-              <div className='set-row'>
-                <label>TO倉庫</label>
-                <select
-                  value={form.moveWarehouse}
-                  onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
-                </select>
-              </div>
-              <div className='set-row set-row-inline'>
-                <label>保管場所</label>
+              <div className='set-row set-row-wo'>
+                <label>WO番号</label>
                 <input
-                  value={form.moveStorage}
-                  onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                  value={form.woNumber}
+                  onChange={(e) => setForm({...form, woNumber: e.target.value})}
                   className='set-small'
                 />
-                <span className='set-inline-label'>数量</span>
+                <button
+                className='set-search-btn set-success'
+                onClick={handleSearchWoNumber}
+              >
+                WO部品リスト表示
+              </button>
+              </div>
+              <div className='set-row'>
+                <label>庫内ﾗﾍﾞﾙ</label>
                 <input
-                  value={form.qty}
-                  onChange={(e) => setForm({...form, qty: e.target.value})}
+                  value={form.internalLabel}
+                  onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                 />
               </div>
-
               <div className='set-row'>
-                {/* <label>数量</label> */}
-                <div className='set-radio-group'>
-                  <label className='set-radio'>
-                    <input
-                      type='radio'
-                      name='quantityRange'
-                      value='from'
-                      checked={quantityRange === 'from'}
-                      onChange={() => setQuantityRange('from')}
-                    />
-                    From
-                  </label>
-                  <label className='set-radio'>
-                    <input
-                      type='radio'
-                      name='quantityRange'
-                      value='to'
-                      checked={quantityRange === 'to'}
-                      onChange={() => setQuantityRange('to')}
-                    />
-                    To
-                  </label>
-                </div>
-                <div className='set-row set-row-bundle'>
-                <label>JANコード</label>
+                <label>出庫数</label>
                 <input
-                  value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
+                  value={form.shipmentQty}
+                  onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
                 />
               </div>
-              </div>
-            
               <div className='set-row'>
-                <label>移動保管場所</label>
+                <label>保管場所</label>
                 <input
-                  value={form.moveStorage}
-                  onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                  value={form.storage}
+                  onChange={(e) => setForm({...form, storage: e.target.value})}
+                />
+              </div>
+              <div className='set-row'>
+                <label>事業所</label>
+                <input
+                  value={form.office}
+                  onChange={(e) => setForm({...form, office: e.target.value})}
                 />
               </div>
             </div>
@@ -411,33 +387,54 @@ const WOPartsIssuance = () => {
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
-              onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
+              gridClassName='woPartsIssuance-table'
+              onRowActivate={(rowKey) => {
+                const selectedRow = rows.find((row) => row.id === Number(rowKey))
+                if (!selectedRow) return
+                setActiveRowId(selectedRow.id)
+                setForm((prev) => ({
+                  ...prev,
+                  internalLabel: selectedRow.woNumber,
+                  shipmentQty: selectedRow.reqNumber,
+                  storage: selectedRow.storage,
+                  office: selectedRow.office,
+                }))
+              }}
             />
 
-            <ActionFooter columns={4}>
+            <ActionFooter columns={5}>
+              <button
+                className='set-btn set-primary set-success'
+
+                onClick={() => handleReleaseClick({forceHandInput: true})}
+              >
+                決定
+              </button>
               <button
                 className='set-btn set-danger'
                 onClick={() => setShowClearConfirm(true)}
               >
-                破棄
+                出庫登録
               </button>
               <button
                 className='set-btn set-primary'
                 onClick={() => setShowCompleteConfirm(true)}
+                style={{fontSize: '35px'}}
               >
-                完了
-              </button>     
+                出庫票印刷
+              </button>   
               <button
-                className='set-btn set-primary set-success'
-                onClick={() => handleReleaseClick({forceHandInput: true})}
+                className='set-btn set-primary set-hand-input-btn'
+                onClick={() => navigate('/factory/wo-parts-issuance-detail')}
               >
-                手入力
+                明細確認
               </button>
               <button
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
+
               </button>
             </ActionFooter>
           </div>
@@ -445,13 +442,13 @@ const WOPartsIssuance = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
+                  <div className='set-modal-body'>変更を確認しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/BundleHandInputPage')
+                        navigate('')
                       }}
                     >
                       はい
@@ -564,7 +561,7 @@ const WOPartsIssuance = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory')
+                        navigate('/factory/button-access')
                       }}
                     >
                       {'\u306f\u3044'}
