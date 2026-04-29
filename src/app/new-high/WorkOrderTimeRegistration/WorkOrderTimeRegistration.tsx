@@ -306,30 +306,29 @@ const WorkOrderTimeRegistration = () => {
               <div className='wot-footer-row'>
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>開始</label>
-                  <input className='wot-grid-value' />
+                  <input className='wot-grid-value' type='time' />
                 </div>
                 <div className='wot-footer-item'>
+
                   <label className='wot-footer-label wot-bg-blue'>作業時間</label>
-                  <input className='wot-grid-value' />
+                  <input className='wot-grid-value' placeholder='時間' />
                 </div>
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>目標時間計</label>
-                  <input className='wot-grid-value' />
+                  <input className='wot-grid-value' placeholder='時間' />
                 </div>
               </div>
 
-              <div className='wot-footer-row'>
+              <div className='wot-footer-row wot-footer-row-padding'>
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>終了</label>
-                  <input className='wot-grid-value' />
+                  <input className='wot-grid-value' type='time' />
                 </div>
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>時間</label>
-                  <input className='wot-grid-value' />
+                  <input className='wot-grid-value' placeholder='分' />
                 </div>
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>時間</label>
-                  <input className='wot-grid-value' />
+                  <input className='wot-grid-value' placeholder='分' />
                 </div>
               </div>
             </div>

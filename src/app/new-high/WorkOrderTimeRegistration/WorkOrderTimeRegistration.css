@@ -141,6 +141,12 @@ input.wot-grid-value {
     gap: 20px;
 }
 
+.wot-footer-row-padding {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+}
+
 .wot-footer-label,
 .wot-footer-value {
     font-size: 28px;
