@@ -15,6 +15,7 @@ import { BundlePage } from '../app/apps/BundleRegistration/BundlePage'
 import { BundleHandInputPage } from '../app/apps/BundleRegistration/BundleHandInputPage'
 import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
 import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
+import  { WorkOrderCompletion } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion'
 import { Factory } from './layout/factory'
 import { Warehouse } from './layout/warehouse'
 import { WOPartsIssuance } from '../app/new-high/WOPartsIssuance/WOPartsIssuance'
@@ -42,8 +43,9 @@ const MainPage = () => {
         <Route path='set-miscellaneous-in-and-out-bound' element={<SetMiscellaneousInAndOutBound />} />
         <Route path='bundle-page' element={<BundlePage />} />
         <Route path='bundle-hand-input' element={<BundleHandInputPage />} />
-        <Route path='equipment' element={<Equipment />} />
-        <Route path='equipment-hand-input' element={<EquipmentHandInputPage />} />
+        <Route path='equipment' element={<Equipment/>} />
+        <Route path='equipment-hand-input' element={<EquipmentHandInputPage/>} />
+        <Route path='WorkOrderCompletion' element={<WorkOrderCompletion/>} />
         <Route path='wo-parts-issuance' element={<WOPartsIssuance />} />
         <Route path='wo-parts-issuance-hand-input' element={<WOPartsIssuanceHandInputPage />} />
         <Route path='wo-parts-issuance-detail' element={<WOPartsIssuanceDetail />} />
