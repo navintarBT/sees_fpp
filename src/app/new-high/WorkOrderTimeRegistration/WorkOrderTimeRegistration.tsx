@@ -10,6 +10,13 @@ type Row = {
   woNo: string
   itemNo: string
   itemName: string
+  targetTime?: string
+  acceptedQty?: string
+  defectiveQty?: string
+  opOrder?: string
+  opDesc?: string
+  processStatus?: string
+  remarks?: string
 }
 
 const WorkOrderTimeRegistration = () => {
@@ -17,63 +24,65 @@ const WorkOrderTimeRegistration = () => {
   const [rows, setRows] = useState<Row[]>([
     {
       id: 1,
-      woNo: 'wo-20',
-      itemNo: '202603310',
-      itemName: '製品A',
+      woNo: 'wo-1',
+      itemNo: 'a',
+      itemName: '製品a',
+      targetTime: '50',
+      acceptedQty: '9',
+      defectiveQty: '1',
+      opOrder: '10',
+      opDesc: '研磨3',
+      processStatus: '90',
+      remarks: 'xxxxx',
     },
     {
       id: 2,
-      woNo: 'wo-20',
-      itemNo: 'a',
-      itemName: '製品B',
+      woNo: 'wo-2',
+      itemNo: 'b',
+      itemName: '製品b',
+      targetTime: '50',
+      acceptedQty: '3',
+      defectiveQty: '',
+      opOrder: '10',
+      opDesc: '研磨3',
+      processStatus: '',
+      remarks: '',
     },
     {
       id: 3,
-      woNo: 'wo-20',
-      itemNo: 'b',
-      itemName: '製品C',
+      woNo: 'wo-3',
+      itemNo: 'c',
+      itemName: '製品c',
     },
     {
       id: 4,
-      woNo: 'wo-20',
-      itemNo: 'c',
-      itemName: '製品D',
+      woNo: 'wo-4',
+      itemNo: 'd',
+      itemName: '製品d',
     },
     {
       id: 5,
-      woNo: 'wo-20',
-      itemNo: 'd',
-      itemName: '製品E',
+      woNo: 'wo-5',
+      itemNo: 'e',
+      itemName: '製品e',
     },
     {
       id: 6,
-      woNo: 'wo-20',
-      itemNo: 'e',
-      itemName: '製品F',
+      woNo: 'wo-6',
+      itemNo: 'f',
+      itemName: '製品f',
     },
     {
       id: 7,
-      woNo: 'wo-20',
-      itemNo: 'f',
-      itemName: '製品G',
+      woNo: 'wo-7',
+      itemNo: 'g',
+      itemName: '製品g',
     },
     {
       id: 8,
-      woNo: 'wo-20',
-      itemNo: 'g',
-      itemName: '製品H',
-    },
-    {
-      id: 9,
-      woNo: 'wo-20',
+      woNo: 'wo-8',
       itemNo: 'h',
-      itemName: '製品I',
-    },
-    {
-      id: 10,
-      woNo: 'wo-20',
-      itemNo: 'i',
-      itemName: '製品J',
+      itemName: '製品h',
     },
   ])
 
@@ -133,6 +142,7 @@ const WorkOrderTimeRegistration = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId(rowId)
+    toggleRowChecked(rowId, !checkedRowIds.includes(rowId))
   }
 
   const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
@@ -210,6 +220,13 @@ const WorkOrderTimeRegistration = () => {
     { key: 'woNo', headClassName: 'col-wo', cellClassName: 'col-wo', header: 'WoNo', render: (row) => row.woNo },
     { key: 'itemNo', headClassName: 'col-item-no', cellClassName: 'col-item-no', header: '品番', render: (row) => row.itemNo },
     { key: 'itemName', headClassName: 'col-item-name', cellClassName: 'col-item-name', header: '品名', render: (row) => row.itemName },
+    { key: 'targetTime', headClassName: 'col-target-time', cellClassName: 'col-target-time col-text-purple', header: '目標時間', render: (row) => row.targetTime },
+    { key: 'acceptedQty', headClassName: 'col-qty', cellClassName: 'col-qty', header: '合格数', render: (row) => row.acceptedQty },
+    { key: 'defectiveQty', headClassName: 'col-qty', cellClassName: 'col-qty', header: '不良数', render: (row) => row.defectiveQty },
+    { key: 'opOrder', headClassName: 'col-op', cellClassName: 'col-op', header: '作業順序', render: (row) => row.opOrder },
+    { key: 'opDesc', headClassName: 'col-op', cellClassName: 'col-op', header: '作業記述', render: (row) => row.opDesc },
+    { key: 'processStatus', headClassName: 'col-process', cellClassName: 'col-process', header: '工程状況', render: (row) => row.processStatus },
+    { key: 'remarks', headClassName: 'col-remarks', cellClassName: 'col-remarks', header: '備考', render: (row) => row.remarks },
   ]
 
   return (
@@ -218,58 +235,60 @@ const WorkOrderTimeRegistration = () => {
         <div className='mockup-frame'>
           <div className='set-header'>作業実績入力</div>
           <div className='set-body'>
-            <div className='set-formnew_high'>
-              <div className='wot-header-container'>
+            <div className='set-formnew_high '>
+              <div className='wot-header-container '>
                 {/* Left side: Info Grid */}
-                <div className='wot-info-scroll'>
+                <div className='wot-info-soll'>
                   <div className='wot-info-grid'>
                     <label className='wot-grid-label wot-bg-blue'>人</label>
-                    <input className='wot-grid-value' defaultValue='XXXXX' />
-                    <input className='wot-grid-value wot-bg-gray' defaultValue='作業者X' />
+                    <input className='wot-grid-value' />
                   </div>
 
                   <div className='wot-info-grid'>
                     <label className='wot-grid-label wot-bg-blue'>日付</label>
-                    <input className='wot-grid-value' defaultValue='2026/02/19' />
-                    <div className='wot-grid-value'></div>
+                    <input className='wot-grid-value' type='date' defaultValue={new Date().toISOString().split('T')[0]} />
                   </div>
 
                   <div className='wot-info-grid'>
-                    <label className='wot-grid-label wot-bg-red'>作業場</label>
-                    <input className='wot-grid-value wot-text-red' defaultValue='9005' />
-                    <input className='wot-grid-value wot-bg-pink wot-text-red' defaultValue='研磨班' />
+                    <label className='wot-grid-label wot-bg-red'>工程状況初期値</label>
+                    <input className='wot-grid-value wot-text-red' />
+                  </div>
+                  <div className='wot-info-grid'>
+                    <label className='wot-grid-label wot-bg-red'>作業順序</label>
+                    <input className='wot-grid-value wot-text-red' />
+                  </div>
+                  <div className='wot-info-grid'>
+                    <label className='wot-grid-label wot-bg-red'>備考</label>
+                    <input className='wot-grid-value wot-text-red' />
                   </div>
                 </div>
 
-                {/* Right side: Actions */}
                 <div className='wot-header-actions'>
                   <div className='wot-top-row'>
                     <button className='set-btnnew_high set-primary'>WO選択</button>
                   </div>
+                  <div className='wot-radio-container'>
+                    <div className='wot-radio-title'>登録時間種類</div>
+                    <div className='wot-radio-group'>
+                      <label className='wot-radio-item'>
+                        <input type='radio' name='timeType' defaultChecked />
+                        <span>労務</span>
+                      </label>
+                      <label className='wot-radio-item'>
+                        <input type='radio' name='timeType' />
+                        <span>段取</span>
+                      </label>
+                      <label className='wot-radio-item'>
+                        <input type='radio' name='timeType' />
+                        <span>機械</span>
+                      </label>
+                    </div>
+                    <ActionFooter columns={2}>
+                      <button className='set-btn set-primary'>作業開始</button>
+                      <button className='set-btn set-success'>作業終了</button>
+                    </ActionFooter>
+                  </div>
                 </div>
-              </div>
-
-              <div className='wot-radio-container'>
-                <div className='wot-radio-title'>登録時間種類</div>
-                <div className='wot-radio-group'>
-                  <label className='wot-radio-item'>
-                    <input type='radio' name='timeType' defaultChecked />
-                    <span>労務</span>
-                  </label>
-                  <label className='wot-radio-item'>
-                    <input type='radio' name='timeType' />
-                    <span>段取</span>
-                  </label>
-                  <label className='wot-radio-item'>
-                    <input type='radio' name='timeType' />
-                    <span>機械</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className='wot-main-actions'>
-                <button className='wot-btn-large'>作業開始</button>
-                <button className='wot-btn-large'>作業終了</button>
               </div>
             </div>
 
@@ -283,9 +302,41 @@ const WorkOrderTimeRegistration = () => {
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
             />
 
+            <div className='wot-footer-summary wot-radio-container'>
+              <div className='wot-footer-row'>
+                <div className='wot-footer-item'>
+                  <label className='wot-footer-label wot-bg-blue'>開始</label>
+                  <input className='wot-grid-value' />
+                </div>
+                <div className='wot-footer-item'>
+                  <label className='wot-footer-label wot-bg-blue'>作業時間</label>
+                  <input className='wot-grid-value' />
+                </div>
+                <div className='wot-footer-item'>
+                  <label className='wot-footer-label wot-bg-blue'>目標時間計</label>
+                  <input className='wot-grid-value' />
+                </div>
+              </div>
+
+              <div className='wot-footer-row'>
+                <div className='wot-footer-item'>
+                  <label className='wot-footer-label wot-bg-blue'>終了</label>
+                  <input className='wot-grid-value' />
+                </div>
+                <div className='wot-footer-item'>
+                  <label className='wot-footer-label wot-bg-blue'>時間</label>
+                  <input className='wot-grid-value' />
+                </div>
+                <div className='wot-footer-item'>
+                  <label className='wot-footer-label wot-bg-blue'>時間</label>
+                  <input className='wot-grid-value' />
+                </div>
+              </div>
+            </div>
+
             <ActionFooter columns={3}>
               <button
-                className='set-btn set-primary'
+                className='set-btn set-danger'
                 onClick={handleDeleteSelected}
               >
                 選択行削除
@@ -400,7 +451,7 @@ const WorkOrderTimeRegistration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory')
+                      navigate('/factory/factory')
                     }}
                   >
                     はい
