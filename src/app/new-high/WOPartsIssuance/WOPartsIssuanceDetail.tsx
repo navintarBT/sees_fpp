@@ -96,7 +96,7 @@ const WOPartsIssuanceDetail = () => {
       lot: 'LOT-020',
     },
     {
-      id: 10,
+      id: 13,
       Interior: '部品010',
       office:'Fxxxxx', 
       storage: 'LOC-021',
@@ -120,7 +120,7 @@ const WOPartsIssuanceDetail = () => {
       lot: 'LOT-023',
     },
      {
-      id: 10,
+      id: 14,
       Interior: '部品010',
       office:'Fxxxxx', 
       storage: 'LOC-021',
@@ -152,6 +152,7 @@ const WOPartsIssuanceDetail = () => {
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showDetailConfirm, setShowDetailConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
@@ -165,6 +166,7 @@ const WOPartsIssuanceDetail = () => {
     showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
+    showDetailConfirm ||
     showBackConfirm
 
   const closeAllModals = () => {
@@ -173,6 +175,7 @@ const WOPartsIssuanceDetail = () => {
     setShowNoSelectionConfirm(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
+    setShowDetailConfirm(false)
     setShowBackConfirm(false)
   }
 
@@ -338,8 +341,8 @@ const WOPartsIssuanceDetail = () => {
         />
       ),
     },
-    {key: 'Interior', headClassName: 'col-Interior', cellClassName: 'col-Interior', header: '庫内ﾗﾍﾞﾙ', render: (row) => row.Interior},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
+    {key: 'Interior', headClassName: 'col-Interior', cellClassName: 'col-Interior', header: '保管場所', render: (row) => row.Interior},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'LOT', render: (row) => row.lot},
     {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '出庫数', render: (row) => row.numOfShipments},
     {key: 'office', headClassName: 'col-office', cellClassName: 'col-office', header: '事業所', render: (row) => row.office},
   ]
@@ -352,21 +355,26 @@ const WOPartsIssuanceDetail = () => {
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>
-                    <label>品番</label>
-                    <input
-                      value={parentItem}
-                    />
-                  </div>
-                    <div className='set-row'>
                     <label>WO番号</label>
                     <input
                       value={parentSerial}
+ 
+                      readOnly
+                    />
+                  </div>
+                    <div className='set-row'>
+                    <label>品番</label>
+                    <input
+                      value={parentItem}
+
+                      readOnly
                     />
                   </div>
                   <div className='set-row'>
                     <label>必要数</label>
                     <input
                       value={moveStorage}
+                      readOnly
                     />
                   </div>
                 </div>
@@ -383,6 +391,13 @@ const WOPartsIssuanceDetail = () => {
 
             <ActionFooter columns={5}>
               <button
+                className='set-btn set-primary'
+                onClick={() => setShowCompleteConfirm(true)}
+                style={{ visibility: 'hidden' }}
+              >
+                出庫登録
+              </button>
+              <button
                 className='set-btn set-danger'
                 onClick={() => {
                   if (checkedRowIds.length === 0) {
@@ -392,14 +407,7 @@ const WOPartsIssuanceDetail = () => {
                   }
                 }}
               >
-                決定
-              </button>
-              <button
-                className='set-btn set-primary'
-                onClick={() => setShowCompleteConfirm(true)}
-                style={{ visibility: 'hidden' }}
-              >
-                出庫登録
+                削除
               </button>   
               <button
                 className='set-btn set-primary set-success'
@@ -410,7 +418,7 @@ const WOPartsIssuanceDetail = () => {
               </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'
-                onClick={() => navigate('/factory/wo-parts-issuance-detail')}
+                onClick={() => setShowDetailConfirm(true)}
                 style={{ visibility: 'hidden' }}
 
               >
@@ -418,41 +426,13 @@ const WOPartsIssuanceDetail = () => {
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => navigate('/factory/wo-parts-issuance')}
+                onClick={() => setShowBackConfirm(true)}
               >
                 戻る
 
               </button>
             </ActionFooter>
        </div>
-            {showHandInputConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                        navigate('')
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
-                    >
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
 
             {showDeleteConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -474,66 +454,6 @@ const WOPartsIssuanceDetail = () => {
                       onClick={() => setShowDeleteConfirm(false)}
                     >
                       いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showNoSelectionConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowNoSelectionConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showClearConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowClearConfirm(false)
-                        clearFormAndRows()
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowClearConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showCompleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
                     </button>
                   </div>
                 </div>

@@ -42,13 +42,16 @@ const MainPage = () => {
         <Route path='set-return-configuration' element={<SetReturnConfiguration />} />
         <Route path='miscellaneous-in-and-out-bound' element={<MiscellaneousInAndOutBound />} />
         <Route path='set-miscellaneous-in-and-out-bound' element={<SetMiscellaneousInAndOutBound />} />
-        <Route path='BundlePage' element={<BundlePage />} />
-        <Route path='BundleHandInputPage' element={<BundleHandInputPage />} />
-        <Route path='Equipment' element={<Equipment />} />
-        <Route path='EquipmentHandInputPage' element={<EquipmentHandInputPage />} />
-        <Route path='WOPartsIssuance' element={<WOPartsIssuance />} />
-        <Route path='WOPartsIssuanceHandInputPage' element={<WOPartsIssuanceHandInputPage />} />
-        <Route path='WorkOrderTimeRegistration' element={<WorkOrderTimeRegistration />} />
+        <Route path='bundle-page' element={<BundlePage />} />
+        <Route path='bundle-hand-input' element={<BundleHandInputPage />} />
+        <Route path='equipment' element={<Equipment />} />
+        <Route path='equipment-hand-input' element={<EquipmentHandInputPage />} />
+        <Route path='wo-parts-issuance' element={<WOPartsIssuance />} />
+        <Route path='wo-parts-issuance-hand-input' element={<WOPartsIssuanceHandInputPage />} />
+        <Route path='button-access' element={<ButtonAccess />} />
+        <Route path='wo-parts-issuance-detail' element={<WOPartsIssuanceDetail />} />
+        <Route path='work-order-completion' element={<WorkOrderCompletion />} />
+        <Route path='work-order-time-registration' element={<WorkOrderTimeRegistration />} />
       </Route>
     </Routes>
   )
