@@ -49,12 +49,12 @@ const WorkOrderCompletion = () => {
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
   const [showWoCalendar, setShowWoCalendar] = useState(false)
   const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(todayValue))
-  const [woNumber, setWoNumber] = useState('WO-001')
+  const [woNumber, setWoNumber] = useState('wo-001')
 
   const woData = WO_MOCKUP_DATA[woNumber] ?? {completed: 0, defective: 0}
 
   const openWoDatePicker = () => {
-    setWoCalendarMonth(parseDateValue(woDatePickerValue))
+    setWoCalendarMonth(parseDateValue(woDatePickerValue || todayValue))
     setShowWoCalendar((current) => !current)
   }
 
@@ -65,6 +65,17 @@ const WorkOrderCompletion = () => {
   const selectWoDate = (value: string) => {
     setWoDatePickerValue(value)
     setWoCalendarMonth(parseDateValue(value))
+    setShowWoCalendar(false)
+  }
+
+  const selectToday = () => {
+    setWoDatePickerValue(todayValue)
+    setWoCalendarMonth(parseDateValue(todayValue))
+    setShowWoCalendar(false)
+  }
+
+  const clearDate = () => {
+    setWoDatePickerValue('')
     setShowWoCalendar(false)
   }
 
@@ -126,6 +137,40 @@ const WorkOrderCompletion = () => {
                             {date.getDate()}
                           </button>
                         ))}
+                      </div>
+                      <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 4px 4px', gap: '6px'}}>
+                        <button
+                          type='button'
+                          style={{
+                            flex: 1,
+                            padding: '6px 0',
+                            borderRadius: '4px',
+                            border: '1px solid #4a90d9',
+                            background: '#4a90d9',
+                            color: '#fff',
+                            fontSize: '13px',
+                            cursor: 'pointer',
+                          }}
+                          onClick={selectToday}
+                        >
+                          Today
+                        </button>
+                        <button
+                          type='button'
+                          style={{
+                            flex: 1,
+                            padding: '6px 0',
+                            borderRadius: '4px',
+                            border: '1px solid #ccc',
+                            background: '#f5f5f5',
+                            color: '#555',
+                            fontSize: '13px',
+                            cursor: 'pointer',
+                          }}
+                          onClick={clearDate}
+                        >
+                          Clear
+                        </button>
                       </div>
                     </div>
                   )}
