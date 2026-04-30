@@ -15,7 +15,7 @@ import { BundlePage } from '../app/apps/BundleRegistration/BundlePage'
 import { BundleHandInputPage } from '../app/apps/BundleRegistration/BundleHandInputPage'
 import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
 import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
-import  { WorkOrderCompletion } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion'
+import { WorkOrderCompletion } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion'
 import { Factory } from './layout/factory'
 import { Warehouse } from './layout/warehouse'
 import { WOPartsIssuance } from '../app/new-high/WOPartsIssuance/WOPartsIssuance'
@@ -48,6 +48,7 @@ const MainPage = () => {
         <Route path='EquipmentHandInputPage' element={<EquipmentHandInputPage />} />
         <Route path='WOPartsIssuance' element={<WOPartsIssuance />} />
         <Route path='WOPartsIssuanceHandInputPage' element={<WOPartsIssuanceHandInputPage />} />
+        <Route path='WorkOrderTimeRegistration' element={<WorkOrderTimeRegistration />} />
       </Route>
     </Routes>
   )
