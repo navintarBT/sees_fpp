@@ -96,6 +96,7 @@ const WorkOrderCompletion = () => {
                     readOnly
                     value={formatWoDate(woDatePickerValue)}
                     onClick={openWoDatePicker}
+                    style={{textAlign: 'center'}}
                   />
                   <button
                     type='button'
