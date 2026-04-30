@@ -49,7 +49,7 @@ const WorkOrderCompletion = () => {
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
   const [showWoCalendar, setShowWoCalendar] = useState(false)
   const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(todayValue))
-  const [woNumber, setWoNumber] = useState('wo-001')
+  const [woNumber, setWoNumber] = useState('WO-001')
 
   const woData = WO_MOCKUP_DATA[woNumber] ?? {completed: 0, defective: 0}
 
