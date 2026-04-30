@@ -3,6 +3,12 @@ import {useNavigate} from 'react-router-dom'
 import {FaRegCalendarAlt} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
+const WO_MOCKUP_DATA: Record<string, {completed: number; defective: number}> = {
+  'WO-001': {completed: 9, defective: 1},
+  'WO-002': {completed: 5, defective: 5},
+  'WO-003': {completed: 8, defective: 2},
+}
+
 const formatWoDate = (value: string) => {
   const [year, month, day] = value.split('-')
   if (!year || !month || !day) return ''
@@ -43,7 +49,9 @@ const WorkOrderCompletion = () => {
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
   const [showWoCalendar, setShowWoCalendar] = useState(false)
   const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(todayValue))
-  const [woNumber, setWoNumber] = useState('123001')
+  const [woNumber, setWoNumber] = useState('WO-001')
+
+  const woData = WO_MOCKUP_DATA[woNumber] ?? {completed: 0, defective: 0}
 
   const openWoDatePicker = () => {
     setWoCalendarMonth(parseDateValue(woDatePickerValue))
@@ -87,7 +95,12 @@ const WorkOrderCompletion = () => {
                     <FaRegCalendarAlt />
                   </button>
                   {showWoCalendar && (
-                    <div className='hand-calendar' role='dialog' aria-label='Choose WO completion date'>
+                    <div
+                      className='hand-calendar'
+                      role='dialog'
+                      aria-label='Choose WO completion date'
+                      style={{left: '50%', transform: 'translateX(-50%)'}}
+                    >
                       <div className='hand-calendar-header'>
                         <button type='button' onClick={() => changeWoCalendarMonth(-1)}>{'<'}</button>
                         <span>{calendarMonthLabel}</span>
@@ -124,11 +137,15 @@ const WorkOrderCompletion = () => {
               </div>
               <div className='hand-row' style={{marginTop: '11px', fontSize: '30px'}}>
                 <label>WO完了数</label>
-                <span style={{marginTop: '10px', fontSize: '32px', textAlign: 'center'}}>9</span>
+                <span style={{marginTop: '10px', fontSize: '32px', textAlign: 'center'}}>
+                  {woData.completed}
+                </span>
               </div>
               <div className='hand-row' style={{marginTop: '22px', fontSize: '30px'}}>
                 <label>WO仕損数</label>
-                <span style={{color: '#e05555', marginTop: '12px', fontSize: '32px', textAlign: 'center'}}>1</span>
+                <span style={{color: '#e05555', marginTop: '12px', fontSize: '32px', textAlign: 'center'}}>
+                  {woData.defective}
+                </span>
               </div>
             </div>
 
