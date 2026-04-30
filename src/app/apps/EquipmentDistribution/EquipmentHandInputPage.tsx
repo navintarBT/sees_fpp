@@ -137,7 +137,7 @@ const EquipmentHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/Equipment')
+                        navigate('/factory/equipment')
                       }}
                     >
                       {'\u306f\u3044'}

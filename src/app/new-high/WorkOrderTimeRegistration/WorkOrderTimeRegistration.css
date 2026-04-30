@@ -1,0 +1,157 @@
+.set-formnew_high {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-bottom: 5px;
+}
+
+/* WOT Header Layout */
+.wot-header-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.wot-info-grid {
+    display: grid;
+    grid-template-columns: 200px 250px;
+    gap: 60px;
+}
+
+.wot-grid-label,
+.wot-grid-value {
+    padding: 15px 25px;
+    border: none;
+    background-color: #fff;
+    font-size: 30px;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+input.wot-grid-value {
+    background-color: #fff;
+    outline: none;
+    font-family: inherit;
+    width: 100%;
+    border: 2px solid #5b6d86;
+    border-radius: 14px;
+    font-size: 30px;
+    font-weight: 400;
+    transition: all 0.2s;
+    height: 78px;
+    padding: 0 22px;
+    box-sizing: border-box;
+    min-height: 0;
+    display: inline-block;
+}
+
+.wot-span-2 {
+    grid-column: span 2;
+}
+
+.wot-hint-text {
+    font-size: 22px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.wot-header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    flex-shrink: 0;
+}
+
+.wot-top-row {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.set-btnnew_high {
+    width: 220px !important;
+    height: 85px !important;
+    font-size: 30px !important;
+    border-radius: 16px !important;
+    color: white;
+    border: none;
+}
+
+.wot-radio-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #f8f9fa;
+    padding: 15px 25px;
+    border-radius: 16px;
+    border: 1px solid #dee2e6;
+}
+
+.wot-radio-title {
+    font-size: 33px;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.wot-radio-group {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.wot-radio-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 33px;
+    cursor: pointer;
+    color: #495057;
+}
+
+.wot-radio-item input {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.wot-main-actions {
+    display: flex;
+    gap: 25px;
+}
+
+.wot-main-actions button {
+    flex: 1;
+}
+
+.wot-btn-large:active {
+    transform: translateY(-1px);
+}
+
+.wot-grid-label {
+    font-size: 33px;
+}
+
+/* Footer Summary Section */
+.wot-footer-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.wot-footer-row-padding {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+}
+
+.wot-footer-label,
+.wot-footer-value {
+    font-size: 28px;
+}
+
+.wot-footer-item {
+    margin-bottom: 5px;
+}

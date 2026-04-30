@@ -134,7 +134,7 @@ const BundleHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/BundlePage')
+                        navigate('/factory/bundle-page')
                       }}
                     >
                       {'\u306f\u3044'}
