@@ -341,8 +341,8 @@ const WOPartsIssuanceDetail = () => {
         />
       ),
     },
-    {key: 'Interior', headClassName: 'col-Interior', cellClassName: 'col-Interior', header: '庫内ﾗﾍﾞﾙ', render: (row) => row.Interior},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
+    {key: 'Interior', headClassName: 'col-Interior', cellClassName: 'col-Interior', header: '保管場所', render: (row) => row.Interior},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'LOT', render: (row) => row.lot},
     {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '出庫数', render: (row) => row.numOfShipments},
     {key: 'office', headClassName: 'col-office', cellClassName: 'col-office', header: '事業所', render: (row) => row.office},
   ]
@@ -355,16 +355,18 @@ const WOPartsIssuanceDetail = () => {
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>
-                    <label>品番</label>
+                    <label>WO番号</label>
                     <input
-                      value={parentItem}
+                      value={parentSerial}
+ 
                       readOnly
                     />
                   </div>
                     <div className='set-row'>
-                    <label>WO番号</label>
+                    <label>品番</label>
                     <input
-                      value={parentSerial}
+                      value={parentItem}
+
                       readOnly
                     />
                   </div>
@@ -405,7 +407,7 @@ const WOPartsIssuanceDetail = () => {
                   }
                 }}
               >
-                決定
+                削除
               </button>   
               <button
                 className='set-btn set-primary set-success'

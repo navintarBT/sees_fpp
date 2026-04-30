@@ -14,7 +14,7 @@
 
 .wot-info-grid {
     display: grid;
-    grid-template-columns: 200px 250px;
+    grid-template-columns: 200px 270px;
     gap: 60px;
 }
 
@@ -154,4 +154,35 @@ input.wot-grid-value {
 
 .wot-footer-item {
     margin-bottom: 5px;
+}
+
+.hand-calendar-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #cbd5e1;
+}
+
+.hand-calendar-footer button {
+    border: none;
+    background: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.hand-calendar-footer button:hover {
+    background: #e2e8f0;
+}
+
+.hand-calendar-btn-today {
+    color: #1d4ed8;
+    font-weight: 600;
+}
+
+.hand-calendar-btn-clear {
+    color: #ef4444;
 }

@@ -2,7 +2,41 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
+import { FaRegCalendarAlt } from 'react-icons/fa'
 import './WorkOrderTimeRegistration.css'
+
+const formatWoDate = (value: string) => {
+  const [year, month, day] = value.split('-')
+  if (!year || !month || !day) return 'yy/mm/dd'
+  return `${year}/${month}/${day}`
+}
+const padDatePart = (value: number) => value.toString().padStart(2, '0')
+
+const toDateValue = (date: Date) => (
+  `${date.getFullYear()}-${padDatePart(date.getMonth() + 1)}-${padDatePart(date.getDate())}`
+)
+
+const parseDateValue = (value: string) => {
+  const [year, month, day] = value.split('-').map(Number)
+  return year && month && day ? new Date(year, month - 1, day) : new Date()
+}
+
+const getCalendarDays = (monthDate: Date) => {
+  const year = monthDate.getFullYear()
+  const month = monthDate.getMonth()
+  const startDate = new Date(year, month, 1 - new Date(year, month, 1).getDay())
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(startDate)
+    date.setDate(startDate.getDate() + index)
+
+    return {
+      date,
+      value: toDateValue(date),
+      inMonth: date.getMonth() === month,
+    }
+  })
+}
 
 
 type Row = {
@@ -85,6 +119,29 @@ const WorkOrderTimeRegistration = () => {
       itemName: '製品h',
     },
   ])
+
+  const todayValue = toDateValue(new Date())
+  const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
+  const [showWoCalendar, setShowWoCalendar] = useState(false)
+  const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(todayValue))
+
+  const openWoDatePicker = () => {
+    setWoCalendarMonth(parseDateValue(woDatePickerValue))
+    setShowWoCalendar((current) => !current)
+  }
+
+  const changeWoCalendarMonth = (amount: number) => {
+    setWoCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() + amount, 1))
+  }
+
+  const selectWoDate = (value: string) => {
+    setWoDatePickerValue(value)
+    setWoCalendarMonth(parseDateValue(value))
+    setShowWoCalendar(false)
+  }
+
+  const calendarDays = getCalendarDays(woCalendarMonth)
+  const calendarMonthLabel = woCalendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
 
   const [showDeleteSelectedConfirm, setShowDeleteSelectedConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
@@ -246,7 +303,69 @@ const WorkOrderTimeRegistration = () => {
 
                   <div className='wot-info-grid'>
                     <label className='wot-grid-label wot-bg-blue'>日付</label>
-                    <input className='wot-grid-value' type='date' defaultValue={new Date().toISOString().split('T')[0]} />
+                    <div className='hand-date-field'>
+                      <input
+                        readOnly
+                        className='wot-grid-value'
+                        value={formatWoDate(woDatePickerValue)}
+                        onClick={openWoDatePicker}
+                        style={{ cursor: 'pointer' }}
+                      />
+                      <button
+                        type='button'
+                        className='hand-date-btn'
+                        aria-label='Choose date'
+                        onClick={openWoDatePicker}
+                      >
+                        <FaRegCalendarAlt />
+                      </button>
+                      {showWoCalendar && (
+                        <div className='hand-calendar' role='dialog' aria-label='Choose date'>
+                          <div className='hand-calendar-header'>
+                            <button type='button' onClick={() => changeWoCalendarMonth(-1)}>{'<'}</button>
+                            <span>{calendarMonthLabel}</span>
+                            <button type='button' onClick={() => changeWoCalendarMonth(1)}>{'>'}</button>
+                          </div>
+                          <div className='hand-calendar-weekdays'>
+                            {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
+                              <span key={day}>{day}</span>
+                            ))}
+                          </div>
+                          <div className='hand-calendar-days'>
+                            {calendarDays.map(({ date, value, inMonth }) => (
+                              <button
+                                type='button'
+                                key={value}
+                                className={[
+                                  'hand-calendar-day',
+                                  inMonth ? '' : 'hand-calendar-muted',
+                                  value === woDatePickerValue ? 'hand-calendar-selected' : '',
+                                ].filter(Boolean).join(' ')}
+                                onClick={() => selectWoDate(value)}
+                              >
+                                {date.getDate()}
+                              </button>
+                            ))}
+                          </div>
+                          <div className='hand-calendar-footer'>
+                            <button
+                              type='button'
+                              className='hand-calendar-btn-today'
+                              onClick={() => selectWoDate(toDateValue(new Date()))}
+                            >
+                              今日
+                            </button>
+                            <button
+                              type='button'
+                              className='hand-calendar-btn-clear'
+                              onClick={() => selectWoDate('')}
+                            >
+                              クリア
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className='wot-info-grid'>
