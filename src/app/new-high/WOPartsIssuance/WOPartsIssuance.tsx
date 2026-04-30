@@ -162,9 +162,10 @@ const WOPartsIssuance = () => {
     office: '',
     janCode: '',
   })
+  const [showDetailConfirm, setShowDetailConfirm] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
+  const [showRegistration, setShowRegistration] = useState(false)
+  const [showPrinting, setShowPrinting] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
@@ -174,19 +175,21 @@ const WOPartsIssuance = () => {
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
     showHandInputConfirm ||
-    showDeleteConfirm ||
-    showNoSelectionConfirm ||
+    showRegistration ||
+    showPrinting ||
     showClearConfirm ||
     showCompleteConfirm ||
     showBackConfirm
 
   const closeAllModals = () => {
     setShowHandInputConfirm(false)
-    setShowDeleteConfirm(false)
-    setShowNoSelectionConfirm(false)
+    setShowRegistration(false)
+    setShowPrinting(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
     setShowBackConfirm(false)
+    setShowDetailConfirm(false)
+
   }
 
 
@@ -227,7 +230,7 @@ const WOPartsIssuance = () => {
     const keywords = form.woNumber
       .split(/[,\.\u3001]+/)
       .map((v) => v.trim().toUpperCase())
-      .filter(Boolean)
+      .filter((v) => v.length > 0)
 
     if (keywords.length === 0) {
       setRows(sourceRowsRef.current)
@@ -412,20 +415,20 @@ const WOPartsIssuance = () => {
               </button>
               <button
                 className='set-btn set-danger'
-                onClick={() => setShowClearConfirm(true)}
+                onClick={() => setShowRegistration(true)}
               >
                 出庫登録
               </button>
               <button
                 className='set-btn set-primary'
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={() => setShowPrinting(true)}
                 style={{fontSize: '35px'}}
               >
                 出庫票印刷
               </button>   
               <button
                 className='set-btn set-primary set-hand-input-btn'
-                onClick={() => navigate('/factory/wo-parts-issuance-detail')}
+                onClick={() => setShowDetailConfirm(true)}
               >
                 明細確認
               </button>
@@ -467,22 +470,23 @@ const WOPartsIssuance = () => {
             )}
 
 
-            {showDeleteConfirm && (
+            {showRegistration && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>登録しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
-                        setShowDeleteConfirm(false)
+                        setShowRegistration(false)
                       }}
                     >
                       {'\u306f\u3044'}
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowDeleteConfirm(false)}
+                      onClick={() => setShowRegistration(false)}
                     >
                       {'\u3044\u3044\u3048'}
                     </button>
@@ -491,41 +495,23 @@ const WOPartsIssuance = () => {
               </div>
             )}
 
-            {showNoSelectionConfirm && (
+            {showPrinting && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>印刷しますか？</div>
                   <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowNoSelectionConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showClearConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
-                  <div className='set-modal-actions'>
-                    <button
+                   <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
-                        setShowClearConfirm(false)
-                        clearFormAndRows()
+                        setShowPrinting(false)
                       }}
                     >
                       {'\u306f\u3044'}
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowClearConfirm(false)}
+                      onClick={() => setShowPrinting(false)}
                     >
                       {'\u3044\u3044\u3048'}
                     </button>
@@ -534,22 +520,32 @@ const WOPartsIssuance = () => {
               </div>
             )}
 
-            {showCompleteConfirm && (
+            {showDetailConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>詳細を確認しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
+                      onClick={() => {
+                        setShowDetailConfirm(false)
+                        navigate('/factory/wo-parts-issuance-detail')
+                      }}
                     >
-                      {'\u004f\u004b'}
+                      はい
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => setShowDetailConfirm(false)}
+                    >
+                      いいえ
                     </button>
                   </div>
                 </div>
               </div>
             )}
+
 
             {showBackConfirm && (
               <div className='set-modal-backdrop' role='presentation'>

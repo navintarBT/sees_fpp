@@ -50,6 +50,8 @@ const MainPage = () => {
         <Route path='wo-parts-issuance-hand-input' element={<WOPartsIssuanceHandInputPage />} />
         <Route path='button-access' element={<ButtonAccess />} />
         <Route path='wo-parts-issuance-detail' element={<WOPartsIssuanceDetail />} />
+        <Route path='work-order-completion' element={<WorkOrderCompletion />} />
+        <Route path='work-order-time-registration' element={<WorkOrderTimeRegistration />} />
       </Route>
     </Routes>
   )

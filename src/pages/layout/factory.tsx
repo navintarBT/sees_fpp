@@ -8,8 +8,8 @@ const Factory = () => {
     { label: '入荷工程登録', path: '', className: 'mockup-blue' },
     { label: '棚移動', path: '', className: 'mockup-green' },
     { label: '作業オーダー部品払出', path: '/factory/button-access', className: 'mockup-yellow' },
-    { label: '作業オーダー実績時間登録', path: '/factory/workOrderTimeRegistration', className: 'mockup-gray' },
-    { label: '作業オーダー完了機', path: '/factory/set-return-configuration', className: 'mockup-orange' },
+    { label: '作業オーダー実績時間登録', path: '/factory/work-order-time-registration', className: 'mockup-gray' },
+    { label: '作業オーダー完了', path: '/factory/work-order-completion', className: 'mockup-orange' },
     { label: '出荷実績登録', path: '', className: 'mockup-pink' },
 
   ] as const

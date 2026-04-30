@@ -37,6 +37,7 @@ const WOPartsIssuanceHandInputPage = () => {
   const [moveStorage, setMoveStorage] = useState('10')
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const tableColumns: Array<TFTableColumn<Row>> = [
     {key: 'Interior', headClassName: 'col-Interior', cellClassName: 'col-Interior', header: '庫内ﾗﾍﾞﾙ', render: (row) => row.Interior},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
@@ -82,9 +83,11 @@ const WOPartsIssuanceHandInputPage = () => {
 
             <ActionFooter columns={3}>
               <button
-                className='set-btn set-danger'
+                className='set-btn set-success'
+                onClick={() => setShowHandInputConfirm(true)}
+
               >
-                {'\u7834\u68C4'}
+                出庫登録
               </button>
               <button
                 className='set-btn set-success'
@@ -100,6 +103,35 @@ const WOPartsIssuanceHandInputPage = () => {
               </button>
             </ActionFooter>
        </div>
+
+            {showHandInputConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>変更を確認しますか？</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowHandInputConfirm(false)
+                        navigate('')
+                      }}
+                    >
+                      はい
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => {
+                        setShowHandInputConfirm(false)
+                      }}
+                    >
+                      いいえ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )} 
+
             {showBackConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
