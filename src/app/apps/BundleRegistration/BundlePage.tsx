@@ -451,7 +451,7 @@ const BundlePage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/BundleHandInputPage')
+                        navigate('/factory/bundle-hand-input')
                       }}
                     >
                       はい

@@ -19,15 +19,15 @@ const MiscellaneousInAndOutBound = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録手入力</div>
+          <div className='set-header'>手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
-                <label>移動保管場所</label>
+                <label>倉庫</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
               </div>
               <div className='hand-row'>
-                <label>ロット</label>
+                <label>保管場所</label>
                 <input readOnly={!isEnabled} placeholder=' ' />
               </div>
               <div className='hand-row'>
@@ -41,19 +41,19 @@ const MiscellaneousInAndOutBound = () => {
                 </div>
               </div>
               <div className='hand-row'>
-                <label>品目No.(親)</label>
+                <label>品目No.</label>
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} style={{ backgroundColor: 'transparent' }} />
               </div>
               <div className='hand-row'>
-                <label>シリアル(親)</label>
+                <label>ロット</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} style={{ backgroundColor: 'transparent' }} />
               </div>
               <div className='hand-row'>
-                <label>移動保管場所</label>
+                <label>シリアル</label>
                 <input style={{ backgroundColor: 'transparent' }} />
               </div>
               <div className='hand-row' >
-                <label>移動保管場所</label>
+                <label>有効期限(yymm)</label>
                 <input style={{ backgroundColor: 'transparent' }} />
               </div>
             </div>
