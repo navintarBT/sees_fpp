@@ -117,7 +117,8 @@ const VehicleInboundPage = () => {
     },
   ])
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
+    number: '',
+    parentWarehouse: '',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
@@ -156,6 +157,7 @@ const VehicleInboundPage = () => {
   const clearRows = () => setRows([])
   const clearForm = () =>
     setForm({
+      number: '',
       parentWarehouse: '',
       parentItemNo: '',
       moveWarehouse: '',
@@ -281,15 +283,15 @@ const VehicleInboundPage = () => {
                   <div className='set-row'>
                     <label>出荷/発注No.</label>
                     <input
-                      value={form.parentItemNo}
-                      onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                      value={form.number}
+                      onChange={(e) => setForm({...form, number: e.target.value})}
                     />
                   </div>
                   <div className='set-row'>
                     <label>倉庫</label>
                     <select
-                      value={form.moveWarehouse}
-                      onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
+                      value={form.parentWarehouse}
+                      onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                     >
                       <option value=''></option>
                       <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>

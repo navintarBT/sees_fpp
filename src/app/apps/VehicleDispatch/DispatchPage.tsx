@@ -117,7 +117,7 @@ const DispatchPage = () => {
     },
   ])
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
+    parentWarehouse: '',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
@@ -282,8 +282,8 @@ const DispatchPage = () => {
                 <div className='set-row'>
                   <label>出荷No.</label>
                   <input
-                    value={form.parentItemNo}
-                    onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                    value={form.parentWarehouse}
+                    onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                   />
                 </div>
                 

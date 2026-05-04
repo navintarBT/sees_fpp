@@ -52,7 +52,7 @@ const EquipmentHandInputPage = () => {
               </div>
               <div className='hand-row hand-row-always'>
                 <label>品目No.</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロットシリアル</label>
