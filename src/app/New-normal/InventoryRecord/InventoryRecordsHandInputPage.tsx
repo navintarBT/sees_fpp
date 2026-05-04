@@ -1,8 +1,8 @@
-import {useState} from 'react'
+﻿import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
-const VehicleInboundHandInputPage = () => {
+const InventoryRecordsHandInputPage = () => {
   const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
@@ -11,6 +11,9 @@ const VehicleInboundHandInputPage = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+
+
+
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
@@ -21,7 +24,7 @@ const VehicleInboundHandInputPage = () => {
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
-                <label>倉庫</label>
+                <label>倉庫（親）</label>
                 <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
@@ -30,46 +33,44 @@ const VehicleInboundHandInputPage = () => {
                 </select>
               </div>
               <div className='hand-row'>
-                <label>保管場所</label>
+                <label>品目No.(親)</label>
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
-              <div className='hand-row hand-form-disabled'>
-                <label>ロット状況</label>
-                <select
-                  value={parentWarehouse}
-                  disabled
-                  style={{ background: '#e5e7eb', color: '#111827' }}
-                  onChange={(e) => setParentWarehouse(e.target.value)}
-                >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+              <div className='hand-row'>
+                <label>シリアル(親)</label>
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+              </div>
+              <div className='hand-row'>
+                <label>移動倉庫</label>
+                <select disabled={!isEnabled}>
+                  <option>千葉倉庫（WMS）：W002</option>
+                  <option>千葉倉庫（WMS）：W003</option>
+                  <option>千葉倉庫（WMS）：W004</option>
                 </select>
               </div>
-              <div className='hand-row hand-row-always'>
+              <div className='hand-row'>
+                <label>移動保管場所</label>
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
+              </div>
+              <div className='hand-row '>
                 <label>数量</label>
-                <input value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
               </div>
-              <div className='hand-row hand-row-always'>
+              <div className='hand-row'>
                 <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                <input readOnly={!isEnabled} placeholder=' ' />
               </div>
-              <div className='hand-row hand-row-always'>
+              <div className='hand-row'>
                 <label>ロット</label>
-                <input value={parentSerial}onChange={(e) => setParentSerial(e.target.value)} />
+                <input readOnly={!isEnabled} placeholder=' ' />
               </div>
-              <div className='hand-row hand-row-always'>
+              <div className='hand-row'>
                 <label>シリアル</label>
-                <input placeholder=' ' />
-              </div>
-              <div className='hand-row hand-row-always'>
-                <label>有効期限(yymm)</label>
-                <input placeholder=' ' />
+                <input readOnly={!isEnabled} placeholder=' ' />
               </div>
             </div>
 
-            <ActionFooter columns={4}>
+            <ActionFooter columns={5}>
               <button
                 className='set-btn set-danger'
                 style={{ visibility: 'hidden' }}
@@ -82,6 +83,12 @@ const VehicleInboundHandInputPage = () => {
                 style={{ visibility: 'hidden' }}
               >
                 {'\u89E3\u9664'}
+              </button>
+              <button
+                className='set-btn set-primary'
+                style={{ visibility: 'hidden' }}
+              >
+                {'\u624b\u5165\u529b'}
               </button>
               <button
                 className='set-btn set-warning'
@@ -124,7 +131,7 @@ const VehicleInboundHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/inbound')
+                        navigate('/factory/set-register')
                       }}
                     >
                       {'\u306f\u3044'}
@@ -146,4 +153,4 @@ const VehicleInboundHandInputPage = () => {
   )
 }
 
-export {VehicleInboundHandInputPage}
+export {InventoryRecordsHandInputPage}

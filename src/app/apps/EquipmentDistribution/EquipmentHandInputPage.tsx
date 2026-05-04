@@ -20,7 +20,7 @@ const EquipmentHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>備品振分手入力</div>
+          <div className='set-header'>備品振分登録手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
@@ -34,19 +34,25 @@ const EquipmentHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>TO倉庫</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                {/* <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} /> */}
+                 <select value={parentWarehouse} onChange={(e) => setParentItem(e.target.value)}>
+                  <option value=''></option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：AA001</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：AA002</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：AA003</option>
+                </select>
               </div>
               <div className='hand-row'>
                 <label>保管場所</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>数量</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                <input value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>品目No.</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロットシリアル</label>

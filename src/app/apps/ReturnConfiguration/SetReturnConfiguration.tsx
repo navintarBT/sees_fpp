@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+﻿import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaPlay } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
@@ -193,7 +193,7 @@ const SetReturnConfiguration = () => {
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
-    qty: '',
+    qty: '1',
     janCode: '',
   })
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -347,7 +347,6 @@ const SetReturnConfiguration = () => {
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
-    { key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error },
     { key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item },
     { key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot },
     { key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '構成', render: (row) => row.status },
@@ -407,19 +406,21 @@ const SetReturnConfiguration = () => {
                 <label>数量</label>
                 <input
                   value={form.qty}
-                  readOnly={!isEnabled} placeholder=' '
+                  readOnly={!isEnabled}
                   onChange={(e) => setForm({ ...form, qty: e.target.value })}
                   className='set-small set-input-gray'
+                  style={{ backgroundColor: '#e5e7eb' }}
                 />
               </div>
 
-              <div className='set-row nocolorbackground'>
+              <div className='set-row'>
                 <label>JANコード</label>
                 <input
                   value={form.janCode}
-                  readOnly={!isEnabled} placeholder=' '
+                  readOnly={!isEnabled}
                   onChange={(e) => setForm({ ...form, janCode: e.target.value })}
                   className='set-input-gray'
+                  style={{ backgroundColor: '#e5e7eb' }}
                 />
               </div>
             </div>
@@ -427,6 +428,7 @@ const SetReturnConfiguration = () => {
             <TableSection
               columns={tableColumns}
               rows={rows}
+              gridClassName='set-return-configuration-table'
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
@@ -450,7 +452,7 @@ const SetReturnConfiguration = () => {
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
               >
-                解除
+                削除
               </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'

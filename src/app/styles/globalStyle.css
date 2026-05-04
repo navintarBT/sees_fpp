@@ -1180,3 +1180,9 @@
 .woPartsIssuanceDetail-table .col-office{
   min-width: 250px;
 }
+
+/* ####################################table WOPartsIssuanceDetail########################################### */
+
+.set-return-configuration-table .col-lot{
+min-width: 300px;
+}

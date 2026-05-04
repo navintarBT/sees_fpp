@@ -162,7 +162,7 @@ const BundlePage = () => {
   ])
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '0193090',
+    parentItemNo: '',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
     qty: '1',
@@ -322,7 +322,7 @@ const BundlePage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録</div>
+          <div className='set-header'>販売セット登録</div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
@@ -352,8 +352,8 @@ const BundlePage = () => {
               <div className='set-row set-row-inline'>
                 <label>保管場所</label>
                 <input
-                  value={form.moveStorage}
-                  onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                  value={form.parentItemNo}
+                  onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                   className='set-small'
                 />
                 <span className='set-inline-label'>数量</span>
@@ -397,7 +397,7 @@ const BundlePage = () => {
               </div>
             
               <div className='set-row'>
-                <label>移動保管場所</label>
+                <label>理由</label>
                 <input
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
