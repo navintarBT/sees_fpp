@@ -23,7 +23,7 @@ const initialRows: Row[] = [
     reqNumber: '10',
     storage: 'LOC-001',
     lot: 'LOT-0130',
-    numOfShipments: '000000000001',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
@@ -33,117 +33,117 @@ const initialRows: Row[] = [
     reqNumber: '10',
     storage: 'LOC-002',
     lot: 'LOT-0131',
-    numOfShipments: '000000000002',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
-    {
-    id: 2,
+  {
+    id: 3,
     woNumber: 'WO-002',
     partNumber: '部品002',
     reqNumber: '10',
     storage: 'LOC-002',
     lot: 'LOT-0131',
-    numOfShipments: '000000000002',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 3,
+    id: 4,
     woNumber: 'WO-003',
     partNumber: '部品003',
     reqNumber: '10',
     storage: 'LOC-003',
     lot: 'LOT-0132',
-    numOfShipments: '000000000003',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 4,
+    id: 5,
     woNumber: 'WO-004',
     partNumber: '部品004',
     reqNumber: '10',
     storage: 'LOC-004',
     lot: 'LOT-0134',
-    numOfShipments: '000000000004',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 5,
+    id: 6,
     woNumber: 'WO-005',
     partNumber: '部品005',
     reqNumber: '10',
     storage: 'LOC-005',
     lot: 'LOT-0135',
-    numOfShipments: '000000000005',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 6,
+    id: 7,
     woNumber: 'WO-006',
     partNumber: '部品006',
     reqNumber: '10',
     storage: 'LOC-006',
     lot: 'LOT-0136',
-    numOfShipments: '000000000006',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 7,
+    id: 8,
     woNumber: 'WO-007',
     partNumber: '部品007',
     reqNumber: '10',
     storage: 'LOC-007',
     lot: 'LOT-0137',
-    numOfShipments: '000000000007',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 8,
+    id: 9,
     woNumber: 'WO-008',
     partNumber: '部品008',
     reqNumber: '10',
     storage: 'LOC-008',
     lot: 'LOT-0138',
-    numOfShipments: '000000000008',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 9,
+    id: 10,
     woNumber: 'WO-009',
     partNumber: '部品009',
     reqNumber: '10',
     storage: 'LOC-009',
     lot: 'LOT-0139',
-    numOfShipments: '000000000009',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 10,
+    id: 11,
     woNumber: 'WO-010',
     partNumber: '部品010',
     reqNumber: '10',
     storage: 'LOC-010',
     lot: 'LOT-0140',
-    numOfShipments: '000000000010',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 11,
+    id: 12,
     woNumber: 'WO-011',
     partNumber: '部品011',
     reqNumber: '10',
     storage: 'LOC-011',
     lot: 'LOT-0141',
-    numOfShipments: '000000000011',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
   {
-    id: 12,
+    id: 13,
     woNumber: 'WO-012',
     partNumber: '部品012',
     reqNumber: '10',
     storage: 'LOC-012',
     lot: 'LOT-0142',
-    numOfShipments: '000000000012',
+    numOfShipments: '',
     office: 'Fxxxxxxxx',
   },
 ]
@@ -173,6 +173,7 @@ const ShelfTransfer = () => {
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const sourceRowsRef = useRef<Row[]>(initialRows)
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
+  const [selectedWarehouse, setSelectedWarehouse] = useState<string>('')
   const isAnyModalOpen =
     showHandInputConfirm ||
     showRegistration ||
@@ -180,6 +181,15 @@ const ShelfTransfer = () => {
     showClearConfirm ||
     showCompleteConfirm ||
     showBackConfirm
+
+  // โหลดข้อมูลทันทีเมื่อ component mount
+  useEffect(() => {
+    const allRows = sourceRowsRef.current.map(row => ({
+      ...row,
+      numOfShipments: ''
+    }))
+    setRows(allRows)
+  }, [])
 
   const closeAllModals = () => {
     setShowHandInputConfirm(false)
@@ -189,9 +199,7 @@ const ShelfTransfer = () => {
     setShowCompleteConfirm(false)
     setShowBackConfirm(false)
     setShowDetailConfirm(false)
-
   }
-
 
   const clearRows = () => setRows([])
   const clearForm = () =>
@@ -227,22 +235,46 @@ const ShelfTransfer = () => {
   }
 
   const handleSearchWoNumber = () => {
-    const keywords = form.woNumber
-      .split(/[,\.\u3001]+/)
-      .map((v) => v.trim().toUpperCase())
-      .filter((v) => v.length > 0)
-
-    if (keywords.length === 0) {
-      setRows(sourceRowsRef.current)
-      return
-    }
-
-    const keywordSet = new Set(keywords)
-    const matchedRows = sourceRowsRef.current
-      .filter((row) => keywordSet.has(row.woNumber.toUpperCase()))
-
-    setRows(matchedRows)
+    const allRows = sourceRowsRef.current.map(row => ({
+      ...row,
+      numOfShipments: ''
+    }))
+    setRows(allRows)
     setActiveRowId(null)
+    setSelectedWarehouse('')
+  }
+
+  // 倉庫選択時の処理
+  const handleWarehouseSelect = (warehouseValue: string) => {
+    setSelectedWarehouse(warehouseValue)
+    if (warehouseValue && activeRowId !== null) {
+      setRows(prevRows => 
+        prevRows.map(row => 
+          row.id === activeRowId 
+            ? { ...row, numOfShipments: warehouseValue }
+            : row
+        )
+      )
+    }
+  }
+
+  // 行選択時の処理
+  const handleRowActivate = (rowKey: string | number) => {
+    const selectedRow = rows.find((row) => row.id === Number(rowKey))
+    if (!selectedRow) return
+    setActiveRowId(selectedRow.id)
+    setForm((prev) => ({
+      ...prev,
+      internalLabel: selectedRow.woNumber,
+      shipmentQty: selectedRow.reqNumber,
+      storage: selectedRow.storage,
+      office: selectedRow.office,
+    }))
+    if (selectedRow.numOfShipments) {
+      setSelectedWarehouse(selectedRow.numOfShipments)
+    } else {
+      setSelectedWarehouse('')
+    }
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -253,7 +285,6 @@ const ShelfTransfer = () => {
       return
     }
   }
-
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -298,7 +329,6 @@ const ShelfTransfer = () => {
         setShowBackConfirm(true)
         return
       }
-
     }
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === 'F1') {
@@ -317,7 +347,7 @@ const ShelfTransfer = () => {
   }, [isAnyModalOpen])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
-       {
+    {
       key: 'arrow',
       headClassName: 'col-arrow-head',
       cellClassName: 'col-arrow',
@@ -329,8 +359,7 @@ const ShelfTransfer = () => {
     {key: 'reqNumber', headClassName: 'col-reqNumber', cellClassName: 'col-reqNumber', header: 'ロットシリアル', render: (row) => row.reqNumber},
     {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '移動数', render: (row) => row.storage},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '品名', render: (row) => row.lot},
-    {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '先保管場所', render: (row) => row.numOfShipments},
-    
+    {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '先保管場所', render: (row) => row.numOfShipments || ''},
   ]
 
   return (
@@ -340,16 +369,15 @@ const ShelfTransfer = () => {
           <div className='set-header'>棚移動登録</div>
           <div className='set-body'>
             <div className='set-form'>
-                        <div className='set-row'>
+              <div className='set-row'>
                 <label>品目No.</label>  
                 <input
                   value={form.internalLabel}
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                 />
               </div>
-                           <div className='set-row'>
-                <label>倉庫
-</label>
+              <div className='set-row'>
+                <label>倉庫</label>
                 <select
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
@@ -362,12 +390,7 @@ const ShelfTransfer = () => {
               </div>
               <div className='set-row set-row-wo'>
                 <label>保管場所</label>
-                {/* <input
-                  value={form.woNumber}
-                  onChange={(e) => setForm({...form, woNumber: e.target.value})}
-                  className='set-small'
-                /> */}
-                      <select
+                <select
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                 >
@@ -377,16 +400,14 @@ const ShelfTransfer = () => {
                   <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                 </select>
                 <button
-                className='set-search-btn set-success'
-                onClick={handleSearchWoNumber}
-              >
-                一括
-              </button>
+                  className='set-search-btn set-success'
+                  onClick={handleSearchWoNumber}
+                >
+                  一括
+                </button>
               </div>
-      
               <div className='set-row'>
-                <label>品名
-</label>
+                <label>品名</label>
                 <input
                   value={form.shipmentQty}
                   onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
@@ -399,36 +420,18 @@ const ShelfTransfer = () => {
                   onChange={(e) => setForm({...form, storage: e.target.value})}
                 />
               </div>
-              {/* <div className='set-row'>
-                <label>事業所</label>
+              <div className='set-row set-row-wo'>
+                <label>移動数量</label>
                 <input
                   value={form.office}
                   onChange={(e) => setForm({...form, office: e.target.value})}
                 />
-              </div> */}
-                            <div className='set-row set-row-wo'>
-                <label>移動数量
-</label>
-                {/* <input
-                  value={form.woNumber}
-                  onChange={(e) => setForm({...form, woNumber: e.target.value})}
-                  className='set-small'
-                /> */}
-                      <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
-                </select>
                 <button
-                className='set-search-btn set-primary'
-                onClick={handleSearchWoNumber}
-              >
-                EA
-              </button>
+                  className='set-search-btn set-primary'
+                  onClick={handleSearchWoNumber}
+                >
+                  EA
+                </button>
               </div>
             </div>
 
@@ -439,190 +442,170 @@ const ShelfTransfer = () => {
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               gridClassName='ShelfTransfer-table'
-              onRowActivate={(rowKey) => {
-                const selectedRow = rows.find((row) => row.id === Number(rowKey))
-                if (!selectedRow) return
-                setActiveRowId(selectedRow.id)
-                setForm((prev) => ({
-                  ...prev,
-                  internalLabel: selectedRow.woNumber,
-                  shipmentQty: selectedRow.reqNumber,
-                  storage: selectedRow.storage,
-                  office: selectedRow.office,
-                }))
-              }}
+              onRowActivate={handleRowActivate}
             />
 
             <ActionFooter columns={4}>
               <button
-                className='set-btn set-primary set-success'
-
+                className='set-btn set-danger'
                 onClick={() => handleReleaseClick({forceHandInput: true})}
               >
                 破棄
               </button>
               <button
-                className='set-btn set-danger'
+                className='set-btn set-warning'
                 onClick={() => setShowRegistration(true)}
               >
-                完了
+                {activeRowId === null ? '移動元登録完了' : '完了'}
               </button>
+              
               <button
                 className='set-btn set-primary'
                 onClick={() => setShowPrinting(true)}
-                style={{fontSize: '35px'}}
+                style={{fontSize: '35px', visibility: activeRowId === null ? 'hidden' : 'visible'}}
               >
                 登録
-              </button>   
-              {/* <button
-                className='set-btn set-primary set-hand-input-btn'
-                onClick={() => setShowDetailConfirm(true)}
-              >
-                明細確認
-              </button> */}
+              </button>
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success '
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
-
               </button>
             </ActionFooter>
           </div>
-            {showHandInputConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>変更を確認しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                        navigate('')
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
-                    >
-                      いいえ
-                    </button>
-                  </div>
+          {showHandInputConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>変更を確認しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowHandInputConfirm(false)
+                      navigate('')
+                    }}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => {
+                      setShowHandInputConfirm(false)
+                    }}
+                  >
+                    いいえ
+                  </button>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-
-            {showRegistration && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>登録しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowRegistration(false)
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowRegistration(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
+          {showRegistration && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>登録しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowRegistration(false)
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowRegistration(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {showPrinting && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>印刷しますか？</div>
-                  <div className='set-modal-actions'>
-                   <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowPrinting(false)
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowPrinting(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
+          {showPrinting && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>印刷しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowPrinting(false)
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowPrinting(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {showDetailConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>詳細を確認しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowDetailConfirm(false)
-                        navigate('/factory/wo-parts-issuance-detail')
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowDetailConfirm(false)}
-                    >
-                      いいえ
-                    </button>
-                  </div>
+          {showDetailConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>詳細を確認しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowDetailConfirm(false)
+                      navigate('/factory/wo-parts-issuance-detail')
+                    }}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowDetailConfirm(false)}
+                  >
+                    いいえ
+                  </button>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-
-            {showBackConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowBackConfirm(false)
-                        navigate('/factory/button-access')
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
+          {showBackConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      navigate('/factory/factory')
+                    }}
+                  >
+                    {'\u306f\u3044'}
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowBackConfirm(false)}
+                  >
+                    {'\u3044\u3044\u3048'}
+                  </button>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
+    </div>
   )
 }
 
