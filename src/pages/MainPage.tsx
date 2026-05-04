@@ -24,8 +24,7 @@ import { WOPartsIssuanceDetail } from '../app/new-high/WOPartsIssuance/WOPartsIs
 import { ButtonAccess } from '../app/new-high/WOPartsIssuance/ButtonAccess'
 import { WorkOrderTimeRegistration } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistration'
 import { InventoryRecordsPage } from '../app/New-normal/InventoryRecord/InventoryRecordsPage'
-
-
+import { ShelfTransfer } from '../app/New-normal/ShelfTransfer/ShelfTransfer'
 const MainPage = () => {
   return (
     <Routes>
@@ -55,6 +54,7 @@ const MainPage = () => {
         <Route path='work-order-completion' element={<WorkOrderCompletion />} />
         <Route path='work-order-time-registration' element={<WorkOrderTimeRegistration />} />
         <Route path='inventory-records' element={<InventoryRecordsPage />} />
+        <Route path='shelf-transfer' element={<ShelfTransfer />} />
       </Route>
     </Routes>
   )

@@ -6,7 +6,7 @@ const Factory = () => {
   const factoryButtons = [
     { label: '入荷実績登録機能', path: '/factory/inventory-records', className: 'mockup-red' },
     { label: '入荷工程登録', path: '', className: 'mockup-blue' },
-    { label: '棚移動', path: '', className: 'mockup-green' },
+    { label: '棚移動', path: '/factory/shelf-transfer', className: 'mockup-green' },
     { label: '作業オーダー\n部品払出', path: '/factory/button-access', className: 'mockup-yellow' },
     { label: '作業オーダー\n実績時間登録', path: '/factory/work-order-time-registration', className: 'mockup-gray' },
     { label: '作業オーダー完了', path: '/factory/work-order-completion', className: 'mockup-orange' },
