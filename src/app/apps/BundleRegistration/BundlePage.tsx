@@ -397,7 +397,7 @@ const BundlePage = () => {
               </div>
             
               <div className='set-row'>
-                <label>移動保管場所</label>
+                <label>理由</label>
                 <input
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}

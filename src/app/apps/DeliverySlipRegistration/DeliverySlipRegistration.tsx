@@ -254,7 +254,7 @@ const DeliverySlipRegistration = () => {
                   setShowDeleteRowConfirm(true)
                 }}
               >
-                に修正
+                削除
               </button>
               <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>
                 戻る

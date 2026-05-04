@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+﻿import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaPlay } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
@@ -193,7 +193,7 @@ const SetReturnConfiguration = () => {
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
-    qty: '',
+    qty: '1',
     janCode: '',
   })
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -428,6 +428,7 @@ const SetReturnConfiguration = () => {
             <TableSection
               columns={tableColumns}
               rows={rows}
+              gridClassName='set-return-configuration-table'
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
