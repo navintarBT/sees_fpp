@@ -406,19 +406,21 @@ const SetReturnConfiguration = () => {
                 <label>数量</label>
                 <input
                   value={form.qty}
-                  readOnly={!isEnabled} placeholder=' '
+                  readOnly={!isEnabled}
                   onChange={(e) => setForm({ ...form, qty: e.target.value })}
                   className='set-small set-input-gray'
+                  style={{ backgroundColor: '#e5e7eb' }}
                 />
               </div>
 
-              <div className='set-row nocolorbackground'>
+              <div className='set-row'>
                 <label>JANコード</label>
                 <input
                   value={form.janCode}
-                  readOnly={!isEnabled} placeholder=' '
+                  readOnly={!isEnabled}
                   onChange={(e) => setForm({ ...form, janCode: e.target.value })}
                   className='set-input-gray'
+                  style={{ backgroundColor: '#e5e7eb' }}
                 />
               </div>
             </div>
