@@ -57,7 +57,7 @@ const MainPage = () => {
         <Route path='work-order-time-registration' element={<WorkOrderTimeRegistration />} />
         <Route path='inventory-records' element={<InventoryRecordsPage />} />
         <Route path='shelf-transfer' element={<ShelfTransfer />} />
-        <Route path='shelf-transfer' element={<IncomingProcessRegistration />} />
+        <Route path='incoming-process-registration' element={<IncomingProcessRegistration />} />
       </Route>
     </Routes>
   )
