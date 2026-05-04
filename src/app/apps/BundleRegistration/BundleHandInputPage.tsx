@@ -81,7 +81,7 @@ const BundleHandInputPage = () => {
                 </div>
                 </div>
               <div className='hand-row hand-row-always'>
-                <label>有効期限(yymm)</label>
+                <label>有効日付(yymm)</label>
                 <input placeholder=' ' />
               </div>
             </div>

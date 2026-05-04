@@ -20,7 +20,7 @@ const EquipmentHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>備品振分手入力</div>
+          <div className='set-header'>備品振分登録手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
@@ -46,13 +46,13 @@ const EquipmentHandInputPage = () => {
                 <label>保管場所</label>
                 <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
                 <label>数量</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                <input value={quantity}  onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>品目No.</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                <input value={parentSerial} onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロットシリアル</label>

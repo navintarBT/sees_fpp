@@ -124,12 +124,11 @@ const MiscellaneousInAndOutBound = () => {
                 <label>有効期限</label>
                 <div className='hand-date-field'>
                   <input
-                    readOnly
                     value={formatExpirationDate(datePickerValue)}
                     onClick={openDatePicker}
                     style={{ backgroundColor: 'transparent', cursor: 'pointer', width: '100%' }}
                   />
-                  <button
+                  {/* <button
                     type='button'
                     className='hand-date-btn'
                     aria-label='Choose date'
@@ -184,7 +183,7 @@ const MiscellaneousInAndOutBound = () => {
                         </button>
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
