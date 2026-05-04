@@ -160,9 +160,9 @@ const SetMiscellaneousInAndOutBound = () => {
       moveStorage2: '棚J',
     },
     {
-      id: 10,
+      id: 11,
       error: 'E',
-      item: 'J10',
+      item: 'J11',
       lot: 'L10',
       status: '構成中',
       build: 6,
@@ -173,9 +173,9 @@ const SetMiscellaneousInAndOutBound = () => {
       moveStorage2: '棚J',
     },
     {
-      id: 10,
+      id: 12,
       error: 'E',
-      item: 'J10',
+      item: 'J12',
       lot: 'L10',
       status: '構成中',
       build: 6,
@@ -358,7 +358,7 @@ const SetMiscellaneousInAndOutBound = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>予定なし入出庫</div>
+          <div className='set-header'>予定なし入出庫登録</div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
@@ -424,7 +424,7 @@ const SetMiscellaneousInAndOutBound = () => {
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
               >
-                解除
+                削除
               </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'

@@ -4,7 +4,8 @@ import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
 const BundleHandInputPage = () => {
   const navigate = useNavigate()
-  const [parentWarehouse, setParentWarehouse] = useState('')
+  const [fromWarehouse, setFromWarehouse] = useState('')
+  const [toWarehouse, setToWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
@@ -12,22 +13,31 @@ const BundleHandInputPage = () => {
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
-  const isEnabled = parentWarehouse && parentItem && parentSerial
+  const isEnabled = fromWarehouse && toWarehouse && parentItem && parentSerial
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録手入力</div>
+          <div className='set-header'>販売セット登録手入力</div>
           <div className='hand-body'>
-            <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
+            <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled-a'}`}>
               <div className='hand-row'>
-                <label>倉庫</label>
-                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                <label>FR倉庫</label>
+                <select value={fromWarehouse} onChange={(e) => setFromWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
                   <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                </select>
+              </div>
+              <div className='hand-row'>
+                <label>TO倉庫</label>
+                <select value={toWarehouse} onChange={(e) => setToWarehouse(e.target.value)}>
+                  <option value=''></option>
+                  <option value='羽田製品補充倉庫：W0040'>羽田製品補充倉庫：W0040</option>
+                  <option value='羽田製品補充倉庫：W0041'>羽田製品補充倉庫：W0041</option>
+                  <option value='羽田製品補充倉庫：W0042'>羽田製品補充倉庫：W0042</option>
                 </select>
               </div>
               <div className='hand-row'>
@@ -36,19 +46,15 @@ const BundleHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>数量</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row'>
-                <label>品目No.</label>
+                <label>品目No</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
-                <label>ロット</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-              </div>
-              <div className='hand-row hand-row-always'>
-                <label>シリアル</label>
-                <input placeholder=' ' />
+                <label>ロットシリアル</label>
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='set-row'>
               <div className='set-radio-group bundle-group'>

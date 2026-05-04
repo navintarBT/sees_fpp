@@ -18,7 +18,7 @@ const DispatchHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録手入力</div>
+          <div className='set-header'>出庫実績登録手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
@@ -36,7 +36,7 @@ const DispatchHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>数量</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input value={quantity}onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
@@ -44,7 +44,7 @@ const DispatchHandInputPage = () => {
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロット</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                <input value={moveStorage} onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>シリアル</label>
