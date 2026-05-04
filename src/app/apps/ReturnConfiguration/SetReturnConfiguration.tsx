@@ -347,7 +347,6 @@ const SetReturnConfiguration = () => {
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
-    { key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error },
     { key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item },
     { key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot },
     { key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '構成', render: (row) => row.status },
@@ -450,7 +449,7 @@ const SetReturnConfiguration = () => {
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
               >
-                解除
+                削除
               </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'
