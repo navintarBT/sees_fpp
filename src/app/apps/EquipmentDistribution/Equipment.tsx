@@ -163,7 +163,7 @@ const Equipment = () => {
   ])
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '0193090',
+    parentItemNo: '',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
     qty: '1',
@@ -400,8 +400,8 @@ const Equipment = () => {
               <div className='set-row'>
                 <label>理由</label>
                 <input
-                  value={form.moveStorage}
-                  onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                  value={form.parentItemNo}
+                  onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
               </div>
             </div>

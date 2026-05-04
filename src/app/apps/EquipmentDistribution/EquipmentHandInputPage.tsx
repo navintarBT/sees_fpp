@@ -48,11 +48,11 @@ const EquipmentHandInputPage = () => {
               </div>
               <div className='hand-row hand-row-always'>
                 <label>数量</label>
-                <input value={quantity}  onChange={(e) => setMoveStorage(e.target.value)} />
+                <input value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>品目No.</label>
-                <input value={parentSerial} onChange={(e) => setQuantity(e.target.value)} />
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロットシリアル</label>

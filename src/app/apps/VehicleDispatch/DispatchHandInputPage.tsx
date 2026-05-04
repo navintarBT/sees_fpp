@@ -36,7 +36,7 @@ const DispatchHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>数量</label>
-                <input value={quantity}onChange={(e) => setParentSerial(e.target.value)} />
+                <input value={quantity}onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
@@ -44,7 +44,7 @@ const DispatchHandInputPage = () => {
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロット</label>
-                <input value={moveStorage} onChange={(e) => setQuantity(e.target.value)} />
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>シリアル</label>
