@@ -1,8 +1,8 @@
 ﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
-import {ActionFooter} from '../components/ActionFooter/ActionFooter'
-import {TableSection, type TableColumn as TFTableColumn} from '../components/TableSection/TableSection'
+import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 
 type Row = {
   id: number
@@ -26,7 +26,7 @@ type TableColumn = {
   render: (row: Row) => ReactNode
 }
 
-const SetRegisterPage = () => {
+const InventoryRecordsPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
     {
@@ -320,19 +320,15 @@ const SetRegisterPage = () => {
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '状態', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '構成数', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '解除数', render: (row) => row.release},
-    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '移動倉庫', render: (row) => row.move},
-    {
-      key: 'moveStorage',
-      headClassName: 'col-move',
-      cellClassName: 'col-move',
-      header: '移動保管場所',
-      render: (row) => row.moveStorage,
-    },
-    {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '削除', render: (row) => row.lot},
+    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: 'エラー', render: (row) => row.status},
+    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: 'ロットシリアル', render: (row) => row.build},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.release},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '倉庫', render: (row) => row.move},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '保管場所', render: (row) => row.move},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: 'ロット状況CD', render: (row) => row.move},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '削除ボタン', render: (row) => row.move},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '戻るボタン', render: (row) => row.move},
 
   ]
 
@@ -343,36 +339,12 @@ const SetRegisterPage = () => {
           <div className='set-header'>セット構成登録</div>
           <div className='set-body'>
             <div className='set-form'>
-              <div className='set-row'>
-                <label>倉庫（親）</label>
-                <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
-                </select>
-              </div>
-              <div className='set-row'>
-                <label>JANコード(親)</label>
+                <div className='set-row'>
+                <label>出荷/発注No/現品票No.</label>
                 <input
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
-              </div>
-              <div className='set-row'>
-                <label>移動倉庫</label>
-                <select
-                  value={form.moveWarehouse}
-                  onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
-                </select>
               </div>
               <div className='set-row'>
                 <label>移動倉庫</label>
@@ -393,6 +365,18 @@ const SetRegisterPage = () => {
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                 />
               </div>
+                <div className='set-row'>
+                <label>移動倉庫</label>
+                <select
+                  value={form.moveWarehouse}
+                  onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
+                >
+                  <option value=''></option>
+                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
+                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
+                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                </select>
+              </div>
 
               <div className='set-row'>
                 <label>数量</label>
@@ -403,6 +387,13 @@ const SetRegisterPage = () => {
                 />
               </div>
 
+              <div className='set-row'>
+                <label>JANコード</label>
+                <input
+                  value={form.janCode}
+                  onChange={(e) => setForm({...form, janCode: e.target.value})}
+                />
+              </div>
               <div className='set-row'>
                 <label>JANコード</label>
                 <input
@@ -599,4 +590,4 @@ const SetRegisterPage = () => {
   )
 }
 
-export {SetRegisterPage}
+export {InventoryRecordsPage}

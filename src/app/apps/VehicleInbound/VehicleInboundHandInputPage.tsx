@@ -36,9 +36,14 @@ const VehicleInboundHandInputPage = () => {
                 <label>保管場所</label>
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-form-disabled'>
                 <label>ロット状況</label>
-                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                <select
+                  value={parentWarehouse}
+                  disabled
+                  style={{ background: '#e5e7eb', color: '#111827' }}
+                  onChange={(e) => setParentWarehouse(e.target.value)}
+                >
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
@@ -47,7 +52,7 @@ const VehicleInboundHandInputPage = () => {
               </div>
               <div className='hand-row hand-row-always'>
                 <label>数量</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input value={quantity}  onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>品目No.</label>
@@ -55,7 +60,7 @@ const VehicleInboundHandInputPage = () => {
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロット</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
+                <input value={parentSerial}onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>シリアル</label>
