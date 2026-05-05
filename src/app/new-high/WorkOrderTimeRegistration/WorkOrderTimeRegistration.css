@@ -78,6 +78,14 @@ input.wot-grid-value {
     border-radius: 16px !important;
     color: white;
     border: none;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22), inset 0 2px 0 rgba(255, 255, 255, 0.18);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    letter-spacing: 0.04em;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.set-btnnew_high:active {
+    transform: translateY(-1px) !important;
 }
 
 .wot-radio-container {
