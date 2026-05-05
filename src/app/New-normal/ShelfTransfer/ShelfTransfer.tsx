@@ -6,145 +6,131 @@ import {TableSection, type TableColumn as TFTableColumn} from '../../components/
 
 type Row = {
   id: number
-  woNumber: string
-  partNumber: string
-  reqNumber: string
-  lot: string
-  numOfShipments: string
-  office: string
-  storage: string
+  source_location: string
+  item_no: string
+  transfer_qty: string
+  product_name: string
+  dest_location: string
+  lot_serial_no: string
 }
 
 const initialRows: Row[] = [
   {
     id: 1,
-    woNumber: 'WO-001',
-    partNumber: '部品001',
-    reqNumber: '10',
-    storage: 'LOC-001',
-    lot: 'LOT-0130',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0001',
+    item_no: '1197101',
+    lot_serial_no: '001',
+    transfer_qty: '10',
+    product_name: 'ITE-IR11ZZ',
+    dest_location: '',
   },
   {
     id: 2,
-    woNumber: 'WO-001',
-    partNumber: '部品002',
-    reqNumber: '10',
-    storage: 'LOC-002',
-    lot: 'LOT-0131',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0001',
+    item_no: '1197102',
+    lot_serial_no: '002',
+    transfer_qty: '20',
+    product_name: 'ITE-IR12ZZ',
+    dest_location: '',
   },
   {
     id: 3,
-    woNumber: 'WO-002',
-    partNumber: '部品002',
-    reqNumber: '10',
-    storage: 'LOC-002',
-    lot: 'LOT-0131',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0002',
+    item_no: '1197102',
+    lot_serial_no: '002',
+    transfer_qty: '30',
+    product_name: 'ITE-IR12ZZ',
+    dest_location: '',
   },
   {
     id: 4,
-    woNumber: 'WO-003',
-    partNumber: '部品003',
-    reqNumber: '10',
-    storage: 'LOC-003',
-    lot: 'LOT-0132',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0003',
+    item_no: '1197103',
+    lot_serial_no: '003',
+    transfer_qty: '40',
+    product_name: 'ITE-IR13ZZ',
+    dest_location: '',
   },
   {
     id: 5,
-    woNumber: 'WO-004',
-    partNumber: '部品004',
-    reqNumber: '10',
-    storage: 'LOC-004',
-    lot: 'LOT-0134',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0004',
+    item_no: '1197104',
+    lot_serial_no: '004',
+    transfer_qty: '50',
+    product_name: 'ITE-IR14ZZ',
+    dest_location: '',
   },
   {
     id: 6,
-    woNumber: 'WO-005',
-    partNumber: '部品005',
-    reqNumber: '10',
-    storage: 'LOC-005',
-    lot: 'LOT-0135',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0005',
+    item_no: '1197105',
+    lot_serial_no: '005',
+    transfer_qty: '60',
+    product_name: 'ITE-IR15ZZ',
+    dest_location: '',
   },
   {
     id: 7,
-    woNumber: 'WO-006',
-    partNumber: '部品006',
-    reqNumber: '10',
-    storage: 'LOC-006',
-    lot: 'LOT-0136',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0006',
+    item_no: '1197106',
+    lot_serial_no: '006',
+    transfer_qty: '70',
+    product_name: 'ITE-IR16ZZ',
+    dest_location: '',
   },
   {
     id: 8,
-    woNumber: 'WO-007',
-    partNumber: '部品007',
-    reqNumber: '10',
-    storage: 'LOC-007',
-    lot: 'LOT-0137',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0007',
+    item_no: '1197107',
+    lot_serial_no: '007',
+    transfer_qty: '80',
+    product_name: 'ITE-IR17ZZ',
+    dest_location: '',
   },
   {
     id: 9,
-    woNumber: 'WO-008',
-    partNumber: '部品008',
-    reqNumber: '10',
-    storage: 'LOC-008',
-    lot: 'LOT-0138',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0008',
+    item_no: '1197108',
+    lot_serial_no: '008',
+    transfer_qty: '90',
+    product_name: 'ITE-IR18ZZ',
+    dest_location: '',
   },
   {
     id: 10,
-    woNumber: 'WO-009',
-    partNumber: '部品009',
-    reqNumber: '10',
-    storage: 'LOC-009',
-    lot: 'LOT-0139',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0009',
+    item_no: '1197109',
+    lot_serial_no: '009',
+    transfer_qty: '100',
+    product_name: 'ITE-IR19ZZ',
+    dest_location: '',
   },
   {
     id: 11,
-    woNumber: 'WO-010',
-    partNumber: '部品010',
-    reqNumber: '10',
-    storage: 'LOC-010',
-    lot: 'LOT-0140',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0010',
+    item_no: '1197110',
+    lot_serial_no: '010',
+    transfer_qty: '110',
+    product_name: 'ITE-IR20ZZ',
+    dest_location: '',
   },
   {
     id: 12,
-    woNumber: 'WO-011',
-    partNumber: '部品011',
-    reqNumber: '10',
-    storage: 'LOC-011',
-    lot: 'LOT-0141',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0011',
+    item_no: '1197111',
+    lot_serial_no: '011',
+    transfer_qty: '120',
+    product_name: 'ITE-IR21ZZ',
+    dest_location: '',
   },
   {
     id: 13,
-    woNumber: 'WO-012',
-    partNumber: '部品012',
-    reqNumber: '10',
-    storage: 'LOC-012',
-    lot: 'LOT-0142',
-    numOfShipments: '',
-    office: 'Fxxxxxxxx',
+    source_location: 'WO-0012',
+    item_no: '1197112',
+    lot_serial_no: '012',
+    transfer_qty: '130',
+    product_name: 'ITE-IR22ZZ',
+    dest_location: '',
   },
 ]
 
@@ -152,15 +138,18 @@ const ShelfTransfer = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
+    parentWarehouse: '',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
-    woNumber: '',
+    source_location: '',
     internalLabel: '',
     shipmentQty: '',
-    storage: '',
+    lot_serial_no: '',
     office: '',
+    transfer_qty: '',
     janCode: '',
+    dest_location: '',
+    
   })
   const [showDetailConfirm, setShowDetailConfirm] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -174,6 +163,7 @@ const ShelfTransfer = () => {
   const sourceRowsRef = useRef<Row[]>(initialRows)
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const [selectedWarehouse, setSelectedWarehouse] = useState<string>('')
+
   const isAnyModalOpen =
     showHandInputConfirm ||
     showRegistration ||
@@ -182,11 +172,10 @@ const ShelfTransfer = () => {
     showCompleteConfirm ||
     showBackConfirm
 
-  // โหลดข้อมูลทันทีเมื่อ component mount
   useEffect(() => {
     const allRows = sourceRowsRef.current.map(row => ({
       ...row,
-      numOfShipments: ''
+      dest_location: '',
     }))
     setRows(allRows)
   }, [])
@@ -207,12 +196,14 @@ const ShelfTransfer = () => {
       parentWarehouse: '',
       parentItemNo: '',
       moveWarehouse: '',
-      woNumber: '',
+      source_location: '',
       internalLabel: '',
       shipmentQty: '',
-      storage: '',
+      lot_serial_no: '',
       office: '',
       janCode: '',
+      dest_location: '',
+      transfer_qty: '',
     })
 
   const resetTableScroll = () => {
@@ -234,44 +225,55 @@ const ShelfTransfer = () => {
     resetTableScroll()
   }
 
-  const handleSearchWoNumber = () => {
-    const allRows = sourceRowsRef.current.map(row => ({
-      ...row,
-      numOfShipments: ''
-    }))
-    setRows(allRows)
-    setActiveRowId(null)
-    setSelectedWarehouse('')
+  // ✅ UPDATED: ถ้าเลือก row → ใส่ให้แค่ row นั้น, ถ้าไม่เลือก → ใส่ให้ทุก row
+  const handleSearchsource_location = () => {
+    const selectedLocation = form.parentWarehouse
+
+    if (activeRowId !== null) {
+      // มีการเลือก row อยู่ → ใส่ค่าให้เฉพาะ row ที่เลือก
+      setRows(prevRows =>
+        prevRows.map(row =>
+          row.id === activeRowId
+            ? {...row, dest_location: selectedLocation}
+            : row
+        )
+      )
+    } else {
+      // ไม่ได้เลือก row → ใส่ค่าให้ทุก row
+      setRows(prevRows =>
+        prevRows.map(row => ({...row, dest_location: selectedLocation}))
+      )
+    }
   }
 
-  // 倉庫選択時の処理
   const handleWarehouseSelect = (warehouseValue: string) => {
     setSelectedWarehouse(warehouseValue)
     if (warehouseValue && activeRowId !== null) {
-      setRows(prevRows => 
-        prevRows.map(row => 
-          row.id === activeRowId 
-            ? { ...row, numOfShipments: warehouseValue }
+      setRows(prevRows =>
+        prevRows.map(row =>
+          row.id === activeRowId
+            ? {...row, dest_location: warehouseValue}
             : row
         )
       )
     }
   }
 
-  // 行選択時の処理
   const handleRowActivate = (rowKey: string | number) => {
     const selectedRow = rows.find((row) => row.id === Number(rowKey))
     if (!selectedRow) return
     setActiveRowId(selectedRow.id)
     setForm((prev) => ({
       ...prev,
-      internalLabel: selectedRow.woNumber,
-      shipmentQty: selectedRow.reqNumber,
-      storage: selectedRow.storage,
-      office: selectedRow.office,
+      internalLabel: selectedRow.item_no,
+      shipmentQty: selectedRow.product_name,
+      lot_serial_no: selectedRow.lot_serial_no,
+      transfer_qty: selectedRow.transfer_qty,
+      dest_location: selectedRow.dest_location,
+      
     }))
-    if (selectedRow.numOfShipments) {
-      setSelectedWarehouse(selectedRow.numOfShipments)
+    if (selectedRow.dest_location) {
+      setSelectedWarehouse(selectedRow.dest_location)
     } else {
       setSelectedWarehouse('')
     }
@@ -288,15 +290,11 @@ const ShelfTransfer = () => {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (isAnyModalOpen) {
-        return
-      }
-      if (event.key === 'F1') {
-        pressedKeysRef.current.f1 = true
-      }
-      if (event.key === 'F8') {
-        pressedKeysRef.current.f8 = true
-      }
+      if (isAnyModalOpen) return
+
+      if (event.key === 'F1') pressedKeysRef.current.f1 = true
+      if (event.key === 'F8') pressedKeysRef.current.f8 = true
+
       if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
         event.preventDefault()
         handleReleaseClick({forceHandInput: true})
@@ -309,20 +307,17 @@ const ShelfTransfer = () => {
         setShowClearConfirm(true)
         return
       }
-
       if (event.key === 'F2') {
         event.preventDefault()
         closeAllModals()
         setShowCompleteConfirm(true)
         return
       }
-
       if (event.key === 'F3') {
         event.preventDefault()
         handleReleaseClick({forceRelease: true})
         return
       }
-
       if (event.key === 'F4') {
         event.preventDefault()
         closeAllModals()
@@ -330,14 +325,12 @@ const ShelfTransfer = () => {
         return
       }
     }
+
     const onKeyUp = (event: KeyboardEvent) => {
-      if (event.key === 'F1') {
-        pressedKeysRef.current.f1 = false
-      }
-      if (event.key === 'F8') {
-        pressedKeysRef.current.f8 = false
-      }
+      if (event.key === 'F1') pressedKeysRef.current.f1 = false
+      if (event.key === 'F8') pressedKeysRef.current.f8 = false
     }
+
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
     return () => {
@@ -354,12 +347,12 @@ const ShelfTransfer = () => {
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
-    {key: 'woNumber', headClassName: 'col-woNumber', cellClassName: 'col-woNumber', header: '元保管場所', render: (row) => row.woNumber},
-    {key: 'partNumber', headClassName: 'col-partNumber', cellClassName: 'col-partNumber', header: '品目No', render: (row) => row.partNumber},
-    {key: 'reqNumber', headClassName: 'col-reqNumber', cellClassName: 'col-reqNumber', header: 'ロットシリアル', render: (row) => row.reqNumber},
-    {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '移動数', render: (row) => row.storage},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '品名', render: (row) => row.lot},
-    {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '先保管場所', render: (row) => row.numOfShipments || ''},
+    {key: 'source_location', headClassName: 'col-woNumber', cellClassName: 'col-woNumber', header: '元保管場所', render: (row) => row.source_location},
+    {key: 'item_no', headClassName: 'col-item_no', cellClassName: 'col-partNumber', header: '品目No', render: (row) => row.item_no},
+    {key: 'lot_serial_no', headClassName: 'col-reqNumber', cellClassName: 'col-reqNumber', header: 'ロットシリアル', render: (row) => row.lot_serial_no},
+    {key: 'transfer_qty', headClassName: 'col-storage', cellClassName: 'col-storage', header: '移動数', render: (row) => row.transfer_qty},
+    {key: 'product_name', headClassName: 'col-lot', cellClassName: 'col-lot', header: '品名', render: (row) => row.product_name},
+    {key: 'dest_location', headClassName: 'col-dest_location', cellClassName: 'col-dest_location', header: '先保管場所', render: (row) => row.dest_location || ''},
   ]
 
   return (
@@ -370,7 +363,7 @@ const ShelfTransfer = () => {
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
-                <label>品目No.</label>  
+                <label>品目No.</label>
                 <input
                   value={form.internalLabel}
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
@@ -395,13 +388,17 @@ const ShelfTransfer = () => {
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                 >
                   <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                  <option value='W0040'>W0040</option>
+                  <option value='W0041'>W0041</option>
+                  <option value='W0042'>W0042</option>
+                  <option value='W0043'>W0043</option>
+                  <option value='W0044'>W0044</option>
+                  <option value='W0045'>W0045</option>
+                  <option value='W0046'>W0046</option>
                 </select>
                 <button
                   className='set-search-btn set-success'
-                  onClick={handleSearchWoNumber}
+                  onClick={handleSearchsource_location}
                 >
                   一括
                 </button>
@@ -416,19 +413,19 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>ロットシリアル</label>
                 <input
-                  value={form.storage}
-                  onChange={(e) => setForm({...form, storage: e.target.value})}
+                  value={form.lot_serial_no}
+                  onChange={(e) => setForm({...form, lot_serial_no: e.target.value})}
                 />
               </div>
               <div className='set-row set-row-wo'>
                 <label>移動数量</label>
                 <input
-                  value={form.office}
-                  onChange={(e) => setForm({...form, office: e.target.value})}
+                  value={form.transfer_qty}
+                  onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                 />
                 <button
                   className='set-search-btn set-primary'
-                  onClick={handleSearchWoNumber}
+                  onClick={handleSearchsource_location}
                 >
                   EA
                 </button>
@@ -458,7 +455,6 @@ const ShelfTransfer = () => {
               >
                 {activeRowId === null ? '移動元登録完了' : '完了'}
               </button>
-              
               <button
                 className='set-btn set-primary'
                 onClick={() => setShowPrinting(true)}
@@ -467,13 +463,14 @@ const ShelfTransfer = () => {
                 登録
               </button>
               <button
-                className='set-btn set-success '
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
               </button>
             </ActionFooter>
           </div>
+
           {showHandInputConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -491,9 +488,7 @@ const ShelfTransfer = () => {
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
-                    onClick={() => {
-                      setShowHandInputConfirm(false)
-                    }}
+                    onClick={() => setShowHandInputConfirm(false)}
                   >
                     いいえ
                   </button>
@@ -510,17 +505,15 @@ const ShelfTransfer = () => {
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => {
-                      setShowRegistration(false)
-                    }}
+                    onClick={() => setShowRegistration(false)}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowRegistration(false)}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
@@ -535,17 +528,15 @@ const ShelfTransfer = () => {
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => {
-                      setShowPrinting(false)
-                    }}
+                    onClick={() => setShowPrinting(false)}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowPrinting(false)}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
@@ -581,8 +572,10 @@ const ShelfTransfer = () => {
           {showBackConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>
+                  メニューに戻ります。<br />読込データを破棄しますか？
+                </div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -591,13 +584,13 @@ const ShelfTransfer = () => {
                       navigate('/factory/factory')
                     }}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowBackConfirm(false)}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>

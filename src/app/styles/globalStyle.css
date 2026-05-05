@@ -1186,3 +1186,6 @@
 .set-return-configuration-table .col-lot{
 min-width: 300px;
 }
+.col-dest_location{
+  min-width: 210px;
+}
