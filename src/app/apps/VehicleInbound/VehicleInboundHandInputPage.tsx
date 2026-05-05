@@ -11,9 +11,6 @@ const VehicleInboundHandInputPage = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-
-
-
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
@@ -52,23 +49,23 @@ const VehicleInboundHandInputPage = () => {
               </div>
               <div className='hand-row hand-row-always'>
                 <label>数量</label>
-                <input value={quantity}  onChange={(e) => setParentSerial(e.target.value)} />
+                <input value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロット</label>
-                <input value={parentSerial}onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
+                <input value={parentSerial}onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>有効期限(yymm)</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
             </div>
 
