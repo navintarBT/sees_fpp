@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState, type ReactNode} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
@@ -138,7 +138,8 @@ const ShelfTransfer = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
-    parentWarehouse: '',
+    parentWarehouse: '葉工場：F0200',  // ✅ 倉庫
+    parentStorage: 'W0040',            // ✅ 保管場所 (แยกออกมา)
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     source_location: '',
@@ -149,7 +150,6 @@ const ShelfTransfer = () => {
     transfer_qty: '',
     janCode: '',
     dest_location: '',
-    
   })
   const [showDetailConfirm, setShowDetailConfirm] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -191,9 +191,11 @@ const ShelfTransfer = () => {
   }
 
   const clearRows = () => setRows([])
+
   const clearForm = () =>
     setForm({
-      parentWarehouse: '',
+      parentWarehouse: '',   // ✅
+      parentStorage: '',     // ✅
       parentItemNo: '',
       moveWarehouse: '',
       source_location: '',
@@ -225,12 +227,12 @@ const ShelfTransfer = () => {
     resetTableScroll()
   }
 
-  // ✅ UPDATED: ถ้าเลือก row → ใส่ให้แค่ row นั้น, ถ้าไม่เลือก → ใส่ให้ทุก row
+  // ✅ ใช้ parentStorage แทน parentWarehouse
   const handleSearchsource_location = () => {
-    const selectedLocation = form.parentWarehouse
+    const selectedLocation = form.parentStorage
 
     if (activeRowId !== null) {
-      // มีการเลือก row อยู่ → ใส่ค่าให้เฉพาะ row ที่เลือก
+      // มีการเลือก row → ใส่ค่าให้เฉพาะ row นั้น
       setRows(prevRows =>
         prevRows.map(row =>
           row.id === activeRowId
@@ -270,7 +272,6 @@ const ShelfTransfer = () => {
       lot_serial_no: selectedRow.lot_serial_no,
       transfer_qty: selectedRow.transfer_qty,
       dest_location: selectedRow.dest_location,
-      
     }))
     if (selectedRow.dest_location) {
       setSelectedWarehouse(selectedRow.dest_location)
@@ -369,23 +370,27 @@ const ShelfTransfer = () => {
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                 />
               </div>
+
+              {/* ✅ 倉庫 — ใช้ parentWarehouse */}
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                 >
-                  <option value='千葉工場：F0200'></option>
+                  <option value=''></option>
                   <option value='葉工場：F0200'>千葉工場：F0200</option>
                   <option value='葉工場：F0201'>千葉工場：F0201</option>
                   <option value='葉工場：F0202'>千葉工場：F0202</option>
                 </select>
               </div>
+
+              {/* ✅ 保管場所 — ใช้ parentStorage แยกออกมา */}
               <div className='set-row set-row-wo'>
                 <label>保管場所</label>
                 <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                  value={form.parentStorage}
+                  onChange={(e) => setForm({...form, parentStorage: e.target.value})}
                 >
                   <option value=''></option>
                   <option value='W0040'>W0040</option>
@@ -403,6 +408,7 @@ const ShelfTransfer = () => {
                   一括
                 </button>
               </div>
+
               <div className='set-row'>
                 <label>品名</label>
                 <input
