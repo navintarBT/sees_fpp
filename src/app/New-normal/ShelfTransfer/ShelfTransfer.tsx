@@ -366,6 +366,7 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>品目No.</label>
                 <input
+                  style={{textAlign: 'center'}}
                   value={form.internalLabel}
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                 />
@@ -375,6 +376,7 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
+                  style={{textAlign: 'center'}}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                 >
@@ -389,6 +391,7 @@ const ShelfTransfer = () => {
               <div className='set-row set-row-wo'>
                 <label>保管場所</label>
                 <select
+                  style={{textAlign: 'center'}}
                   value={form.parentStorage}
                   onChange={(e) => setForm({...form, parentStorage: e.target.value})}
                 >
@@ -412,6 +415,7 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>品名</label>
                 <input
+                  style={{textAlign: 'center'}}
                   value={form.shipmentQty}
                   onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
                 />
@@ -419,6 +423,7 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>ロットシリアル</label>
                 <input
+                  style={{textAlign: 'center'}}
                   value={form.lot_serial_no}
                   onChange={(e) => setForm({...form, lot_serial_no: e.target.value})}
                 />
@@ -426,6 +431,7 @@ const ShelfTransfer = () => {
               <div className='set-row set-row-wo'>
                 <label>移動数量</label>
                 <input
+                  style={{textAlign: 'center'}}
                   value={form.transfer_qty}
                   onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                 />
