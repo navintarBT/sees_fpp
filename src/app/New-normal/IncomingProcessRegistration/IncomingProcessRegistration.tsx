@@ -81,8 +81,7 @@ const IncomingProcessRegistration = () => {
                             <div className='set-row '>
                                 <label>ロット/ｼﾘｱﾙ</label>
                                 <input
-                                    readOnly={true} placeholder=' '
-                                    className='set-input-gray nocolorbackground'
+                                    className='set-input-gray '
                                 />
                             </div>
                             <div className='set-row '>
