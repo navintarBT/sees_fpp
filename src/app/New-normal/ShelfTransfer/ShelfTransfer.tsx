@@ -138,8 +138,8 @@ const ShelfTransfer = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
-    parentWarehouse: '葉工場：F0200',  // ✅ 倉庫
-    parentStorage: 'W0040',            // ✅ 保管場所 (แยกออกมา)
+    parentWarehouse: '葉工場：F0200',  
+    parentStorage: 'W0040',            
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     source_location: '',
