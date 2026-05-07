@@ -26,7 +26,7 @@ type TableColumn = {
   render: (row: Row) => ReactNode
 }
 
-const InventoryRecordsPage = () => {
+const ShippingRecordPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
     {
@@ -325,9 +325,11 @@ const InventoryRecordsPage = () => {
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '指示', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.build},
+    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '基本保管場所|', render: (row) => row.status},
+    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '指示', render: (row) => row.build},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '数量', render: (row) => row.release},
     {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.release},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.release},
 
   ]
 
@@ -335,21 +337,21 @@ const InventoryRecordsPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>入荷実績登録</div>
+          <div className='set-header'>出荷実績登録</div>
           <div className='set-body'>
             <div className='set-form'>
                 <div className='set-row'>
-                <label>出荷/発注No/現品票No.</label>
+                <label>出荷指示No.</label>
                 <input
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
               </div>
               <div className='set-row'>
-                <label>倉庫</label>
+                <label>倉庫/工場</label>
                 <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                  value={form.moveWarehouse}
+                  onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                 >
                   <option value=''></option>
                   <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
@@ -364,16 +366,6 @@ const InventoryRecordsPage = () => {
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                 />
               </div>
-                <div className='set-row'>
-                <label>ロット状況</label>
-                <select
-                  value={form.moveWarehouse}
-                  onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>検査中</option>
-                </select>
-              </div>
 
               <div className='set-row'>
                 <label>数量</label>
@@ -385,14 +377,14 @@ const InventoryRecordsPage = () => {
               </div>
 
               <div className='set-row'>
-                <label>JANコード ／品目コード</label>
+                <label>品目No</label>
                 <input
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
                 />
               </div>
               <div className='set-row'>
-                <label>移動元</label>
+                <label>移動先</label>
                 <input
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
@@ -446,7 +438,7 @@ const InventoryRecordsPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/inventory-hand-input')
+                        navigate('/factory/shipping-hand-input')
                       }}
                     >
                       はい
@@ -586,7 +578,7 @@ const InventoryRecordsPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowRowClickConfirm(false)
-                        navigate('/factory/inventory-detail')
+                        navigate('/factory/shipping-detail')
                       }}
                     >
                       はい
@@ -609,4 +601,4 @@ const InventoryRecordsPage = () => {
   )
 }
 
-export {InventoryRecordsPage}
+export {ShippingRecordPage}

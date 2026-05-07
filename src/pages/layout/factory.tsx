@@ -10,7 +10,7 @@ const Factory = () => {
     { label: '作業オーダー\n部品払出', path: '/factory/button-access', className: 'mockup-yellow' },
     { label: '作業オーダー\n実績時間登録', path: '/factory/work-order-time-registration', className: 'mockup-gray' },
     { label: '作業オーダー完了', path: '/factory/work-order-completion', className: 'mockup-orange' },
-    { label: '出荷実績登録', path: '', className: 'mockup-pink' },
+    { label: '出荷実績登録', path: '/factory/shipping-records', className: 'mockup-pink' },
 
   ] as const
 

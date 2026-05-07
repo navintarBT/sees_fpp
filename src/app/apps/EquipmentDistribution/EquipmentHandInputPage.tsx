@@ -35,7 +35,7 @@ const EquipmentHandInputPage = () => {
               <div className='hand-row'>
                 <label>TO倉庫</label>
                 {/* <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} /> */}
-                 <select value={parentWarehouse} onChange={(e) => setParentItem(e.target.value)}>
+                 <select value={parentItem} onChange={(e) => setParentItem(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：AA001</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：AA002</option>

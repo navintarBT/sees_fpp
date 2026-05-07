@@ -1,8 +1,9 @@
-﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
+import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import {FaPlay} from 'react-icons/fa'
+
 
 type Row = {
   id: number
@@ -18,15 +19,7 @@ type Row = {
   moveStorage2?: string
 }
 
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
-}
-
-const InventoryRecordsPage = () => {
+const InventoryRecordDetail = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
     {
@@ -159,6 +152,71 @@ const InventoryRecordsPage = () => {
       name: '部品J',
       moveStorage2: '棚J',
     },
+    {
+      id: 11,
+      error: 'E',
+      item: 'J10',
+      lot: 'L10',
+      status: '構成中',
+      build: 6,
+      release: 2,
+      move: 'W1',
+      moveStorage: 'S10',
+      name: '部品J',
+      moveStorage2: '棚J',
+    },
+    {
+      id: 12,
+      error: 'E',
+      item: 'J10',
+      lot: 'L10',
+      status: '構成中',
+      build: 6,
+      release: 2,
+      move: 'W1',
+      moveStorage: 'S10',
+      name: '部品J',
+      moveStorage2: '棚J',
+    },
+    {
+      id: 13,
+      error: 'E',
+      item: 'J10',
+      lot: 'L10',
+      status: '構成中',
+      build: 6,
+      release: 2,
+      move: 'W1',
+      moveStorage: 'S10',
+      name: '部品J',
+      moveStorage2: '棚J',
+    },
+        {
+      id: 14,
+      error: 'E',
+      item: 'J10',
+      lot: 'L10',
+      status: '構成中',
+      build: 6,
+      release: 2,
+      move: 'W1',
+      moveStorage: 'S10',
+      name: '部品J',
+      moveStorage2: '棚J',
+    },
+        {
+      id: 15,
+      error: 'E',
+      item: 'J10',
+      lot: 'L10',
+      status: '構成中',
+      build: 6,
+      release: 2,
+      move: 'W1',
+      moveStorage: 'S10',
+      name: '部品J',
+      moveStorage2: '棚J',
+    },
   ])
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
@@ -168,16 +226,20 @@ const InventoryRecordsPage = () => {
     qty: '1',
     janCode: '',
   })
+  const [parentItem, setParentItem] = useState('部品001')
+  const [parentSerial, setParentSerial] = useState('WO-001')
+  const [moveStorage, setMoveStorage] = useState('10')
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
-  const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
+  const [showDetailConfirm, setShowDetailConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
@@ -186,7 +248,7 @@ const InventoryRecordsPage = () => {
     showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
-    showRowClickConfirm ||
+    showDetailConfirm ||
     showBackConfirm
 
   const closeAllModals = () => {
@@ -195,12 +257,19 @@ const InventoryRecordsPage = () => {
     setShowNoSelectionConfirm(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
-    setShowRowClickConfirm(false)
+    setShowDetailConfirm(false)
     setShowBackConfirm(false)
   }
 
+  const clearRows = () => {
+    setRows([])
+    setCheckedRowIds([])
+  }
 
-  const clearRows = () => setRows([])
+  const deleteCheckedRows = () => {
+    setRows((prev) => prev.filter((row) => !checkedRowIds.includes(row.id)))
+    setCheckedRowIds([])
+  }
   const clearForm = () =>
     setForm({
       parentWarehouse: '',
@@ -232,7 +301,26 @@ const InventoryRecordsPage = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId(rowId)
-    setShowRowClickConfirm(true)
+    setCheckedRowIds((prev) => (prev.includes(rowId) ? prev.filter((id) => id !== rowId) : [...prev, rowId]))
+  }
+
+  const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
+
+  const toggleAllChecked = (checked: boolean) => {
+    if (checked) {
+      setCheckedRowIds(rows.map((row) => row.id))
+      return
+    }
+    setCheckedRowIds([])
+  }
+
+  const toggleRowChecked = (rowId: number, checked: boolean) => {
+    setCheckedRowIds((prev) => {
+      if (checked) {
+        return prev.includes(rowId) ? prev : [...prev, rowId]
+      }
+      return prev.filter((id) => id !== rowId)
+    })
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -245,11 +333,6 @@ const InventoryRecordsPage = () => {
     if (!activeRow) {
       closeAllModals()
       setShowNoSelectionConfirm(true)
-      return
-    }
-    if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
-      closeAllModals()
-      setShowDeleteConfirm(true)
       return
     }
   }
@@ -315,94 +398,79 @@ const InventoryRecordsPage = () => {
   }, [activeRow, isAnyModalOpen])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
+        {
+          key: 'arrow',
+          headClassName: 'col-arrow-head',
+          cellClassName: 'col-arrow',
+          header: '',
+          render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
+        },
+
     {
-      key: 'arrow',
-      headClassName: 'col-arrow-head',
-      cellClassName: 'col-arrow',
-      header: '',
-      render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
+      key: 'check',
+      headClassName: 'col-check',
+      cellClassName: 'col-check',
+      header: (
+        <input
+          type='checkbox'
+          className='tf-tableCheckbox'
+          checked={isAllChecked}
+          onChange={(e) => toggleAllChecked(e.target.checked)}
+          onClick={(e) => e.stopPropagation()}
+          aria-label='Select all rows'
+        />
+      ),
+      render: (row) => (
+        <input
+          type='checkbox'
+          className='tf-tableCheckbox'
+          checked={checkedRowIds.includes(row.id)}
+          onChange={(e) => toggleRowChecked(row.id, e.target.checked)}
+          onClick={(e) => e.stopPropagation()}
+          aria-label={`Select row ${row.id}`}
+        />
+      ),
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '指示', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.release},
-
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '削除', render: (row) => row.lot},
+    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: 'エラー', render: (row) => row.status},
+    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: 'ロットシリアル', render: (row) => row.build},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.release},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '倉庫', render: (row) => row.move},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '保管場所', render: (row) => row.move},
+    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: 'ロット状況CD', render: (row) => row.move},
   ]
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>入荷実績登録</div>
+          <div className='set-header'>配送伝票登録</div>
           <div className='set-body'>
-            <div className='set-form'>
-                <div className='set-row'>
-                <label>出荷/発注No/現品票No.</label>
-                <input
-                  value={form.parentItemNo}
-                  onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
-                />
-              </div>
-              <div className='set-row'>
-                <label>倉庫</label>
-                <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
-                </select>
-              </div>
-              <div className='set-row'>
-                <label>保管場所</label>
-                <input
-                  value={form.moveStorage}
-                  onChange={(e) => setForm({...form, moveStorage: e.target.value})}
-                />
-              </div>
-                <div className='set-row'>
-                <label>ロット状況</label>
-                <select
-                  value={form.moveWarehouse}
-                  onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>検査中</option>
-                </select>
-              </div>
+                <div className='set-form'>
+                  <div className='set-row'>
+                    <label>品名</label>
+                    <input
+                      value={parentSerial}
+ 
+                      readOnly
+                    />
+                  </div>
+                    <div className='set-row'>
+                    <label>品目No.</label>
+                    <input
+                      value={parentItem}
 
-              <div className='set-row'>
-                <label>数量</label>
-                <input
-                  value={form.qty}
-                  onChange={(e) => setForm({...form, qty: e.target.value})}
-                  className='set-small'
-                />
-              </div>
-
-              <div className='set-row'>
-                <label>JANコード ／品目コード</label>
-                <input
-                  value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
-                />
-              </div>
-              <div className='set-row'>
-                <label>移動元</label>
-                <input
-                  value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
-                />
-              </div>
-            </div>
+                      readOnly
+                    />
+                  </div>
+                </div>
 
             <TableSection
               columns={tableColumns}
               rows={rows}
+              gridClassName='woPartsIssuanceDetail-table'
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
@@ -412,138 +480,61 @@ const InventoryRecordsPage = () => {
             <ActionFooter columns={4}>
               <button
                 className='set-btn set-danger'
-                onClick={() => setShowClearConfirm(true)}
+                onClick={() => {
+                  if (checkedRowIds.length === 0) {
+                    setShowNoSelectionConfirm(true)
+                  } else {
+                    setShowDeleteConfirm(true)
+                  }
+                }}
               >
-                破棄
-              </button>
-              <button
+                削除
+              </button>  
+               <button
                 className='set-btn set-primary'
                 onClick={() => setShowCompleteConfirm(true)}
+                style={{ visibility: 'hidden' }}
               >
-                完了
-              </button>     
+                削除
+              </button> 
               <button
-                className='set-btn set-success'
-                onClick={() => setShowHandInputConfirm(true)}
+                className='set-btn set-primary set-success'
+                onClick={() => handleReleaseClick({forceHandInput: true})}
+                style={{ visibility: 'hidden' }}
               >
-                手入力
+                出庫票印刷
               </button>
+
               <button
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
+
               </button>
             </ActionFooter>
        </div>
-            {showHandInputConfirm && (
+
+            {showDeleteConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
+                  <div className='set-modal-body'>選択した行を削除しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
-                        setShowHandInputConfirm(false)
-                        navigate('/factory/inventory-hand-input')
+                        setShowDeleteConfirm(false)
+                        deleteCheckedRows()
                       }}
                     >
                       はい
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
-                    >
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-
-            {showDeleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowDeleteConfirm(false)
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
                       onClick={() => setShowDeleteConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showNoSelectionConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowNoSelectionConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showClearConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'></div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowClearConfirm(false)
-                        clearFormAndRows()
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowClearConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showCompleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
+                      いいえ
                     </button>
                   </div>
                 </div>
@@ -560,7 +551,7 @@ const InventoryRecordsPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/factory')
+                        navigate('/factory/inventory-records')
                       }}
                     >
                       {'\u306f\u3044'}
@@ -575,38 +566,10 @@ const InventoryRecordsPage = () => {
                 </div>
               </div>
             )}
-
-            {showRowClickConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>選択行の読込内容を表示しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowRowClickConfirm(false)
-                        navigate('/factory/inventory-detail')
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowRowClickConfirm(false)
-                      }}
-                    >
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
   )
 }
 
-export {InventoryRecordsPage}
+export {InventoryRecordDetail}
