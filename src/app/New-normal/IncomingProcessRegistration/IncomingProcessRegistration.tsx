@@ -127,7 +127,7 @@ const IncomingProcessRegistration = () => {
                                 破棄
                             </button>
                             <button
-                                className='set-btn set-success '
+                                className='set-btn set-warning'
                             >
                                 完了
                             </button>
@@ -137,7 +137,7 @@ const IncomingProcessRegistration = () => {
                                 手入力
                             </button>
                             <button
-                                className='set-btn set-warning'
+                                className='set-btn set-success'
                                 onClick={() => setShowBackConfirm(true)}
                             >
                                 戻る
