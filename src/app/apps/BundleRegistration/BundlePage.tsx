@@ -364,7 +364,6 @@ const BundlePage = () => {
               </div>
 
               <div className='set-row'>
-                {/* <label>数量</label> */}
                 <div className='set-radio-group'>
                   <label className='set-radio'>
                     <input
@@ -441,6 +440,7 @@ const BundlePage = () => {
               </button>
             </ActionFooter>
           </div>
+
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
@@ -468,7 +468,6 @@ const BundlePage = () => {
                 </div>
               </div>
             )}
-
 
             {showDeleteConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
