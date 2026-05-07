@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 import { FaRegCalendarAlt } from 'react-icons/fa'
-import './WorkOrderTimeRegistration.css'
 
 const formatWoDate = (value: string) => {
   const [year, month, day] = value.split('-')
   if (!year || !month || !day) return 'yy/mm/dd'
   return `${year}/${month}/${day}`
 }
+
 const padDatePart = (value: number) => value.toString().padStart(2, '0')
 
 const toDateValue = (date: Date) => (
@@ -37,7 +37,6 @@ const getCalendarDays = (monthDate: Date) => {
     }
   })
 }
-
 
 type Row = {
   id: number
@@ -403,8 +402,8 @@ const WorkOrderTimeRegistration = () => {
                       </label>
                     </div>
                     <ActionFooter columns={2}>
-                      <button className='set-btn set-primary'>作業開始</button>
-                      <button className='set-btn set-success'>作業終了</button>
+                      <button className='set-btnnew_high set-primary'>作業開始</button>
+                      <button className='set-btnnew_high set-success'>作業終了</button>
                     </ActionFooter>
                   </div>
                 </div>
@@ -427,27 +426,29 @@ const WorkOrderTimeRegistration = () => {
                   <label className='wot-footer-label wot-bg-blue'>開始</label>
                   <input className='wot-grid-value' type='time' />
                 </div>
-                <div className='wot-footer-item'>
 
-                  <label className='wot-footer-label wot-bg-blue'>作業時間</label>
-                  <input className='wot-grid-value' placeholder='時間' />
-                </div>
-                <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>目標時間計</label>
-                  <input className='wot-grid-value' placeholder='時間' />
-                </div>
-              </div>
-
-              <div className='wot-footer-row wot-footer-row-padding'>
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>終了</label>
                   <input className='wot-grid-value' type='time' />
                 </div>
+
                 <div className='wot-footer-item'>
-                  <input className='wot-grid-value' placeholder='分' />
+                  <label className='wot-footer-label wot-bg-blue'>作業時間</label>
+                  <input className='wot-grid-value' placeholder='時間' />
                 </div>
+
                 <div className='wot-footer-item'>
-                  <input className='wot-grid-value' placeholder='分' />
+                  <label className='wot-footer-label wot-bg-blue'></label>
+                  <input className='wot-grid-value addspanto' placeholder='分' />
+                </div>
+
+                <div className='wot-footer-item'>
+                  <label className='wot-footer-label wot-bg-blue'>目標時間計</label>
+                  <input className='wot-grid-value' placeholder='時間' />
+                </div>
+
+                <div className='wot-footer-item'>
+                  <input className='wot-grid-value addspanto' placeholder='分' />
                 </div>
               </div>
             </div>
