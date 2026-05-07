@@ -24,6 +24,11 @@ import { WOPartsIssuanceDetail } from '../app/new-high/WOPartsIssuance/WOPartsIs
 import { ButtonAccess } from '../app/new-high/WOPartsIssuance/ButtonAccess'
 import { WorkOrderTimeRegistration } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistration'
 import { InventoryRecordsPage } from '../app/New-normal/InventoryRecord/InventoryRecordsPage'
+import { InventoryRecordsHandInputPage } from '../app/New-normal/InventoryRecord/InventoryRecordsHandInputPage'
+import { InventoryRecordDetail } from '../app/New-normal/InventoryRecord/InventoryRecordDetail'
+import { ShippingRecordPage } from '../app/New-normal/ShippingRecord/ShippingRecordPage'
+import { ShippingRecordHandInputPage } from '../app/New-normal/ShippingRecord/ShippingRecordHandInputPage'
+import { ShippingRecordDetail } from '../app/New-normal/ShippingRecord/ShippingRecordDetail'
 import { ShelfTransfer } from '../app/New-normal/ShelfTransfer/ShelfTransfer'
 import { IncomingProcessRegistration } from '../app/New-normal/IncomingProcessRegistration/IncomingProcessRegistration'
 
@@ -56,6 +61,11 @@ const MainPage = () => {
         <Route path='work-order-completion' element={<WorkOrderCompletion />} />
         <Route path='work-order-time-registration' element={<WorkOrderTimeRegistration />} />
         <Route path='inventory-records' element={<InventoryRecordsPage />} />
+        <Route path='inventory-hand-input' element={<InventoryRecordsHandInputPage />} />
+        <Route path='inventory-detail' element={<InventoryRecordDetail />} />
+        <Route path='shipping-records' element={<ShippingRecordPage />} />
+        <Route path='shipping-hand-input' element={<ShippingRecordHandInputPage />} />
+        <Route path='shipping-detail' element={<ShippingRecordDetail />} />
         <Route path='shelf-transfer' element={<ShelfTransfer />} />
         <Route path='incoming-process-registration' element={<IncomingProcessRegistration />} />
       </Route>

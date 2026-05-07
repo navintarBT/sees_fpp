@@ -2,7 +2,7 @@
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
-const InventoryRecordsHandInputPage = () => {
+const ShippingRecordHandInputPage = () => {
   const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('F0200')
@@ -20,10 +20,10 @@ const InventoryRecordsHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>入荷実績登録手入力</div>
+          <div className='set-header'>セット構成登録手入力</div>
           <div className='hand-body'>
               <div className='hand-row'>
-                <label>倉庫</label>
+                <label>倉庫/工場</label>
                 <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
@@ -36,31 +36,19 @@ const InventoryRecordsHandInputPage = () => {
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled}  style={{ backgroundColor: '#e5e7eb' }} />
               </div>
               <div className='hand-row'>
-                <label>ロット状況</label>
-                <select disabled={!isEnabled}>
-                  <option>千葉倉庫（WMS）：W002</option>
-                  <option>千葉倉庫（WMS）：W003</option>
-                  <option>千葉倉庫（WMS）：W004</option>
-                </select>
-              </div>
-              <div className='hand-row'>
                 <label>数量</label>
                 <input value={quantity} onChange={(e) => setQuantity(e.target.value)} style={{ backgroundColor: 'white' }} />
               </div>
               <div className='hand-row '>
-                <label>品目No.</label>
+                <label>品目No</label>
                 <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#e5e7eb' }} />
               </div>
               <div className='hand-row'>
-                <label>ロット</label>
+                <label>ロットシリアル</label>
                 <input readOnly={!isEnabled} placeholder=' ' style={{ backgroundColor: 'white' }} />
               </div>
               <div className='hand-row'>
-                <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' style={{ backgroundColor: 'white' }} />
-              </div>
-              <div className='hand-row'>
-                <label>有効期限（yymm）</label>
+                <label>有効期限(yymm)</label>
                 <input placeholder=' ' style={{ backgroundColor: 'white' }} />
               </div>
 
@@ -125,7 +113,7 @@ const InventoryRecordsHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/inventory-records')
+                        navigate('/factory/shipping-records')
                       }}
                     >
                       {'\u306f\u3044'}
@@ -147,4 +135,4 @@ const InventoryRecordsHandInputPage = () => {
   )
 }
 
-export {InventoryRecordsHandInputPage}
+export {ShippingRecordHandInputPage}
