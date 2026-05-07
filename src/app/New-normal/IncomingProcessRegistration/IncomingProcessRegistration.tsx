@@ -60,13 +60,15 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     placeholder=' '
                                     className='set-small set-input-gray'
+                                    style={{ textAlign: 'center' }}
                                 />
                             </div>
                             <div className='set-row'>
                                 <label>品　　 名</label>
                                 <input
                                     readOnly={true} placeholder=' '
-                                    className='set-small set-input-gray nocolorbackground'
+                                    className='set-small set-input-gray '
+                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb' }}
                                 />
                             </div>
 
@@ -74,22 +76,25 @@ const IncomingProcessRegistration = () => {
                                 <label>品　　 番</label>
                                 <input
                                     readOnly={true} placeholder=' '
-                                    className='set-small set-input-gray nocolorbackground'
+                                    className='set-small set-input-gray '
+                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb' }}
                                 />
                             </div>
 
                             <div className='set-row '>
                                 <label>ロット/ｼﾘｱﾙ</label>
                                 <input
-                                    readOnly={true} placeholder=' '
-                                    className='set-input-gray nocolorbackground'
+                                    className='set-input-gray '
+                                    style={{ textAlign: 'center' }}
                                 />
                             </div>
                             <div className='set-row '>
                                 <label>入荷数量</label>
                                 <input
                                     readOnly={true} placeholder=' '
-                                    className='set-input-gray nocolorbackground'
+                                    className='set-input-grayx'
+                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb' }}
+
                                 />
                             </div>
                             <div className='set-row '>
@@ -97,6 +102,8 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     placeholder=' '
                                     className='set-input-gray'
+                                    style={{ textAlign: 'center' }}
+
                                 />
                             </div>
                             <div className='set-row '>
@@ -104,11 +111,14 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     placeholder=' '
                                     className='set-input-gray'
+                                    style={{ textAlign: 'center' }}
+
                                 />
                             </div>
                             <div className='set-row'>
                                 <label>不良理由</label>
                                 <select
+                                    style={{ textAlign: 'center' }}
                                 >
                                     <option value=''></option>
                                     <option value='キズ'>キズ</option>
@@ -128,7 +138,7 @@ const IncomingProcessRegistration = () => {
                                 破棄
                             </button>
                             <button
-                                className='set-btn set-success '
+                                className='set-btn set-warning'
                             >
                                 完了
                             </button>
@@ -138,7 +148,7 @@ const IncomingProcessRegistration = () => {
                                 手入力
                             </button>
                             <button
-                                className='set-btn set-warning'
+                                className='set-btn set-success'
                                 onClick={() => setShowBackConfirm(true)}
                             >
                                 戻る

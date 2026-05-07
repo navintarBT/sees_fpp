@@ -1,79 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
-import { FaRegCalendarAlt } from 'react-icons/fa'
-
-const formatExpirationDate = (value: string) => {
-  if (!value) return ''
-  const [year, month] = value.split('-')
-  if (!year || !month) return ''
-  return `${year}/${month}`
-}
-const padDatePart = (value: number) => value.toString().padStart(2, '0')
-
-const toDateValue = (date: Date) => (
-  `${date.getFullYear()}-${padDatePart(date.getMonth() + 1)}-${padDatePart(date.getDate())}`
-)
-
-const parseDateValue = (value: string) => {
-  if (!value) return new Date()
-  const [year, month, day] = value.split('-').map(Number)
-  return year && month && day ? new Date(year, month - 1, day) : new Date()
-}
-
-const getCalendarDays = (monthDate: Date) => {
-  const year = monthDate.getFullYear()
-  const month = monthDate.getMonth()
-  const startDate = new Date(year, month, 1 - new Date(year, month, 1).getDay())
-
-  return Array.from({ length: 42 }, (_, index) => {
-    const date = new Date(startDate)
-    date.setDate(startDate.getDate() + index)
-
-    return {
-      date,
-      value: toDateValue(date),
-      inMonth: date.getMonth() === month,
-    }
-  })
-}
 
 const MiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
-  const [moveStorage, setMoveStorage] = useState('')
-  const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const [qty, setQty] = useState(1);
-
-  const todayValue = toDateValue(new Date())
-  const [datePickerValue, setDatePickerValue] = useState('')
-  const [showCalendar, setShowCalendar] = useState(false)
-  const [calendarMonth, setCalendarMonth] = useState(() => parseDateValue(todayValue))
-
-  const openDatePicker = () => {
-    setCalendarMonth(parseDateValue(datePickerValue))
-    setShowCalendar((current) => !current)
-  }
-
-  const changeCalendarMonth = (amount: number) => {
-    setCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() + amount, 1))
-  }
-
-  const selectDate = (value: string) => {
-    setDatePickerValue(value)
-    if (value) {
-      setCalendarMonth(parseDateValue(value))
-    }
-    setShowCalendar(false)
-  }
-
-  const calendarDays = getCalendarDays(calendarMonth)
-  const calendarMonthLabel = calendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
-
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
@@ -127,62 +62,6 @@ const MiscellaneousInAndOutBound = () => {
                     type='text'
                     style={{ backgroundColor: 'transparent', cursor: 'pointer', width: '100%' }}
                   />
-                  {/* <button
-                    type='button'
-                    className='hand-date-btn'
-                    aria-label='Choose date'
-                    onClick={openDatePicker}
-                  >
-                    <FaRegCalendarAlt />
-                  </button>
-                  {showCalendar && (
-                    <div className='hand-calendar' role='dialog' aria-label='Choose date'>
-                      <div className='hand-calendar-header'>
-                        <button type='button' onClick={() => changeCalendarMonth(-1)}>{'<'}</button>
-                        <span>{calendarMonthLabel}</span>
-                        <button type='button' onClick={() => changeCalendarMonth(1)}>{'>'}</button>
-                      </div>
-                      <div className='hand-calendar-weekdays'>
-                        {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
-                          <span key={day}>{day}</span>
-                        ))}
-                      </div>
-                      <div className='hand-calendar-days'>
-                        {calendarDays.map(({ date, value, inMonth }) => (
-                          <button
-                            type='button'
-                            key={value}
-                            className={[
-                              'hand-calendar-day',
-                              inMonth ? '' : 'hand-calendar-muted',
-                              value === datePickerValue ? 'hand-calendar-selected' : '',
-                            ].filter(Boolean).join(' ')}
-                            onClick={() => selectDate(value)}
-                          >
-                            {date.getDate()}
-                          </button>
-                        ))}
-                      </div>
-                      <div className='hand-calendar-footer' style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                        <button
-                          type='button'
-                          className='set-pill'
-                          style={{ flex: 1, cursor: 'pointer', color: 'blue' }}
-                          onClick={() => selectDate(toDateValue(new Date()))}
-                        >
-                          今日
-                        </button>
-                        <button
-                          type='button'
-                          className='set-pill'
-                          style={{ flex: 1, cursor: 'pointer', color: 'red' }}
-                          onClick={() => selectDate('')}
-                        >
-                          クリア
-                        </button>
-                      </div>
-                    </div>
-                  )} */}
                 </div>
               </div>
             </div>
