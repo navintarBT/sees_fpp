@@ -42,7 +42,7 @@ const SetReturnConfiguration = () => {
       move: 'W1', // 移動倉
       moveStorage: 'S1', // 移動保管場所
       name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
+      moveStorage2: '棚A', // 移動保管場所
     },
     {
       id: 2,
@@ -162,10 +162,10 @@ const SetReturnConfiguration = () => {
       moveStorage2: '棚J',
     },
     {
-      id: 10,
+      id: 11,
       error: 'E',
-      item: 'J10',
-      lot: 'L10',
+      item: 'J11',
+      lot: 'L11',
       status: '構成中',
       build: 6,
       release: 2,
@@ -175,10 +175,10 @@ const SetReturnConfiguration = () => {
       moveStorage2: '棚J',
     },
     {
-      id: 10,
+      id: 12,
       error: 'E',
-      item: 'J10',
-      lot: 'L10',
+      item: 'J12',
+      lot: 'L12',
       status: '構成中',
       build: 6,
       release: 2,
@@ -278,7 +278,6 @@ const SetReturnConfiguration = () => {
       return
     }
   }
-
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -495,7 +494,6 @@ const SetReturnConfiguration = () => {
               </div>
             </div>
           )}
-
 
           {showDeleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
