@@ -8,7 +8,7 @@ import {TableSection, type TableColumn as TFTableColumn} from '../../components/
 type Row = {
   id: number
   error: string
-  fromTo: string
+  fromToEnqui: string
   item: string
   lot: string
   quantity: string
@@ -31,7 +31,7 @@ const Equipment = () => {
     {
       id: 1,
       error: '',
-      fromTo: 'F',
+      fromToEnqui: 'F',
       item: 'A01', // 品目No.
       lot: 'L01', // ロットシリアル
       quantity: '追加', // 状態
@@ -42,7 +42,7 @@ const Equipment = () => {
     {
       id: 2,
       error: '',
-      fromTo: 'T',
+      fromToEnqui: 'T',
       item: 'B02',
       lot: 'L02',
       quantity: '解除',
@@ -53,7 +53,7 @@ const Equipment = () => {
     {
       id: 3,
       error: '',
-      fromTo: 'F',
+      fromToEnqui: 'F',
       item: 'C03',
       lot: 'L03',
       quantity: 'OV対応要',
@@ -64,7 +64,7 @@ const Equipment = () => {
     {
       id: 4,
       error: '',
-      fromTo: 'F',
+      fromToEnqui: 'F',
       item: 'D04',
       lot: 'L04',
       quantity: '構成中',
@@ -75,7 +75,7 @@ const Equipment = () => {
     {
       id: 5,
       error: 'E',
-      fromTo: 'T',
+      fromToEnqui: 'T',
       item: 'E05',
       lot: 'L05',
       quantity: '構成中',
@@ -86,7 +86,7 @@ const Equipment = () => {
     {
       id: 6,
       error: '',
-      fromTo: 'T',
+      fromToEnqui: 'T',
       item: 'F06',
       lot: 'L06',
       quantity: '構成中',
@@ -97,7 +97,7 @@ const Equipment = () => {
     {
       id: 7,
       error: 'E',
-      fromTo: 'F',
+      fromToEnqui: 'F',
       item: 'G07',
       lot: 'L07',
       quantity: '構成中',
@@ -108,7 +108,7 @@ const Equipment = () => {
     {
       id: 8,
       error: '',
-      fromTo: 'T',
+      fromToEnqui: 'T',
       item: 'H08',
       lot: 'L08',
       quantity: '構成中',
@@ -119,7 +119,7 @@ const Equipment = () => {
     {
       id: 9,
       error: '',
-      fromTo: 'T',
+      fromToEnqui: 'T',
       item: 'I09',
       lot: 'L09',
       quantity: '構成中',
@@ -130,7 +130,7 @@ const Equipment = () => {
     {
       id: 10,
       error: 'E',
-      fromTo: 'F',
+      fromToEnqui: 'F',
       item: 'J10',
       lot: 'L10',
       quantity: '構成中',
@@ -141,7 +141,7 @@ const Equipment = () => {
      {
       id: 11,
       error: 'E',
-      fromTo: 'F',
+      fromToEnqui: 'F',
       item: 'J10',
       lot: 'L10',
       quantity: '構成中',
@@ -152,7 +152,7 @@ const Equipment = () => {
      {
       id: 12,
       error: 'E',
-      fromTo: 'F',
+      fromToEnqui: 'F',
       item: 'J10',
       lot: 'L10',
       quantity: '構成中',
@@ -310,7 +310,7 @@ const Equipment = () => {
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
-    {key: 'fromTo', headClassName: 'col-fromTo', cellClassName: 'col-fromTo', header: 'From/To', render: (row) => row.fromTo},
+    {key: 'fromToEnqui', headClassName: 'col-fromToEnqui', cellClassName: 'col-fromToEnqui', header: 'From/To', render: (row) => row.fromToEnqui},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
     {key: 'Quantity', headClassName: 'col-quantity', cellClassName: 'col-quantity', header: '数量', render: (row) => row.quantity},

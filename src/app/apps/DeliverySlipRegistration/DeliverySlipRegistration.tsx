@@ -29,6 +29,7 @@ const DeliverySlipRegistration = () => {
     {id: 14, situation: '', item: '202603310000000000000000000015'},
     {id: 15, situation: '', item: '202603310000000000000000000016'},
   ])
+  
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
     parentItemNo: '019309000000000000000000001',
