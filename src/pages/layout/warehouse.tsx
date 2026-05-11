@@ -5,8 +5,8 @@ const Warehouse = () => {
   const navigate = useNavigate()
 
   const warehouseButtons = [
-    { label: '出庫', path: '/factory/dispatch', className: 'mockup-red' },
-    { label: '入庫', path: '/factory/inbound', className: 'mockup-blue' },
+    // { label: '出庫', path: '/factory/dispatch', className: 'mockup-red' },
+    // { label: '入庫', path: '/factory/inbound', className: 'mockup-blue' },
     { label: '配送伝票', path: '/factory/delivery-slip-registration', className: 'mockup-green' },
     { label: '戻り構成', path: '/factory/set-return-configuration', className: 'mockup-yellow' },
     { label: 'セット登録', path: '/factory/set-register', className: 'mockup-gray' },

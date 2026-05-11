@@ -227,10 +227,6 @@ const BundlePage = () => {
     resetTableScroll()
   }
 
-  const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
-  }
-
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
     if (isAnyModalOpen) return
     if (options?.forceHandInput) {

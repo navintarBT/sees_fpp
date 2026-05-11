@@ -38,6 +38,7 @@ const WOPartsIssuanceHandInputPage = () => {
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
+  
   const tableColumns: Array<TFTableColumn<Row>> = [
     {key: 'Interior', headClassName: 'col-Interior', cellClassName: 'col-Interior', header: '庫内ﾗﾍﾞﾙ', render: (row) => row.Interior},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},

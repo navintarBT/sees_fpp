@@ -169,8 +169,6 @@ const InventoryRecordsPage = () => {
     janCode: '',
   })
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
@@ -182,8 +180,6 @@ const InventoryRecordsPage = () => {
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
     showHandInputConfirm ||
-    showDeleteConfirm ||
-    showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
     showRowClickConfirm ||
@@ -191,8 +187,6 @@ const InventoryRecordsPage = () => {
 
   const closeAllModals = () => {
     setShowHandInputConfirm(false)
-    setShowDeleteConfirm(false)
-    setShowNoSelectionConfirm(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
     setShowRowClickConfirm(false)
@@ -240,16 +234,6 @@ const InventoryRecordsPage = () => {
     if (options?.forceHandInput) {
       closeAllModals()
       setShowHandInputConfirm(true)
-      return
-    }
-    if (!activeRow) {
-      closeAllModals()
-      setShowNoSelectionConfirm(true)
-      return
-    }
-    if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
-      closeAllModals()
-      setShowDeleteConfirm(true)
       return
     }
   }
@@ -436,76 +420,6 @@ const InventoryRecordsPage = () => {
               </button>
             </ActionFooter>
        </div>
-            {showHandInputConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                        navigate('/factory/inventory-hand-input')
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
-                    >
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-
-            {showDeleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowDeleteConfirm(false)
-                      }}
-                    >
-                      {'\u306f\u3044'}
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowDeleteConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showNoSelectionConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowNoSelectionConfirm(false)}
-                    >
-                      {'\u004f\u004b'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {showClearConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -544,6 +458,34 @@ const InventoryRecordsPage = () => {
                       onClick={() => setShowCompleteConfirm(false)}
                     >
                       {'\u004f\u004b'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showHandInputConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowHandInputConfirm(false)
+                        navigate('/factory/inventory-hand-input')
+                      }}
+                    >
+                      はい
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => {
+                        setShowHandInputConfirm(false)
+                      }}
+                    >
+                      いいえ
                     </button>
                   </div>
                 </div>
