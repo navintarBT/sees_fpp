@@ -440,6 +440,7 @@ const ShippingRecordDetail = () => {
   ]
 
   return (
+    
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>

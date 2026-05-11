@@ -11,9 +11,6 @@ const ShippingRecordHandInputPage = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-
-
-
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (

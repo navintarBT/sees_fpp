@@ -220,12 +220,6 @@ const WOPartsIssuance = () => {
     })
   }
 
-  const clearFormAndRows = () => {
-    clearForm()
-    clearRows()
-    resetTableScroll()
-  }
-
   const handleSearchWoNumber = () => {
     const keywords = form.woNumber
       .split(/[,\.\u3001]+/)
@@ -441,10 +435,11 @@ const WOPartsIssuance = () => {
               </button>
             </ActionFooter>
           </div>
+
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-header'>確認1111</div>
                   <div className='set-modal-body'>変更を確認しますか？</div>
                   <div className='set-modal-actions'>
                     <button
@@ -468,7 +463,6 @@ const WOPartsIssuance = () => {
                 </div>
               </div>
             )}
-
 
             {showRegistration && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -545,7 +539,6 @@ const WOPartsIssuance = () => {
                 </div>
               </div>
             )}
-
 
             {showBackConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
