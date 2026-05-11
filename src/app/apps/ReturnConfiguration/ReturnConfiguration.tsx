@@ -24,15 +24,15 @@ const ReturnConfiguration = () => {
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
                 <label>品目No.(親)</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                <input className='dark-backinput' value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={true} />
               </div>
               <div className='hand-row'>
                 <label>シリアル(親)</label>
-                <input />
+                <input className='dark-backinput' value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} readOnly={true} />
               </div>
               <div className='hand-row'>
-                <label>数量</label>
-                <input />
+                <label >数量</label>
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='rlr-row2'>
                 <label>状態</label>
@@ -62,15 +62,15 @@ const ReturnConfiguration = () => {
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled} />
+                <input style={{ backgroundColor: '#fff' }} />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} readOnly={!isEnabled} />
+                <input style={{ backgroundColor: '#fff' }} />
               </div>
-              <div className='hand-row'>
-                <label>シリアル</label>
-                <input readOnly={!isEnabled} />
+              <div className='hand-row' >
+                <label >シリアル</label>
+                <input style={{ backgroundColor: '#fff' }} />
               </div>
             </div>
 

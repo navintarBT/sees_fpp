@@ -10,6 +10,7 @@ const MiscellaneousInAndOutBound = () => {
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const isEnabled = parentWarehouse && parentItem && parentSerial
+  const [quantity, setQuantity] = useState('1')
 
   return (
     <div className='mockup-page'>
@@ -22,9 +23,9 @@ const MiscellaneousInAndOutBound = () => {
                 <label>倉庫</label>
                 <select>
                   <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                  <option value='倉庫A:W0040'>倉庫A:W0040</option>
+                  <option value='倉庫B:W0041'>倉庫B:W0041</option>
+                  <option value='倉庫C:W0042'>倉庫C:W0042</option>
                 </select>
               </div>
               <div className='hand-row'>
@@ -38,7 +39,9 @@ const MiscellaneousInAndOutBound = () => {
                     <option value='+'>+</option>
                     <option value='-'>-</option>
                   </select>
-                  <input style={{ backgroundColor: 'transparent' }} />
+                  <input value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                  />
                 </div>
               </div>
 
