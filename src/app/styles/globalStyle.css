@@ -1237,6 +1237,10 @@ input.wot-grid-value {
     color: #ef4444;
 }
 
+.hand-row .dark-backinput{
+  background-color: #e5e7eb;
+}
+
 /* ####################################table dispatch ########################################### */
 .dispatch-table .col-arrow-head,
 .dispatch-table .col-arrow{

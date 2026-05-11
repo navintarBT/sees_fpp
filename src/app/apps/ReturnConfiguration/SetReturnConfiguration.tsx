@@ -363,15 +363,7 @@ const SetReturnConfiguration = () => {
             <div className='set-form'>
               <div className='set-row'>
                 <label>JANコード(親)</label>
-                <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
-                >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
-                </select>
+                <input />
               </div>
               <div className='rlr-row2'>
                 <label>状態</label>

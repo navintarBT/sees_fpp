@@ -28,6 +28,7 @@ type TableColumn = {
 
 const SetMiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
+  const [quantity, setQuantity] = useState('1')
   const [rows, setRows] = useState<Row[]>([
     {
       id: 1,
@@ -368,9 +369,9 @@ const SetMiscellaneousInAndOutBound = () => {
                   onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
                 >
                   <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                  <option value='倉庫A:W0040'>倉庫A:W0040</option>
+                  <option value='倉庫B:W0041'>倉庫B:W0041</option>
+                  <option value='倉庫C:W0042'>倉庫C:W0042</option>
                 </select>
               </div>
               <div className='set-row'>
@@ -386,8 +387,9 @@ const SetMiscellaneousInAndOutBound = () => {
                     <option value='+'>+</option>
                     <option value='-'>-</option>
                   </select>
-                  <input value={form.qty}
-                    onChange={(e) => setForm({ ...form, qty: e.target.value })} />
+                  <input value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                  />
                 </div>
               </div>
 
