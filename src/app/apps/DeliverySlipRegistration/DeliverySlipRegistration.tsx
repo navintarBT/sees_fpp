@@ -273,6 +273,7 @@ const DeliverySlipRegistration = () => {
                 {/* ⑤ ผูก onKeyDown เพื่อ trigger fetch */}
                 <input
                   value={form.parentItemNo}
+                  maxLength={8}
                   onChange={(e) => {
                     const value = e.target.value;
                     setForm({ ...form, parentItemNo: value });
@@ -284,6 +285,7 @@ const DeliverySlipRegistration = () => {
                 <label>配送伝票No.</label>
                 <input
                   value={form.deliverySlipNo}
+                  maxLength={30}
                   onChange={(e) =>
                     setForm({ ...form, deliverySlipNo: e.target.value })
                   }
