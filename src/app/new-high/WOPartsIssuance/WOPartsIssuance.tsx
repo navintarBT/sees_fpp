@@ -331,12 +331,13 @@ const WOPartsIssuance = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録</div>
+          <div className='set-header'>WO部品出庫　WO別</div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row set-row-wo'>
                 <label>WO番号</label>
                 <input
+                  style={{textAlign: 'center'}}
                   value={form.woNumber}
                   onChange={(e) => setForm({...form, woNumber: e.target.value})}
                   className='set-small'
@@ -353,6 +354,7 @@ const WOPartsIssuance = () => {
                 <input
                   value={form.internalLabel}
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
+                  style={{textAlign: 'center'}}
                 />
               </div>
               <div className='set-row'>
@@ -360,6 +362,7 @@ const WOPartsIssuance = () => {
                 <input
                   value={form.shipmentQty}
                   onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
+                  style={{textAlign: 'center'}}
                 />
               </div>
               <div className='set-row'>
@@ -367,11 +370,13 @@ const WOPartsIssuance = () => {
                 <input
                   value={form.storage}
                   onChange={(e) => setForm({...form, storage: e.target.value})}
+                  style={{textAlign: 'center'}}
                 />
               </div>
               <div className='set-row'>
                 <label>事業所</label>
                 <input
+                style={{textAlign: 'center'}}
                   value={form.office}
                   onChange={(e) => setForm({...form, office: e.target.value})}
                 />

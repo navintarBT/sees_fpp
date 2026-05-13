@@ -226,8 +226,8 @@ const InventoryRecordDetail = () => {
     qty: '1',
     janCode: '',
   })
-  const [parentItem, setParentItem] = useState('部品001')
-  const [parentSerial, setParentSerial] = useState('WO-001')
+  const [parentItem, setParentItem] = useState('1197101')
+  const [parentSerial, setParentSerial] = useState('ITEM0001')
   const [moveStorage, setMoveStorage] = useState('10')
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -446,14 +446,14 @@ const InventoryRecordDetail = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>配送伝票登録</div>
+          <div className='set-header'>入荷実績登録読込データ参照</div>
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>
                     <label>品名</label>
                     <input
                       value={parentSerial}
- 
+                       style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>
@@ -461,7 +461,7 @@ const InventoryRecordDetail = () => {
                     <label>品目No.</label>
                     <input
                       value={parentItem}
-
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>

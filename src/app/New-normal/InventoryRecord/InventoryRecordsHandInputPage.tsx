@@ -24,7 +24,7 @@ const InventoryRecordsHandInputPage = () => {
           <div className='hand-body'>
               <div className='hand-row'>
                 <label>倉庫</label>
-                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)} style={{textAlign: 'center'}}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
@@ -33,35 +33,33 @@ const InventoryRecordsHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>保管場所</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled}  style={{ backgroundColor: '#e5e7eb' }} />
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled}  style={{ backgroundColor: '#e5e7eb',textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>ロット状況</label>
-                <select disabled={!isEnabled}>
-                  <option>千葉倉庫（WMS）：W002</option>
-                  <option>千葉倉庫（WMS）：W003</option>
-                  <option>千葉倉庫（WMS）：W004</option>
+                <select style={{textAlign: 'center'}}>
+                  <option>検査中</option>
                 </select>
               </div>
               <div className='hand-row'>
                 <label>数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} style={{ backgroundColor: 'white' }} />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} style={{ backgroundColor: 'white', textAlign: 'center' }} />
               </div>
               <div className='hand-row '>
                 <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#e5e7eb' }} />
+                <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#e5e7eb', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input readOnly={!isEnabled} placeholder=' ' style={{ backgroundColor: 'white' }} />
+                <input placeholder=' ' style={{ backgroundColor: 'white', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' style={{ backgroundColor: 'white' }} />
+                <input placeholder=' ' style={{ backgroundColor: 'white', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>有効期限（yymm）</label>
-                <input placeholder=' ' style={{ backgroundColor: 'white' }} />
+                <input placeholder=' ' style={{ backgroundColor: 'white', textAlign: 'center' }} />
               </div>
 
             <ActionFooter columns={4}>
@@ -85,7 +83,7 @@ const InventoryRecordsHandInputPage = () => {
                 {'\u624b\u5165\u529b'}
               </button> */}
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 {'\u623B\u308B'}

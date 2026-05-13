@@ -44,5 +44,4 @@ const Warehouse = () => {
     </div>
   )
 }
-
 export { Warehouse }

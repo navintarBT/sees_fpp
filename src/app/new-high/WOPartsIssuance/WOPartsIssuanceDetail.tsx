@@ -351,14 +351,14 @@ const WOPartsIssuanceDetail = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>配送伝票登録</div>
+          <div className='set-header'>投入明細確認画面</div>
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>
                     <label>WO番号</label>
                     <input
                       value={parentSerial}
- 
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>
@@ -366,7 +366,7 @@ const WOPartsIssuanceDetail = () => {
                     <label>品番</label>
                     <input
                       value={parentItem}
-
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>
@@ -374,6 +374,7 @@ const WOPartsIssuanceDetail = () => {
                     <label>必要数</label>
                     <input
                       value={moveStorage}
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>
@@ -425,7 +426,7 @@ const WOPartsIssuanceDetail = () => {
                 明細確認
               </button>
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る

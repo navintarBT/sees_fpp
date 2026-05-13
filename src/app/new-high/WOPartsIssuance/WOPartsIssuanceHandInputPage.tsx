@@ -51,24 +51,27 @@ const WOPartsIssuanceHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>配送伝票登録</div>
+          <div className='set-header'>WO部品出庫　品番別</div>
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>
                     <label>品番</label>
                     <input
+                    style={{textAlign: 'center'}}
                       value={parentItem}
                     />
                   </div>
                     <div className='set-row'>
                     <label>WO番号</label>
                     <input
+                    style={{textAlign: 'center'}}
                       value={parentSerial}
                     />
                   </div>
                   <div className='set-row'>
                     <label>必要数</label>
                     <input
+                    style={{textAlign: 'center'}}
                       value={moveStorage}
                     />
                   </div>

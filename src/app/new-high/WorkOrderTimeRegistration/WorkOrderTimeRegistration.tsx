@@ -289,7 +289,7 @@ const WorkOrderTimeRegistration = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>作業実績入力</div>
+          <div className='set-header'>作業オーダー実績時間登録</div>
           <div className='set-body'>
             <div className='set-formnew_high '>
               <div className='wot-header-container '>

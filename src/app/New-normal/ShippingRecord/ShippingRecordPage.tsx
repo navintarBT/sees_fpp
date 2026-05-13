@@ -161,8 +161,8 @@ const ShippingRecordPage = () => {
     },
   ])
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '0193090',
+    parentWarehouse: '',
+    parentItemNo: '3019',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
     qty: '1',
@@ -226,7 +226,6 @@ const ShippingRecordPage = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId(rowId)
-    setShowRowClickConfirm(true)
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -284,6 +283,13 @@ const ShippingRecordPage = () => {
         event.preventDefault()
         closeAllModals()
         setShowBackConfirm(true)
+        return
+      }
+
+      if (event.key === 'Enter' && activeRow) {
+        event.preventDefault()
+        closeAllModals()
+        setShowRowClickConfirm(true)
       }
     }
     const onKeyUp = (event: KeyboardEvent) => {
@@ -331,6 +337,7 @@ const ShippingRecordPage = () => {
                 <div className='set-row'>
                 <label>出荷指示No.</label>
                 <input
+                style={{textAlign: 'center'}}
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
@@ -340,16 +347,18 @@ const ShippingRecordPage = () => {
                 <select
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
+                  style={{textAlign: 'center'}}
                 >
                   <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                  <option value='千葉倉庫（WMS）：W002'>千葉工場：F0200</option>
+                  <option value='千葉倉庫（WMS）：W003'>千葉工場：F0201</option>
+                  <option value='千葉倉庫（WMS）：W004'>千葉工場：F0202</option>
                 </select>
               </div>
               <div className='set-row'>
                 <label>保管場所</label>
                 <input
+                style={{textAlign: 'center'}}
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                 />
@@ -358,6 +367,7 @@ const ShippingRecordPage = () => {
               <div className='set-row'>
                 <label>数量</label>
                 <input
+                style={{textAlign: 'center'}}
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
@@ -367,6 +377,7 @@ const ShippingRecordPage = () => {
               <div className='set-row'>
                 <label>品目No</label>
                 <input
+                style={{textAlign: 'center'}}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
                 />
@@ -374,8 +385,9 @@ const ShippingRecordPage = () => {
               <div className='set-row'>
                 <label>移動先</label>
                 <input
-                  value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
+                style={{textAlign: 'center'}}
+                  value={form.parentWarehouse}
+                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                 />
               </div>
             </div>
@@ -397,19 +409,19 @@ const ShippingRecordPage = () => {
                 破棄
               </button>
               <button
-                className='set-btn set-primary'
+                className='set-btn set-warning'
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
               </button>     
               <button
-                className='set-btn set-success'
+                className='set-btn set-primary'
                 onClick={() => setShowHandInputConfirm(true)}
               >
                 手入力
               </button>
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る

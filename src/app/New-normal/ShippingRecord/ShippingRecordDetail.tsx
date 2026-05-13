@@ -450,6 +450,7 @@ const ShippingRecordDetail = () => {
                   <div className='set-row'>
                     <label>品名</label>
                     <input
+                    style={{textAlign: 'center'}}
                       value={parentSerial}
                       readOnly
                     />
@@ -458,7 +459,7 @@ const ShippingRecordDetail = () => {
                     <label>品目No.</label>
                     <input
                       value={parentItem}
-
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>
@@ -502,7 +503,7 @@ const ShippingRecordDetail = () => {
               </button>
 
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
