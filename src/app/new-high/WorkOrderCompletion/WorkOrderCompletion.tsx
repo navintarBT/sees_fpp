@@ -179,7 +179,7 @@ const WorkOrderCompletion = () => {
               </div>
               <div className='hand-row'>
                 <label>WO番号</label>
-                <input value={woNumber} onChange={(e) => setWoNumber(e.target.value)} />
+                <input value={woNumber} style={{textAlign: 'center'}} onChange={(e) => setWoNumber(e.target.value)} />
               </div>
               <div className='hand-row' style={{marginTop: '11px', fontSize: '30px'}}>
                 <label>WO完了数</label>
