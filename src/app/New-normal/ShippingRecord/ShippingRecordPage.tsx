@@ -226,7 +226,6 @@ const ShippingRecordPage = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId(rowId)
-    setShowRowClickConfirm(true)
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -284,6 +283,13 @@ const ShippingRecordPage = () => {
         event.preventDefault()
         closeAllModals()
         setShowBackConfirm(true)
+        return
+      }
+
+      if (event.key === 'Enter' && activeRow) {
+        event.preventDefault()
+        closeAllModals()
+        setShowRowClickConfirm(true)
       }
     }
     const onKeyUp = (event: KeyboardEvent) => {
@@ -397,19 +403,19 @@ const ShippingRecordPage = () => {
                 破棄
               </button>
               <button
-                className='set-btn set-primary'
+                className='set-btn set-warning'
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
               </button>     
               <button
-                className='set-btn set-success'
+                className='set-btn set-primary'
                 onClick={() => setShowHandInputConfirm(true)}
               >
                 手入力
               </button>
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る

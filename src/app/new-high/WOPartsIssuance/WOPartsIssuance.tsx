@@ -331,7 +331,7 @@ const WOPartsIssuance = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録</div>
+          <div className='set-header'>WO部品出庫　WO別</div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row set-row-wo'>

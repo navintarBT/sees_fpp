@@ -502,7 +502,7 @@ const ShippingRecordDetail = () => {
               </button>
 
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る

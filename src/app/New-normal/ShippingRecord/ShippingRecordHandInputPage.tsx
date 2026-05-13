@@ -70,7 +70,7 @@ const ShippingRecordHandInputPage = () => {
                 {'\u624b\u5165\u529b'}
               </button> */}
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 {'\u623B\u308B'}

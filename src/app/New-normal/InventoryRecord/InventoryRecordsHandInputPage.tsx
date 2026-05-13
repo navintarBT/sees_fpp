@@ -37,10 +37,8 @@ const InventoryRecordsHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>ロット状況</label>
-                <select disabled={!isEnabled}>
-                  <option>千葉倉庫（WMS）：W002</option>
-                  <option>千葉倉庫（WMS）：W003</option>
-                  <option>千葉倉庫（WMS）：W004</option>
+                <select>
+                  <option>検査中</option>
                 </select>
               </div>
               <div className='hand-row'>
@@ -85,7 +83,7 @@ const InventoryRecordsHandInputPage = () => {
                 {'\u624b\u5165\u529b'}
               </button> */}
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 {'\u623B\u308B'}

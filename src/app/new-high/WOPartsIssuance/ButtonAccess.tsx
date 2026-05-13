@@ -11,7 +11,7 @@ const ButtonAccess = () => {
     <div className='mockup-page'>
       <div className='mockup-stage'>
         <div className='mockup-frame'>
-          <div className='mockup-header'>メインメニュー</div>
+          <div className='mockup-header'>作業オーダー部品払出</div>
           <div className='mockup-body'>
             <div className='mockup-grid'>
               {factoryButtons.map((btn) => (
@@ -21,7 +21,7 @@ const ButtonAccess = () => {
               ))}
             </div>
             <button className='mockup-exit' onClick={() => navigate('/factory/factory')}>
-              終了
+              戻る
             </button>
           </div>
         </div>

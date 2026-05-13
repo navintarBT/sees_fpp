@@ -226,8 +226,8 @@ const InventoryRecordDetail = () => {
     qty: '1',
     janCode: '',
   })
-  const [parentItem, setParentItem] = useState('部品001')
-  const [parentSerial, setParentSerial] = useState('WO-001')
+  const [parentItem, setParentItem] = useState('1197101')
+  const [parentSerial, setParentSerial] = useState('ITEM0001')
   const [moveStorage, setMoveStorage] = useState('10')
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)

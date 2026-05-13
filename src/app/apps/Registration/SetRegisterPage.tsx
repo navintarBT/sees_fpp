@@ -37,9 +37,9 @@ const SetRegisterPage = () => {
       status: '追加', // 状態
       build: 2, // 構成数
       release: 1, // 解除数
-      move: 'W1', // 移動倉
-      moveStorage: 'S1', // 移動保管場所
-      name: '部品A', // 品名
+      move: 'W001', // 移動倉
+      moveStorage: '', // 移動保管場所
+      name: '品目1', // 品名
       moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
     },
     {
@@ -50,9 +50,9 @@ const SetRegisterPage = () => {
       status: '解除',
       build: 1,
       release: 0,
-      move: 'W2',
-      moveStorage: 'S2',
-      name: '部品B',
+      move: 'W002',
+      moveStorage: '',
+      name: '品目2',
       moveStorage2: '棚B',
     },
     {
@@ -63,9 +63,9 @@ const SetRegisterPage = () => {
       status: 'OV対応要',
       build: 3,
       release: 2,
-      move: 'W3',
-      moveStorage: 'S3',
-      name: '部品C',
+      move: 'W003',
+      moveStorage: '',
+      name: '品目3',
       moveStorage2: '棚C',
     },
     {
@@ -76,9 +76,9 @@ const SetRegisterPage = () => {
       status: '構成中',
       build: 4,
       release: 1,
-      move: 'W1',
-      moveStorage: 'S4',
-      name: '部品D',
+      move: 'W004',
+      moveStorage: '',
+      name: '品目4',
       moveStorage2: '棚D',
     },
     {
@@ -89,9 +89,9 @@ const SetRegisterPage = () => {
       status: '構成中',
       build: 2,
       release: 0,
-      move: 'W2',
-      moveStorage: 'S5',
-      name: '部品E',
+      move: 'W005',
+      moveStorage: '',
+      name: '品目5',
       moveStorage2: '棚E',
     },
     {
@@ -102,9 +102,9 @@ const SetRegisterPage = () => {
       status: '構成中',
       build: 5,
       release: 3,
-      move: 'W3',
-      moveStorage: 'S6',
-      name: '部品F',
+      move: 'W006',
+      moveStorage: '',
+      name: '品目6',
       moveStorage2: '棚F',
     },
     {
@@ -115,9 +115,9 @@ const SetRegisterPage = () => {
       status: '構成中',
       build: 1,
       release: 0,
-      move: 'W1',
-      moveStorage: 'S7',
-      name: '部品G',
+      move: 'W007',
+      moveStorage: '',
+      name: '品目7',
       moveStorage2: '棚G',
     },
     {
@@ -128,9 +128,9 @@ const SetRegisterPage = () => {
       status: '構成中',
       build: 3,
       release: 1,
-      move: 'W2',
-      moveStorage: 'S8',
-      name: '部品H',
+      move: 'W008',
+      moveStorage: '',
+      name: '品目8',
       moveStorage2: '棚H',
     },
     {
@@ -141,9 +141,9 @@ const SetRegisterPage = () => {
       status: '構成中',
       build: 2,
       release: 2,
-      move: 'W3',
-      moveStorage: 'S9',
-      name: '部品I',
+      move: 'W009',
+      moveStorage: '',
+      name: '品目9',
       moveStorage2: '棚I',
     },
     {
@@ -154,9 +154,9 @@ const SetRegisterPage = () => {
       status: '構成中',
       build: 6,
       release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
+      move: 'W010',
+      moveStorage: '',
+      name: '品目10',
       moveStorage2: '棚J',
     },
   ])
@@ -352,9 +352,9 @@ const SetRegisterPage = () => {
 
                 >
                   <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0020</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0021</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
                 </select>
               </div>
               <div className='set-row'>

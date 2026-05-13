@@ -351,7 +351,7 @@ const WOPartsIssuanceDetail = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>配送伝票登録</div>
+          <div className='set-header'>投入明細確認画面</div>
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>
@@ -425,7 +425,7 @@ const WOPartsIssuanceDetail = () => {
                 明細確認
               </button>
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る

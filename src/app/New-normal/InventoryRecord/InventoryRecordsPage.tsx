@@ -9,21 +9,9 @@ type Row = {
   error: string
   item: string
   lot: string
-  status: string
-  build: number
-  release: number
-  move: string
-  moveStorage: string
-  name: string
-  moveStorage2?: string
-}
-
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
+  instruct: string
+  Load: number
+  productName: string
 }
 
 const InventoryRecordsPage = () => {
@@ -32,139 +20,99 @@ const InventoryRecordsPage = () => {
     {
       id: 1,
       error: '',
-      item: 'A01', // 品目No.
-      lot: 'L01', // ロットシリアル
-      status: '追加', // 状態
-      build: 2, // 構成数
-      release: 1, // 解除数
-      move: 'W1', // 移動倉
-      moveStorage: 'S1', // 移動保管場所
-      name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
+      item: 'A01',
+      lot: 'L01', 
+      instruct: '追加', 
+      Load: 2,
+      productName: '品目1', 
     },
     {
       id: 2,
       error: '',
       item: 'B02',
       lot: 'L02',
-      status: '解除',
-      build: 1,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S2',
-      name: '部品B',
-      moveStorage2: '棚B',
+      instruct: '解除',
+      Load: 1,
+      productName: '品目2',
     },
     {
       id: 3,
       error: '',
       item: 'C03',
       lot: 'L03',
-      status: 'OV対応要',
-      build: 3,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S3',
-      name: '部品C',
-      moveStorage2: '棚C',
+      instruct: 'OV対応要',
+      Load: 3,
+      productName: '品目3',
     },
     {
       id: 4,
       error: '',
       item: 'D04',
       lot: 'L04',
-      status: '構成中',
-      build: 4,
-      release: 1,
-      move: 'W1',
-      moveStorage: 'S4',
-      name: '部品D',
-      moveStorage2: '棚D',
+      instruct: '構成中',
+      Load: 4,
+      productName: '品目4',
     },
     {
       id: 5,
       error: 'E',
       item: 'E05',
       lot: 'L05',
-      status: '構成中',
-      build: 2,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S5',
-      name: '部品E',
-      moveStorage2: '棚E',
+      instruct: '構成中',
+      Load: 2,
+      productName: '品目5',
     },
     {
       id: 6,
       error: '',
       item: 'F06',
       lot: 'L06',
-      status: '構成中',
-      build: 5,
-      release: 3,
-      move: 'W3',
-      moveStorage: 'S6',
-      name: '部品F',
-      moveStorage2: '棚F',
+      instruct: '構成中',
+      Load: 5,
+      productName: '品目6',
     },
     {
       id: 7,
       error: 'E',
       item: 'G07',
       lot: 'L07',
-      status: '構成中',
-      build: 1,
-      release: 0,
-      move: 'W1',
-      moveStorage: 'S7',
-      name: '部品G',
-      moveStorage2: '棚G',
+      instruct: '構成中',
+      Load: 1,
+      productName: '品目7',
     },
     {
       id: 8,
       error: '',
       item: 'H08',
       lot: 'L08',
-      status: '構成中',
-      build: 3,
-      release: 1,
-      move: 'W2',
-      moveStorage: 'S8',
-      name: '部品H',
-      moveStorage2: '棚H',
+      instruct: '構成中',
+      Load: 3,
+      productName: '品目8',
     },
     {
       id: 9,
       error: '',
       item: 'I09',
       lot: 'L09',
-      status: '構成中',
-      build: 2,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S9',
-      name: '部品I',
-      moveStorage2: '棚I',
+      instruct: '構成中',
+      Load: 2,
+      productName: '品目9',
     },
     {
       id: 10,
       error: 'E',
       item: 'J10',
       lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
+      instruct: '構成中',
+      Load: 6,
+      productName: '品目10',
     },
   ])
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '0193090',
+    parentItemNo: '3019',
     moveWarehouse: '千葉倉庫（WMS）：W002',
-    moveStorage: '',
+    moveStorage: '工場：基本保管場所',
     qty: '1',
     janCode: '',
   })
@@ -309,9 +257,9 @@ const InventoryRecordsPage = () => {
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '指示', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.release},
+    {key: 'instruct', headClassName: 'col-instruct', cellClassName: 'col-instruct', header: '指示', render: (row) => row.instruct},
+    {key: 'Load', headClassName: 'col-Load', cellClassName: 'col-Load', header: '読込', render: (row) => row.Load},
+    {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
 
   ]
 
@@ -388,6 +336,7 @@ const InventoryRecordsPage = () => {
               columns={tableColumns}
               rows={rows}
               scrollRef={tableScrollRef}
+              gridClassName='inventory-table'
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
@@ -401,19 +350,19 @@ const InventoryRecordsPage = () => {
                 破棄
               </button>
               <button
-                className='set-btn set-primary'
+                className='set-btn set-warning'
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
               </button>     
               <button
-                className='set-btn set-success'
+                className='set-btn set-primary '
                 onClick={() => setShowHandInputConfirm(true)}
               >
                 手入力
               </button>
               <button
-                className='set-btn set-warning'
+                className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る

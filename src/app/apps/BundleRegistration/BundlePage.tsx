@@ -11,8 +11,8 @@ type Row = {
   item: string
   lot: string
   quantity: string
-  warehouse: number
-  storage: number
+  warehouse: string
+  storage: string
   productName: string
 }
 
@@ -34,9 +34,9 @@ const BundlePage = () => {
       item: 'A01', // 品目No.
       lot: 'L01', // ロットシリアル
       quantity: '追加', // 状態
-      warehouse: 2, // 構成数
-      storage: 1111, // 解除数
-      productName: 'W1', // 移動倉
+      warehouse: 'W0020', // 構成数
+      storage: '', // 解除数
+      productName: '品目1', // 移動倉
     },
     {
       id: 2,
@@ -45,9 +45,9 @@ const BundlePage = () => {
       item: 'B02',
       lot: 'L02',
       quantity: '解除',
-      warehouse: 1,
-      storage: 110,
-      productName: 'W2',
+      warehouse: 'W0021',
+      storage: '',
+      productName: '品目2',
     },
     {
       id: 3,
@@ -56,9 +56,9 @@ const BundlePage = () => {
       item: 'C03',
       lot: 'L03',
       quantity: 'OV対応要',
-      warehouse: 3777888,
-      storage: 1112,
-      productName: 'W3',
+      warehouse: 'W0022',
+      storage: '',
+      productName: '品目3',
     },
     {
       id: 4,
@@ -67,9 +67,9 @@ const BundlePage = () => {
       item: 'D04',
       lot: 'L04',
       quantity: '構成中',
-      warehouse: 4,
-      storage: 1111,
-      productName: 'W1',
+      warehouse: 'W0023',
+      storage: '',
+      productName: '品目4',
     },
     {
       id: 5,
@@ -78,9 +78,9 @@ const BundlePage = () => {
       item: 'E05',
       lot: 'L05',
       quantity: '構成中',
-      warehouse: 2,
-      storage: 110,
-      productName: 'W2',
+      warehouse: 'W0024',
+      storage: '',
+      productName: '品目5',
     },
     {
       id: 6,
@@ -89,9 +89,9 @@ const BundlePage = () => {
       item: 'F06',
       lot: 'L06',
       quantity: '構成中',
-      warehouse: 5,
-      storage: 311,
-      productName: 'W3',
+      warehouse: 'W0025',
+      storage: '',
+      productName: '品目6',
     },
     {
       id: 7,
@@ -100,9 +100,9 @@ const BundlePage = () => {
       item: 'G07',
       lot: 'L07',
       quantity: '構成中',
-      warehouse: 1,
-      storage: 111,
-      productName: 'W1',
+      warehouse: 'W0026',
+      storage: '',
+      productName: '品目7',
     },
     {
       id: 8,
@@ -111,9 +111,9 @@ const BundlePage = () => {
       item: 'H08',
       lot: 'L08',
       quantity: '構成中',
-      warehouse: 3,
-      storage: 122,
-      productName: 'W2',
+      warehouse: 'W0027',
+      storage: '',
+      productName: '品目8',
     },
     {
       id: 9,
@@ -122,9 +122,9 @@ const BundlePage = () => {
       item: 'I09',
       lot: 'L09',
       quantity: '構成中',
-      warehouse: 2,
-      storage: 222,
-      productName: 'W3',
+      warehouse: 'W0028',
+      storage: '',
+      productName: '品目9',
     },
     {
       id: 10,
@@ -133,9 +133,9 @@ const BundlePage = () => {
       item: 'J10',
       lot: 'L10',
       quantity: '構成中',
-      warehouse: 6,
-      storage: 222,
-      productName: 'W1',
+      warehouse: 'W0029',
+      storage: '',
+      productName: '品目10',
     },
      {
       id: 11,
@@ -144,9 +144,9 @@ const BundlePage = () => {
       item: 'J10',
       lot: 'L10',
       quantity: '構成中',
-      warehouse: 6,
-      storage: 222,
-      productName: 'W1',
+      warehouse: 'W0030',
+      storage: '',
+      productName: '品目11',
     },
      {
       id: 12,
@@ -155,9 +155,9 @@ const BundlePage = () => {
       item: 'J10',
       lot: 'L10',
       quantity: '構成中',
-      warehouse: 6,
-      storage: 222,
-      productName: 'W1',
+      warehouse: 'W0031',
+      storage: '',
+      productName: '品目12',
     },
   ])
   const [form, setForm] = useState({
@@ -328,9 +328,9 @@ const BundlePage = () => {
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                 >
                   <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0020</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0021</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
                 </select>
               </div>
               <div className='set-row'>
