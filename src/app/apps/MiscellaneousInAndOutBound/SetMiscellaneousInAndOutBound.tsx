@@ -271,11 +271,8 @@ const SetMiscellaneousInAndOutBound = () => {
       setShowNoSelectionConfirm(true)
       return
     }
-    if (activeRow?.status === '\u8ffd\u52a0' || activeRow?.status === '\u004f\u0056\u5bfe\u5fdc\u8981' || activeRow?.status === '\u89e3\u9664' || activeRow?.status === '\u69cb\u6210\u4e2d') {
-      closeAllModals()
-      setShowDeleteConfirm(true)
-      return
-    }
+    closeAllModals()
+    setShowDeleteConfirm(true)
   }
 
 
@@ -474,13 +471,17 @@ const SetMiscellaneousInAndOutBound = () => {
           {showDeleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>選択した行を削除します。<br />よろしいですか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowDeleteConfirm(false)
+                      if (activeRowId !== null) {
+                        setRows((prev) => prev.filter((row) => row.id !== activeRowId))
+                        setActiveRowId(null)
+                      }
                     }}
                   >
                     {'\u306f\u3044'}
