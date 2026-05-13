@@ -161,7 +161,7 @@ const ShippingRecordPage = () => {
     },
   ])
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
+    parentWarehouse: '',
     parentItemNo: '3019',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
@@ -386,8 +386,8 @@ const ShippingRecordPage = () => {
                 <label>移動先</label>
                 <input
                 style={{textAlign: 'center'}}
-                  value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
+                  value={form.parentWarehouse}
+                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                 />
               </div>
             </div>

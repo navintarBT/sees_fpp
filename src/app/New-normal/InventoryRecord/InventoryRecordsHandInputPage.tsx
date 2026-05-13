@@ -47,19 +47,19 @@ const InventoryRecordsHandInputPage = () => {
               </div>
               <div className='hand-row '>
                 <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#e5e7eb' }} />
+                <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#e5e7eb', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input readOnly={!isEnabled} placeholder=' ' style={{ backgroundColor: 'white' }} />
+                <input placeholder=' ' style={{ backgroundColor: 'white', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' style={{ backgroundColor: 'white' }} />
+                <input placeholder=' ' style={{ backgroundColor: 'white', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>有効期限（yymm）</label>
-                <input placeholder=' ' style={{ backgroundColor: 'white' }} />
+                <input placeholder=' ' style={{ backgroundColor: 'white', textAlign: 'center' }} />
               </div>
 
             <ActionFooter columns={4}>

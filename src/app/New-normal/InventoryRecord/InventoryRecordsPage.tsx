@@ -115,6 +115,7 @@ const InventoryRecordsPage = () => {
     moveStorage: '工場：基本保管場所',
     qty: '1',
     janCode: '',
+    source: '',
   })
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
@@ -151,6 +152,7 @@ const InventoryRecordsPage = () => {
       moveStorage: '',
       qty: '',
       janCode: '',
+      source: '',
     })
 
   const resetTableScroll = () => {
@@ -323,6 +325,7 @@ const InventoryRecordsPage = () => {
               <div className='set-row'>
                 <label>JANコード ／品目コード</label>
                 <input
+                style={{textAlign: 'center'}}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
                 />
@@ -330,8 +333,9 @@ const InventoryRecordsPage = () => {
               <div className='set-row'>
                 <label>移動元</label>
                 <input
-                  value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
+                style={{textAlign: 'center'}}
+                  value={form.source}
+                  onChange={(e) => setForm({...form, source: e.target.value})}
                 />
               </div>
             </div>
