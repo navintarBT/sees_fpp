@@ -358,7 +358,7 @@ const WOPartsIssuanceDetail = () => {
                     <label>WO番号</label>
                     <input
                       value={parentSerial}
- 
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>
@@ -366,7 +366,7 @@ const WOPartsIssuanceDetail = () => {
                     <label>品番</label>
                     <input
                       value={parentItem}
-
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>
@@ -374,6 +374,7 @@ const WOPartsIssuanceDetail = () => {
                     <label>必要数</label>
                     <input
                       value={moveStorage}
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>

@@ -264,7 +264,7 @@ const InventoryRecordsPage = () => {
   ]
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page' style={{textAlign: 'center'}}>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
           <div className='set-header'>入荷実績登録</div>
@@ -272,7 +272,7 @@ const InventoryRecordsPage = () => {
             <div className='set-form'>
                 <div className='set-row'>
                 <label>出荷/発注No/現品票No.</label>
-                <input
+                <input style={{textAlign: 'center'}}
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
@@ -280,6 +280,7 @@ const InventoryRecordsPage = () => {
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
+                style={{textAlign: 'center'}}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                 >
@@ -292,6 +293,7 @@ const InventoryRecordsPage = () => {
               <div className='set-row'>
                 <label>保管場所</label>
                 <input
+                style={{textAlign: 'center'}}
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                 />
@@ -299,6 +301,7 @@ const InventoryRecordsPage = () => {
                 <div className='set-row'>
                 <label>ロット状況</label>
                 <select
+                  style={{textAlign: 'center'}}
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                 >
@@ -310,6 +313,7 @@ const InventoryRecordsPage = () => {
               <div className='set-row'>
                 <label>数量</label>
                 <input
+                style={{textAlign: 'center'}}
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'

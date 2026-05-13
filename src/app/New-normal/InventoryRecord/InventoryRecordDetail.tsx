@@ -453,7 +453,7 @@ const InventoryRecordDetail = () => {
                     <label>品名</label>
                     <input
                       value={parentSerial}
- 
+                       style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>
@@ -461,7 +461,7 @@ const InventoryRecordDetail = () => {
                     <label>品目No.</label>
                     <input
                       value={parentItem}
-
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>

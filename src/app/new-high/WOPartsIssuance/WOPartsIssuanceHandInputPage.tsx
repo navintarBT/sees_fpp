@@ -57,18 +57,21 @@ const WOPartsIssuanceHandInputPage = () => {
                   <div className='set-row'>
                     <label>品番</label>
                     <input
+                    style={{textAlign: 'center'}}
                       value={parentItem}
                     />
                   </div>
                     <div className='set-row'>
                     <label>WO番号</label>
                     <input
+                    style={{textAlign: 'center'}}
                       value={parentSerial}
                     />
                   </div>
                   <div className='set-row'>
                     <label>必要数</label>
                     <input
+                    style={{textAlign: 'center'}}
                       value={moveStorage}
                     />
                   </div>

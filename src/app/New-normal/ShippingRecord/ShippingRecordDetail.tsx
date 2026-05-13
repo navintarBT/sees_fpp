@@ -450,6 +450,7 @@ const ShippingRecordDetail = () => {
                   <div className='set-row'>
                     <label>品名</label>
                     <input
+                    style={{textAlign: 'center'}}
                       value={parentSerial}
                       readOnly
                     />
@@ -458,7 +459,7 @@ const ShippingRecordDetail = () => {
                     <label>品目No.</label>
                     <input
                       value={parentItem}
-
+                      style={{textAlign: 'center'}}
                       readOnly
                     />
                   </div>

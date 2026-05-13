@@ -21,7 +21,9 @@ const ShippingRecordHandInputPage = () => {
           <div className='hand-body'>
               <div className='hand-row'>
                 <label>倉庫/工場</label>
-                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                <select value={parentWarehouse} 
+                onChange={(e) => setParentWarehouse(e.target.value)} 
+                style={{textAlign: 'center'}}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
@@ -30,15 +32,15 @@ const ShippingRecordHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>保管場所</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled}  style={{ backgroundColor: '#e5e7eb' }} />
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled}  style={{ backgroundColor: '#e5e7eb', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} style={{ backgroundColor: 'white' }} />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} style={{ backgroundColor: 'white', textAlign: 'center' }} />
               </div>
               <div className='hand-row '>
                 <label>品目No</label>
-                <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#e5e7eb' }} />
+                <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#e5e7eb', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>ロットシリアル</label>
