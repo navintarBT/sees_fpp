@@ -59,7 +59,7 @@ const MiscellaneousInAndOutBound = () => {
                 <input style={{ backgroundColor: 'transparent' }} />
               </div>
               <div className='hand-row' >
-                <label>有効期限</label>
+                <label>有効期限(yymm)</label>
                 <div className='hand-date-field'>
                   <input
                     type='text'
