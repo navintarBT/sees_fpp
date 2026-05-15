@@ -13,6 +13,7 @@ type TableSectionProps<Row> = {
   rows: Row[]
   getRowKey: (row: Row) => string | number
   activeRowKey?: string | number | null
+  isRowActive?: (rowKey: string | number, row: Row) => boolean
   onRowActivate?: (rowKey: string | number, row: Row) => void
   tools?: ReactNode
   empty?: ReactNode
@@ -26,6 +27,7 @@ function TableSection<Row>({
   rows,
   getRowKey,
   activeRowKey = null,
+  isRowActive,
   onRowActivate,
   tools,
   empty,
@@ -65,7 +67,8 @@ function TableSection<Row>({
               ) : (
                 rows.map((row) => {
                   const rowKey = getRowKey(row)
-                  const isActive = activeRowKey != null && rowKey === activeRowKey
+                  const isActiveByKey = activeRowKey != null && rowKey === activeRowKey
+                  const isActive = isRowActive ? isRowActive(rowKey, row) : isActiveByKey
                   return (
                     <div
                       className={isActive ? 'tf-tableRow tf-tableRowActive' : 'tf-tableRow'}

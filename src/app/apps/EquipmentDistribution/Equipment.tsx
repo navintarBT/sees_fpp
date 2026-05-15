@@ -489,6 +489,7 @@ const Equipment = () => {
             <TableSection
               columns={tableColumns}
               rows={rows}
+              gridClassName="equipment-table"
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}

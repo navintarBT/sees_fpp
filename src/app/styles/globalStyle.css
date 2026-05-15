@@ -248,6 +248,10 @@
   border-bottom:1px solid rgba(0,0,0,0.2);
 }
 
+.tf-tableRowActive .tf-tableCell{
+  background:#d1d5db;
+}
+
 .tf-tableEmpty{
   grid-column: 1 / -1;
   min-height:240px;
@@ -1302,7 +1306,65 @@ input.wot-grid-value {
   min-width: 170px;
 }
 
+/* ####################################table set-register ########################################### */
+
+.set-register-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.set-register-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.set-register-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
+
+/* ####################################table set-return-configuration ########################################### */
+
+.set-return-configuration-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.set-return-configuration-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.set-return-configuration-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
+
 /* ####################################table delivery ########################################### */
+
+.delivery-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.delivery-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.delivery-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
 
 .delivery-table .col-situation{
   min-width: 200px;
@@ -1310,6 +1372,66 @@ input.wot-grid-value {
 
 .delivery-table .col-item{
   min-width: 796px;
+}
+
+/* ####################################table miscellaneous ########################################### */
+
+.set-table-miscellaneous .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.set-table-miscellaneous .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.set-table-miscellaneous .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
+
+/* ####################################table equipment ########################################### */
+
+.equipment-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.equipment-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.equipment-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
+
+/* ####################################table bundle ########################################### */
+
+.bundle-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.bundle-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.bundle-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
 }
 
 /* ####################################table woPartsIssuance ########################################### */

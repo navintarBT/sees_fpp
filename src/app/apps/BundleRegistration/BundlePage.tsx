@@ -403,6 +403,7 @@ const BundlePage = () => {
             <TableSection
               columns={tableColumns}
               rows={rows}
+              gridClassName='bundle-table'
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}

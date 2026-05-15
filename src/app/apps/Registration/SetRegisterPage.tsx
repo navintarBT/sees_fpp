@@ -407,6 +407,7 @@ const SetRegisterPage = () => {
               columns={tableColumns}
               rows={rows}
               scrollRef={tableScrollRef}
+              gridClassName='set-register-table'
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
