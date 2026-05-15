@@ -396,6 +396,7 @@ const ShippingRecordPage = () => {
               columns={tableColumns}
               rows={rows}
               scrollRef={tableScrollRef}
+              gridClassName='shipping-table'
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
