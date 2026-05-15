@@ -77,7 +77,7 @@ const DeliverySlipRegistration = () => {
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
-
+  const isEnabled = !!form.deliverySlipNo;
   const [activeRowId, setActiveRowId] = useState<number | null>(null);
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([]);
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null;
@@ -284,9 +284,12 @@ const DeliverySlipRegistration = () => {
               <div className="set-row">
                 <label>配送伝票No.</label>
                 <input
+                  readOnly={!isEnabled}
                   value={form.deliverySlipNo}
+                  style={{ backgroundColor: "rgb(229, 231, 235)" }}
                   maxLength={30}
                   onChange={(e) =>
+                  
                     setForm({ ...form, deliverySlipNo: e.target.value })
                   }
                 />
