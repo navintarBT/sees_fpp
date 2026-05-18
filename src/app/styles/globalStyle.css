@@ -1436,6 +1436,24 @@ input.wot-grid-value {
 
 /* ####################################table woPartsIssuance ########################################### */
 
+.woPartsIssuance-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.woPartsIssuance-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.woPartsIssuance-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
+
 .woPartsIssuance-table .col-woNumber{
   min-width: 125px;
 }
@@ -1516,6 +1534,24 @@ min-width: 300px;
 
 /* ####################################table inventory-table########################################### */
 
+.inventory-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.inventory-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.inventory-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
+
 .inventory-table .col-item{
   min-width: 200px;
 }
@@ -1535,4 +1571,64 @@ min-width: 300px;
 
 .inventory-table .col-productName{
   min-width: 200px;
+}
+
+/* ####################################table inventory-record-detail ########################################### */
+
+.woPartsIssuanceDetail-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.woPartsIssuanceDetail-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.woPartsIssuanceDetail-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
+
+/* ####################################table shelf-transfer ########################################### */
+
+.ShelfTransfer-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.ShelfTransfer-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.ShelfTransfer-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
+}
+
+/* ####################################table shipping ########################################### */
+
+.shipping-table .col-arrow-head{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.shipping-table .tf-tableRow .col-arrow{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.shipping-table .tf-tableRowActive .col-arrow{
+  background: #d1d5db;
 }

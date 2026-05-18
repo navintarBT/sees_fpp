@@ -387,6 +387,7 @@ const WOPartsIssuanceDetail = () => {
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
+              isRowActive={(rowKey) => checkedRowIds.includes(Number(rowKey))}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
             />
 

@@ -37,7 +37,7 @@ const initialRows: Row[] = [
     office: 'Fxxxxxxxx',
   },
     {
-    id: 2,
+    id: 13,
     woNumber: 'WO-002',
     partNumber: '部品002',
     reqNumber: '10',
