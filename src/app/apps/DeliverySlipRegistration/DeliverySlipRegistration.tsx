@@ -409,12 +409,21 @@ const DeliverySlipRegistration = () => {
               <div className="set-row">
                 <label>出荷No.</label>
                 <input
+                autoFocus
                   value={form.parentItemNo}
                   maxLength={8}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    setForm({ ...form, parentItemNo: value });
-                    if (value.trim() === "") {
+                    const rawValue = e.target.value;
+                    if (/[^0-9]/.test(rawValue)) {
+                      setError(
+                        "",
+                        `配送伝票番号が半角数字でない。${rawValue}を入力して下さい。`,
+                      );
+                      return;
+                    }
+
+                    setForm({ ...form, parentItemNo: rawValue });
+                    if (rawValue.trim() === "") {
                       clearRows();
                     }
                   }}
