@@ -711,6 +711,12 @@
   color:rgba(248,250,252,0.7);
 }
 
+.hand-row input:disabled,
+.hand-row select:disabled{
+  background:#e5e7eb;
+  color:#111827;
+}
+
 .hand-row-with-details{
   align-items:start;
 }
