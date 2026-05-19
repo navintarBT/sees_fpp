@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
@@ -12,6 +12,21 @@ const MiscellaneousInAndOutBound = () => {
   const isEnabled = parentWarehouse && parentItem && parentSerial
   const [quantity, setQuantity] = useState('1')
 
+  const warehouseRef = useRef<HTMLSelectElement>(null)
+  const locationRef = useRef<HTMLInputElement>(null)
+  const qtyRef = useRef<HTMLInputElement>(null)
+  const itemNoRef = useRef<HTMLInputElement>(null)
+  const lotRef = useRef<HTMLInputElement>(null)
+  const serialRef = useRef<HTMLInputElement>(null)
+  const dateRef = useRef<HTMLInputElement>(null)
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>, nextRef: React.RefObject<HTMLElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      nextRef.current?.focus()
+    }
+  }
+
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
@@ -21,7 +36,7 @@ const MiscellaneousInAndOutBound = () => {
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
                 <label>倉庫</label>
-                <select>
+                <select defaultValue='倉庫A:W0040' ref={warehouseRef} onKeyDown={(e) => handleKeyDown(e, locationRef)}>
                   <option value=''></option>
                   <option value='倉庫A:W0040'>倉庫A:W0040</option>
                   <option value='倉庫B:W0041'>倉庫B:W0041</option>
@@ -30,7 +45,7 @@ const MiscellaneousInAndOutBound = () => {
               </div>
               <div className='hand-row'>
                 <label>保管場所</label>
-                <input placeholder=' ' />
+                <input autoFocus placeholder=' ' ref={locationRef} onKeyDown={(e) => handleKeyDown(e, qtyRef)} />
               </div>
               <div className='hand-row'>
                 <label >引当数</label>
@@ -40,6 +55,8 @@ const MiscellaneousInAndOutBound = () => {
                     <option value='-'>-</option>
                   </select>
                   <input value={quantity}
+                    ref={qtyRef}
+                    onKeyDown={(e) => handleKeyDown(e, itemNoRef)}
                     onChange={(e) => setQuantity(e.target.value)}
                   />
                 </div>
@@ -47,22 +64,23 @@ const MiscellaneousInAndOutBound = () => {
 
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input style={{ backgroundColor: 'transparent' }} />
+                <input style={{ backgroundColor: 'transparent' }} ref={itemNoRef} onKeyDown={(e) => handleKeyDown(e, lotRef)} />
               </div>
 
               <div className='hand-row'>
                 <label>ロット</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} style={{ backgroundColor: 'transparent' }} />
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} style={{ backgroundColor: 'transparent' }} ref={lotRef} onKeyDown={(e) => handleKeyDown(e, serialRef)} />
               </div>
               <div className='hand-row'>
                 <label>シリアル</label>
-                <input style={{ backgroundColor: 'transparent' }} />
+                <input style={{ backgroundColor: 'transparent' }} ref={serialRef} onKeyDown={(e) => handleKeyDown(e, dateRef)} />
               </div>
               <div className='hand-row' >
                 <label>有効期限(yymm)</label>
                 <div className='hand-date-field'>
                   <input
                     type='text'
+                    ref={dateRef}
                     style={{ backgroundColor: 'transparent', cursor: 'pointer', width: '100%' }}
                   />
                 </div>
