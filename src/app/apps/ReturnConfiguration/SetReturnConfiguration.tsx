@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaPlay } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
@@ -6,16 +6,13 @@ import { TableSection, type TableColumn as TFTableColumn } from '../../component
 
 type Row = {
   id: number
-  error: string
-  item: string
-  lot: string
-  status: string
-  build: number
-  release: string
-  move: string
-  moveStorage: string
-  name: string
-  moveStorage2?: string
+  itemNo: string      // 品目No.
+  lotSerial: string   // ロットシリアル
+  buildQty: number    // 構成数 (from セット構成済みデータ)
+  returnQty: number   // 戻り (読込データの数量)
+  status: string      // 状態 (ブランク:正常, 04:調査中)
+  itemName: string    // 品名
+  error?: string
 }
 
 type TableColumn = {
@@ -28,194 +25,52 @@ type TableColumn = {
 
 const SetReturnConfiguration = () => {
   const navigate = useNavigate()
-  const [parentSerial, setParentSerial] = useState('')
-  const isEnabled = parentSerial
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      error: '',
-      item: 'A01', // 品目No.
-      lot: 'L01', // ロットシリアル
-      status: '1', // 状態
-      build: 0, // 構成数
-      release: '', // 
-      move: '品目1', // 移動倉
-      moveStorage: 'S1', // 移動保管場所
-      name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所
-    },
-    {
-      id: 2,
-      error: '',
-      item: 'B02',
-      lot: 'L02',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目2',
-      moveStorage: 'S2',
-      name: '部品B',
-      moveStorage2: '棚B',
-    },
-    {
-      id: 3,
-      error: '',
-      item: 'C03',
-      lot: 'L03',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目3',
-      moveStorage: 'S3',
-      name: '部品C',
-      moveStorage2: '棚C',
-    },
-    {
-      id: 4,
-      error: '',
-      item: 'D04',
-      lot: 'L04',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目4',
-      moveStorage: 'S4',
-      name: '部品D',
-      moveStorage2: '棚D',
-    },
-    {
-      id: 5,
-      error: 'E',
-      item: 'E05',
-      lot: 'L05',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目5',
-      moveStorage: 'S5',
-      name: '部品E',
-      moveStorage2: '棚E',
-    },
-    {
-      id: 6,
-      error: '',
-      item: 'F06',
-      lot: 'L06',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目6',
-      moveStorage: 'S6',
-      name: '部品F',
-      moveStorage2: '棚F',
-    },
-    {
-      id: 7,
-      error: 'E',
-      item: 'G07',
-      lot: 'L07',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目7',
-      moveStorage: 'S7',
-      name: '部品G',
-      moveStorage2: '棚G',
-    },
-    {
-      id: 8,
-      error: '',
-      item: 'H08',
-      lot: 'L08',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目8',
-      moveStorage: 'S8',
-      name: '部品H',
-      moveStorage2: '棚H',
-    },
-    {
-      id: 9,
-      error: '',
-      item: 'I09',
-      lot: 'L09',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目9',
-      moveStorage: 'S9',
-      name: '部品I',
-      moveStorage2: '棚I',
-    },
-    {
-      id: 10,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目10',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-    {
-      id: 11,
-      error: 'E',
-      item: 'J11',
-      lot: 'L11',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目11',
-      moveStorage: 'S11',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-    {
-      id: 12,
-      error: 'E',
-      item: 'J12',
-      lot: 'L12',
-      status: '1',
-      build: 0,
-      release: '',
-      move: '品目12',
-      moveStorage: 'S12',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-  ])
-  const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '0193090',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
-    moveStorage: '',
-    qty: '1',
-    janCode: '',
-  })
+
+  // State for loaded data (読込データ from server)
+  const [loadedData, setLoadedData] = useState<Row[]>([])
+  const [hasLoadedData, setHasLoadedData] = useState(false)
+
+  // Form state
+  const [parentJanCode, setParentJanCode] = useState('')      // JANコード(親)
+  const [parentStatus, setParentStatus] = useState('')        // 状態 (ブランク or 04)
+  const [parentQty, setParentQty] = useState(1)               // 数量 (固定1)
+  const [janCode, setJanCode] = useState('')                  // JANコード
+
+  const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const tableScrollRef = useRef<HTMLDivElement | null>(null)
+
+  // Modal states
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
-  const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const [showEmptyParentWarning, setShowEmptyParentWarning] = useState(false)
+  const [showNormalConfirm, setShowNormalConfirm] = useState(false)
+  const [showIncompleteConfirm, setShowIncompleteConfirm] = useState(false)
+  const [showStatusChangeConfirm, setShowStatusChangeConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const [qty, setQty] = useState(1);
 
-  const [activeRowId, setActiveRowId] = useState<number | null>(null)
-  const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({ f1: false, f8: false })
+
   const isAnyModalOpen =
     showHandInputConfirm ||
     showDeleteConfirm ||
     showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
-    showBackConfirm
+    showBackConfirm ||
+    showEmptyParentWarning ||
+    showNormalConfirm ||
+    showIncompleteConfirm ||
+    showStatusChangeConfirm
 
+  const activeRow = loadedData.find((row) => row.id === activeRowId) ?? null
+
+  // Check if parent JAN code is editable (has loaded data)
+  const isParentJanCodeEditable = !hasLoadedData
+
+  // Close all modals
   const closeAllModals = () => {
     setShowHandInputConfirm(false)
     setShowDeleteConfirm(false)
@@ -223,19 +78,23 @@ const SetReturnConfiguration = () => {
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
     setShowBackConfirm(false)
+    setShowEmptyParentWarning(false)
+    setShowNormalConfirm(false)
+    setShowIncompleteConfirm(false)
+    setShowStatusChangeConfirm(false)
   }
 
-
-  const clearRows = () => setRows([])
-  const clearForm = () =>
-    setForm({
-      parentWarehouse: '',
-      parentItemNo: '',
-      moveWarehouse: '',
-      moveStorage: '',
-      qty: '',
-      janCode: '',
-    })
+  // Clear all data and reset to initial state
+  const clearAllData = () => {
+    setLoadedData([])
+    setHasLoadedData(false)
+    setParentJanCode('')
+    setParentStatus('')
+    setParentQty(1)
+    setJanCode('')
+    setActiveRowId(null)
+    resetTableScroll()
+  }
 
   const resetTableScroll = () => {
     const el = tableScrollRef.current
@@ -243,44 +102,124 @@ const SetReturnConfiguration = () => {
     requestAnimationFrame(() => {
       el.scrollTop = 0
       el.scrollLeft = 0
-      requestAnimationFrame(() => {
-        el.scrollTop = 0
-        el.scrollLeft = 0
-      })
     })
   }
 
-  const clearFormAndRows = () => {
-    clearForm()
-    clearRows()
-    resetTableScroll()
-  }
-
-  const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
-  }
-
-  const handleReleaseClick = (options?: { forceRelease?: boolean; forceHandInput?: boolean }) => {
-    if (isAnyModalOpen) return
-    if (options?.forceHandInput) {
-      closeAllModals()
-      setShowHandInputConfirm(true)
+  // 完了ボタン処理 - based on document section 4
+  const handleCompleteClick = () => {
+    // ４－１．JANコード(親)入力チェック
+    if (!hasLoadedData && !parentJanCode) {
+      setShowEmptyParentWarning(true)
       return
     }
+
+    // ４－４．読込数全量判定
+    // Check if there are any rows where 構成 - 戻り > 0
+    const hasUnreturnedItems = loadedData.some((row) => row.buildQty - row.returnQty > 0)
+
+    if (hasUnreturnedItems) {
+      // ４－４－１．明細．構成 - 明細．戻り ＞ 0の行がある
+      setShowIncompleteConfirm(true)
+    } else {
+      // ４－４－２．明細．構成 - 明細．戻り ＞ 0の行がない
+      setShowNormalConfirm(true)
+    }
+  }
+
+  // Confirm registration
+  const confirmRegistration = () => {
+    setShowNormalConfirm(false)
+    setShowIncompleteConfirm(false)
+    // Simulate registration
+    setShowCompleteConfirm(true)
+    clearAllData()
+  }
+
+  // 削除ボタン処理 - based on document section 8
+  const handleDeleteClick = () => {
+    if (isAnyModalOpen) return
+
+    // ８－１．明細部が存在する場合
     if (!activeRow) {
-      closeAllModals()
+      // ８－２．明細部が存在しない場合
       setShowNoSelectionConfirm(true)
       return
     }
-    closeAllModals()
+
+    // ８－３．選択行の読込数が0の場合 check (Disabled for mockup to allow deleting rows)
+    // if (activeRow.returnQty === 0) {
+    //   setShowNoSelectionConfirm(true)
+    //   return
+    // }
+
+    // ８－４．確認メッセージ表示
     setShowDeleteConfirm(true)
   }
 
+  // Execute delete
+  const executeDelete = () => {
+    if (activeRowId !== null) {
+      // Remove the selected row's read data
+      setLoadedData((prev) => prev.filter((row) => row.id !== activeRowId))
+      setActiveRowId(null)
+    }
+    setShowDeleteConfirm(false)
+  }
+
+  // 破棄ボタン処理 - based on document section 5
+  const handleClearClick = () => {
+    if (isAnyModalOpen) return
+    setShowClearConfirm(true)
+  }
+
+  const executeClear = () => {
+    clearAllData()
+    setShowClearConfirm(false)
+  }
+
+  // 手入力ボタン処理 - based on document section 7
+  const handleHandInputClick = () => {
+    if (isAnyModalOpen) return
+    setShowHandInputConfirm(true)
+  }
+
+  // 戻るボタン処理 - based on document section 6
+  const handleBackClick = () => {
+    if (isAnyModalOpen) return
+    setShowBackConfirm(true)
+  }
+
+  const executeBack = () => {
+    navigate('/factory')
+  }
+
+  // Toggle status for selected row - based on document section 9
+  const toggleRowStatus = () => {
+    if (activeRow) {
+      // Toggle between ブランク (normal) and 04 (調査中)
+      const newStatus = activeRow.status === '04' ? '' : '04'
+      setLoadedData((prev) =>
+        prev.map((row) =>
+          row.id === activeRow.id ? { ...row, status: newStatus } : row
+        )
+      )
+    }
+    setShowStatusChangeConfirm(false)
+  }
+
+  // Keyboard shortcuts - based on document section "ショートカットキー"
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (isAnyModalOpen) {
+      if (isAnyModalOpen) return
+
+      // Enter key on detail row - toggle status
+      if (event.key === 'Enter' && activeRow && document.activeElement?.tagName !== 'BUTTON') {
+        event.preventDefault()
+        setShowStatusChangeConfirm(true)
         return
       }
+
+      // F1 + F8 combination for hand input
       if (event.key === 'F1') {
         pressedKeysRef.current.f1 = true
       }
@@ -289,36 +228,38 @@ const SetReturnConfiguration = () => {
       }
       if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
         event.preventDefault()
-        handleReleaseClick({ forceHandInput: true })
+        handleHandInputClick()
         return
       }
 
+      // F1 - 破棄
       if (event.key === 'F1') {
         event.preventDefault()
-        closeAllModals()
-        setShowClearConfirm(true)
+        handleClearClick()
         return
       }
 
+      // F2 - 完了
       if (event.key === 'F2') {
         event.preventDefault()
-        closeAllModals()
-        setShowCompleteConfirm(true)
+        handleCompleteClick()
         return
       }
 
+      // F3 - 削除
       if (event.key === 'F3') {
         event.preventDefault()
-        handleReleaseClick({ forceRelease: true })
+        handleDeleteClick()
         return
       }
 
+      // F4 - 戻る
       if (event.key === 'F4') {
         event.preventDefault()
-        closeAllModals()
-        setShowBackConfirm(true)
+        handleBackClick()
       }
     }
+
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === 'F1') {
         pressedKeysRef.current.f1 = false
@@ -327,6 +268,7 @@ const SetReturnConfiguration = () => {
         pressedKeysRef.current.f8 = false
       }
     }
+
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
     return () => {
@@ -334,6 +276,30 @@ const SetReturnConfiguration = () => {
       window.removeEventListener('keyup', onKeyUp)
     }
   }, [activeRow, isAnyModalOpen])
+
+  // Simulate loading data when parent JAN code is entered (2-2. セット構成データ取得)
+  const handleParentJanCodeSubmit = () => {
+    if (parentJanCode) {
+      // Simulate fetching set configuration data
+      // This would normally call the server
+      const mockSetData: Row[] = [
+        { id: 1, itemNo: 'A01', lotSerial: 'L01', buildQty: 1, returnQty: 0, status: '', itemName: '部品A' },
+        { id: 2, itemNo: 'B02', lotSerial: 'L02', buildQty: 2, returnQty: 0, status: '', itemName: '部品B' },
+        { id: 3, itemNo: 'C03', lotSerial: 'L03', buildQty: 1, returnQty: 0, status: '', itemName: '部品C' },
+        { id: 4, itemNo: 'D04', lotSerial: 'L04', buildQty: 1, returnQty: 0, status: '', itemName: '部品D' },
+        { id: 5, itemNo: 'E05', lotSerial: 'L05', buildQty: 1, returnQty: 0, status: '', itemName: '部品E', error: 'E' },
+        { id: 6, itemNo: 'F06', lotSerial: 'L06', buildQty: 2, returnQty: 0, status: '', itemName: '部品F' },
+        { id: 7, itemNo: 'G07', lotSerial: 'L07', buildQty: 1, returnQty: 0, status: '', itemName: '部品G', error: 'E' },
+        { id: 8, itemNo: 'H08', lotSerial: 'L08', buildQty: 3, returnQty: 0, status: '', itemName: '部品H' },
+        { id: 9, itemNo: 'I09', lotSerial: 'L09', buildQty: 1, returnQty: 0, status: '', itemName: '部品I' },
+        { id: 10, itemNo: 'J10', lotSerial: 'L10', buildQty: 1, returnQty: 0, status: '', itemName: '部品J', error: 'E' },
+        { id: 11, itemNo: 'J11', lotSerial: 'L11', buildQty: 1, returnQty: 0, status: '', itemName: '部品J', error: 'E' },
+        { id: 12, itemNo: 'J12', lotSerial: 'L12', buildQty: 1, returnQty: 0, status: '', itemName: '部品J', error: 'E' },
+      ]
+      setLoadedData(mockSetData)
+      setHasLoadedData(true)
+    }
+  }
 
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
@@ -343,12 +309,48 @@ const SetReturnConfiguration = () => {
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
-    { key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item },
-    { key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot },
-    { key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '構成', render: (row) => row.status },
-    { key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '戻り', render: (row) => row.build },
-    { key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '状態', render: (row) => row.release },
-    { key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '品名', render: (row) => row.move },
+    {
+      key: 'itemNo',
+      headClassName: 'col-item',
+      cellClassName: 'col-item',
+      header: '品目No.',
+      render: (row) => row.itemNo
+    },
+    {
+      key: 'lotSerial',
+      headClassName: 'col-lot',
+      cellClassName: 'col-lot',
+      header: 'ロットシリアル',
+      render: (row) => row.lotSerial
+    },
+    {
+      key: 'buildQty',
+      headClassName: 'col-num',
+      cellClassName: 'col-num',
+      header: '構成',
+      render: (row) => row.buildQty
+    },
+    {
+      key: 'returnQty',
+      headClassName: 'col-num',
+      cellClassName: 'col-num',
+      header: '戻り',
+      render: (row) => row.returnQty
+    },
+    {
+      key: 'status',
+      headClassName: 'col-status',
+      cellClassName: 'col-status',
+      header: '状態',
+      render: (row) => row.status === '04' ? '調査中' : ''
+    },
+    {
+      key: 'itemName',
+      headClassName: 'col-move',
+      cellClassName: 'col-move',
+      header: '品名',
+      render: (row) => row.itemName
+    },
   ]
 
   return (
@@ -358,10 +360,22 @@ const SetReturnConfiguration = () => {
           <div className='set-header'>レンタル戻り構成登録</div>
           <div className='set-body'>
             <div className='set-form'>
+              {/* １．JANコード(親) - based on document section 2 */}
               <div className='set-row'>
                 <label>JANコード(親)</label>
-                <input />
+                <input
+                  autoFocus
+                  value={parentJanCode}
+                  onChange={(e) => setParentJanCode(e.target.value)}
+                  onBlur={handleParentJanCodeSubmit}
+                  onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
+                  readOnly={!isParentJanCodeEditable}
+                  className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
+                  style={!isParentJanCodeEditable ? { backgroundColor: '#e5e7eb' } : {}}
+                />
               </div>
+
+              {/* 状態 - based on document specification */}
               <div className='rlr-row2'>
                 <label>状態</label>
                 <div className="rlr-qty-group badioBtnFun10">
@@ -369,10 +383,10 @@ const SetReturnConfiguration = () => {
                     <input
                       type="radio"
                       name="status"
-                      value="中"
-                      checked={qty === 1}
-                      onChange={() => setQty(1)}
-
+                      value="normal"
+                      checked={parentStatus === ''}
+                      onChange={() => setParentStatus('')}
+                      disabled={hasLoadedData}
                     />
                     正常
                   </label>
@@ -380,42 +394,44 @@ const SetReturnConfiguration = () => {
                     <input
                       type="radio"
                       name="status"
-                      value="済"
-                      checked={qty === 2}
-                      onChange={() => setQty(2)}
-
+                      value="investigating"
+                      checked={parentStatus === '04'}
+                      onChange={() => setParentStatus('04')}
+                      disabled={hasLoadedData}
                     />
                     調査中
                   </label>
                 </div>
               </div>
 
+              {/* 数量 - fixed to 1 as per document */}
               <div className='set-row'>
                 <label>数量</label>
                 <input
-                  value={form.qty}
-                  readOnly={!isEnabled}
-                  onChange={(e) => setForm({ ...form, qty: e.target.value })}
+                  value={parentQty}
+                  readOnly
                   className='set-small set-input-gray'
                   style={{ backgroundColor: '#e5e7eb' }}
                 />
               </div>
 
+              {/* JANコード - editable when has loaded data */}
               <div className='set-row'>
                 <label>JANコード</label>
                 <input
-                  value={form.janCode}
-                  readOnly={!isEnabled}
-                  onChange={(e) => setForm({ ...form, janCode: e.target.value })}
-                  className='set-input-gray'
-                  style={{ backgroundColor: '#e5e7eb' }}
+                  value={janCode}
+                  onChange={(e) => setJanCode(e.target.value)}
+                  readOnly={!hasLoadedData}
+                  className={!hasLoadedData ? 'set-input-gray' : ''}
+                  style={!hasLoadedData ? { backgroundColor: '#e5e7eb' } : {}}
                 />
               </div>
             </div>
 
+            {/* 明細部 - based on document section "明細部" */}
             <TableSection
               columns={tableColumns}
-              rows={rows}
+              rows={loadedData}
               gridClassName='set-return-configuration-table'
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
@@ -426,36 +442,38 @@ const SetReturnConfiguration = () => {
             <ActionFooter columns={5}>
               <button
                 className='set-btn set-danger'
-                onClick={() => setShowClearConfirm(true)}
+                onClick={handleClearClick}
               >
                 破棄
               </button>
               <button
                 className='set-btn set-primary'
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={handleCompleteClick}
               >
                 完了
               </button>
               <button
                 className='set-btn set-success'
-                onClick={() => handleReleaseClick()}
+                onClick={handleDeleteClick}
               >
                 削除
               </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'
-                onClick={() => handleReleaseClick({ forceHandInput: true })}
+                onClick={handleHandInputClick}
               >
                 手入力
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => setShowBackConfirm(true)}
+                onClick={handleBackClick}
               >
                 戻る
               </button>
             </ActionFooter>
           </div>
+
+          {/* 手入力確認 - based on document 7-1 */}
           {showHandInputConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -473,9 +491,7 @@ const SetReturnConfiguration = () => {
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
-                    onClick={() => {
-                      setShowHandInputConfirm(false)
-                    }}
+                    onClick={() => setShowHandInputConfirm(false)}
                   >
                     いいえ
                   </button>
@@ -484,115 +500,212 @@ const SetReturnConfiguration = () => {
             </div>
           )}
 
+          {/* 削除確認 - based on document 8-4 */}
           {showDeleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>選択した行を削除します。<br />よろしいですか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => {
-                      setShowDeleteConfirm(false)
-                      if (activeRowId !== null) {
-                        setRows((prev) => prev.filter((row) => row.id !== activeRowId))
-                        setActiveRowId(null)
-                      }
-                    }}
+                    onClick={executeDelete}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowDeleteConfirm(false)}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
             </div>
           )}
 
+          {/* No selection error - based on document 8-2-1 */}
           {showNoSelectionConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>選択行がありません。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => setShowNoSelectionConfirm(false)}
                   >
-                    {'\u004f\u004b'}
+                    OK
                   </button>
                 </div>
               </div>
             </div>
           )}
 
+          {/* 破棄確認 - based on document 5-1 */}
           {showClearConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>読込データを破棄します。<br />宜しいですか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => {
-                      setShowClearConfirm(false)
-                      clearFormAndRows()
-                    }}
+                    onClick={executeClear}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
             </div>
           )}
 
+          {/* 完了成功 - based on document 4-6-3 */}
           {showCompleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>レンタル戻り構成を登録しました。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => setShowCompleteConfirm(false)}
                   >
-                    {'\u004f\u004b'}
+                    OK
                   </button>
                 </div>
               </div>
             </div>
           )}
 
+          {/* JANコード(親)未入力エラー - based on document 4-1 */}
+          {showEmptyParentWarning && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>JANコード(親)を入力して下さい。</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => setShowEmptyParentWarning(false)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 全量登録確認 - based on document 4-4-2 */}
+          {showNormalConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>レンタル戻り構成登録を完了しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={confirmRegistration}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowNormalConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 未返却あり警告 - based on document 4-4-1 */}
+          {showIncompleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>警告</div>
+                <div className='set-modal-body'>
+                  戻りのない構成品は全て"調査中"として登録されます。<br />
+                  完了しますか？
+                </div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={confirmRegistration}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowIncompleteConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 状態変更確認 - based on document 9-2 */}
+          {showStatusChangeConfirm && activeRow && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>
+                  選択行の状態を
+                  {activeRow.status === '04' ? '「正常」' : '「調査中」'}
+                  に変更しますか？
+                </div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={toggleRowStatus}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowStatusChangeConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 戻る確認 - based on document 6 */}
           {showBackConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>メニューに戻ります。<br />読込データを破棄しますか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
+                      clearAllData()
                       navigate('/factory')
                     }}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
-                    onClick={() => setShowBackConfirm(false)}
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      navigate('/factory')
+                    }}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
@@ -605,5 +718,3 @@ const SetReturnConfiguration = () => {
 }
 
 export { SetReturnConfiguration }
-
-
