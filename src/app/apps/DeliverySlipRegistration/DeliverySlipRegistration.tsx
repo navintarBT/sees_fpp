@@ -392,8 +392,8 @@ const DeliverySlipRegistration = () => {
     },
     {
       key: "item",
-      headClassName: "col-item",
-      cellClassName: "col-item",
+      headClassName: "col-item-delivery",
+      cellClassName: "col-item-delivery",
       header: "配送伝票No.",
       render: (row) => row.item,
     },

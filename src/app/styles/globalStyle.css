@@ -1632,3 +1632,7 @@ min-width: 300px;
 .shipping-table .tf-tableRowActive .col-arrow{
   background: #d1d5db;
 }
+
+.col-item-delivery{
+  min-width: 831px;
+}
