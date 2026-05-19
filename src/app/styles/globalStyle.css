@@ -1319,6 +1319,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .set-register-table .tf-tableRow .col-arrow{
@@ -1339,6 +1340,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .set-return-configuration-table .tf-tableRow .col-arrow{
@@ -1359,6 +1361,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .delivery-table .tf-tableRow .col-arrow{
@@ -1387,6 +1390,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .set-table-miscellaneous .tf-tableRow .col-arrow{
@@ -1407,6 +1411,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .equipment-table .tf-tableRow .col-arrow{
@@ -1427,6 +1432,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .bundle-table .tf-tableRow .col-arrow{
