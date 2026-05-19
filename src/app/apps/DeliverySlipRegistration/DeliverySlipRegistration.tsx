@@ -50,7 +50,19 @@ const ITEM_DATA_MAP: Record<string, Row[]> = {
     { id: 30, situation: "", item: "202603310000000000000000000032" },
   ],
 };
-// ────────────────────────────────────────────────────────────────────────────
+
+const SHIPPING_INFO_MAP: Record<
+  string,
+  {
+    exclusiveLocked: boolean;
+  }
+> = {
+  "10000001": { exclusiveLocked: false },
+  "10000002": { exclusiveLocked: true },
+};
+
+const WORK_TABLE_REGISTRATION = new Set<string>();
+let nextRowId = 1000;
 
 const DeliverySlipRegistration = () => {
   const navigate = useNavigate();
@@ -76,8 +88,12 @@ const DeliverySlipRegistration = () => {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const [showErrorConfirm, setShowErrorConfirm] = useState(false);
+  const [errorCode, setErrorCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [completeMessage, setCompleteMessage] = useState("");
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
-
+  const isEnabled = !!form.parentItemNo.trim();
   const [activeRowId, setActiveRowId] = useState<number | null>(null);
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([]);
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null;
@@ -93,7 +109,8 @@ const DeliverySlipRegistration = () => {
     showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
-    showBackConfirm;
+    showBackConfirm ||
+    showErrorConfirm;
 
   const closeAllModals = () => {
     setShowHandInputConfirm(false);
@@ -103,11 +120,13 @@ const DeliverySlipRegistration = () => {
     setShowClearConfirm(false);
     setShowCompleteConfirm(false);
     setShowBackConfirm(false);
+    setShowErrorConfirm(false);
   };
 
   const clearRows = () => {
     setRows([]);
     setCheckedRowIds([]);
+    setActiveRowId(null);
   };
 
   const clearForm = () =>
@@ -140,21 +159,140 @@ const DeliverySlipRegistration = () => {
     resetTableScroll();
   };
 
-  // ── ③ ฟังก์ชันดึงข้อมูลตาม parentItemNo ─────────────────────────────────
-  const fetchRowsByItemNo = (itemNo: string) => {
-    const data = ITEM_DATA_MAP[itemNo.trim()] ?? [];
-    setRows(data);
-    setCheckedRowIds([]);
-    setActiveRowId(null);
-    resetTableScroll();
+  const setError = (code: string, message: string) => {
+    setErrorCode(code);
+    setErrorMessage(message);
+    setShowErrorConfirm(true);
   };
 
-  // ── ④ กด Enter ใน field 出荷No. ─────────────────────────────────────────
-  const handleParentItemNoKeyDown = (
+  const delay = (ms: number) =>
+    new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+  const isHalfWidthDigits = (value: string) => /^[0-9]+$/.test(value);
+
+  const fetchShippingRows = async (shippingNo: string) => {
+    if (!shippingNo) {
+      setError("HT006-E", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      return;
+    }
+
+    if (!isHalfWidthDigits(shippingNo)) {
+      setError("HT006-E", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      return;
+    }
+
+    try {
+      await delay(250);
+      if (shippingNo === "00000000") {
+        throw new Error("HT998-E");
+      }
+
+      const status = SHIPPING_INFO_MAP[shippingNo];
+      if (!status) {
+        setError("", "データが存在しません。配送伝票番号を確認して下さい。");
+        return;
+      }
+
+      if (status.exclusiveLocked) {
+        setError("", "他の端末で変更されています。再度読み込みを行って下さい。");
+        return;
+      }
+
+      const data = ITEM_DATA_MAP[shippingNo] ?? [];
+      if (data.length === 0) {
+        setError("", "配送伝票データが見つかりませんでした。");
+        return;
+      }
+
+      setRows(data);
+      setCheckedRowIds([]);
+      setActiveRowId(null);
+      resetTableScroll();
+    } catch (err) {
+      const code = err instanceof Error && err.message === "" ? "" : "";
+      const message =
+        code === ""
+          ? "ネットワークに接続出来ません。電波の届く場所で再度実行して下さい。"
+          : "ネットワークエラーが発生しました。再度実行して下さい。";
+      setError(code, message);
+    }
+  };
+
+  const saveDeliverySlip = async (slipNo: string) => {
+    if (!slipNo) {
+      setError("", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      return false;
+    }
+
+    if (!isHalfWidthDigits(slipNo)) {
+      setError("", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      return false;
+    }
+
+    if (rows.some((row) => row.item === slipNo)) {
+      setError("", "同じ配送伝票番号がすでに一覧に存在します。重複登録できません。");
+      return false;
+    }
+
+    if (WORK_TABLE_REGISTRATION.has(slipNo)) {
+      setError("", "既にワークテーブルに登録済みの配送伝票番号です。重複登録できません。");
+      return false;
+    }
+
+    try {
+      await delay(200);
+      if (slipNo === "99999999") {
+        throw new Error("");
+      }
+      WORK_TABLE_REGISTRATION.add(slipNo);
+      const nextId = nextRowId++;
+      setRows((prev) => [...prev, { id: nextId, situation: "", item: slipNo }]);
+      setForm((prev) => ({ ...prev, deliverySlipNo: "" }));
+      return true;
+    } catch (err) {
+      setError("", "ネットワークに接続出来ません。電波の届く場所で再度実行して下さい。");
+      return false;
+    }
+  };
+
+  const completeRegistration = async () => {
+    if (form.deliverySlipNo.trim()) {
+      const saved = await saveDeliverySlip(form.deliverySlipNo.trim());
+      if (!saved) {
+        return;
+      }
+    }
+
+    if (rows.length === 0) {
+      setError("", "配送伝票番号を入力して下さい。登録するデータがありません。");
+      return;
+    }
+
+    try {
+      await delay(200);
+      setCompleteMessage("登録完了");
+      setShowCompleteConfirm(true);
+      WORK_TABLE_REGISTRATION.clear();
+      clearFormAndRows();
+    } catch {
+      setError("", "ネットワークに接続出来ません。電波の届く場所で再度実行して下さい。");
+    }
+  };
+
+  const deleteSelectedRows = async () => {
+    const willDelete = rows.filter((row) => checkedRowIds.includes(row.id));
+    willDelete.forEach((row) => WORK_TABLE_REGISTRATION.delete(row.item));
+    setRows((prev) => prev.filter((row) => !checkedRowIds.includes(row.id)));
+    setCheckedRowIds([]);
+    setActiveRowId(null);
+  };
+
+  const handleParentItemNoKeyDown = async (
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Enter") {
-      fetchRowsByItemNo(form.parentItemNo);
+      e.preventDefault();
+      await fetchShippingRows(form.parentItemNo.trim());
     }
   };
 
@@ -206,7 +344,7 @@ const DeliverySlipRegistration = () => {
       if (event.key === "F2") {
         event.preventDefault();
         closeAllModals();
-        setShowCompleteConfirm(true);
+        completeRegistration();
         return;
       }
       if (event.key === "F3") {
@@ -254,8 +392,8 @@ const DeliverySlipRegistration = () => {
     },
     {
       key: "item",
-      headClassName: "col-item",
-      cellClassName: "col-item",
+      headClassName: "col-item-delivery",
+      cellClassName: "col-item-delivery",
       header: "配送伝票No.",
       render: (row) => row.item,
     },
@@ -270,25 +408,44 @@ const DeliverySlipRegistration = () => {
             <div className="set-form">
               <div className="set-row">
                 <label>出荷No.</label>
-                {/* ⑤ ผูก onKeyDown เพื่อ trigger fetch */}
                 <input
+                autoFocus
                   value={form.parentItemNo}
                   maxLength={8}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    setForm({ ...form, parentItemNo: value });
-                    fetchRowsByItemNo(value); // ← ดึงข้อมูลทันทีทุกครั้งที่พิมพ์
+                    const rawValue = e.target.value;
+                    if (/[^0-9]/.test(rawValue)) {
+                      setError(
+                        "",
+                        `配送伝票番号が半角数字でない。${rawValue}を入力して下さい。`,
+                      );
+                      return;
+                    }
+
+                    setForm({ ...form, parentItemNo: rawValue });
+                    if (rawValue.trim() === "") {
+                      clearRows();
+                    }
                   }}
+                  onKeyDown={handleParentItemNoKeyDown}
                 />
               </div>
               <div className="set-row">
                 <label>配送伝票No.</label>
                 <input
+                  readOnly={!isEnabled}
                   value={form.deliverySlipNo}
+                  style={{ backgroundColor: isEnabled ? "white" : "rgb(229, 231, 235)" }}
                   maxLength={30}
                   onChange={(e) =>
                     setForm({ ...form, deliverySlipNo: e.target.value })
                   }
+                  onKeyDown={async (e) => {
+                    if (e.key === "Enter" && isEnabled) {
+                      e.preventDefault();
+                      await saveDeliverySlip(form.deliverySlipNo.trim());
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -314,7 +471,7 @@ const DeliverySlipRegistration = () => {
               </button>
               <button
                 className="set-btn set-primary"
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={() => completeRegistration()}
               >
                 完了
               </button>
@@ -376,13 +533,9 @@ const DeliverySlipRegistration = () => {
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
-                    onClick={() => {
+                    onClick={async () => {
                       setShowDeleteRowConfirm(false);
-                      setRows((prev) =>
-                        prev.filter((row) => !checkedRowIds.includes(row.id)),
-                      );
-                      setCheckedRowIds([]);
-                      setActiveRowId(null);
+                      await deleteSelectedRows();
                     }}
                   >
                     はい
@@ -470,12 +623,29 @@ const DeliverySlipRegistration = () => {
           {showCompleteConfirm && (
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
-                <div className="set-modal-header">確認</div>
-                <div className="set-modal-body">セット構成を登録しました。</div>
+                <div className="set-modal-header">完了</div>
+                <div className="set-modal-body">{completeMessage || "登録完了"}</div>
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
                     onClick={() => setShowCompleteConfirm(false)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showErrorConfirm && (
+            <div className="set-modal-backdrop" role="presentation">
+              <div className="set-modal" role="dialog" aria-modal="true">
+                <div className="set-modal-header">エラー {errorCode || ""}</div>
+                <div className="set-modal-body">{errorMessage}</div>
+                <div className="set-modal-actions">
+                  <button
+                    className="set-modal-btn set-modal-yes"
+                    onClick={() => setShowErrorConfirm(false)}
                   >
                     OK
                   </button>
