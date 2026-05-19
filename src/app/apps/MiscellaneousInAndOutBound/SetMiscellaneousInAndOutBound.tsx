@@ -188,7 +188,7 @@ const SetMiscellaneousInAndOutBound = () => {
     },
   ])
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
+    parentWarehouse: '倉庫A:W0040',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
@@ -228,7 +228,7 @@ const SetMiscellaneousInAndOutBound = () => {
   const clearRows = () => setRows([])
   const clearForm = () =>
     setForm({
-      parentWarehouse: '',
+      parentWarehouse: '倉庫A:W0040',
       parentItemNo: '',
       moveWarehouse: '',
       moveStorage: '',
@@ -275,6 +275,16 @@ const SetMiscellaneousInAndOutBound = () => {
     setShowDeleteConfirm(true)
   }
 
+  const itemNoRef = useRef<HTMLInputElement>(null);
+  const lotRef = useRef<HTMLInputElement>(null);
+  const serialRef = useRef<HTMLInputElement>(null);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement | null>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      nextRef.current?.focus();
+    }
+  };
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -373,7 +383,7 @@ const SetMiscellaneousInAndOutBound = () => {
               </div>
               <div className='set-row'>
                 <label>保管場所</label>
-                <input value={form.moveStorage}
+                <input value={form.moveStorage} autoFocus onKeyDown={(e) => handleKeyDown(e, itemNoRef)}
                   onChange={(e) => setForm({ ...form, moveStorage: e.target.value })} />
               </div>
 
@@ -385,17 +395,18 @@ const SetMiscellaneousInAndOutBound = () => {
                     <option value='-'>-</option>
                   </select>
                   <input value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
+                    onChange={(e) => setQuantity(e.target.value)} ref={itemNoRef} onKeyDown={(e) => handleKeyDown(e, lotRef)}
                   />
                 </div>
               </div>
 
               <div className='set-row '>
                 <label>JANコード</label>
-                <input value={form.janCode}
+                <input value={form.janCode} ref={lotRef} onKeyDown={(e) => handleKeyDown(e, serialRef)}
                   onChange={(e) => setForm({ ...form, janCode: e.target.value })} />
               </div>
             </div>
+
             <TableSection
               className='set-table-miscellaneous'
               columns={tableColumns}

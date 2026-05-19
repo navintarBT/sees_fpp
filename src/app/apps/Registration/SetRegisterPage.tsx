@@ -162,7 +162,7 @@ const SetRegisterPage = () => {
   ])
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '0193090',
+    parentItemNo: '',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
     qty: '1',
@@ -174,6 +174,8 @@ const SetRegisterPage = () => {
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const parentWarehouseRef = useRef<HTMLSelectElement | null>(null)
+  const parentJanCodeInputRef = useRef<HTMLInputElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
@@ -226,6 +228,10 @@ const SetRegisterPage = () => {
     clearRows()
     resetTableScroll()
   }
+
+  useEffect(() => {
+    parentJanCodeInputRef.current?.focus()
+  }, [])
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId(rowId)
@@ -346,9 +352,10 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>倉庫（親）</label>
                 <select
+                  ref={parentWarehouseRef}
+                  tabIndex={1}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                  style={{ background: '#e5e7eb', color: '#111827' }}
 
                 >
                   <option value=''></option>
@@ -360,14 +367,16 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>JANコード(親)</label>
                 <input
+                  ref={parentJanCodeInputRef}
+                  tabIndex={-1}
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
-                  style={{ background: '#e5e7eb', color: '#111827' }}
                 />
               </div>
               <div className='set-row'>
                 <label>移動倉庫</label>
                 <select
+                  tabIndex={-1}
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                 >
@@ -380,6 +389,7 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>移動保管場所</label>
                 <input
+                  tabIndex={2}
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                 />
@@ -388,6 +398,7 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>数量</label>
                 <input
+                  tabIndex={-1}
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
@@ -397,6 +408,7 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>JANコード</label>
                 <input
+                  tabIndex={3}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
                 />
@@ -406,6 +418,7 @@ const SetRegisterPage = () => {
             <TableSection
               columns={tableColumns}
               rows={rows}
+              rowTabIndex={4}
               scrollRef={tableScrollRef}
               gridClassName='set-register-table'
               getRowKey={(row) => row.id}
@@ -415,30 +428,35 @@ const SetRegisterPage = () => {
 
             <ActionFooter columns={5}>
               <button
+                tabIndex={5}
                 className='set-btn set-danger'
                 onClick={() => setShowClearConfirm(true)}
               >
                 破棄
               </button>
               <button
+                tabIndex={6}
                 className='set-btn set-primary'
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
               </button>     
               <button
+                tabIndex={7}
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
               >
                 解除
               </button>
               <button
+                tabIndex={-1}
                 className='set-btn set-primary set-hand-input-btn'
                 onClick={() => handleReleaseClick({forceHandInput: true})}
               >
                 手入力
               </button>
               <button
+                tabIndex={8}
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >

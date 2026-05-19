@@ -22,7 +22,7 @@ const SetRegisterHandInputPage = () => {
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
                 <label>倉庫（親）</label>
-                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                <select disabled={Boolean(isEnabled)} value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
@@ -31,11 +31,11 @@ const SetRegisterHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>品目No.(親)</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                <input disabled={Boolean(isEnabled)} value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>シリアル(親)</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input disabled={Boolean(isEnabled)} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>移動倉庫</label>

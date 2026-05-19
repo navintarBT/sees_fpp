@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
@@ -12,6 +12,17 @@ const ReturnConfiguration = () => {
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [qty, setQty] = useState(1);
+
+  const itemNoRef = useRef<HTMLInputElement>(null);
+  const lotRef = useRef<HTMLInputElement>(null);
+  const serialRef = useRef<HTMLInputElement>(null);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      nextRef.current?.focus();
+    }
+  };
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -32,7 +43,7 @@ const ReturnConfiguration = () => {
               </div>
               <div className='hand-row'>
                 <label >数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} autoFocus onKeyDown={(e) => handleKeyDown(e, itemNoRef)} />
               </div>
               <div className='rlr-row2'>
                 <label>状態</label>
@@ -62,15 +73,20 @@ const ReturnConfiguration = () => {
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff' }} ref={itemNoRef} onKeyDown={(e) => handleKeyDown(e, lotRef)} />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff' }} ref={lotRef} onKeyDown={(e) => handleKeyDown(e, serialRef)} />
               </div>
               <div className='hand-row' >
                 <label >シリアル</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff' }} ref={serialRef} onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    e.currentTarget.blur();
+                  }
+                }} />
               </div>
             </div>
 

@@ -711,6 +711,12 @@
   color:rgba(248,250,252,0.7);
 }
 
+.hand-row input:disabled,
+.hand-row select:disabled{
+  background:#e5e7eb;
+  color:#111827;
+}
+
 .hand-row-with-details{
   align-items:start;
 }
@@ -1313,6 +1319,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .set-register-table .tf-tableRow .col-arrow{
@@ -1333,6 +1340,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .set-return-configuration-table .tf-tableRow .col-arrow{
@@ -1353,6 +1361,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .delivery-table .tf-tableRow .col-arrow{
@@ -1381,6 +1390,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .set-table-miscellaneous .tf-tableRow .col-arrow{
@@ -1401,6 +1411,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .equipment-table .tf-tableRow .col-arrow{
@@ -1421,6 +1432,7 @@ input.wot-grid-value {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .bundle-table .tf-tableRow .col-arrow{
@@ -1634,5 +1646,5 @@ min-width: 300px;
 }
 
 .col-item-delivery{
-  min-width: 831px;
+  min-width: 830px;
 }
