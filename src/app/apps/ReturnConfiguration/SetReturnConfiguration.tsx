@@ -50,6 +50,7 @@ const SetReturnConfiguration = () => {
   const [showIncompleteConfirm, setShowIncompleteConfirm] = useState(false)
   const [showStatusChangeConfirm, setShowStatusChangeConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [scanError, setScanError] = useState<string | null>(null)
 
   const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({ f1: false, f8: false })
 
@@ -353,6 +354,81 @@ const SetReturnConfiguration = () => {
     },
   ]
 
+
+  // เพิ่มฟังก์ชันจำลองการสแกน
+  const mockScanData = [
+    { janCode: "04946329345254", lotSerial: "SN00123456", itemNo: "A01" },
+    { janCode: "04946329345255", lotSerial: "SN00234567", itemNo: "B02" },
+    { janCode: "04946329345256", lotSerial: "LOT2024001", itemNo: "C03" },
+  ]
+
+  // แก้ไข handleJanCodeScan ให้รองรับการทดสอบ
+  const handleJanCodeScan = () => {
+    if (!janCode) {
+      setScanError('JANコードを入力して下さい。')
+      return
+    }
+
+    // สำหรับทดสอบ: ถ้าพิมพ์ตัวเลขธรรมดา ให้ค้นหาจาก itemNo
+    const matchedRow = loadedData.find(row =>
+      row.itemNo === janCode ||  // ทดสอบด้วยการพิมพ์ itemNo เช่น "A01"
+      row.lotSerial === janCode  // ทดสอบด้วยการพิมพ์ lotSerial
+    )
+
+    if (!matchedRow) {
+      setScanError('構成データに品目が存在しません。')
+      setJanCode('')
+      return
+    }
+
+    // ตรวจสอบจำนวน
+    if (matchedRow.returnQty + 1 > matchedRow.buildQty) {
+      setScanError('構成数を超えています。')
+      setJanCode('')
+      return
+    }
+
+    // อัปเดต
+    setLoadedData(prev =>
+      prev.map(row =>
+        row.id === matchedRow.id
+          ? { ...row, returnQty: row.returnQty + 1 }
+          : row
+      )
+    )
+    setJanCode('')
+    setScanError(null)
+  }
+
+  // ฟังก์ชันคำนวณ Check Digit (ตามข้อ 6.補足説明)
+  const validateCheckDigit = (janCode: string): boolean => {
+    // จำลองการคำนวณ check digit
+    // ควร implement จริงตามเอกสารข้อ 6
+    if (janCode.length < 13) return false
+
+    // ดึง 13 หลักแรก (ไม่รวม check digit หลักสุดท้าย)
+    const codeWithoutCheck = janCode.slice(0, 13)
+    const providedCheckDigit = parseInt(janCode.slice(13), 10)
+
+    // คำนวณ check digit (วิธีตามเอกสาร)
+    // 1. บวกเลขในตำแหน่งคู่
+    let evenSum = 0
+    // 2. บวกเลขในตำแหน่งคี่
+    let oddSum = 0
+
+    for (let i = 0; i < codeWithoutCheck.length; i++) {
+      const digit = parseInt(codeWithoutCheck[i], 10)
+      if ((i + 1) % 2 === 0) {
+        evenSum += digit
+      } else {
+        oddSum += digit
+      }
+    }
+
+    const calculatedCheckDigit = (10 - ((evenSum * 3 + oddSum) % 10)) % 10
+    return calculatedCheckDigit === providedCheckDigit
+  }
+
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
@@ -420,7 +496,16 @@ const SetReturnConfiguration = () => {
                 <label>JANコード</label>
                 <input
                   value={janCode}
-                  onChange={(e) => setJanCode(e.target.value)}
+                  onChange={(e) => {
+                    setJanCode(e.target.value)
+                    setScanError(null)
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      handleJanCodeScan()
+                    }
+                  }}
                   readOnly={!hasLoadedData}
                   className={!hasLoadedData ? 'set-input-gray' : ''}
                   style={!hasLoadedData ? { backgroundColor: '#e5e7eb' } : {}}
