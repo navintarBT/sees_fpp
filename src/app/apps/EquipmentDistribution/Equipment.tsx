@@ -285,6 +285,17 @@ const Equipment = () => {
     clearRows();
     resetTableScroll();
   };
+  const clearAfterComplete = () => {
+    setRows([]);
+    setActiveRowId(null);
+    setForm((prev) => ({
+      ...prev,
+      parentItemNo: "",
+      qty: "1",
+      janCode: "",
+    }));
+    resetTableScroll();
+  };
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId(rowId);
@@ -563,6 +574,7 @@ const Equipment = () => {
               <button
                 className="set-btn set-primary"
                 onClick={() => setShowCompleteConfirm(true)}
+                
               >
                 完了
               </button>
@@ -697,7 +709,10 @@ const Equipment = () => {
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
-                    onClick={() => setShowCompleteConfirm(false)}
+                    onClick={() => {
+                      setShowCompleteConfirm(false);
+                      clearAfterComplete();
+                    }}
                   >
                     {"\u004f\u004b"}
                   </button>
