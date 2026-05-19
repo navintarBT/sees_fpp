@@ -1683,6 +1683,30 @@ min-width: 300px;
   background: #d1d5db;
 }
 
+/* ####################################table delivery zang ########################################### */
 .col-item-delivery{
   min-width: 830px;
+}
+
+
+/* ####################################table equipment zang ########################################### */
+
+.col-error-equipment{
+  min-width: 37px;
+}
+.col-warehouse-equipment{
+  min-width: 140px;
+}
+.col-storage-equipment
+{
+  min-width: 150px;
+}
+.col-quantity-equipment{
+  min-width: 90px;
+}
+.col-item-equipment{
+  min-width: 150px;
+}
+.col-productName-equipment{
+  min-width: 95px;
 }

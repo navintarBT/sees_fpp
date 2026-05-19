@@ -15,7 +15,7 @@ type Row = {
 
 // ── mock data store ──────────────────────────────────────────────────────────
 const ITEM_DATA_MAP: Record<string, Row[]> = {
-  "10000001": [
+  "12345678": [
     { id: 1, situation: "", item: "202603310000000000000000000001" },
     { id: 2, situation: "", item: "202603310000000000000000000002" },
     { id: 3, situation: "", item: "202603310000000000000000000003" },
@@ -26,11 +26,7 @@ const ITEM_DATA_MAP: Record<string, Row[]> = {
     { id: 8, situation: "", item: "202603310000000000000000000008" },
     { id: 9, situation: "", item: "202603310000000000000000000009" },
     { id: 10, situation: "", item: "202603310000000000000000000011" },
-    { id: 11, situation: "", item: "202603310000000000000000000012" },
-    { id: 12, situation: "", item: "202603310000000000000000000013" },
-    { id: 13, situation: "", item: "202603310000000000000000000014" },
-    { id: 14, situation: "", item: "202603310000000000000000000015" },
-    { id: 15, situation: "", item: "202603310000000000000000000016" },
+
   ],
   "10000002": [
     { id: 16, situation: "", item: "202603310000000000000000000137" },
@@ -57,7 +53,8 @@ const SHIPPING_INFO_MAP: Record<
     exclusiveLocked: boolean;
   }
 > = {
-  "10000001": { exclusiveLocked: false },
+  "12345678": { exclusiveLocked: false },
+  
   "10000002": { exclusiveLocked: true },
 };
 
@@ -92,6 +89,11 @@ const DeliverySlipRegistration = () => {
   const [errorCode, setErrorCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [completeMessage, setCompleteMessage] = useState("");
+  const parentItemNoInputRef = useRef<HTMLInputElement | null>(null);
+  const deliverySlipNoInputRef = useRef<HTMLInputElement | null>(null);
+  const errorFocusTargetRef = useRef<"parentItemNo" | "deliverySlipNo" | null>(
+    null,
+  );
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
   const isEnabled = !!form.parentItemNo.trim();
   const [activeRowId, setActiveRowId] = useState<number | null>(null);
@@ -101,6 +103,9 @@ const DeliverySlipRegistration = () => {
     f1: false,
     f8: false,
   });
+  const lastRowActivationRef = useRef<{ rowId: number; time: number } | null>(
+    null,
+  );
 
   const isAnyModalOpen =
     showHandInputConfirm ||
@@ -165,6 +170,32 @@ const DeliverySlipRegistration = () => {
     setShowErrorConfirm(true);
   };
 
+  const setInputError = (
+    target: "parentItemNo" | "deliverySlipNo",
+    code: string,
+    message: string,
+  ) => {
+    errorFocusTargetRef.current = target;
+    setError(code, message);
+  };
+
+  const closeErrorConfirm = () => {
+    setShowErrorConfirm(false);
+    requestAnimationFrame(() => {
+      const focusTarget = errorFocusTargetRef.current;
+      errorFocusTargetRef.current = null;
+      if (!focusTarget) return;
+      const target =
+        focusTarget === "deliverySlipNo"
+          ? deliverySlipNoInputRef.current
+          : parentItemNoInputRef.current;
+      if (!target) return;
+      target.focus();
+      const cursorPosition = target.value.length;
+      target.setSelectionRange(cursorPosition, cursorPosition);
+    });
+  };
+
   const delay = (ms: number) =>
     new Promise<void>((resolve) => setTimeout(resolve, ms));
 
@@ -172,12 +203,12 @@ const DeliverySlipRegistration = () => {
 
   const fetchShippingRows = async (shippingNo: string) => {
     if (!shippingNo) {
-      setError("HT006-E", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      setInputError("parentItemNo", "HT006-E", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
       return;
     }
 
     if (!isHalfWidthDigits(shippingNo)) {
-      setError("HT006-E", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      setInputError("parentItemNo", "HT006-E", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
       return;
     }
 
@@ -220,12 +251,12 @@ const DeliverySlipRegistration = () => {
 
   const saveDeliverySlip = async (slipNo: string) => {
     if (!slipNo) {
-      setError("", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      setInputError("deliverySlipNo", "", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
       return false;
     }
 
     if (!isHalfWidthDigits(slipNo)) {
-      setError("", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      setInputError("deliverySlipNo", "", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
       return false;
     }
 
@@ -297,6 +328,16 @@ const DeliverySlipRegistration = () => {
   };
 
   const handleRowClick = (rowId: number) => {
+    const now = Date.now();
+    const lastActivation = lastRowActivationRef.current;
+    if (
+      lastActivation?.rowId === rowId &&
+      now - lastActivation.time < 100
+    ) {
+      return;
+    }
+    lastRowActivationRef.current = { rowId, time: now };
+
     setActiveRowId(rowId);
     setCheckedRowIds((prev) =>
       prev.includes(rowId)
@@ -409,18 +450,24 @@ const DeliverySlipRegistration = () => {
               <div className="set-row">
                 <label>出荷No.</label>
                 <input
-                autoFocus
+                  ref={parentItemNoInputRef}
+                  autoFocus
                   value={form.parentItemNo}
                   maxLength={8}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  disabled={showErrorConfirm}
                   onChange={(e) => {
                     const rawValue = e.target.value;
-                    if (/[^0-9]/.test(rawValue)) {
-                      setError(
-                        "",
-                        `配送伝票番号が半角数字でない。${rawValue}を入力して下さい。`,
-                      );
-                      return;
-                    }
+                if (/[^0-9]/.test(rawValue)) {
+  setInputError(
+    "parentItemNo",
+    "",
+    `出荷No.は半角数字を
+入力してください。`, // ເຄາະເອັນເຕີລົງມາເລີຍ
+  );
+  return;
+}
 
                     setForm({ ...form, parentItemNo: rawValue });
                     if (rawValue.trim() === "") {
@@ -433,13 +480,28 @@ const DeliverySlipRegistration = () => {
               <div className="set-row">
                 <label>配送伝票No.</label>
                 <input
+                  ref={deliverySlipNoInputRef}
                   readOnly={!isEnabled}
+                  disabled={showErrorConfirm}
                   value={form.deliverySlipNo}
                   style={{ backgroundColor: isEnabled ? "white" : "rgb(229, 231, 235)" }}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   maxLength={30}
-                  onChange={(e) =>
-                    setForm({ ...form, deliverySlipNo: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const rawValue = e.target.value;
+                    if (/[^0-9]/.test(rawValue)) {
+                      setInputError(
+                        "deliverySlipNo",
+                        "",
+                       `出荷No.は半角数字を
+入力してください。`,
+                      );
+                      return;
+                    }
+
+                    setForm({ ...form, deliverySlipNo: rawValue });
+                  }}
                   onKeyDown={async (e) => {
                     if (e.key === "Enter" && isEnabled) {
                       e.preventDefault();
@@ -645,7 +707,7 @@ const DeliverySlipRegistration = () => {
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
-                    onClick={() => setShowErrorConfirm(false)}
+                    onClick={closeErrorConfirm}
                   >
                     OK
                   </button>
