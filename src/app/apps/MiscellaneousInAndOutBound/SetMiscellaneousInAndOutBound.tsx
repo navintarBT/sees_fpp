@@ -279,7 +279,7 @@ const SetMiscellaneousInAndOutBound = () => {
   const lotRef = useRef<HTMLInputElement>(null);
   const serialRef = useRef<HTMLInputElement>(null);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement | null>) => {
     if (e.key === 'Tab') {
       e.preventDefault();
       nextRef.current?.focus();
