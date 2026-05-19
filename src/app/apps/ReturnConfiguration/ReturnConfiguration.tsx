@@ -1,13 +1,21 @@
-import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
 const ReturnConfiguration = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
+
+  useEffect(() => {
+    const state = location.state as { parentItemNo?: string } | null
+    if (state?.parentItemNo) {
+      setMoveStorage(state.parentItemNo)
+    }
+  }, [location.state])
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
@@ -35,15 +43,15 @@ const ReturnConfiguration = () => {
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
                 <label>品目No.(親)</label>
-                <input className='dark-backinput' value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={true} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} autoFocus />
               </div>
               <div className='hand-row'>
                 <label>シリアル(親)</label>
-                <input className='dark-backinput' value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} readOnly={true} />
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label >数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} autoFocus onKeyDown={(e) => handleKeyDown(e, itemNoRef)} />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='rlr-row2'>
                 <label>状態</label>
@@ -73,20 +81,15 @@ const ReturnConfiguration = () => {
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input style={{ backgroundColor: '#fff' }} ref={itemNoRef} onKeyDown={(e) => handleKeyDown(e, lotRef)} />
+                <input style={{ backgroundColor: '#fff' }} />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input style={{ backgroundColor: '#fff' }} ref={lotRef} onKeyDown={(e) => handleKeyDown(e, serialRef)} />
+                <input style={{ backgroundColor: '#fff' }} />
               </div>
               <div className='hand-row' >
                 <label >シリアル</label>
-                <input style={{ backgroundColor: '#fff' }} ref={serialRef} onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    e.currentTarget.blur();
-                  }
-                }} />
+                <input style={{ backgroundColor: '#fff' }} />
               </div>
             </div>
 
@@ -126,7 +129,9 @@ const ReturnConfiguration = () => {
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowReadConfirm(false)}
+                      onClick={() => {
+                        setShowReadConfirm(false)
+                      }}
                     >
                       {'\u306f\u3044'}
                     </button>
@@ -169,7 +174,7 @@ const ReturnConfiguration = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

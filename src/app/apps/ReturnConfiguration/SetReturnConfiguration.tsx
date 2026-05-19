@@ -278,11 +278,8 @@ const SetReturnConfiguration = () => {
     }
   }, [activeRow, isAnyModalOpen])
 
-  // Simulate loading data when parent JAN code is entered (2-2. セット構成データ取得)
   const handleParentJanCodeSubmit = () => {
     if (parentJanCode) {
-      // Simulate fetching set configuration data
-      // This would normally call the server
       const mockSetData: Row[] = [
         { id: 1, itemNo: 'A01', lotSerial: 'L01', buildQty: 1, returnQty: 0, status: '', itemName: '部品A' },
         { id: 2, itemNo: 'B02', lotSerial: 'L02', buildQty: 2, returnQty: 0, status: '', itemName: '部品B' },
@@ -354,15 +351,6 @@ const SetReturnConfiguration = () => {
     },
   ]
 
-
-  // เพิ่มฟังก์ชันจำลองการสแกน
-  const mockScanData = [
-    { janCode: "04946329345254", lotSerial: "SN00123456", itemNo: "A01" },
-    { janCode: "04946329345255", lotSerial: "SN00234567", itemNo: "B02" },
-    { janCode: "04946329345256", lotSerial: "LOT2024001", itemNo: "C03" },
-  ]
-
-  // แก้ไข handleJanCodeScan ให้รองรับการทดสอบ
   const handleJanCodeScan = () => {
     if (!janCode) {
       setScanError('JANコードを入力して下さい。')
@@ -402,18 +390,13 @@ const SetReturnConfiguration = () => {
 
   // ฟังก์ชันคำนวณ Check Digit (ตามข้อ 6.補足説明)
   const validateCheckDigit = (janCode: string): boolean => {
-    // จำลองการคำนวณ check digit
-    // ควร implement จริงตามเอกสารข้อ 6
     if (janCode.length < 13) return false
 
     // ดึง 13 หลักแรก (ไม่รวม check digit หลักสุดท้าย)
     const codeWithoutCheck = janCode.slice(0, 13)
     const providedCheckDigit = parseInt(janCode.slice(13), 10)
 
-    // คำนวณ check digit (วิธีตามเอกสาร)
-    // 1. บวกเลขในตำแหน่งคู่
     let evenSum = 0
-    // 2. บวกเลขในตำแหน่งคี่
     let oddSum = 0
 
     for (let i = 0; i < codeWithoutCheck.length; i++) {
@@ -569,7 +552,7 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowHandInputConfirm(false)
-                      navigate('/factory/return-configuration')
+                      navigate('/factory/return-configuration', { state: { parentItemNo: parentJanCode } })
                     }}
                   >
                     はい
@@ -787,7 +770,6 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-no'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory')
                     }}
                   >
                     いいえ
