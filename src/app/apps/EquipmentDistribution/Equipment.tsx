@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlay } from "react-icons/fa";
 import { ActionFooter } from "../../components/ActionFooter/ActionFooter";
@@ -29,7 +36,7 @@ type TableColumn = {
 
 const Equipment = () => {
   const navigate = useNavigate();
-  const [rows, setRows] = useState<Row[]>([
+  const mockRowsRef = useRef<Row[]>([
     {
       id: 1,
       error: "",
@@ -163,10 +170,11 @@ const Equipment = () => {
       productName: "品目12",
     },
   ]);
+  const [rows, setRows] = useState<Row[]>([]);
   const [form, setForm] = useState({
-    parentWarehouse: "羽田製品倉庫：W0040",
+    parentWarehouse: "",
     parentItemNo: "",
-    moveWarehouse: "羽田製品倉庫：W0043",
+    moveWarehouse: "",
     moveStorage: "",
     qty: "1",
     janCode: "",
@@ -176,7 +184,10 @@ const Equipment = () => {
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
+  const [showJanCodeErrorConfirm, setShowJanCodeErrorConfirm] = useState(false);
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
+  const janCodeInputRef = useRef<HTMLInputElement | null>(null);
+  const janCodeErrorOkButtonRef = useRef<HTMLButtonElement | null>(null);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const [quantityRange, setQuantityRange] = useState<"from" | "to">("from");
   const [activeRowId, setActiveRowId] = useState<number | null>(null);
@@ -191,6 +202,7 @@ const Equipment = () => {
     showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
+    showJanCodeErrorConfirm ||
     showBackConfirm;
 
   const closeAllModals = () => {
@@ -199,10 +211,52 @@ const Equipment = () => {
     setShowNoSelectionConfirm(false);
     setShowClearConfirm(false);
     setShowCompleteConfirm(false);
+    setShowJanCodeErrorConfirm(false);
     setShowBackConfirm(false);
   };
 
   const clearRows = () => setRows([]);
+  const focusJanCodeInput = () => {
+    requestAnimationFrame(() => {
+      const input = janCodeInputRef.current;
+      if (!input) return;
+      input.focus();
+      const cursorPosition = input.value.length;
+      input.setSelectionRange(cursorPosition, cursorPosition);
+    });
+  };
+  const showJanCodeError = () => {
+    janCodeInputRef.current?.blur();
+    setShowJanCodeErrorConfirm(true);
+  };
+  const handleJanCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextValue = event.target.value;
+    if (/\D/.test(nextValue)) {
+      showJanCodeError();
+      return;
+    }
+    setForm((prev) => ({ ...prev, janCode: nextValue.slice(0, 14) }));
+  };
+  const handleJanCodeKeyDown = (
+    event: ReactKeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+    if (!/^\d{1,14}$/.test(form.janCode)) {
+      showJanCodeError();
+      return;
+    }
+    setRows(mockRowsRef.current);
+    resetTableScroll();
+  };
+
+  useEffect(() => {
+    if (!showJanCodeErrorConfirm) return;
+    requestAnimationFrame(() => {
+      janCodeErrorOkButtonRef.current?.focus();
+    });
+  }, [showJanCodeErrorConfirm]);
+
   const clearForm = () =>
     setForm({
       parentWarehouse: "",
@@ -318,7 +372,7 @@ const Equipment = () => {
     },
     {
       key: "error",
-      headClassName: "col-error",
+      headClassName: "col-error-equipment",
       cellClassName: "col-error",
       header: "",
       render: (row) => row.error,
@@ -332,8 +386,8 @@ const Equipment = () => {
     },
     {
       key: "item",
-      headClassName: "col-item",
-      cellClassName: "col-item",
+      headClassName: "col-item-equipment",
+      cellClassName: "col-item-equipment",
       header: "品目No.",
       render: (row) => row.item,
     },
@@ -346,29 +400,29 @@ const Equipment = () => {
     },
     {
       key: "Quantity",
-      headClassName: "col-quantity",
-      cellClassName: "col-quantity",
+      headClassName: "col-quantity-equipment",
+      cellClassName: "col-quantity-equipment",
       header: "数量",
       render: (row) => row.quantity,
     },
     {
       key: "Warehouse",
-      headClassName: "col-warehouse",
-      cellClassName: "col-warehouse",
+      headClassName: "col-warehouse-equipment",
+      cellClassName: "col-warehouse-equipment",
       header: "倉庫",
       render: (row) => row.warehouse,
     },
     {
       key: "storage",
-      headClassName: "col-storage",
-      cellClassName: "col-storage",
+      headClassName: "col-storage-equipment",
+      cellClassName: "col-storage-equipment",
       header: "保管場所",
       render: (row) => row.storage,
     },
     {
       key: "productName",
-      headClassName: "col-productName",
-      cellClassName: "col-productName",
+      headClassName: "col-productName-equipment",
+      cellClassName: "col-productName-equipment",
       header: "品名",
       render: (row) => row.productName,
     },
@@ -456,7 +510,7 @@ const Equipment = () => {
                   <label className="set-radio">
                     <input
                       type="radio"
-                      name="quantityRange"
+                      name="quantityRange-2"
                       value="to"
                       checked={quantityRange === "to"}
                       onChange={() => setQuantityRange("to")}
@@ -467,10 +521,13 @@ const Equipment = () => {
                 <div className="set-row set-row-bundle">
                   <label>JANコード</label>
                   <input
+                    ref={janCodeInputRef}
                     value={form.janCode}
-                    onChange={(e) =>
-                      setForm({ ...form, janCode: e.target.value })
-                    }
+                    onChange={handleJanCodeChange}
+                    onKeyDown={handleJanCodeKeyDown}
+                    inputMode="numeric"
+                    maxLength={14}
+                    readOnly={showJanCodeErrorConfirm}
                   />
                 </div>
               </div>
@@ -641,6 +698,29 @@ const Equipment = () => {
                   <button
                     className="set-modal-btn set-modal-yes"
                     onClick={() => setShowCompleteConfirm(false)}
+                  >
+                    {"\u004f\u004b"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showJanCodeErrorConfirm && (
+            <div className="set-modal-backdrop" role="presentation">
+              <div className="set-modal" role="dialog" aria-modal="true">
+                <div className="set-modal-header">{"\u30a8\u30e9\u30fc"}</div>
+                <div className="set-modal-body">
+                  {"JAN\u30b3\u30fc\u30c9\u304c\u4e0d\u6b63\u3067\u3059\u3002"}
+                </div>
+                <div className="set-modal-actions">
+                  <button
+                    ref={janCodeErrorOkButtonRef}
+                    className="set-modal-btn set-modal-yes"
+                    onClick={() => {
+                      setShowJanCodeErrorConfirm(false);
+                      focusJanCodeInput();
+                    }}
                   >
                     {"\u004f\u004b"}
                   </button>
