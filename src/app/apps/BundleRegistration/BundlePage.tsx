@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState, type ReactNode} from 'react'
+﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
@@ -16,143 +16,145 @@ type Row = {
   productName: string;
 };
 
+const initialRows: Row[] = [
+  {
+    id: 1,
+    error: "",
+    fromTo: "F",
+    item: "A01",
+    lot: "L01",
+    quantity: 1,
+    warehouse: "W0020",
+    storage: "W0045",
+    productName: "品目1",
+  },
+  {
+    id: 2,
+    error: "",
+    fromTo: "T",
+    item: "B02",
+    lot: "L02",
+    quantity: 2,
+    warehouse: "W0021",
+    storage: "W0046",
+    productName: "品目2",
+  },
+  {
+    id: 3,
+    error: "",
+    fromTo: "F",
+    item: "C03",
+    lot: "L03",
+    quantity: 3,
+    warehouse: "W0022",
+    storage: "W0047",
+    productName: "品目3",
+  },
+  {
+    id: 4,
+    error: "",
+    fromTo: "F",
+    item: "D04",
+    lot: "L04",
+    quantity: 4,
+    warehouse: "W0023",
+    storage: "W0048",
+    productName: "品目4",
+  },
+  {
+    id: 5,
+    error: "E",
+    fromTo: "T",
+    item: "E05",
+    lot: "L05",
+    quantity: 5,
+    warehouse: "W0024",
+    storage: "W0049",
+    productName: "品目5",
+  },
+  {
+    id: 6,
+    error: "",
+    fromTo: "T",
+    item: "F06",
+    lot: "L06",
+    quantity: 6,
+    warehouse: "W0025",
+    storage: "W0050",
+    productName: "品目6",
+  },
+  {
+    id: 7,
+    error: "E",
+    fromTo: "F",
+    item: "G07",
+    lot: "L07",
+    quantity: 7,
+    warehouse: "W0026",
+    storage: "W0051",
+    productName: "品目7",
+  },
+  {
+    id: 8,
+    error: "",
+    fromTo: "T",
+    item: "H08",
+    lot: "L08",
+    quantity: 8,
+    warehouse: "W0027",
+    storage: "W0052",
+    productName: "品目8",
+  },
+  {
+    id: 9,
+    error: "",
+    fromTo: "T",
+    item: "I09",
+    lot: "L09",
+    quantity: 9,
+    warehouse: "W0028",
+    storage: "W0053",
+    productName: "品目9",
+  },
+  {
+    id: 10,
+    error: "E",
+    fromTo: "F",
+    item: "J10",
+    lot: "L10",
+    quantity: 10,
+    warehouse: "W0029",
+    storage: "W0054",
+    productName: "品目10",
+  },
+  {
+    id: 11,
+    error: "E",
+    fromTo: "F",
+    item: "J10",
+    lot: "L10",
+    quantity: 11,
+    warehouse: "W0030",
+    storage: "W0055",
+    productName: "品目11",
+  },
+  {
+    id: 12,
+    error: "E",
+    fromTo: "F",
+    item: "J10",
+    lot: "L10",
+    quantity: 12,
+    warehouse: "W0031",
+    storage: "W0056",
+    productName: "品目12",
+  },
+]
+
 
 const BundlePage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      error: "",
-      fromTo: "F",
-      item: "A01",
-      lot: "L01",
-      quantity: 1,
-      warehouse: "W0020",
-      storage: "W0045",
-      productName: "品目1",
-    },
-    {
-      id: 2,
-      error: "",
-      fromTo: "T",
-      item: "B02",
-      lot: "L02",
-      quantity: 2,
-      warehouse: "W0021",
-      storage: "W0046",
-      productName: "品目2",
-    },
-    {
-      id: 3,
-      error: "",
-      fromTo: "F",
-      item: "C03",
-      lot: "L03",
-      quantity: 3,
-      warehouse: "W0022",
-      storage: "W0047",
-      productName: "品目3",
-    },
-    {
-      id: 4,
-      error: "",
-      fromTo: "F",
-      item: "D04",
-      lot: "L04",
-      quantity: 4,
-      warehouse: "W0023",
-      storage: "W0048",
-      productName: "品目4",
-    },
-    {
-      id: 5,
-      error: "E",
-      fromTo: "T",
-      item: "E05",
-      lot: "L05",
-      quantity: 5,
-      warehouse: "W0024",
-      storage: "W0049",
-      productName: "品目5",
-    },
-    {
-      id: 6,
-      error: "",
-      fromTo: "T",
-      item: "F06",
-      lot: "L06",
-      quantity: 6,
-      warehouse: "W0025",
-      storage: "W0050",
-      productName: "品目6",
-    },
-    {
-      id: 7,
-      error: "E",
-      fromTo: "F",
-      item: "G07",
-      lot: "L07",
-      quantity: 7,
-      warehouse: "W0026",
-      storage: "W0051",
-      productName: "品目7",
-    },
-    {
-      id: 8,
-      error: "",
-      fromTo: "T",
-      item: "H08",
-      lot: "L08",
-      quantity: 8,
-      warehouse: "W0027",
-      storage: "W0052",
-      productName: "品目8",
-    },
-    {
-      id: 9,
-      error: "",
-      fromTo: "T",
-      item: "I09",
-      lot: "L09",
-      quantity: 9,
-      warehouse: "W0028",
-      storage: "W0053",
-      productName: "品目9",
-    },
-    {
-      id: 10,
-      error: "E",
-      fromTo: "F",
-      item: "J10",
-      lot: "L10",
-      quantity: 10,
-      warehouse: "W0029",
-      storage: "W0054",
-      productName: "品目10",
-    },
-    {
-      id: 11,
-      error: "E",
-      fromTo: "F",
-      item: "J10",
-      lot: "L10",
-      quantity: 11,
-      warehouse: "W0030",
-      storage: "W0055",
-      productName: "品目11",
-    },
-    {
-      id: 12,
-      error: "E",
-      fromTo: "F",
-      item: "J10",
-      lot: "L10",
-      quantity: 12,
-      warehouse: "W0031",
-      storage: "W0056",
-      productName: "品目12",
-    },
-  ]);
+  const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
     parentWarehouse: '',
     parentItemNo: '',
@@ -229,6 +231,17 @@ const BundlePage = () => {
     }
   }
 
+  const handleJanCodeChange = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, '').slice(0, 14)
+    setForm((prev) => ({...prev, janCode: digitsOnly}))
+  }
+
+  const handleJanCodeEnter = () => {
+    if (!/^\d{1,14}$/.test(form.janCode)) return
+    setRows(initialRows)
+    setActiveRowId(null)
+    resetTableScroll()
+  }
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -427,8 +440,15 @@ const BundlePage = () => {
                 <div className='set-row set-row-bundle'>
                 <label>JANコード</label>
                 <input
+                  inputMode='numeric'
+                  maxLength={14}
                   value={form.janCode}
-                  onChange={(e) => setForm({...form, janCode: e.target.value})}
+                  onChange={(e) => handleJanCodeChange(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key !== 'Enter') return
+                    e.preventDefault()
+                    handleJanCodeEnter()
+                  }}
                 />
               </div>
               </div>

@@ -1445,8 +1445,32 @@ input.wot-grid-value {
   min-width: 45px;
 }
 
+.bundle-table .col-error{
+min-width: 39px;
+}
+
 .bundle-table .col-item{
 min-width: 170px;
+}
+
+.bundle-table .col-lot{
+min-width: 219px;
+}
+
+.bundle-table .col-quantity{
+min-width: 78px;
+}
+
+.bundle-table .col-warehouse{
+min-width: 108px;
+}
+
+.bundle-table .col-storage{
+min-width: 134px;
+}
+
+.bundle-table .col-productName{
+min-width: 110px;
 }
 
 .bundle-table .tf-tableRow .col-arrow{
