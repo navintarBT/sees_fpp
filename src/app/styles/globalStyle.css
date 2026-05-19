@@ -58,6 +58,12 @@
   padding:0 22px;
 }
 
+.set-row input:disabled,
+.set-row select:disabled{
+  background:#d9d9d9;
+  color:#666;
+}
+
 .set-row-inline{
   grid-template-columns:240px 200px 200px 1fr;
 
@@ -1414,6 +1420,10 @@ input.wot-grid-value {
   min-width: 45px;
 }
 
+.equipment-table .col-item{
+  min-width: 170px;
+}
+
 .equipment-table .tf-tableRow .col-arrow{
   position: sticky;
   left: 0;
@@ -1433,6 +1443,10 @@ input.wot-grid-value {
   z-index: 4;
   background: white;
   min-width: 45px;
+}
+
+.bundle-table .col-item{
+min-width: 170px;
 }
 
 .bundle-table .tf-tableRow .col-arrow{

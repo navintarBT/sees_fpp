@@ -26,144 +26,146 @@ type TableColumn = {
   render: (row: Row) => ReactNode
 }
 
+const initialRows: Row[] = [
+  {
+    id: 1,
+    error: '',
+    item: 'A01',
+    lot: 'L01',
+    status: '追加',
+    build: 2,
+    release: 1,
+    move: 'W001',
+    moveStorage: '',
+    name: '品目1',
+    moveStorage2: '棚A',
+  },
+  {
+    id: 2,
+    error: '',
+    item: 'B02',
+    lot: 'L02',
+    status: '解除',
+    build: 1,
+    release: 0,
+    move: 'W002',
+    moveStorage: '',
+    name: '品目2',
+    moveStorage2: '棚B',
+  },
+  {
+    id: 3,
+    error: '',
+    item: 'C03',
+    lot: 'L03',
+    status: 'OV対応要',
+    build: 3,
+    release: 2,
+    move: 'W003',
+    moveStorage: '',
+    name: '品目3',
+    moveStorage2: '棚C',
+  },
+  {
+    id: 4,
+    error: '',
+    item: 'D04',
+    lot: 'L04',
+    status: '構成中',
+    build: 4,
+    release: 1,
+    move: 'W004',
+    moveStorage: '',
+    name: '品目4',
+    moveStorage2: '棚D',
+  },
+  {
+    id: 5,
+    error: 'E',
+    item: 'E05',
+    lot: 'L05',
+    status: '構成中',
+    build: 2,
+    release: 0,
+    move: 'W005',
+    moveStorage: '',
+    name: '品目5',
+    moveStorage2: '棚E',
+  },
+  {
+    id: 6,
+    error: '',
+    item: 'F06',
+    lot: 'L06',
+    status: '構成中',
+    build: 5,
+    release: 3,
+    move: 'W006',
+    moveStorage: '',
+    name: '品目6',
+    moveStorage2: '棚F',
+  },
+  {
+    id: 7,
+    error: 'E',
+    item: 'G07',
+    lot: 'L07',
+    status: '構成中',
+    build: 1,
+    release: 0,
+    move: 'W007',
+    moveStorage: '',
+    name: '品目7',
+    moveStorage2: '棚G',
+  },
+  {
+    id: 8,
+    error: '',
+    item: 'H08',
+    lot: 'L08',
+    status: '構成中',
+    build: 3,
+    release: 1,
+    move: 'W008',
+    moveStorage: '',
+    name: '品目8',
+    moveStorage2: '棚H',
+  },
+  {
+    id: 9,
+    error: '',
+    item: 'I09',
+    lot: 'L09',
+    status: '構成中',
+    build: 2,
+    release: 2,
+    move: 'W009',
+    moveStorage: '',
+    name: '品目9',
+    moveStorage2: '棚I',
+  },
+  {
+    id: 10,
+    error: 'E',
+    item: 'J10',
+    lot: 'L10',
+    status: '構成中',
+    build: 6,
+    release: 2,
+    move: 'W010',
+    moveStorage: '',
+    name: '品目10',
+    moveStorage2: '棚J',
+  },
+]
+
 const SetRegisterPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      error: '',
-      item: 'A01', // 品目No.
-      lot: 'L01', // ロットシリアル
-      status: '追加', // 状態
-      build: 2, // 構成数
-      release: 1, // 解除数
-      move: 'W001', // 移動倉
-      moveStorage: '', // 移動保管場所
-      name: '品目1', // 品名
-      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
-    },
-    {
-      id: 2,
-      error: '',
-      item: 'B02',
-      lot: 'L02',
-      status: '解除',
-      build: 1,
-      release: 0,
-      move: 'W002',
-      moveStorage: '',
-      name: '品目2',
-      moveStorage2: '棚B',
-    },
-    {
-      id: 3,
-      error: '',
-      item: 'C03',
-      lot: 'L03',
-      status: 'OV対応要',
-      build: 3,
-      release: 2,
-      move: 'W003',
-      moveStorage: '',
-      name: '品目3',
-      moveStorage2: '棚C',
-    },
-    {
-      id: 4,
-      error: '',
-      item: 'D04',
-      lot: 'L04',
-      status: '構成中',
-      build: 4,
-      release: 1,
-      move: 'W004',
-      moveStorage: '',
-      name: '品目4',
-      moveStorage2: '棚D',
-    },
-    {
-      id: 5,
-      error: 'E',
-      item: 'E05',
-      lot: 'L05',
-      status: '構成中',
-      build: 2,
-      release: 0,
-      move: 'W005',
-      moveStorage: '',
-      name: '品目5',
-      moveStorage2: '棚E',
-    },
-    {
-      id: 6,
-      error: '',
-      item: 'F06',
-      lot: 'L06',
-      status: '構成中',
-      build: 5,
-      release: 3,
-      move: 'W006',
-      moveStorage: '',
-      name: '品目6',
-      moveStorage2: '棚F',
-    },
-    {
-      id: 7,
-      error: 'E',
-      item: 'G07',
-      lot: 'L07',
-      status: '構成中',
-      build: 1,
-      release: 0,
-      move: 'W007',
-      moveStorage: '',
-      name: '品目7',
-      moveStorage2: '棚G',
-    },
-    {
-      id: 8,
-      error: '',
-      item: 'H08',
-      lot: 'L08',
-      status: '構成中',
-      build: 3,
-      release: 1,
-      move: 'W008',
-      moveStorage: '',
-      name: '品目8',
-      moveStorage2: '棚H',
-    },
-    {
-      id: 9,
-      error: '',
-      item: 'I09',
-      lot: 'L09',
-      status: '構成中',
-      build: 2,
-      release: 2,
-      move: 'W009',
-      moveStorage: '',
-      name: '品目9',
-      moveStorage2: '棚I',
-    },
-    {
-      id: 10,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W010',
-      moveStorage: '',
-      name: '品目10',
-      moveStorage2: '棚J',
-    },
-  ])
+  const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
+    parentWarehouse: '',
     parentItemNo: '',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
+    moveWarehouse: '',
     moveStorage: '',
     qty: '1',
     janCode: '',
@@ -176,7 +178,9 @@ const SetRegisterPage = () => {
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const parentWarehouseRef = useRef<HTMLSelectElement | null>(null)
   const parentJanCodeInputRef = useRef<HTMLInputElement | null>(null)
+  const janCodeInputRef = useRef<HTMLInputElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [isParentConfirmed, setIsParentConfirmed] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
@@ -224,6 +228,7 @@ const SetRegisterPage = () => {
   }
 
   const clearFormAndRows = () => {
+    setIsParentConfirmed(false)
     clearForm()
     clearRows()
     resetTableScroll()
@@ -232,6 +237,20 @@ const SetRegisterPage = () => {
   useEffect(() => {
     parentJanCodeInputRef.current?.focus()
   }, [])
+
+  useEffect(() => {
+    if (!isParentConfirmed && /^\d{7}$/.test(form.parentItemNo)) {
+      setIsParentConfirmed(true)
+      setRows(initialRows)
+    }
+  }, [form.parentItemNo, isParentConfirmed])
+
+  useEffect(() => {
+    if (!isParentConfirmed) return
+    setTimeout(() => {
+      janCodeInputRef.current?.focus()
+    }, 0)
+  }, [isParentConfirmed])
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId(rowId)
@@ -352,8 +371,9 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>倉庫（親）</label>
                 <select
+                  disabled={isParentConfirmed}
                   ref={parentWarehouseRef}
-                  tabIndex={1}
+                  tabIndex={isParentConfirmed ? -1 : 1}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
 
@@ -365,10 +385,11 @@ const SetRegisterPage = () => {
                 </select>
               </div>
               <div className='set-row'>
-                <label>JANコード(親)</label>
+                <label>{isParentConfirmed ? '品目No.(親)' : 'JANコード(親)'}</label>
                 <input
+                  disabled={isParentConfirmed}
                   ref={parentJanCodeInputRef}
-                  tabIndex={-1}
+                  tabIndex={isParentConfirmed ? -1 : 2}
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
@@ -376,7 +397,8 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>移動倉庫</label>
                 <select
-                  tabIndex={-1}
+                  disabled={!isParentConfirmed}
+                  tabIndex={isParentConfirmed ? 1 : -1}
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                 >
@@ -389,7 +411,8 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>移動保管場所</label>
                 <input
-                  tabIndex={2}
+                  disabled={!isParentConfirmed}
+                  tabIndex={isParentConfirmed ? 2 : -1}
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                 />
@@ -398,6 +421,7 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>数量</label>
                 <input
+                  disabled={!isParentConfirmed}
                   tabIndex={-1}
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
@@ -408,7 +432,9 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>JANコード</label>
                 <input
-                  tabIndex={3}
+                  disabled={!isParentConfirmed}
+                  ref={janCodeInputRef}
+                  tabIndex={isParentConfirmed ? 3 : -1}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
                 />
@@ -418,7 +444,7 @@ const SetRegisterPage = () => {
             <TableSection
               columns={tableColumns}
               rows={rows}
-              rowTabIndex={4}
+              rowTabIndex={isParentConfirmed ? 4 : -1}
               scrollRef={tableScrollRef}
               gridClassName='set-register-table'
               getRowKey={(row) => row.id}
@@ -428,21 +454,21 @@ const SetRegisterPage = () => {
 
             <ActionFooter columns={5}>
               <button
-                tabIndex={5}
+                tabIndex={isParentConfirmed ? 5 : 3}
                 className='set-btn set-danger'
                 onClick={() => setShowClearConfirm(true)}
               >
                 破棄
               </button>
               <button
-                tabIndex={6}
+                tabIndex={isParentConfirmed ? 6 : 4}
                 className='set-btn set-primary'
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
               </button>     
               <button
-                tabIndex={7}
+                tabIndex={isParentConfirmed ? 7 : 5}
                 className='set-btn set-success'
                 onClick={() => handleReleaseClick()}
               >
@@ -456,7 +482,7 @@ const SetRegisterPage = () => {
                 手入力
               </button>
               <button
-                tabIndex={8}
+                tabIndex={isParentConfirmed ? 8 : 6}
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >
@@ -497,11 +523,20 @@ const SetRegisterPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30924\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
+                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30921\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        if (activeRowId !== null) {
+                          setRows((prevRows) =>
+                            prevRows.map((row) =>
+                              row.id === activeRowId && row.status === '\u69cb\u6210\u4e2d'
+                                ? {...row, status: '\u89e3\u9664'}
+                                : row,
+                            ),
+                          )
+                        }
                         setShowDeleteConfirm(false)
                       }}
                     >

@@ -19,13 +19,6 @@ type Row = {
   productName: string;
 };
 
-type TableColumn = {
-  key: string;
-  headClassName: string;
-  cellClassName: string;
-  header: ReactNode;
-  render: (row: Row) => ReactNode;
-};
 
 const Equipment = () => {
   const navigate = useNavigate();

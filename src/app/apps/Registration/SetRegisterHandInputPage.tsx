@@ -11,7 +11,6 @@ const SetRegisterHandInputPage = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
     <div className='mockup-page'>
@@ -19,10 +18,10 @@ const SetRegisterHandInputPage = () => {
         <div className='mockup-frame'>
           <div className='set-header'>セット登録手入力</div>
           <div className='hand-body'>
-            <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
+            <div className='hand-form'>
               <div className='hand-row'>
                 <label>倉庫（親）</label>
-                <select disabled={Boolean(isEnabled)} value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
@@ -31,15 +30,16 @@ const SetRegisterHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>品目No.(親)</label>
-                <input disabled={Boolean(isEnabled)} value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>シリアル(親)</label>
-                <input disabled={Boolean(isEnabled)} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>移動倉庫</label>
-                <select disabled={!isEnabled}>
+                <select>
+                  <option value=''></option>
                   <option>千葉倉庫（WMS）：W002</option>
                   <option>千葉倉庫（WMS）：W003</option>
                   <option>千葉倉庫（WMS）：W004</option>
@@ -47,23 +47,23 @@ const SetRegisterHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>移動保管場所</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={!isEnabled} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row '>
                 <label>数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} readOnly={!isEnabled} />
+                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
               <div className='hand-row'>
                 <label>シリアル</label>
-                <input readOnly={!isEnabled} placeholder=' ' />
+                <input placeholder=' ' />
               </div>
             </div>
 

@@ -5,165 +5,158 @@ import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 
 type Row = {
-  id: number
-  error: string
-  fromTo: string
-  item: string
-  lot: string
-  quantity: string
-  warehouse: string
-  storage: string
-  productName: string
-}
+  id: number;
+  error: string;
+  fromTo: string;
+  item: string;
+  lot: string;
+  quantity: number;
+  warehouse: string;
+  storage: string;
+  productName: string;
+};
 
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
-}
 
 const BundlePage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
     {
       id: 1,
-      error: '',
-      fromTo: 'F',
-      item: 'A01', // 品目No.
-      lot: 'L01', // ロットシリアル
-      quantity: '追加', // 状態
-      warehouse: 'W0020', // 構成数
-      storage: '', // 解除数
-      productName: '品目1', // 移動倉
+      error: "",
+      fromTo: "F",
+      item: "A01",
+      lot: "L01",
+      quantity: 1,
+      warehouse: "W0020",
+      storage: "W0045",
+      productName: "品目1",
     },
     {
       id: 2,
-      error: '',
-      fromTo: 'T',
-      item: 'B02',
-      lot: 'L02',
-      quantity: '解除',
-      warehouse: 'W0021',
-      storage: '',
-      productName: '品目2',
+      error: "",
+      fromTo: "T",
+      item: "B02",
+      lot: "L02",
+      quantity: 2,
+      warehouse: "W0021",
+      storage: "W0046",
+      productName: "品目2",
     },
     {
       id: 3,
-      error: '',
-      fromTo: 'F',
-      item: 'C03',
-      lot: 'L03',
-      quantity: 'OV対応要',
-      warehouse: 'W0022',
-      storage: '',
-      productName: '品目3',
+      error: "",
+      fromTo: "F",
+      item: "C03",
+      lot: "L03",
+      quantity: 3,
+      warehouse: "W0022",
+      storage: "W0047",
+      productName: "品目3",
     },
     {
       id: 4,
-      error: '',
-      fromTo: 'F',
-      item: 'D04',
-      lot: 'L04',
-      quantity: '構成中',
-      warehouse: 'W0023',
-      storage: '',
-      productName: '品目4',
+      error: "",
+      fromTo: "F",
+      item: "D04",
+      lot: "L04",
+      quantity: 4,
+      warehouse: "W0023",
+      storage: "W0048",
+      productName: "品目4",
     },
     {
       id: 5,
-      error: 'E',
-      fromTo: 'T',
-      item: 'E05',
-      lot: 'L05',
-      quantity: '構成中',
-      warehouse: 'W0024',
-      storage: '',
-      productName: '品目5',
+      error: "E",
+      fromTo: "T",
+      item: "E05",
+      lot: "L05",
+      quantity: 5,
+      warehouse: "W0024",
+      storage: "W0049",
+      productName: "品目5",
     },
     {
       id: 6,
-      error: '',
-      fromTo: 'T',
-      item: 'F06',
-      lot: 'L06',
-      quantity: '構成中',
-      warehouse: 'W0025',
-      storage: '',
-      productName: '品目6',
+      error: "",
+      fromTo: "T",
+      item: "F06",
+      lot: "L06",
+      quantity: 6,
+      warehouse: "W0025",
+      storage: "W0050",
+      productName: "品目6",
     },
     {
       id: 7,
-      error: 'E',
-      fromTo: 'F',
-      item: 'G07',
-      lot: 'L07',
-      quantity: '構成中',
-      warehouse: 'W0026',
-      storage: '',
-      productName: '品目7',
+      error: "E",
+      fromTo: "F",
+      item: "G07",
+      lot: "L07",
+      quantity: 7,
+      warehouse: "W0026",
+      storage: "W0051",
+      productName: "品目7",
     },
     {
       id: 8,
-      error: '',
-      fromTo: 'T',
-      item: 'H08',
-      lot: 'L08',
-      quantity: '構成中',
-      warehouse: 'W0027',
-      storage: '',
-      productName: '品目8',
+      error: "",
+      fromTo: "T",
+      item: "H08",
+      lot: "L08",
+      quantity: 8,
+      warehouse: "W0027",
+      storage: "W0052",
+      productName: "品目8",
     },
     {
       id: 9,
-      error: '',
-      fromTo: 'T',
-      item: 'I09',
-      lot: 'L09',
-      quantity: '構成中',
-      warehouse: 'W0028',
-      storage: '',
-      productName: '品目9',
+      error: "",
+      fromTo: "T",
+      item: "I09",
+      lot: "L09",
+      quantity: 9,
+      warehouse: "W0028",
+      storage: "W0053",
+      productName: "品目9",
     },
     {
       id: 10,
-      error: 'E',
-      fromTo: 'F',
-      item: 'J10',
-      lot: 'L10',
-      quantity: '構成中',
-      warehouse: 'W0029',
-      storage: '',
-      productName: '品目10',
+      error: "E",
+      fromTo: "F",
+      item: "J10",
+      lot: "L10",
+      quantity: 10,
+      warehouse: "W0029",
+      storage: "W0054",
+      productName: "品目10",
     },
-     {
+    {
       id: 11,
-      error: 'E',
-      fromTo: 'F',
-      item: 'J10',
-      lot: 'L10',
-      quantity: '構成中',
-      warehouse: 'W0030',
-      storage: '',
-      productName: '品目11',
+      error: "E",
+      fromTo: "F",
+      item: "J10",
+      lot: "L10",
+      quantity: 11,
+      warehouse: "W0030",
+      storage: "W0055",
+      productName: "品目11",
     },
-     {
+    {
       id: 12,
-      error: 'E',
-      fromTo: 'F',
-      item: 'J10',
-      lot: 'L10',
-      quantity: '構成中',
-      warehouse: 'W0031',
-      storage: '',
-      productName: '品目12',
+      error: "E",
+      fromTo: "F",
+      item: "J10",
+      lot: "L10",
+      quantity: 12,
+      warehouse: "W0031",
+      storage: "W0056",
+      productName: "品目12",
     },
-  ])
+  ]);
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
+    parentWarehouse: '',
     parentItemNo: '',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
+    moveWarehouse: '',
     moveStorage: '',
     qty: '1',
     janCode: '',
@@ -297,22 +290,71 @@ const BundlePage = () => {
   }, [activeRow, isAnyModalOpen])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
-       {
-      key: 'arrow',
-      headClassName: 'col-arrow-head',
-      cellClassName: 'col-arrow',
-      header: '',
-      render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
+    {
+      key: "arrow",
+      headClassName: "col-arrow-head",
+      cellClassName: "col-arrow",
+      header: "",
+      render: (row) =>
+        activeRowId === row.id ? <FaPlay className="col-row-arrow" /> : null,
     },
-    {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
-    {key: 'fromTo', headClassName: 'col-fromTo', cellClassName: 'col-fromTo', header: 'From/To', render: (row) => row.fromTo},
-    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
-    {key: 'Quantity', headClassName: 'col-quantity', cellClassName: 'col-quantity', header: '数量', render: (row) => row.quantity},
-    {key: 'Warehouse', headClassName: 'col-warehouse', cellClassName: 'col-warehouse', header: '倉庫', render: (row) => row.warehouse},
-    {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '保管場所', render: (row) => row.storage},
-    {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
-  ]
+    {
+      key: "error",
+      headClassName: "col-error",
+      cellClassName: "col-error",
+      header: "",
+      render: (row) => row.error,
+    },
+    {
+      key: "fromTo",
+      headClassName: "col-fromTo",
+      cellClassName: "col-fromTo",
+      header: "From/To",
+      render: (row) => row.fromTo,
+    },
+    {
+      key: "item",
+      headClassName: "col-item",
+      cellClassName: "col-item",
+      header: "品目No.",
+      render: (row) => row.item,
+    },
+    {
+      key: "lot",
+      headClassName: "col-lot",
+      cellClassName: "col-lot",
+      header: "ロットシリアル",
+      render: (row) => row.lot,
+    },
+    {
+      key: "Quantity",
+      headClassName: "col-quantity",
+      cellClassName: "col-quantity",
+      header: "数量",
+      render: (row) => row.quantity,
+    },
+    {
+      key: "Warehouse",
+      headClassName: "col-warehouse",
+      cellClassName: "col-warehouse",
+      header: "倉庫",
+      render: (row) => row.warehouse,
+    },
+    {
+      key: "storage",
+      headClassName: "col-storage",
+      cellClassName: "col-storage",
+      header: "保管場所",
+      render: (row) => row.storage,
+    },
+    {
+      key: "productName",
+      headClassName: "col-productName",
+      cellClassName: "col-productName",
+      header: "品名",
+      render: (row) => row.productName,
+    },
+  ];
 
   return (
     <div className='mockup-page'>
