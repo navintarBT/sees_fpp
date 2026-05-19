@@ -18,177 +18,172 @@ type Row = {
   moveStorage2?: string
 }
 
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
-}
+// ข้อมูลทั้งหมด
+const allRowsData: Row[] = [
+  {
+    id: 1,
+    error: '',
+    item: 'A01',
+    lot: 'L01',
+    status: 'W0020',
+    build: 'W0023',
+    release: 1,
+    move: '品目1',
+    moveStorage: 'S1',
+    name: '部品A',
+    moveStorage2: '棚A',
+  },
+  {
+    id: 2,
+    error: '',
+    item: 'B02',
+    lot: 'L02',
+    status: 'W0021',
+    build: 'W0023',
+    release: 3,
+    move: '品目2',
+    moveStorage: 'S2',
+    name: '部品B',
+    moveStorage2: '棚B',
+  },
+  {
+    id: 3,
+    error: '',
+    item: 'C03',
+    lot: 'L03',
+    status: 'W0022',
+    build: 'W0023',
+    release: 2,
+    move: '品目3',
+    moveStorage: 'S3',
+    name: '部品C',
+    moveStorage2: '棚C',
+  },
+  {
+    id: 4,
+    error: '',
+    item: 'D04',
+    lot: 'L04',
+    status: 'W0023',
+    build: 'W0023',
+    release: 1,
+    move: '品目4',
+    moveStorage: 'S4',
+    name: '部品D',
+    moveStorage2: '棚D',
+  },
+  {
+    id: 5,
+    error: 'E',
+    item: 'E05',
+    lot: 'L05',
+    status: 'W0024',
+    build: 'W0023',
+    release: 2,
+    move: '品目5',
+    moveStorage: 'S5',
+    name: '部品E',
+    moveStorage2: '棚E',
+  },
+  {
+    id: 6,
+    error: '',
+    item: 'F06',
+    lot: 'L06',
+    status: 'W0025',
+    build: 'W0023',
+    release: 2,
+    move: '品目6',
+    moveStorage: 'S6',
+    name: '部品F',
+    moveStorage2: '棚F',
+  },
+  {
+    id: 7,
+    error: 'E',
+    item: 'G07',
+    lot: 'L07',
+    status: 'W0026',
+    build: 'W0023',
+    release: 1,
+    move: '品目7',
+    moveStorage: 'S7',
+    name: '部品G',
+    moveStorage2: '棚G',
+  },
+  {
+    id: 8,
+    error: '',
+    item: 'H08',
+    lot: 'L08',
+    status: 'W0027',
+    build: 'W0023',
+    release: 1,
+    move: '品目8',
+    moveStorage: 'S8',
+    name: '部品H',
+    moveStorage2: '棚H',
+  },
+  {
+    id: 9,
+    error: '',
+    item: 'I09',
+    lot: 'L09',
+    status: 'W0028',
+    build: 'W0023',
+    release: 1,
+    move: '品目9',
+    moveStorage: 'S9',
+    name: '部品I',
+    moveStorage2: '棚I',
+  },
+  {
+    id: 10,
+    error: 'E',
+    item: 'J10',
+    lot: 'L10',
+    status: 'W0029',
+    build: 'W0023',
+    release: 1,
+    move: '品目10',
+    moveStorage: 'S10',
+    name: '部品J',
+    moveStorage2: '棚J',
+  },
+  {
+    id: 11,
+    error: 'E',
+    item: 'J11',
+    lot: 'L11',
+    status: 'W0030',
+    build: 'W0023',
+    release: 1,
+    move: '品目11',
+    moveStorage: 'S11',
+    name: '部品J',
+    moveStorage2: '棚J',
+  },
+  {
+    id: 12,
+    error: 'E',
+    item: 'J12',
+    lot: 'L12',
+    status: 'W0031',
+    build: 'W0023',
+    release: 2,
+    move: '品目12',
+    moveStorage: 'S12',
+    name: '部品J',
+    moveStorage2: '棚J',
+  },
+]
 
 const SetMiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
   const [quantity, setQuantity] = useState('1')
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      error: '',
-      item: 'A01', // 品目No.
-      lot: 'L01', // ロットシリアル
-      status: 'W0020', // 状態
-      build: 'W0023', // 構成数
-      release: 1, // 
-      move: '品目1', // 移動倉
-      moveStorage: 'S1', // 移動保管場所
-      name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所
-    },
-    {
-      id: 2,
-      error: '',
-      item: 'B02',
-      lot: 'L02',
-      status: 'W0021',
-      build: 'W0023',
-      release: 3,
-      move: '品目2',
-      moveStorage: 'S2',
-      name: '部品B',
-      moveStorage2: '棚B',
-    },
-    {
-      id: 3,
-      error: '',
-      item: 'C03',
-      lot: 'L03',
-      status: 'W0022',
-      build: 'W0023',
-      release: 2,
-      move: '品目3',
-      moveStorage: 'S3',
-      name: '部品C',
-      moveStorage2: '棚C',
-    },
-    {
-      id: 4,
-      error: '',
-      item: 'D04',
-      lot: 'L04',
-      status: 'W0023',
-      build: 'W0023',
-      release: 1,
-      move: '品目4',
-      moveStorage: 'S4',
-      name: '部品D',
-      moveStorage2: '棚D',
-    },
-    {
-      id: 5,
-      error: 'E',
-      item: 'E05',
-      lot: 'L05',
-      status: 'W0024',
-      build: 'W0023',
-      release: 2,
-      move: '品目5',
-      moveStorage: 'S5',
-      name: '部品E',
-      moveStorage2: '棚E',
-    },
-    {
-      id: 6,
-      error: '',
-      item: 'F06',
-      lot: 'L06',
-      status: 'W0025',
-      build: 'W0023',
-      release: 2,
-      move: '品目6',
-      moveStorage: 'S6',
-      name: '部品F',
-      moveStorage2: '棚F',
-    },
-    {
-      id: 7,
-      error: 'E',
-      item: 'G07',
-      lot: 'L07',
-      status: 'W0026',
-      build: 'W0023',
-      release: 1,
-      move: '品目7',
-      moveStorage: 'S7',
-      name: '部品G',
-      moveStorage2: '棚G',
-    },
-    {
-      id: 8,
-      error: '',
-      item: 'H08',
-      lot: 'L08',
-      status: 'W0027',
-      build: 'W0023',
-      release: 1,
-      move: '品目8',
-      moveStorage: 'S8',
-      name: '部品H',
-      moveStorage2: '棚H',
-    },
-    {
-      id: 9,
-      error: '',
-      item: 'I09',
-      lot: 'L09',
-      status: 'W0028',
-      build: 'W0023',
-      release: 1,
-      move: '品目9',
-      moveStorage: 'S9',
-      name: '部品I',
-      moveStorage2: '棚I',
-    },
-    {
-      id: 10,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: 'W0029',
-      build: 'W0023',
-      release: 1,
-      move: '品目10',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-    {
-      id: 11,
-      error: 'E',
-      item: 'J11',
-      lot: 'L11',
-      status: 'W0030',
-      build: 'W0023',
-      release: 1,
-      move: '品目11',
-      moveStorage: 'S11',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-    {
-      id: 12,
-      error: 'E',
-      item: 'J12',
-      lot: 'L12',
-      status: 'W0031',
-      build: 'W0023',
-      release: 2,
-      move: '品目12',
-      moveStorage: 'S12',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-  ])
+  // เริ่มต้นเป็น array ว่าง ไม่แสดงข้อมูล
+  const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
-    parentWarehouse: '倉庫A:W0040',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
@@ -200,9 +195,13 @@ const SetMiscellaneousInAndOutBound = () => {
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showEmptyWarning, setShowEmptyWarning] = useState(false)
+  const [showNormalConfirm, setShowNormalConfirm] = useState(false)
+  const [showIncompleteConfirm, setShowIncompleteConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const [qty, setQty] = useState(1);
+  const [showInvalidJanCode, setShowInvalidJanCode] = useState(false)
+  const [showInvalidLotSerial, setShowInvalidLotSerial] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
@@ -213,7 +212,12 @@ const SetMiscellaneousInAndOutBound = () => {
     showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
-    showBackConfirm
+    showEmptyWarning ||
+    showNormalConfirm ||
+    showIncompleteConfirm ||
+    showBackConfirm ||
+    showInvalidJanCode ||
+    showInvalidLotSerial
 
   const closeAllModals = () => {
     setShowHandInputConfirm(false)
@@ -221,14 +225,17 @@ const SetMiscellaneousInAndOutBound = () => {
     setShowNoSelectionConfirm(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
+    setShowEmptyWarning(false)
+    setShowNormalConfirm(false)
+    setShowIncompleteConfirm(false)
     setShowBackConfirm(false)
+    setShowInvalidJanCode(false)
+    setShowInvalidLotSerial(false)
   }
-
 
   const clearRows = () => setRows([])
   const clearForm = () =>
     setForm({
-      parentWarehouse: '倉庫A:W0040',
       parentItemNo: '',
       moveWarehouse: '',
       moveStorage: '',
@@ -255,8 +262,34 @@ const SetMiscellaneousInAndOutBound = () => {
     resetTableScroll()
   }
 
-  const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
+  // 完了ボタン処理 - based on SetReturnConfiguration pattern
+  const handleCompleteClick = () => {
+    if (isAnyModalOpen) return
+
+    // Check if there are any rows loaded
+    if (rows.length === 0) {
+      setShowEmptyWarning(true)
+      return
+    }
+
+    // Check if there are rows with errors
+    const hasIncompleteItems = rows.some((row) => row.error === 'E')
+
+    if (hasIncompleteItems) {
+      setShowIncompleteConfirm(true)
+    } else {
+      setShowNormalConfirm(true)
+    }
+  }
+
+  // Confirm registration
+  const confirmRegistration = () => {
+    setShowNormalConfirm(false)
+    setShowIncompleteConfirm(false)
+    // Clear data and show success
+    clearFormAndRows()
+    setActiveRowId(null)
+    setShowCompleteConfirm(true)
   }
 
   const handleReleaseClick = (options?: { forceRelease?: boolean; forceHandInput?: boolean }) => {
@@ -275,16 +308,19 @@ const SetMiscellaneousInAndOutBound = () => {
     setShowDeleteConfirm(true)
   }
 
-  const itemNoRef = useRef<HTMLInputElement>(null);
-  const lotRef = useRef<HTMLInputElement>(null);
-  const serialRef = useRef<HTMLInputElement>(null);
+  const janCodeRef = useRef<HTMLInputElement>(null)
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement | null>) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      nextRef.current?.focus();
-    }
-  };
+  // ฟังก์ชันจัดการเมื่อกด Enter ใน JAN code
+  const handleJanCodeEnter = () => {
+    // แสดงข้อมูลทั้งหมด
+    setRows(allRowsData)
+    // เคลียร์ค่าใน input
+    setForm({ ...form })
+    // โฟกัสกลับที่ input
+    setTimeout(() => {
+      janCodeRef.current?.focus()
+    }, 0)
+  }
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -312,8 +348,7 @@ const SetMiscellaneousInAndOutBound = () => {
 
       if (event.key === 'F2') {
         event.preventDefault()
-        closeAllModals()
-        setShowCompleteConfirm(true)
+        handleCompleteClick()
         return
       }
 
@@ -359,7 +394,7 @@ const SetMiscellaneousInAndOutBound = () => {
     { key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '倉庫', render: (row) => row.status },
     { key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.build },
     { key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '引当数', render: (row) => row.release },
-    { key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '品名', render: (row) => row.move },
+    { key: 'move', headClassName: 'col-move-SetMis', cellClassName: 'col-move-SetMis', header: '品名', render: (row) => row.move },
   ]
 
   return (
@@ -372,8 +407,8 @@ const SetMiscellaneousInAndOutBound = () => {
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
+                  autoFocus
+                  onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
                 >
                   <option value=''></option>
                   <option value='倉庫A:W0040'>倉庫A:W0040</option>
@@ -383,27 +418,38 @@ const SetMiscellaneousInAndOutBound = () => {
               </div>
               <div className='set-row'>
                 <label>保管場所</label>
-                <input value={form.moveStorage} autoFocus onKeyDown={(e) => handleKeyDown(e, itemNoRef)}
-                  onChange={(e) => setForm({ ...form, moveStorage: e.target.value })} />
+                <input
+                  onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
+                />
               </div>
 
               <div className='set-row'>
                 <label>引当数</label>
                 <div className='pg-sign-group'>
-                  <select className='pg-sign-select' >
+                  <select className='pg-sign-select'>
                     <option value='+'>+</option>
                     <option value='-'>-</option>
                   </select>
-                  <input value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)} ref={itemNoRef} onKeyDown={(e) => handleKeyDown(e, lotRef)}
+                  <input
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
                   />
                 </div>
               </div>
 
-              <div className='set-row '>
+              <div className='set-row'>
                 <label>JANコード</label>
-                <input value={form.janCode} ref={lotRef} onKeyDown={(e) => handleKeyDown(e, serialRef)}
-                  onChange={(e) => setForm({ ...form, janCode: e.target.value })} />
+                <input
+                  ref={janCodeRef}
+                  value={form.janCode}
+                  onChange={(e) => setForm({ ...form, janCode: e.target.value })}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      handleJanCodeEnter()
+                    }
+                  }}
+                />
               </div>
             </div>
 
@@ -426,7 +472,7 @@ const SetMiscellaneousInAndOutBound = () => {
               </button>
               <button
                 className='set-btn set-primary'
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={handleCompleteClick}
               >
                 完了
               </button>
@@ -450,6 +496,8 @@ const SetMiscellaneousInAndOutBound = () => {
               </button>
             </ActionFooter>
           </div>
+
+          {/* Modals */}
           {showHandInputConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -478,7 +526,6 @@ const SetMiscellaneousInAndOutBound = () => {
             </div>
           )}
 
-
           {showDeleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -495,13 +542,13 @@ const SetMiscellaneousInAndOutBound = () => {
                       }
                     }}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowDeleteConfirm(false)}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
@@ -511,14 +558,14 @@ const SetMiscellaneousInAndOutBound = () => {
           {showNoSelectionConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u9078\u629e\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>選択行がありません。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => setShowNoSelectionConfirm(false)}
                   >
-                    {'\u004f\u004b'}
+                    OK
                   </button>
                 </div>
               </div>
@@ -528,8 +575,8 @@ const SetMiscellaneousInAndOutBound = () => {
           {showClearConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>読込データを破棄します。<br />宜しいですか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -538,30 +585,100 @@ const SetMiscellaneousInAndOutBound = () => {
                       clearFormAndRows()
                     }}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
             </div>
           )}
 
+          {/* 未入力エラー */}
+          {showEmptyWarning && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>登録データがありません。</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => setShowEmptyWarning(false)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 全量登録確認 */}
+          {showNormalConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>予定なし入出庫登録を完了しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={confirmRegistration}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowNormalConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* エラーあり警告 */}
+          {showIncompleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>警告</div>
+                <div className='set-modal-body'>
+                  エラーのある行が存在します。<br />
+                  完了しますか？
+                </div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={confirmRegistration}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowIncompleteConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 完了成功 */}
           {showCompleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>予定なし入出庫を登録しました。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => setShowCompleteConfirm(false)}
                   >
-                    {'\u004f\u004b'}
+                    OK
                   </button>
                 </div>
               </div>
@@ -571,8 +688,8 @@ const SetMiscellaneousInAndOutBound = () => {
           {showBackConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>メニューに戻ります。<br />読込データを破棄しますか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -581,18 +698,58 @@ const SetMiscellaneousInAndOutBound = () => {
                       navigate('/factory')
                     }}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowBackConfirm(false)}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
             </div>
           )}
+
+          {/* {showInvalidJanCode && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>JAN Code ไม่ถูกต้อง</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowInvalidJanCode(false)
+                      janCodeRef.current?.focus()
+                    }}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showInvalidLotSerial && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>Lot/Serial เกิน 30 หลัก</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowInvalidLotSerial(false)
+                      janCodeRef.current?.focus()
+                    }}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )} */}
         </div>
       </div>
     </div>
@@ -600,5 +757,3 @@ const SetMiscellaneousInAndOutBound = () => {
 }
 
 export { SetMiscellaneousInAndOutBound }
-
-
