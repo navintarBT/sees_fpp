@@ -244,7 +244,7 @@ const EquipmentHandInputPage = () => {
                   <label className='set-radio'>
                     <input
                       type='radio'
-                      name='quantityRange'
+                      name='quantityRange-1'
                       value='to'
                       checked={quantityRange === 'to'}
                       onChange={() => setQuantityRange('to')}
