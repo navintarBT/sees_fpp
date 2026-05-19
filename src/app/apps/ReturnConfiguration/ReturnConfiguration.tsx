@@ -1,17 +1,36 @@
-﻿import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
 const ReturnConfiguration = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
+
+  useEffect(() => {
+    const state = location.state as { parentItemNo?: string } | null
+    if (state?.parentItemNo) {
+      setMoveStorage(state.parentItemNo)
+    }
+  }, [location.state])
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [qty, setQty] = useState(1);
+
+  const itemNoRef = useRef<HTMLInputElement>(null);
+  const lotRef = useRef<HTMLInputElement>(null);
+  const serialRef = useRef<HTMLInputElement>(null);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      nextRef.current?.focus();
+    }
+  };
 
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
@@ -24,11 +43,11 @@ const ReturnConfiguration = () => {
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
                 <label>品目No.(親)</label>
-                <input className='dark-backinput' value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} readOnly={true} />
+                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} autoFocus />
               </div>
               <div className='hand-row'>
                 <label>シリアル(親)</label>
-                <input className='dark-backinput' value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} readOnly={true} />
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row'>
                 <label >数量</label>
@@ -110,7 +129,9 @@ const ReturnConfiguration = () => {
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowReadConfirm(false)}
+                      onClick={() => {
+                        setShowReadConfirm(false)
+                      }}
                     >
                       {'\u306f\u3044'}
                     </button>
@@ -153,7 +174,7 @@ const ReturnConfiguration = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

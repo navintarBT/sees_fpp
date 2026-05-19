@@ -398,13 +398,13 @@ const InventoryRecordDetail = () => {
   }, [activeRow, isAnyModalOpen])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
-        {
-          key: 'arrow',
-          headClassName: 'col-arrow-head',
-          cellClassName: 'col-arrow',
-          header: '',
-          render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
-        },
+    {
+      key: 'arrow',
+      headClassName: 'col-arrow-head',
+      cellClassName: 'col-arrow',
+      header: '',
+      render: (row) => (checkedRowIds.includes(row.id) ? <FaPlay className='col-row-arrow' /> : null),
+    },
 
     {
       key: 'check',
@@ -474,6 +474,7 @@ const InventoryRecordDetail = () => {
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
+              isRowActive={(rowKey) => checkedRowIds.includes(Number(rowKey))}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
             />
 

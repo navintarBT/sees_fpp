@@ -1,16 +1,13 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
 const MiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
-  const [parentWarehouse, setParentWarehouse] = useState('')
-  const [parentItem, setParentItem] = useState('')
-  const [parentSerial, setParentSerial] = useState('')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const isEnabled = parentWarehouse && parentItem && parentSerial
   const [quantity, setQuantity] = useState('1')
+  const dateRef = useRef<HTMLInputElement>(null)
 
   return (
     <div className='mockup-page'>
@@ -18,10 +15,10 @@ const MiscellaneousInAndOutBound = () => {
         <div className='mockup-frame'>
           <div className='set-header'>予定なし入出庫登録手入力</div>
           <div className='hand-body'>
-            <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
+            <div className='hand-form'>
               <div className='hand-row'>
                 <label>倉庫</label>
-                <select>
+                <select autoFocus>
                   <option value=''></option>
                   <option value='倉庫A:W0040'>倉庫A:W0040</option>
                   <option value='倉庫B:W0041'>倉庫B:W0041</option>
@@ -30,7 +27,7 @@ const MiscellaneousInAndOutBound = () => {
               </div>
               <div className='hand-row'>
                 <label>保管場所</label>
-                <input placeholder=' ' />
+                <input />
               </div>
               <div className='hand-row'>
                 <label >引当数</label>
@@ -52,7 +49,7 @@ const MiscellaneousInAndOutBound = () => {
 
               <div className='hand-row'>
                 <label>ロット</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} style={{ backgroundColor: 'transparent' }} />
+                <input style={{ backgroundColor: 'transparent' }} />
               </div>
               <div className='hand-row'>
                 <label>シリアル</label>
@@ -63,6 +60,7 @@ const MiscellaneousInAndOutBound = () => {
                 <div className='hand-date-field'>
                   <input
                     type='text'
+                    ref={dateRef}
                     style={{ backgroundColor: 'transparent', cursor: 'pointer', width: '100%' }}
                   />
                 </div>
@@ -148,7 +146,7 @@ const MiscellaneousInAndOutBound = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

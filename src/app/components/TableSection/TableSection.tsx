@@ -13,12 +13,14 @@ type TableSectionProps<Row> = {
   rows: Row[]
   getRowKey: (row: Row) => string | number
   activeRowKey?: string | number | null
+  isRowActive?: (rowKey: string | number, row: Row) => boolean
   onRowActivate?: (rowKey: string | number, row: Row) => void
   tools?: ReactNode
   empty?: ReactNode
   className?: string
   gridClassName?: string
   scrollRef?: Ref<HTMLDivElement>
+  rowTabIndex?: number
 }
 
 function TableSection<Row>({
@@ -26,12 +28,14 @@ function TableSection<Row>({
   rows,
   getRowKey,
   activeRowKey = null,
+  isRowActive,
   onRowActivate,
   tools,
   empty,
   className,
   gridClassName,
   scrollRef,
+  rowTabIndex = 0,
 }: TableSectionProps<Row>) {
   const style: CSSProperties = {
     ['--tf-table-cols' as any]: columns.length,
@@ -65,30 +69,31 @@ function TableSection<Row>({
               ) : (
                 rows.map((row) => {
                   const rowKey = getRowKey(row)
-                  const isActive = activeRowKey != null && rowKey === activeRowKey
+                  const isActiveByKey = activeRowKey != null && rowKey === activeRowKey
+                  const isActive = isRowActive ? isRowActive(rowKey, row) : isActiveByKey
                   return (
                     <div
                       className={isActive ? 'tf-tableRow tf-tableRowActive' : 'tf-tableRow'}
                       key={rowKey}
-                      role={onRowActivate ? 'button' : undefined}
-                      tabIndex={onRowActivate ? 0 : undefined}
-                      onClick={onRowActivate ? () => onRowActivate(rowKey, row) : undefined}
-                      onFocus={onRowActivate ? () => onRowActivate(rowKey, row) : undefined}
-                      onKeyDown={
-                        onRowActivate
-                          ? (e) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault()
-                                onRowActivate(rowKey, row)
-                              }
-                            }
-                          : undefined
-                      }
                     >
-                      {columns.map((col) => (
+                      {columns.map((col, colIndex) => (
                         <span
                           key={col.key}
                           className={col.cellClassName ? `tf-tableCell ${col.cellClassName}` : 'tf-tableCell'}
+                          role={onRowActivate && colIndex === 0 ? 'button' : undefined}
+                          tabIndex={onRowActivate && colIndex === 0 ? rowTabIndex : undefined}
+                          onClick={onRowActivate ? () => onRowActivate(rowKey, row) : undefined}
+                          onFocus={onRowActivate && colIndex === 0 ? () => onRowActivate(rowKey, row) : undefined}
+                          onKeyDown={
+                            onRowActivate && colIndex === 0
+                              ? (e) => {
+                                  if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault()
+                                    onRowActivate(rowKey, row)
+                                  }
+                                }
+                              : undefined
+                          }
                         >
                           {col.render(row)}
                         </span>
