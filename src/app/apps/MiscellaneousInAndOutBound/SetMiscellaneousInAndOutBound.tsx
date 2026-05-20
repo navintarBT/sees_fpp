@@ -20,162 +20,16 @@ type Row = {
 
 // ข้อมูลทั้งหมด
 const allRowsData: Row[] = [
-  {
-    id: 1,
-    error: '',
-    item: 'A01',
-    lot: 'L01',
-    status: 'W0020',
-    build: 'W0023',
-    release: 1,
-    move: '品目1',
-    moveStorage: 'S1',
-    name: '部品A',
-    moveStorage2: '棚A',
-  },
-  {
-    id: 2,
-    error: '',
-    item: 'B02',
-    lot: 'L02',
-    status: 'W0021',
-    build: 'W0023',
-    release: 3,
-    move: '品目2',
-    moveStorage: 'S2',
-    name: '部品B',
-    moveStorage2: '棚B',
-  },
-  {
-    id: 3,
-    error: '',
-    item: 'C03',
-    lot: 'L03',
-    status: 'W0022',
-    build: 'W0023',
-    release: 2,
-    move: '品目3',
-    moveStorage: 'S3',
-    name: '部品C',
-    moveStorage2: '棚C',
-  },
-  {
-    id: 4,
-    error: '',
-    item: 'D04',
-    lot: 'L04',
-    status: 'W0023',
-    build: 'W0023',
-    release: 1,
-    move: '品目4',
-    moveStorage: 'S4',
-    name: '部品D',
-    moveStorage2: '棚D',
-  },
-  {
-    id: 5,
-    error: 'E',
-    item: 'E05',
-    lot: 'L05',
-    status: 'W0024',
-    build: 'W0023',
-    release: 2,
-    move: '品目5',
-    moveStorage: 'S5',
-    name: '部品E',
-    moveStorage2: '棚E',
-  },
-  {
-    id: 6,
-    error: '',
-    item: 'F06',
-    lot: 'L06',
-    status: 'W0025',
-    build: 'W0023',
-    release: 2,
-    move: '品目6',
-    moveStorage: 'S6',
-    name: '部品F',
-    moveStorage2: '棚F',
-  },
-  {
-    id: 7,
-    error: 'E',
-    item: 'G07',
-    lot: 'L07',
-    status: 'W0026',
-    build: 'W0023',
-    release: 1,
-    move: '品目7',
-    moveStorage: 'S7',
-    name: '部品G',
-    moveStorage2: '棚G',
-  },
-  {
-    id: 8,
-    error: '',
-    item: 'H08',
-    lot: 'L08',
-    status: 'W0027',
-    build: 'W0023',
-    release: 1,
-    move: '品目8',
-    moveStorage: 'S8',
-    name: '部品H',
-    moveStorage2: '棚H',
-  },
-  {
-    id: 9,
-    error: '',
-    item: 'I09',
-    lot: 'L09',
-    status: 'W0028',
-    build: 'W0023',
-    release: 1,
-    move: '品目9',
-    moveStorage: 'S9',
-    name: '部品I',
-    moveStorage2: '棚I',
-  },
-  {
-    id: 10,
-    error: 'E',
-    item: 'J10',
-    lot: 'L10',
-    status: 'W0029',
-    build: 'W0023',
-    release: 1,
-    move: '品目10',
-    moveStorage: 'S10',
-    name: '部品J',
-    moveStorage2: '棚J',
-  },
-  {
-    id: 11,
-    error: 'E',
-    item: 'J11',
-    lot: 'L11',
-    status: 'W0030',
-    build: 'W0023',
-    release: 1,
-    move: '品目11',
-    moveStorage: 'S11',
-    name: '部品J',
-    moveStorage2: '棚J',
-  },
-  {
-    id: 12,
-    error: 'E',
-    item: 'J12',
-    lot: 'L12',
-    status: 'W0031',
-    build: 'W0023',
-    release: 2,
-    move: '品目12',
-    moveStorage: 'S12',
-    name: '部品J',
-    moveStorage2: '棚J',
-  },
+  { id: 1, error: '', item: 'A01', lot: 'L01', status: 'W0020', build: 'W0023', release: 1, move: '品目1', moveStorage: 'S1', name: '部品A', moveStorage2: '棚A' },
+  { id: 2, error: '', item: 'B02', lot: 'L02', status: 'W0021', build: 'W0023', release: 3, move: '品目2', moveStorage: 'S2', name: '部品B', moveStorage2: '棚B' },
+  { id: 3, error: '', item: 'C03', lot: 'L03', status: 'W0022', build: 'W0023', release: 2, move: '品目3', moveStorage: 'S3', name: '部品C', moveStorage2: '棚C' },
+  { id: 4, error: '', item: 'D04', lot: 'L04', status: 'W0023', build: 'W0023', release: 1, move: '品目4', moveStorage: 'S4', name: '部品D', moveStorage2: '棚D' },
+  { id: 6, error: '', item: 'F06', lot: 'L06', status: 'W0025', build: 'W0023', release: 2, move: '品目6', moveStorage: 'S6', name: '部品F', moveStorage2: '棚F' },
+  { id: 8, error: '', item: 'H08', lot: 'L08', status: 'W0027', build: 'W0023', release: 1, move: '品目8', moveStorage: 'S8', name: '部品H', moveStorage2: '棚H' },
+  { id: 9, error: '', item: 'I09', lot: 'L09', status: 'W0028', build: 'W0023', release: 1, move: '品目9', moveStorage: 'S9', name: '部品I', moveStorage2: '棚I' },
+  { id: 10, error: '', item: 'J10', lot: 'L10', status: 'W0029', build: 'W0023', release: 1, move: '品目10', moveStorage: 'S10', name: '部品J', moveStorage2: '棚J' },
+  { id: 11, error: '', item: 'J11', lot: 'L11', status: 'W0030', build: 'W0023', release: 1, move: '品目11', moveStorage: 'S11', name: '部品J', moveStorage2: '棚J' },
+  { id: 12, error: '', item: 'J12', lot: 'L12', status: 'W0031', build: 'W0023', release: 2, move: '品目12', moveStorage: 'S12', name: '部品J', moveStorage2: '棚J' },
 ]
 
 const SetMiscellaneousInAndOutBound = () => {
@@ -195,17 +49,20 @@ const SetMiscellaneousInAndOutBound = () => {
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
-  const [showEmptyWarning, setShowEmptyWarning] = useState(false)
-  const [showNormalConfirm, setShowNormalConfirm] = useState(false)
-  const [showIncompleteConfirm, setShowIncompleteConfirm] = useState(false)
+  const [showEmptyWarning, setShowEmptyWarning] = useState(false)       // HT001-E
+  const [showNormalConfirm, setShowNormalConfirm] = useState(false)     // HT002-I
+  const [showStockError, setShowStockError] = useState(false)           // HT902-E
+  const [showSerialError, setShowSerialError] = useState(false)         // HT901-E
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [showInvalidJanCode, setShowInvalidJanCode] = useState(false)
   const [showInvalidLotSerial, setShowInvalidLotSerial] = useState(false)
+  const [showNetworkError, setShowNetworkError] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({ f1: false, f8: false })
+  const backBtnRef = useRef<HTMLButtonElement>(null)
   const isAnyModalOpen =
     showHandInputConfirm ||
     showDeleteConfirm ||
@@ -214,7 +71,8 @@ const SetMiscellaneousInAndOutBound = () => {
     showCompleteConfirm ||
     showEmptyWarning ||
     showNormalConfirm ||
-    showIncompleteConfirm ||
+    showStockError ||
+    showSerialError ||
     showBackConfirm ||
     showInvalidJanCode ||
     showInvalidLotSerial
@@ -227,14 +85,15 @@ const SetMiscellaneousInAndOutBound = () => {
     setShowCompleteConfirm(false)
     setShowEmptyWarning(false)
     setShowNormalConfirm(false)
-    setShowIncompleteConfirm(false)
+    setShowStockError(false)
+    setShowSerialError(false)
     setShowBackConfirm(false)
     setShowInvalidJanCode(false)
     setShowInvalidLotSerial(false)
   }
 
   const clearRows = () => setRows([])
-  const clearForm = () =>
+  const clearForm = () => {
     setForm({
       parentItemNo: '',
       moveWarehouse: '',
@@ -242,6 +101,8 @@ const SetMiscellaneousInAndOutBound = () => {
       qty: '',
       janCode: '',
     })
+    setQuantity('1')
+  }
 
   const resetTableScroll = () => {
     const el = tableScrollRef.current
@@ -262,31 +123,46 @@ const SetMiscellaneousInAndOutBound = () => {
     resetTableScroll()
   }
 
-  // 完了ボタン処理 - based on SetReturnConfiguration pattern
+  // ３－１．完了ボタン処理
   const handleCompleteClick = () => {
     if (isAnyModalOpen) return
 
-    // Check if there are any rows loaded
+    // HT001-E: 読込データが存在しない場合
     if (rows.length === 0) {
       setShowEmptyWarning(true)
       return
     }
 
-    // Check if there are rows with errors
-    const hasIncompleteItems = rows.some((row) => row.error === 'E')
-
-    if (hasIncompleteItems) {
-      setShowIncompleteConfirm(true)
-    } else {
-      setShowNormalConfirm(true)
-    }
+    // HT002-I: 確認メッセージ表示
+    setShowNormalConfirm(true)
   }
 
-  // Confirm registration
-  const confirmRegistration = () => {
+  // ３－７．DBサーバから処理結果受信（シミュレーション）
+  const simulateServerResponse = () => {
     setShowNormalConfirm(false)
-    setShowIncompleteConfirm(false)
-    // Clear data and show success
+
+    // Simulate: rows with id 11,12 → HT901-E (シリアル重複)
+    const serialErrorIds = [11, 12]
+    const hasSerialError = rows.some((row) => serialErrorIds.includes(row.id))
+    const isNetworkAvailable = Math.random() < 0.99
+
+    if (!isNetworkAvailable) {
+      setShowNetworkError(true)
+      return
+    }
+
+    if (hasSerialError) {
+      // ３－７－２．HT901-E: シリアルが重複しています
+      setRows((prev) =>
+        prev.map((row) =>
+          serialErrorIds.includes(row.id) ? { ...row, error: 'E' } : row
+        )
+      )
+      setShowSerialError(true)
+      return
+    }
+
+    // ３－７－３．HT901-I: 成功
     clearFormAndRows()
     setActiveRowId(null)
     setShowCompleteConfirm(true)
@@ -408,7 +284,8 @@ const SetMiscellaneousInAndOutBound = () => {
                 <label>倉庫</label>
                 <select
                   autoFocus
-                  onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
+                  value={form.moveWarehouse}
+                  onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
                 >
                   <option value=''></option>
                   <option value='倉庫A:W0040'>倉庫A:W0040</option>
@@ -419,6 +296,7 @@ const SetMiscellaneousInAndOutBound = () => {
               <div className='set-row'>
                 <label>保管場所</label>
                 <input
+                  value={form.moveStorage}
                   onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
                 />
               </div>
@@ -489,6 +367,7 @@ const SetMiscellaneousInAndOutBound = () => {
                 手入力
               </button>
               <button
+                ref={backBtnRef}
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >
@@ -598,12 +477,12 @@ const SetMiscellaneousInAndOutBound = () => {
             </div>
           )}
 
-          {/* 未入力エラー */}
+          {/* HT001-E: 読込データなしエラー */}
           {showEmptyWarning && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>エラー</div>
-                <div className='set-modal-body'>登録データがありません。</div>
+                <div className='set-modal-body'>読込データがありません。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -616,7 +495,7 @@ const SetMiscellaneousInAndOutBound = () => {
             </div>
           )}
 
-          {/* 全量登録確認 */}
+          {/* HT002-I: 完了確認 */}
           {showNormalConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -625,7 +504,7 @@ const SetMiscellaneousInAndOutBound = () => {
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={confirmRegistration}
+                    onClick={simulateServerResponse}
                   >
                     はい
                   </button>
@@ -640,34 +519,51 @@ const SetMiscellaneousInAndOutBound = () => {
             </div>
           )}
 
-          {/* エラーあり警告 */}
-          {showIncompleteConfirm && (
+          {/* HT902-E: 在庫不足エラー */}
+          {showStockError && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>警告</div>
-                <div className='set-modal-body'>
-                  エラーのある行が存在します。<br />
-                  完了しますか？
-                </div>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>在庫が不足しています。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={confirmRegistration}
+                    onClick={() => {
+                      setShowStockError(false)
+                      // ３－７－１－１．カーソルをJANコードへ移動
+                      setTimeout(() => janCodeRef.current?.focus(), 0)
+                    }}
                   >
-                    はい
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowIncompleteConfirm(false)}
-                  >
-                    いいえ
+                    OK
                   </button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* 完了成功 */}
+          {/* HT901-E: シリアル重複エラー */}
+          {showSerialError && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>シリアルが重複しています。</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowSerialError(false)
+                      // ３－７－２－１．戻るボタンにカーソルを配置
+                      setTimeout(() => backBtnRef.current?.focus(), 0)
+                    }}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* HT901-I: 完了成功 */}
           {showCompleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -676,7 +572,10 @@ const SetMiscellaneousInAndOutBound = () => {
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => setShowCompleteConfirm(false)}
+                    onClick={() => {
+                      setShowCompleteConfirm(false)
+                      // ３－７－３－１．画面の設定は初期処理時の状態
+                    }}
                   >
                     OK
                   </button>
@@ -711,11 +610,12 @@ const SetMiscellaneousInAndOutBound = () => {
             </div>
           )}
 
-          {/* {showInvalidJanCode && (
+          {/* JANコードエラー (ตามเอกสาร) */}
+          {showInvalidJanCode && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>エラー</div>
-                <div className='set-modal-body'>JAN Code ไม่ถูกต้อง</div>
+                <div className='set-modal-body'>JANコードが不正です。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -731,11 +631,12 @@ const SetMiscellaneousInAndOutBound = () => {
             </div>
           )}
 
+          {/* ロットシリアル桁数エラー HT004-E (ตามเอกสาร) */}
           {showInvalidLotSerial && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>エラー</div>
-                <div className='set-modal-body'>Lot/Serial เกิน 30 หลัก</div>
+                <div className='set-modal-body'>ロットシリアルが30桁を越えています。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -749,7 +650,30 @@ const SetMiscellaneousInAndOutBound = () => {
                 </div>
               </div>
             </div>
-          )} */}
+          )}
+
+          {showNetworkError && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>
+                  ネットワークに接続出来ません。<br />
+                  電波の届く場所で再度実行して下さい。
+                </div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowNetworkError(false)
+                      janCodeRef.current?.focus()
+                    }}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
