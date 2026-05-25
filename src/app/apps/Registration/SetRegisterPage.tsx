@@ -159,6 +159,13 @@ const initialRows: Row[] = [
   },
 ]
 
+const MOCK_PARENT_ITEM_NO_LENGTH = 7
+const MOCK_JAN_LENGTHS = [8, 13] as const
+const MOCK_SET_SERIAL_MIN_LENGTH = 3
+const MOCK_PARENT_PASS_CODE = '0123456789012AB'
+const MOCK_SCAN_JAN_LENGTH = 13
+const MOCK_SCAN_PASS_CODE = '0123456789012BC'
+
 const SetRegisterPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
@@ -175,6 +182,9 @@ const SetRegisterPage = () => {
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showParentJanError, setShowParentJanError] = useState(false)
+  const [parentJanErrorMessage, setParentJanErrorMessage] = useState('')
+  const [errorFocusTarget, setErrorFocusTarget] = useState<'parentJan' | 'janCode' | null>(null)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const parentWarehouseRef = useRef<HTMLSelectElement | null>(null)
   const parentJanCodeInputRef = useRef<HTMLInputElement | null>(null)
@@ -191,7 +201,8 @@ const SetRegisterPage = () => {
     showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
-    showBackConfirm
+    showBackConfirm ||
+    showParentJanError
 
   const closeAllModals = () => {
     setShowHandInputConfirm(false)
@@ -200,6 +211,114 @@ const SetRegisterPage = () => {
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
     setShowBackConfirm(false)
+    setShowParentJanError(false)
+    setErrorFocusTarget(null)
+  }
+
+  const showParentJanErrorModal = (message: string) => {
+    setParentJanErrorMessage(message)
+    setErrorFocusTarget('parentJan')
+    setShowParentJanError(true)
+  }
+
+  const handleParentJanValidationError = (message: string) => {
+    showParentJanErrorModal(message)
+    setForm((prev) => ({...prev, parentItemNo: ''}))
+    setIsParentConfirmed(false)
+    setRows([])
+    setTimeout(() => {
+      parentJanCodeInputRef.current?.focus()
+    }, 0)
+  }
+
+  const handleJanCodeValidationError = (message: string) => {
+    setParentJanErrorMessage(message)
+    setErrorFocusTarget('janCode')
+    setShowParentJanError(true)
+  }
+
+  const confirmParent = () => {
+    setIsParentConfirmed(true)
+    setRows(initialRows)
+  }
+
+  const calculateJanCheckDigit = (base: string) => {
+    if (!/^\d+$/.test(base)) return null
+    if (base.length !== MOCK_JAN_LENGTHS[0] - 1 && base.length !== MOCK_JAN_LENGTHS[1] - 1) return null
+
+    let sum = 0
+    for (let i = 0; i < base.length; i += 1) {
+      const n = Number(base[i])
+      sum += (i % 2 === 0 ? 1 : 3) * n
+    }
+    return (10 - (sum % 10)) % 10
+  }
+
+  const isValidJanCode = (value: string) => {
+    if (!/^\d+$/.test(value)) return false
+    if (!MOCK_JAN_LENGTHS.includes(value.length as (typeof MOCK_JAN_LENGTHS)[number])) return false
+    const base = value.slice(0, -1)
+    const checkDigit = Number(value[value.length - 1])
+    const calculated = calculateJanCheckDigit(base)
+    return calculated !== null && calculated === checkDigit
+  }
+
+  const validateParentJanCode = () => {
+    if (isParentConfirmed) return
+    const value = form.parentItemNo.trim()
+    if (!value) return
+
+    if (value === MOCK_PARENT_PASS_CODE) {
+      confirmParent()
+      return
+    }
+
+    // Existing manual entry flow: 7-digit item No. confirms parent directly.
+    if (new RegExp(`^\\d{${MOCK_PARENT_ITEM_NO_LENGTH}}$`).test(value)) {
+      confirmParent()
+      return
+    }
+
+    let janPart = ''
+    let setSerialPart = ''
+    const janLength = [...MOCK_JAN_LENGTHS].sort((a, b) => b - a).find((len) => value.length >= len)
+    if (!janLength) {
+      handleParentJanValidationError('JANコード(親)が不正です。')
+      return
+    }
+    janPart = value.slice(0, janLength)
+    setSerialPart = value.slice(janLength)
+
+    if (!isValidJanCode(janPart)) {
+      handleParentJanValidationError('JANコード(親)が不正です。')
+      return
+    }
+
+    if (setSerialPart.trim().length < MOCK_SET_SERIAL_MIN_LENGTH) {
+      handleParentJanValidationError('JANコード(親)にセットシリアルが含まれていません。')
+      return
+    }
+
+    confirmParent()
+    return
+  }
+
+  const validateJanCode = () => {
+    if (!isParentConfirmed) return
+    const value = form.janCode.trim()
+
+    if (value === MOCK_SCAN_PASS_CODE) {
+      return
+    }
+
+    if (!value) {
+      handleJanCodeValidationError('JANコードにロットシリアルが含まれていません。')
+      return
+    }
+
+    if (!/^\d+$/.test(value) || value.length !== MOCK_SCAN_JAN_LENGTH || !isValidJanCode(value)) {
+      handleJanCodeValidationError('JANコードが不正です。')
+    }
   }
 
 
@@ -237,13 +356,6 @@ const SetRegisterPage = () => {
   useEffect(() => {
     parentJanCodeInputRef.current?.focus()
   }, [])
-
-  useEffect(() => {
-    if (!isParentConfirmed && /^\d{7}$/.test(form.parentItemNo)) {
-      setIsParentConfirmed(true)
-      setRows(initialRows)
-    }
-  }, [form.parentItemNo, isParentConfirmed])
 
   useEffect(() => {
     if (!isParentConfirmed) return
@@ -392,6 +504,12 @@ const SetRegisterPage = () => {
                   tabIndex={isParentConfirmed ? -1 : 2}
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      validateParentJanCode()
+                    }
+                  }}
                 />
               </div>
               <div className='set-row'>
@@ -437,6 +555,12 @@ const SetRegisterPage = () => {
                   tabIndex={isParentConfirmed ? 3 : -1}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      validateJanCode()
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -633,6 +757,36 @@ const SetRegisterPage = () => {
                       onClick={() => setShowBackConfirm(false)}
                     >
                       {'\u3044\u3044\u3048'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showParentJanError && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>{parentJanErrorMessage}</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowParentJanError(false)
+                        setTimeout(() => {
+                          if (errorFocusTarget === 'parentJan') {
+                            parentJanCodeInputRef.current?.focus()
+                            parentJanCodeInputRef.current?.select()
+                          }
+                          if (errorFocusTarget === 'janCode') {
+                            janCodeInputRef.current?.focus()
+                            janCodeInputRef.current?.select()
+                          }
+                          setErrorFocusTarget(null)
+                        }, 0)
+                      }}
+                    >
+                      はい
                     </button>
                   </div>
                 </div>
