@@ -203,12 +203,12 @@ const DeliverySlipRegistration = () => {
 
   const fetchShippingRows = async (shippingNo: string) => {
     if (!shippingNo) {
-      setInputError("parentItemNo", "HT006-E", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      setInputError("parentItemNo", "", "");
       return;
     }
 
     if (!isHalfWidthDigits(shippingNo)) {
-      setInputError("parentItemNo", "HT006-E", "配送伝票番号が半角数字でない。正しい番号を入力して下さい。");
+      setInputError("parentItemNo", "HT006-E", "");
       return;
     }
 
@@ -219,19 +219,15 @@ const DeliverySlipRegistration = () => {
       }
 
       const status = SHIPPING_INFO_MAP[shippingNo];
-      if (!status) {
-        setError("", "データが存在しません。配送伝票番号を確認して下さい。");
+      const data = ITEM_DATA_MAP[shippingNo] ?? [];
+      if (!status || data.length === 0) {
+        setError("", "入力した出荷No.が不正です。");
         return;
       }
 
       if (status.exclusiveLocked) {
-        setError("", "他の端末で変更されています。再度読み込みを行って下さい。");
-        return;
-      }
-
-      const data = ITEM_DATA_MAP[shippingNo] ?? [];
-      if (data.length === 0) {
-        setError("", "配送伝票データが見つかりませんでした。");
+        setError("", "他の端末で変更されています。再度読み込みを行って下さい。"
+        );
         return;
       }
 
@@ -261,7 +257,7 @@ const DeliverySlipRegistration = () => {
     }
 
     if (rows.some((row) => row.item === slipNo)) {
-      setError("", "同じ配送伝票番号がすでに一覧に存在します。重複登録できません。");
+      setError("", "配送伝票Noが重複しています。");
       return false;
     }
 
@@ -321,10 +317,17 @@ const DeliverySlipRegistration = () => {
   const handleParentItemNoKeyDown = async (
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      await fetchShippingRows(form.parentItemNo.trim());
+    if (e.key !== "Enter") {
+      return;
     }
+
+    e.preventDefault();
+    const shippingNo = form.parentItemNo.trim();
+    if (!shippingNo) {
+      return;
+    }
+
+    await fetchShippingRows(shippingNo);
   };
 
   const handleRowClick = (rowId: number) => {
@@ -494,8 +497,7 @@ const DeliverySlipRegistration = () => {
                       setInputError(
                         "deliverySlipNo",
                         "",
-                       `出荷No.は半角数字を
-入力してください。`,
+                        "配送伝票No.は半角数字を入力してください。",
                       );
                       return;
                     }
@@ -503,10 +505,18 @@ const DeliverySlipRegistration = () => {
                     setForm({ ...form, deliverySlipNo: rawValue });
                   }}
                   onKeyDown={async (e) => {
-                    if (e.key === "Enter" && isEnabled) {
-                      e.preventDefault();
-                      await saveDeliverySlip(form.deliverySlipNo.trim());
+                    if (e.key !== "Enter" || !isEnabled) {
+                      return;
                     }
+
+                    const slipNo = form.deliverySlipNo.trim();
+                    if (!slipNo) {
+                      e.preventDefault();
+                      return;
+                    }
+
+                    e.preventDefault();
+                    await saveDeliverySlip(slipNo);
                   }}
                 />
               </div>
@@ -588,9 +598,9 @@ const DeliverySlipRegistration = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">確認</div>
                 <div className="set-modal-body">
-                  選択した行を削除します。
+                 選択行を削除しますか？						
                   <br />
-                  よろしいですか？
+             
                 </div>
                 <div className="set-modal-actions">
                   <button

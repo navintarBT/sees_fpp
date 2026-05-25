@@ -2,49 +2,146 @@ import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
-type Row = {
-    id: number
-    error: string
-    item: string
-    lot: string
-    status: string
-    build: number
-    release: number
-    move: string
-    moveStorage: string
-    name: string
-    moveStorage2?: string
-}
-
 const IncomingProcessRegistration = () => {
     const navigate = useNavigate()
-    const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
-    const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
     const [showClearConfirm, setShowClearConfirm] = useState(false)
     const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
-    const tableScrollRef = useRef<HTMLDivElement | null>(null)
-    const formRef = useRef<HTMLDivElement | null>(null)
     const [showBackConfirm, setShowBackConfirm] = useState(false)
+    const [showError, setShowError] = useState<{ message: string } | null>(null)
+    const barcodeInputRef = useRef<HTMLInputElement | null>(null)
 
-    const resetTableScroll = () => {
-        const el = tableScrollRef.current
-        if (!el) return
-        requestAnimationFrame(() => {
-            el.scrollTop = 0
-            el.scrollLeft = 0
-            requestAnimationFrame(() => {
-                el.scrollTop = 0
-                el.scrollLeft = 0
-            })
-        })
-    }
+    const [productTicketNo, setProductTicketNo] = useState('')
+    const [productName, setProductName] = useState('')
+    const [productCode, setProductCode] = useState('')
+    const [lotSerial, setLotSerial] = useState('')
+    const [orderQuantity, setOrderQuantity] = useState<number | null>(null)
+    const [receivingQuantity, setReceivingQuantity] = useState<string>('')
+    const [goodQuantity, setGoodQuantity] = useState<string>('')
+    const [defectQuantity, setDefectQuantity] = useState<string>('')
+    const [defectReason, setDefectReason] = useState('')
 
     const clearFormAndRows = () => {
-        if (formRef.current) {
-            const elements = formRef.current.querySelectorAll('input, select') as NodeListOf<HTMLInputElement | HTMLSelectElement>
-            elements.forEach(el => el.value = '')
+        setProductTicketNo('')
+        setProductName('')
+        setProductCode('')
+        setLotSerial('')
+        setOrderQuantity(null)
+        setReceivingQuantity('')
+        setGoodQuantity('')
+        setDefectQuantity('')
+        setDefectReason('')
+
+        setTimeout(() => {
+            barcodeInputRef.current?.focus()
+        }, 100)
+    }
+
+    const fetchProductInfo = async (ticketNo: string) => {
+        // TODO: API call to JDE
+        // This is mock data - replace with actual API
+        console.log(`Fetching product info for: ${ticketNo}`)
+        
+        // Mock response
+        if (ticketNo) {
+            setProductName('サンプル製品名')
+            setProductCode('SP-001')
+            setLotSerial('LOT2024001')
+            setOrderQuantity(null)
+        } else {
+            setProductName('')
+            setProductCode('')
+            setLotSerial('')
+            setOrderQuantity(null)
         }
-        resetTableScroll()
+    }
+
+    const handleBarcodeScan = (value: string) => {
+        setProductTicketNo(value)
+        fetchProductInfo(value)
+    }
+
+    const toggleHandInput = () => {
+        barcodeInputRef.current?.focus()
+    }
+
+    const parseNumber = (value: string) => {
+        return Math.max(0, parseInt(value) || 0)
+    }
+
+    const handleReceivingQuantityChange = (value: string) => {
+        setReceivingQuantity(value)
+        const receiving = parseNumber(value)
+        const good = parseNumber(goodQuantity)
+        const defect = parseNumber(defectQuantity)
+
+        if (goodQuantity !== '' && defectQuantity === '') {
+            setDefectQuantity(Math.max(receiving - good, 0).toString())
+        } else if (defectQuantity !== '' && goodQuantity === '') {
+            setGoodQuantity(Math.max(receiving - defect, 0).toString())
+        } else if (goodQuantity !== '' && defectQuantity !== '') {
+            if (good + defect !== receiving) {
+                setDefectQuantity(Math.max(receiving - good, 0).toString())
+            }
+        }
+    }
+
+    const handleGoodQuantityChange = (value: string) => {
+        setGoodQuantity(value)
+        const receiving = parseNumber(receivingQuantity)
+        const good = parseNumber(value)
+        setDefectQuantity(Math.max(receiving - good, 0).toString())
+    }
+
+    const handleDefectQuantityChange = (value: string) => {
+        setDefectQuantity(value)
+        const receiving = parseNumber(receivingQuantity)
+        const defect = parseNumber(value)
+        setGoodQuantity(Math.max(receiving - defect, 0).toString())
+    }
+
+    const handleComplete = () => {
+        if (!productTicketNo) {
+            setShowError({ message: '現品票№が未入力です。' })
+            return
+        }
+
+        if (!receivingQuantity || parseInt(receivingQuantity) <= 0) {
+            setShowError({ message: '入荷数量が未入力です。' })
+            return
+        }
+
+        if (orderQuantity && parseInt(receivingQuantity) !== orderQuantity) {
+            setShowError({ message: '入荷数量と発注数量が一致しません。' })
+            return
+        }
+
+        setShowCompleteConfirm(true)
+    }
+
+    const sendDataToJDE = async () => {
+        try {
+            const payload = {
+                productTicketNo,
+                productName,
+                productCode,
+                lotSerial,
+                orderQuantity,
+                receivingQuantity: parseInt(receivingQuantity),
+                goodQuantity: parseInt(goodQuantity) || 0,
+                defectQuantity: parseInt(defectQuantity) || 0,
+                defectReason: defectReason || null,
+            }
+            console.log('Sending to JDE:', payload)
+            
+            // Mock API call
+            await new Promise(resolve => setTimeout(resolve, 500))
+            
+            clearFormAndRows()
+            setShowCompleteConfirm(false)
+            
+        } catch (error) {
+            setShowError({ message: 'サーバとの通信中にエラーが発生しました。再実行しても解消されない場合は管理者へ連絡してください。' })
+        }
     }
 
     return (
@@ -53,20 +150,25 @@ const IncomingProcessRegistration = () => {
                 <div className='mockup-frame'>
                     <div className='set-header'>入荷工程登録</div>
                     <div className='set-body'>
-                        <div className='set-form' ref={formRef}>
+                        <div className='set-form'>
                             <div className='set-row'>
                                 <label>現品票№</label>
                                 <input
-                                    placeholder=' '
+                                    ref={barcodeInputRef}
+                                    value={productTicketNo}
+                                    onChange={(e) => handleBarcodeScan(e.target.value)}
                                     className='set-small set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
                             </div>
+
                             <div className='set-row'>
                                 <label>品　　 名</label>
                                 <input
-                                    readOnly={true} placeholder=' '
-                                    className='set-small set-input-gray '
+                                    value={productName}
+                                    readOnly={true}
+                                    placeholder=' '
+                                    className='set-small set-input-gray'
                                     style={{ textAlign: 'center', backgroundColor: '#e5e7eb' }}
                                 />
                             </div>
@@ -74,49 +176,66 @@ const IncomingProcessRegistration = () => {
                             <div className='set-row'>
                                 <label>品　　 番</label>
                                 <input
-                                    readOnly={true} placeholder=' '
-                                    className='set-small set-input-gray '
+                                    value={productCode}
+                                    readOnly={true}
+                                    placeholder=' '
+                                    className='set-small set-input-gray'
                                     style={{ textAlign: 'center', backgroundColor: '#e5e7eb' }}
                                 />
                             </div>
 
-                            <div className='set-row '>
+                            <div className='set-row'>
                                 <label>ロット/ｼﾘｱﾙ</label>
                                 <input
-                                    className='set-input-gray '
+                                    value={lotSerial}
+                                    onChange={(e) => setLotSerial(e.target.value)}
+                                    placeholder=' '
+                                    className='set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
                             </div>
-                            <div className='set-row '>
+
+                            <div className='set-row'>
                                 <label>入荷数量</label>
                                 <input
-                                    readOnly={true} placeholder=' '
-                                    className='set-input-grayx'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb' }}
-
+                                    value={receivingQuantity}
+                                    onChange={(e) => handleReceivingQuantityChange(e.target.value)}
+                                    type="number"
+                                    placeholder=' '
+                                    className='set-input-gray'
+                                    style={{ textAlign: 'center' }}
                                 />
                             </div>
-                            <div className='set-row '>
+
+                            <div className='set-row'>
                                 <label>良品数量</label>
                                 <input
+                                    value={goodQuantity}
+                                    onChange={(e) => handleGoodQuantityChange(e.target.value)}
+                                    type="number"
                                     placeholder=' '
                                     className='set-input-gray'
                                     style={{ textAlign: 'center' }}
-
                                 />
                             </div>
-                            <div className='set-row '>
+
+                            <div className='set-row'>
                                 <label>不良数量</label>
                                 <input
+                                    value={defectQuantity}
+                                    onChange={(e) => handleDefectQuantityChange(e.target.value)}
+                                    type="number"
                                     placeholder=' '
                                     className='set-input-gray'
                                     style={{ textAlign: 'center' }}
-
                                 />
                             </div>
+
                             <div className='set-row'>
                                 <label>不良理由</label>
                                 <select
+                                    value={defectReason}
+                                    onChange={(e) => setDefectReason(e.target.value)}
                                     style={{ textAlign: 'center' }}
                                 >
                                     <option value=''></option>
@@ -127,6 +246,7 @@ const IncomingProcessRegistration = () => {
                                     <option value='穴位置ズレ'>穴位置ズレ</option>
                                 </select>
                             </div>
+
                         </div>
 
                         <ActionFooter columns={4}>
@@ -138,11 +258,13 @@ const IncomingProcessRegistration = () => {
                             </button>
                             <button
                                 className='set-btn set-warning'
+                                onClick={handleComplete}
                             >
                                 完了
                             </button>
                             <button
                                 className='set-btn set-primary'
+                                onClick={toggleHandInput}
                             >
                                 手入力
                             </button>
@@ -158,8 +280,11 @@ const IncomingProcessRegistration = () => {
                     {showClearConfirm && (
                         <div className='set-modal-backdrop' role='presentation'>
                             <div className='set-modal' role='dialog' aria-modal='true'>
-                                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                                <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                                <div className='set-modal-header'>確認</div>
+                                <div className='set-modal-body'>
+                                    入力データを破棄します。<br />
+                                    宜しいですか？
+                                </div>
                                 <div className='set-modal-actions'>
                                     <button
                                         className='set-modal-btn set-modal-yes'
@@ -168,26 +293,53 @@ const IncomingProcessRegistration = () => {
                                             clearFormAndRows()
                                         }}
                                     >
-                                        {'\u306f\u3044'}
+                                        はい
                                     </button>
                                     <button
                                         className='set-modal-btn set-modal-no'
                                         onClick={() => setShowClearConfirm(false)}
                                     >
-                                        {'\u3044\u3044\u3048'}
+                                        いいえ
                                     </button>
                                 </div>
                             </div>
                         </div>
                     )}
 
-
+                    {showCompleteConfirm && (
+                        <div className='set-modal-backdrop' role='presentation'>
+                            <div className='set-modal' role='dialog' aria-modal='true'>
+                                <div className='set-modal-header'>確認</div>
+                                <div className='set-modal-body'>
+                                    入荷データを送信します。<br />
+                                    宜しいですか？
+                                </div>
+                                <div className='set-modal-actions'>
+                                    <button
+                                        className='set-modal-btn set-modal-yes'
+                                        onClick={sendDataToJDE}
+                                    >
+                                        はい
+                                    </button>
+                                    <button
+                                        className='set-modal-btn set-modal-no'
+                                        onClick={() => setShowCompleteConfirm(false)}
+                                    >
+                                        いいえ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {showBackConfirm && (
                         <div className='set-modal-backdrop' role='presentation'>
                             <div className='set-modal' role='dialog' aria-modal='true'>
-                                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                                <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                                <div className='set-modal-header'>確認</div>
+                                <div className='set-modal-body'>
+                                    メニューに戻ります。<br />
+                                    入力データを破棄しますか？
+                                </div>
                                 <div className='set-modal-actions'>
                                     <button
                                         className='set-modal-btn set-modal-yes'
@@ -196,13 +348,30 @@ const IncomingProcessRegistration = () => {
                                             navigate('/factory/factory')
                                         }}
                                     >
-                                        {'\u306f\u3044'}
+                                        はい
                                     </button>
                                     <button
                                         className='set-modal-btn set-modal-no'
                                         onClick={() => setShowBackConfirm(false)}
                                     >
-                                        {'\u3044\u3044\u3048'}
+                                        いいえ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showError && (
+                        <div className='set-modal-backdrop' role='presentation'>
+                            <div className='set-modal' role='dialog' aria-modal='true'>
+                                <div className='set-modal-header'>エラー</div>
+                                <div className='set-modal-body'>{showError.message}</div>
+                                <div className='set-modal-actions'>
+                                    <button
+                                        className='set-modal-btn set-modal-yes'
+                                        onClick={() => setShowError(null)}
+                                    >
+                                        閉じる
                                     </button>
                                 </div>
                             </div>
@@ -215,5 +384,3 @@ const IncomingProcessRegistration = () => {
 }
 
 export { IncomingProcessRegistration }
-
-

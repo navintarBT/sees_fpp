@@ -149,7 +149,6 @@ const WorkOrderTimeRegistration = () => {
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
-  const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
 
   const isAnyModalOpen =
@@ -184,7 +183,6 @@ const WorkOrderTimeRegistration = () => {
   const clearAll = () => {
     setRows([])
     setCheckedRowIds([])
-    setActiveRowId(null)
   }
 
   const resetTableScroll = () => {
@@ -194,11 +192,6 @@ const WorkOrderTimeRegistration = () => {
       el.scrollTop = 0
       el.scrollLeft = 0
     })
-  }
-
-  const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
-    toggleRowChecked(rowId, !checkedRowIds.includes(rowId))
   }
 
   const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
@@ -267,7 +260,10 @@ const WorkOrderTimeRegistration = () => {
           type='checkbox'
           className='tf-tableCheckbox'
           checked={checkedRowIds.includes(row.id)}
-          onChange={(e) => toggleRowChecked(row.id, e.target.checked)}
+          onChange={(e) => {
+            e.stopPropagation();  // Stop propagation here
+            toggleRowChecked(row.id, e.target.checked);
+          }}
           onClick={(e) => e.stopPropagation()}
           aria-label={`Select row ${row.id}`}
         />
@@ -416,9 +412,7 @@ const WorkOrderTimeRegistration = () => {
               gridClassName='delivery-table'
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
-              activeRowKey={activeRowId}
               isRowActive={(rowKey) => checkedRowIds.includes(Number(rowKey))}
-              onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
             />
 
             <div className='wot-footer-summary wot-radio-container'>
