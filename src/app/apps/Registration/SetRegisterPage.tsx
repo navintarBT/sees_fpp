@@ -312,7 +312,7 @@ const SetRegisterPage = () => {
     }
 
     if (!value) {
-      handleJanCodeValidationError('JANコードにロットシリアルが含まれていません。')
+      handleJanCodeValidationError('JANコードが不正です。')
       return
     }
 
