@@ -7,6 +7,13 @@ const WO_MOCKUP_DATA: Record<string, {completed: number; defective: number}> = {
   'WO-001': {completed: 9, defective: 1},
   'WO-002': {completed: 5, defective: 5},
   'WO-003': {completed: 8, defective: 2},
+  'WO-004': {completed: 2, defective: 5},
+  'WO-005': {completed: 6, defective: 4},
+  'WO-006': {completed: 4, defective: 6},
+  'WO-007': {completed: 9, defective: 1},
+  'WO-008': {completed: 7, defective: 3},
+  'WO-009': {completed: 4, defective: 6},
+  'WO-010': {completed: 5, defective: 5},
 }
 
 const formatWoDate = (value: string) => {
@@ -179,19 +186,36 @@ const WorkOrderCompletion = () => {
               </div>
               <div className='hand-row'>
                 <label>WO番号</label>
-                <input value={woNumber} style={{textAlign: 'center'}} onChange={(e) => setWoNumber(e.target.value)} />
+                <div style={{display: 'flex', gap: '15px', alignItems: 'center', justifyContent: 'center'}}>
+                  <input
+                    value={woNumber}
+                    onChange={(e) => setWoNumber(e.target.value)}
+                    style={{textAlign: 'center', width: '540px'}}
+                  />
+                  <button type='button' className='set-btnnew_high set-primary'>WO選択</button>
+                </div>
               </div>
               <div className='hand-row' style={{marginTop: '11px', fontSize: '30px'}}>
                 <label>WO完了数</label>
-                <span style={{marginTop: '10px', fontSize: '32px', textAlign: 'center'}}>
-                  {woData.completed}
-                </span>
+                <div style={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center'}}>
+                  <input
+                    readOnly
+                    value={String(woData.completed)}
+                    style={{textAlign: 'center', width: '120px', fontSize: '32px', marginTop: '10px'}}
+                    aria-label='WO completed count'
+                  />
+                </div>
               </div>
               <div className='hand-row' style={{marginTop: '22px', fontSize: '30px'}}>
                 <label>WO仕損数</label>
-                <span style={{color: '#e05555', marginTop: '12px', fontSize: '32px', textAlign: 'center'}}>
-                  {woData.defective}
-                </span>
+                <div style={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center'}}>
+                  <input
+                    readOnly
+                    value={String(woData.defective)}
+                    style={{textAlign: 'center', width: '120px', fontSize: '32px', marginTop: '12px', color: '#e05555'}}
+                    aria-label='WO defective count'
+                  />
+                </div>
               </div>
             </div>
 
