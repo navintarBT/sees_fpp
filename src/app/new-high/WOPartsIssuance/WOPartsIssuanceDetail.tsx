@@ -1,140 +1,137 @@
-import {useEffect, useRef, useState, type ReactNode} from 'react'
-import {useNavigate} from 'react-router-dom'
+﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
+import {useLocation, useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 
 type Row = {
   id: number
   office: string
-  storage: string
   numOfShipments: string
   Interior: string
   lot: string
 }
 
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
+type SelectedRowPayload = {
+  woNumber: string
+  partNumber: string
+  reqNumber: string
 }
 
 const WOPartsIssuanceDetail = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const selectedRow = (location.state as SelectedRowPayload | null) ?? null
   const [rows, setRows] = useState<Row[]>([
     {
       id: 1,
-      Interior: '部品001',
+      Interior: 'LOC-001',
       office:'Fxxxxx', 
-      storage: 'LOC-012',
       numOfShipments: '8',
-      lot: 'LOT-012',
+      lot: 'LOT-0130',
     },
     {
       id: 2,
-      Interior: '部品002',
+      Interior: 'LOC-00',
       office:'Fxxxxx', 
-      storage: 'LOC-013',
       numOfShipments: '2',
-      lot: 'LOT-013',
+      lot: 'LOT-0202',
     },
-    {
-      id: 3,
-      Interior: '部品003',
-      office:'Fxxxxx', 
-      storage: 'LOC-014',
-      numOfShipments: '3',
-      lot: 'LOT-014',
-    },
-    {
-      id: 4,
-      Interior: '部品004',
-      office:'Fxxxxx', 
-      storage: 'LOC-015',
-      numOfShipments: '4',
-      lot: 'LOT-015',
-    },
-    {
-      id: 5,
-      Interior: '部品005',
-      office:'Fxxxxx', 
-      storage: 'LOC-016',
-      numOfShipments: '5',
-      lot: 'LOT-016',
-    },
-    {
-      id: 6,
-      Interior: '部品006',
-      office:'Fxxxxx', 
-      storage: 'LOC-017',
-      numOfShipments: '6',
-      lot: 'LOT-017',
-    },
-    {
-      id: 7,
-      Interior: '部品007',
-      office:'Fxxxxx', 
-      storage: 'LOC-018',
-      numOfShipments: '7',
-      lot: 'LOT-018',
-    },
-    {
-      id: 8,
-      Interior: '部品008',
-      office:'Fxxxxx', 
-      storage: 'LOC-019',
-      numOfShipments: '8',
-      lot: 'LOT-019',
-    },
-    {
-      id: 9,
-      Interior: '部品009',
-      office:'Fxxxxx', 
-      storage: 'LOC-020',
-      numOfShipments: '9',
-      lot: 'LOT-020',
-    },
-    {
-      id: 13,
-      Interior: '部品010',
-      office:'Fxxxxx', 
-      storage: 'LOC-021',
-      numOfShipments: '10',
-      lot: 'LOT-021',
-    },
-    {
-      id: 11,
-      Interior: '部品011',
-      office:'Fxxxxx', 
-      storage: 'LOC-022',
-      numOfShipments: '11',
-      lot: 'LOT-022',
-    },
-    {
-      id: 12,
-      Interior: '部品012',
-      office:'Fxxxxx', 
-      storage: 'LOC-023',
-      numOfShipments: '12',
-      lot: 'LOT-023',
-    },
-     {
-      id: 14,
-      Interior: '部品010',
-      office:'Fxxxxx', 
-      storage: 'LOC-021',
-      numOfShipments: '10',
-      lot: 'LOT-021',
-    },
-     {
-      id: 10,
-      Interior: '部品010',
-      office:'Fxxxxx', 
-      storage: 'LOC-021',
-      numOfShipments: '10',
-      lot: 'LOT-021',
-    },
+    // {
+    //   id: 3,
+    //   Interior: '部品003',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-014',
+    //   numOfShipments: '3',
+    //   lot: 'LOT-014',
+    // },
+    // {
+    //   id: 4,
+    //   Interior: '部品004',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-015',
+    //   numOfShipments: '4',
+    //   lot: 'LOT-015',
+    // },
+    // {
+    //   id: 5,
+    //   Interior: '部品005',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-016',
+    //   numOfShipments: '5',
+    //   lot: 'LOT-016',
+    // },
+    // {
+    //   id: 6,
+    //   Interior: '部品006',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-017',
+    //   numOfShipments: '6',
+    //   lot: 'LOT-017',
+    // },
+    // {
+    //   id: 7,
+    //   Interior: '部品007',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-018',
+    //   numOfShipments: '7',
+    //   lot: 'LOT-018',
+    // },
+    // {
+    //   id: 8,
+    //   Interior: '部品008',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-019',
+    //   numOfShipments: '8',
+    //   lot: 'LOT-019',
+    // },
+    // {
+    //   id: 9,
+    //   Interior: '部品009',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-020',
+    //   numOfShipments: '9',
+    //   lot: 'LOT-020',
+    // },
+    // {
+    //   id: 13,
+    //   Interior: '部品010',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-021',
+    //   numOfShipments: '10',
+    //   lot: 'LOT-021',
+    // },
+    // {
+    //   id: 11,
+    //   Interior: '部品011',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-022',
+    //   numOfShipments: '11',
+    //   lot: 'LOT-022',
+    // },
+    // {
+    //   id: 12,
+    //   Interior: '部品012',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-023',
+    //   numOfShipments: '12',
+    //   lot: 'LOT-023',
+    // },
+    //  {
+    //   id: 14,
+    //   Interior: '部品010',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-021',
+    //   numOfShipments: '10',
+    //   lot: 'LOT-021',
+    // },
+    //  {
+    //   id: 10,
+    //   Interior: '部品010',
+    //   office:'Fxxxxx', 
+    //   storage: 'LOC-021',
+    //   numOfShipments: '10',
+    //   lot: 'LOT-021',
+    // },
   ])
   const [form, setForm] = useState({
     parentWarehouse: '羽田製品倉庫：W0040',
@@ -144,9 +141,9 @@ const WOPartsIssuanceDetail = () => {
     qty: '1',
     janCode: '',
   })
-  const [parentItem, setParentItem] = useState('部品001')
-  const [parentSerial, setParentSerial] = useState('WO-001')
-  const [moveStorage, setMoveStorage] = useState('10')
+  const [parentItem, setParentItem] = useState(selectedRow?.partNumber ?? '部品001')
+  const [parentSerial, setParentSerial] = useState(selectedRow?.woNumber ?? 'WO-001')
+  const [moveStorage, setMoveStorage] = useState(selectedRow?.reqNumber ?? '10')
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
@@ -184,10 +181,6 @@ const WOPartsIssuanceDetail = () => {
     setCheckedRowIds([])
   }
 
-  const deleteCheckedRows = () => {
-    setRows((prev) => prev.filter((row) => !checkedRowIds.includes(row.id)))
-    setCheckedRowIds([])
-  }
   const clearForm = () =>
     setForm({
       parentWarehouse: '',
@@ -218,26 +211,11 @@ const WOPartsIssuanceDetail = () => {
   }
 
   const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
-    setCheckedRowIds((prev) => (prev.includes(rowId) ? prev.filter((id) => id !== rowId) : [...prev, rowId]))
-  }
-
-  const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
-
-  const toggleAllChecked = (checked: boolean) => {
-    if (checked) {
-      setCheckedRowIds(rows.map((row) => row.id))
-      return
-    }
-    setCheckedRowIds([])
-  }
-
-  const toggleRowChecked = (rowId: number, checked: boolean) => {
     setCheckedRowIds((prev) => {
-      if (checked) {
-        return prev.includes(rowId) ? prev : [...prev, rowId]
-      }
-      return prev.filter((id) => id !== rowId)
+      const isSelected = prev.includes(rowId)
+      const next = isSelected ? prev.filter((id) => id !== rowId) : [...prev, rowId]
+      setActiveRowId(next.length === 0 ? null : rowId)
+      return next
     })
   }
 
@@ -320,29 +298,11 @@ const WOPartsIssuanceDetail = () => {
       key: 'check',
       headClassName: 'col-check',
       cellClassName: 'col-check',
-      header: (
-        <input
-          type='checkbox'
-          className='tf-tableCheckbox'
-          checked={isAllChecked}
-          onChange={(e) => toggleAllChecked(e.target.checked)}
-          onClick={(e) => e.stopPropagation()}
-          aria-label='Select all rows'
-        />
-      ),
-      render: (row) => (
-        <input
-          type='checkbox'
-          className='tf-tableCheckbox'
-          checked={checkedRowIds.includes(row.id)}
-          onChange={(e) => toggleRowChecked(row.id, e.target.checked)}
-          onClick={(e) => e.stopPropagation()}
-          aria-label={`Select row ${row.id}`}
-        />
-      ),
+      header: '',
+      render: (row) => (checkedRowIds.includes(row.id) ? '▶' : ''),
     },
     {key: 'Interior', headClassName: 'col-Interior', cellClassName: 'col-Interior', header: '保管場所', render: (row) => row.Interior},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'LOT', render: (row) => row.lot},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
     {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '出庫数', render: (row) => row.numOfShipments},
     {key: 'office', headClassName: 'col-office', cellClassName: 'col-office', header: '事業所', render: (row) => row.office},
   ]
@@ -351,7 +311,7 @@ const WOPartsIssuanceDetail = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>投入明細確認画面</div>
+          <div className='set-header'>投入明細確認</div>
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>
@@ -436,17 +396,34 @@ const WOPartsIssuanceDetail = () => {
             </ActionFooter>
        </div>
 
+            {showNoSelectionConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>選択行がありません</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => setShowNoSelectionConfirm(false)}
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {showDeleteConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>選択した行を削除しますか？</div>
+                  <div className='set-modal-body'>選択行を削除しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowDeleteConfirm(false)
-                        deleteCheckedRows()
+                        navigate('/factory/wo-parts-issuance')
                       }}
                     >
                       はい
@@ -466,7 +443,7 @@ const WOPartsIssuanceDetail = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>投入明細確認を閉じますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'

@@ -83,7 +83,6 @@ function TableSection<Row>({
                           role={onRowActivate && colIndex === 0 ? 'button' : undefined}
                           tabIndex={onRowActivate && colIndex === 0 ? rowTabIndex : undefined}
                           onClick={onRowActivate ? () => onRowActivate(rowKey, row) : undefined}
-                          onFocus={onRowActivate && colIndex === 0 ? () => onRowActivate(rowKey, row) : undefined}
                           onKeyDown={
                             onRowActivate && colIndex === 0
                               ? (e) => {

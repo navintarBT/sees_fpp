@@ -1500,6 +1500,8 @@ min-width: 130px;
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
+
 }
 
 .woPartsIssuance-table .tf-tableRow .col-arrow {
@@ -1580,6 +1582,10 @@ min-width: 130px;
 
 .woPartsIssuanceDetail-table .col-office {
   min-width: 250px;
+}
+
+.woPartsIssuanceDetail-table .col-check{
+  min-width: 55px;
 }
 
 /* ####################################table WOPartsIssuanceDetail########################################### */

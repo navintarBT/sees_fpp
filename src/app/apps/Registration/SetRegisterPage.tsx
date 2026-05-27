@@ -255,7 +255,7 @@ const SetRegisterPage = () => {
   }
 
   const isValidJanCode = (value: string) => {
-    if (!/^\d+$/.test(value)) return false
+    if (!/^\d+$/.test(value)) return false 
     if (!MOCK_JAN_LENGTHS.includes(value.length as (typeof MOCK_JAN_LENGTHS)[number])) return false
     const base = value.slice(0, -1)
     const checkDigit = Number(value[value.length - 1])
@@ -312,7 +312,7 @@ const SetRegisterPage = () => {
     }
 
     if (!value) {
-      handleJanCodeValidationError('JANコードにロットシリアルが含まれていません。')
+      handleJanCodeValidationError('JANコードが不正です。')
       return
     }
 

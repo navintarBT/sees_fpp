@@ -15,6 +15,34 @@ type Row = {
   storage: string
 }
 
+type InternalLabelPreset = {
+  shipmentQty: string
+  storage: string
+  office: string
+  lot: string
+}
+
+type SelectedRowPayload = {
+  woNumber: string
+  partNumber: string
+  reqNumber: string
+}
+
+const INTERNAL_LABEL_PRESETS: Record<string, InternalLabelPreset> = {
+  '部品001_LOT0130': {
+    shipmentQty: '8',
+    storage: 'LOC-001',
+    office: 'Fxxx',
+    lot: 'LOT-0130',
+  },
+  '部品001_LOT-0202': {
+    shipmentQty: '2',
+    storage: 'LOC-001',
+    office: 'Fxxx',
+    lot: '*',
+  },
+}
+
 const initialRows: Row[] = [
   {
     id: 1,
@@ -22,9 +50,9 @@ const initialRows: Row[] = [
     partNumber: '部品001',
     reqNumber: '10',
     storage: 'LOC-001',
-    lot: 'LOT-0130',
-    numOfShipments: '000000000001',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 2,
@@ -32,9 +60,9 @@ const initialRows: Row[] = [
     partNumber: '部品002',
     reqNumber: '10',
     storage: 'LOC-002',
-    lot: 'LOT-0131',
-    numOfShipments: '000000000002',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
     {
     id: 13,
@@ -42,9 +70,9 @@ const initialRows: Row[] = [
     partNumber: '部品002',
     reqNumber: '10',
     storage: 'LOC-002',
-    lot: 'LOT-0131',
-    numOfShipments: '000000000002',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 3,
@@ -52,9 +80,9 @@ const initialRows: Row[] = [
     partNumber: '部品003',
     reqNumber: '10',
     storage: 'LOC-003',
-    lot: 'LOT-0132',
-    numOfShipments: '000000000003',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 4,
@@ -62,9 +90,9 @@ const initialRows: Row[] = [
     partNumber: '部品004',
     reqNumber: '10',
     storage: 'LOC-004',
-    lot: 'LOT-0134',
-    numOfShipments: '000000000004',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 5,
@@ -72,9 +100,9 @@ const initialRows: Row[] = [
     partNumber: '部品005',
     reqNumber: '10',
     storage: 'LOC-005',
-    lot: 'LOT-0135',
-    numOfShipments: '000000000005',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 6,
@@ -82,9 +110,9 @@ const initialRows: Row[] = [
     partNumber: '部品006',
     reqNumber: '10',
     storage: 'LOC-006',
-    lot: 'LOT-0136',
-    numOfShipments: '000000000006',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 7,
@@ -92,9 +120,9 @@ const initialRows: Row[] = [
     partNumber: '部品007',
     reqNumber: '10',
     storage: 'LOC-007',
-    lot: 'LOT-0137',
-    numOfShipments: '000000000007',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 8,
@@ -102,9 +130,9 @@ const initialRows: Row[] = [
     partNumber: '部品008',
     reqNumber: '10',
     storage: 'LOC-008',
-    lot: 'LOT-0138',
-    numOfShipments: '000000000008',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 9,
@@ -112,9 +140,9 @@ const initialRows: Row[] = [
     partNumber: '部品009',
     reqNumber: '10',
     storage: 'LOC-009',
-    lot: 'LOT-0139',
-    numOfShipments: '000000000009',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 10,
@@ -122,9 +150,9 @@ const initialRows: Row[] = [
     partNumber: '部品010',
     reqNumber: '10',
     storage: 'LOC-010',
-    lot: 'LOT-0140',
-    numOfShipments: '000000000010',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 11,
@@ -132,9 +160,9 @@ const initialRows: Row[] = [
     partNumber: '部品011',
     reqNumber: '10',
     storage: 'LOC-011',
-    lot: 'LOT-0141',
-    numOfShipments: '000000000011',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
   {
     id: 12,
@@ -142,16 +170,15 @@ const initialRows: Row[] = [
     partNumber: '部品012',
     reqNumber: '10',
     storage: 'LOC-012',
-    lot: 'LOT-0142',
-    numOfShipments: '000000000012',
-    office: 'Fxxxxxxxx',
+    lot: '',
+    numOfShipments: '',
+    office: '',
   },
 ]
 
 const WOPartsIssuance = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([])
-  const [form, setForm] = useState({
+  const initialForm = {
     parentWarehouse: '羽田製品倉庫：W0040',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
@@ -161,14 +188,23 @@ const WOPartsIssuance = () => {
     storage: '',
     office: '',
     janCode: '',
-  })
+  }
+  const [rows, setRows] = useState<Row[]>([])
+  const [form, setForm] = useState(initialForm)
   const [showDetailConfirm, setShowDetailConfirm] = useState(false)
+  const [showNoSelectionAlert, setShowNoSelectionAlert] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showRegistration, setShowRegistration] = useState(false)
   const [showPrinting, setShowPrinting] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showRegistrationComplete, setShowRegistrationComplete] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const woNumberInputRef = useRef<HTMLInputElement | null>(null)
+  const internalLabelInputRef = useRef<HTMLInputElement | null>(null)
+  const shipmentQtyInputRef = useRef<HTMLInputElement | null>(null)
+  const [isInternalLabelLocked, setIsInternalLabelLocked] = useState(true)
+  const [isIssueDetailLocked, setIsIssueDetailLocked] = useState(true)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const sourceRowsRef = useRef<Row[]>(initialRows)
@@ -179,6 +215,7 @@ const WOPartsIssuance = () => {
     showPrinting ||
     showClearConfirm ||
     showCompleteConfirm ||
+    showRegistrationComplete ||
     showBackConfirm
 
   const closeAllModals = () => {
@@ -187,13 +224,27 @@ const WOPartsIssuance = () => {
     setShowPrinting(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
+    setShowRegistrationComplete(false)
     setShowBackConfirm(false)
     setShowDetailConfirm(false)
+    setShowNoSelectionAlert(false)
 
   }
 
 
   const clearRows = () => setRows([])
+  const resetToInitialDisplay = () => {
+    closeAllModals()
+    setRows([])
+    setForm(initialForm)
+    setIsInternalLabelLocked(true)
+    setIsIssueDetailLocked(true)
+    setActiveRowId(null)
+    resetTableScroll()
+    requestAnimationFrame(() => {
+      woNumberInputRef.current?.focus()
+    })
+  }
   const clearForm = () =>
     setForm({
       parentWarehouse: '',
@@ -227,7 +278,6 @@ const WOPartsIssuance = () => {
       .filter((v) => v.length > 0)
 
     if (keywords.length === 0) {
-      setRows(sourceRowsRef.current)
       return
     }
 
@@ -235,8 +285,16 @@ const WOPartsIssuance = () => {
     const matchedRows = sourceRowsRef.current
       .filter((row) => keywordSet.has(row.woNumber.toUpperCase()))
 
+    if (matchedRows.length === 0) {
+      return
+    }
+
     setRows(matchedRows)
+    setIsInternalLabelLocked(false)
     setActiveRowId(null)
+    requestAnimationFrame(() => {
+      internalLabelInputRef.current?.focus()
+    })
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -248,6 +306,106 @@ const WOPartsIssuance = () => {
     }
   }
 
+  const applyDecide = () => {
+    const shipmentQty = form.shipmentQty.trim()
+    const storage = form.storage.trim()
+    const office = form.office.trim()
+    const lot = INTERNAL_LABEL_PRESETS[form.internalLabel.trim()]?.lot
+
+    if (!shipmentQty || !storage || !office) {
+      return
+    }
+
+    const qtyToAdd = Number(shipmentQty)
+    if (!Number.isFinite(qtyToAdd)) {
+      return
+    }
+
+    const woKeywords = form.woNumber
+      .split(/[,\.\u3001]+/)
+      .map((v) => v.trim().toUpperCase())
+      .filter((v) => v.length > 0)
+
+    setRows((prev) => {
+      const targetIndex = prev.findIndex(
+        (row) =>
+          row.storage.trim().toUpperCase() === storage.toUpperCase() &&
+          (woKeywords.length === 0 || woKeywords.includes(row.woNumber.toUpperCase())),
+      )
+
+      if (targetIndex === -1) {
+        return prev
+      }
+
+      const targetRow = prev[targetIndex]
+      const currentQty = Number(targetRow.numOfShipments || '0')
+      const nextQty = (Number.isFinite(currentQty) ? currentQty : 0) + qtyToAdd
+
+      const updatedRow: Row = {
+        ...targetRow,
+        lot: lot ?? targetRow.lot,
+        numOfShipments: String(nextQty),
+        office,
+      }
+
+      const nextRows = [...prev]
+      nextRows[targetIndex] = updatedRow
+      return nextRows
+    })
+
+    setForm((prev) => ({
+      ...prev,
+      internalLabel: '',
+      shipmentQty: '',
+      storage: '',
+      office: '',
+    }))
+    setIsIssueDetailLocked(true)
+    requestAnimationFrame(() => {
+      internalLabelInputRef.current?.focus()
+    })
+  }
+
+  const handleDecide = () => {
+    if (isAnyModalOpen) return
+    closeAllModals()
+    setShowHandInputConfirm(true)
+  }
+
+  const selectedRowPayload: SelectedRowPayload | null = (() => {
+    if (activeRowId == null) return null
+    const row = rows.find((item) => item.id === activeRowId)
+    if (!row) return null
+    return {
+      woNumber: row.woNumber,
+      partNumber: row.partNumber,
+      reqNumber: row.reqNumber,
+    }
+  })()
+
+  const handleInternalLabelEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+    event.preventDefault()
+    const preset = INTERNAL_LABEL_PRESETS[form.internalLabel.trim()]
+    if (!preset) {
+      return
+    }
+    setForm((prev) => ({
+      ...prev,
+      shipmentQty: preset.shipmentQty,
+      storage: preset.storage,
+      office: preset.office,
+    }))
+    setIsIssueDetailLocked(false)
+    requestAnimationFrame(() => {
+      shipmentQtyInputRef.current?.focus()
+    })
+  }
+
+
+  useEffect(() => {
+    woNumberInputRef.current?.focus()
+  }, [])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -337,6 +495,7 @@ const WOPartsIssuance = () => {
               <div className='set-row set-row-wo'>
                 <label>WO番号</label>
                 <input
+                  ref={woNumberInputRef}
                   style={{textAlign: 'center'}}
                   value={form.woNumber}
                   onChange={(e) => setForm({...form, woNumber: e.target.value})}
@@ -350,16 +509,21 @@ const WOPartsIssuance = () => {
               </button>
               </div>
               <div className='set-row'>
-                <label>庫内ﾗﾍﾞﾙ</label>
+                <label>庫内ラベル</label>
                 <input
+                  ref={internalLabelInputRef}
+                  disabled={isInternalLabelLocked}
                   value={form.internalLabel}
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
+                  onKeyDown={handleInternalLabelEnter}
                   style={{textAlign: 'center'}}
                 />
               </div>
               <div className='set-row'>
                 <label>出庫数</label>
                 <input
+                  ref={shipmentQtyInputRef}
+                  disabled={isIssueDetailLocked}
                   value={form.shipmentQty}
                   onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
                   style={{textAlign: 'center'}}
@@ -368,6 +532,7 @@ const WOPartsIssuance = () => {
               <div className='set-row'>
                 <label>保管場所</label>
                 <input
+                  disabled={isIssueDetailLocked}
                   value={form.storage}
                   onChange={(e) => setForm({...form, storage: e.target.value})}
                   style={{textAlign: 'center'}}
@@ -376,7 +541,8 @@ const WOPartsIssuance = () => {
               <div className='set-row'>
                 <label>事業所</label>
                 <input
-                style={{textAlign: 'center'}}
+                  disabled={isIssueDetailLocked}
+                  style={{textAlign: 'center'}}
                   value={form.office}
                   onChange={(e) => setForm({...form, office: e.target.value})}
                 />
@@ -393,22 +559,14 @@ const WOPartsIssuance = () => {
               onRowActivate={(rowKey) => {
                 const selectedRow = rows.find((row) => row.id === Number(rowKey))
                 if (!selectedRow) return
-                setActiveRowId(selectedRow.id)
-                setForm((prev) => ({
-                  ...prev,
-                  internalLabel: selectedRow.woNumber,
-                  shipmentQty: selectedRow.reqNumber,
-                  storage: selectedRow.storage,
-                  office: selectedRow.office,
-                }))
+                setActiveRowId((prev) => (prev === selectedRow.id ? null : selectedRow.id))
               }}
             />
 
             <ActionFooter columns={5}>
               <button
                 className='set-btn set-primary set-success'
-
-                onClick={() => handleReleaseClick({forceHandInput: true})}
+                onClick={handleDecide}
               >
                 決定
               </button>
@@ -427,7 +585,13 @@ const WOPartsIssuance = () => {
               </button>   
               <button
                 className='set-btn set-primary set-hand-input-btn'
-                onClick={() => setShowDetailConfirm(true)}
+                onClick={() => {
+                  if (activeRowId == null) {
+                    setShowNoSelectionAlert(true)
+                    return
+                  }
+                  setShowDetailConfirm(true)
+                }}
               >
                 明細確認
               </button>
@@ -444,14 +608,14 @@ const WOPartsIssuance = () => {
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認1111</div>
+                  <div className='set-modal-header'>確認</div>
                   <div className='set-modal-body'>変更を確認しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        applyDecide()
                         setShowHandInputConfirm(false)
-                        navigate('')
                       }}
                     >
                       はい
@@ -479,6 +643,7 @@ const WOPartsIssuance = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowRegistration(false)
+                        setShowRegistrationComplete(true)
                       }}
                     >
                       {'\u306f\u3044'}
@@ -488,6 +653,23 @@ const WOPartsIssuance = () => {
                       onClick={() => setShowRegistration(false)}
                     >
                       {'\u3044\u3044\u3048'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showRegistrationComplete && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>登録しました。</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={resetToInitialDisplay}
+                    >
+                      OK
                     </button>
                   </div>
                 </div>
@@ -519,17 +701,36 @@ const WOPartsIssuance = () => {
               </div>
             )}
 
+            {showNoSelectionAlert && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>選択行がありません</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => setShowNoSelectionAlert(false)}
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {showDetailConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>詳細を確認しますか？</div>
+                  <div className='set-modal-body'>明細を確認しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowDetailConfirm(false)
-                        navigate('/factory/wo-parts-issuance-detail')
+                        navigate('/factory/wo-parts-issuance-detail', {
+                          state: selectedRowPayload,
+                        })
                       }}
                     >
                       はい
@@ -549,7 +750,7 @@ const WOPartsIssuance = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>メニューに戻ります。読込データを破棄しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -562,7 +763,10 @@ const WOPartsIssuance = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
+                      onClick={() => {
+                        setShowBackConfirm(false)
+                        navigate('/factory/button-access')
+                      }}
                     >
                       {'\u3044\u3044\u3048'}
                     </button>
