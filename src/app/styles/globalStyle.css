@@ -59,9 +59,9 @@
 }
 
 .set-row input:disabled,
-.set-row select:disabled{
-  background:#d9d9d9;
-  color:#666;
+.set-row select:disabled {
+  background: #d9d9d9;
+  color: #666;
 }
 
 .set-row-inline {
@@ -208,6 +208,26 @@
   min-width: 100%;
   align-items: center;
   text-align: center;
+}
+
+.WorkOrderTimeRegistrationChiba-table {
+  width: 100%;
+  grid-template-columns: 56px repeat(3, minmax(0, 1fr)) !important;
+}
+
+.WorkOrderTimeRegistrationChiba-table .col-check {
+  min-width: 56px;
+  width: 56px;
+  padding: 0;
+}
+
+.WorkOrderTimeRegistrationChiba-table .col-check .tf-tableCheckbox {
+  width: 28px;
+  height: 28px;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableCell {
+  min-width: 0;
 }
 
 .tf-tableCell {
@@ -542,6 +562,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableCheckbox {
+  width: 20px;
+  height: 20px;
 }
 
 .tf-tableCheckbox {
@@ -1084,6 +1109,29 @@
   gap: 60px;
 }
 
+.wot-info-grid-2 {
+  padding: 15px 0;
+  gap: 0px;
+}
+
+input.wot-grid-value2{
+  background-color: #fff;
+  outline: none;
+  font-family: inherit;
+  width: 100%;
+  border: 2px solid #5b6d86;
+  border-radius: 14px;
+  font-size: 30px;
+  font-weight: 400;
+  transition: all 0.2s;
+  height: 78px;
+  padding: 0 22px;
+  box-sizing: border-box;
+  min-height: 0;
+  display: inline-block;
+}
+
+
 .wot-grid-label,
 .wot-grid-value {
   padding: 15px 25px;
@@ -1429,7 +1477,7 @@ input.wot-grid-value {
   min-width: 45px;
 }
 
-.equipment-table .col-item{
+.equipment-table .col-item {
   min-width: 170px;
 }
 
@@ -1454,32 +1502,32 @@ input.wot-grid-value {
   min-width: 45px;
 }
 
-.bundle-table .col-error{
-min-width: 39px;
+.bundle-table .col-error {
+  min-width: 39px;
 }
 
-.bundle-table .col-item{
-min-width: 170px;
+.bundle-table .col-item {
+  min-width: 170px;
 }
 
-.bundle-table .col-lot{
-min-width: 219px;
+.bundle-table .col-lot {
+  min-width: 219px;
 }
 
-.bundle-table .col-quantity{
-min-width: 78px;
+.bundle-table .col-quantity {
+  min-width: 78px;
 }
 
-.bundle-table .col-warehouse{
-min-width: 108px;
+.bundle-table .col-warehouse {
+  min-width: 108px;
 }
 
-.bundle-table .col-storage{
-min-width: 134px;
+.bundle-table .col-storage {
+  min-width: 134px;
 }
 
-.bundle-table .col-productName{
-min-width: 130px;
+.bundle-table .col-productName {
+  min-width: 130px;
 }
 
 .bundle-table .tf-tableRow .col-arrow {
@@ -1701,22 +1749,26 @@ min-width: 130px;
 
 /* ####################################table equipment zang ########################################### */
 
-.col-error-equipment{
+.col-error-equipment {
   min-width: 37px;
 }
-.col-warehouse-equipment{
+
+.col-warehouse-equipment {
   min-width: 140px;
 }
-.col-storage-equipment
-{
+
+.col-storage-equipment {
   min-width: 150px;
 }
-.col-quantity-equipment{
+
+.col-quantity-equipment {
   min-width: 90px;
 }
-.col-item-equipment{
+
+.col-item-equipment {
   min-width: 150px;
 }
-.col-productName-equipment{
+
+.col-productName-equipment {
   min-width: 95px;
 }

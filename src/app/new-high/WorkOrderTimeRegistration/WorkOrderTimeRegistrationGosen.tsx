@@ -52,7 +52,7 @@ type Row = {
   remarks?: string
 }
 
-const WorkOrderTimeRegistration = () => {
+const WorkOrderTimeRegistrationGosen = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
     {
@@ -565,7 +565,7 @@ const WorkOrderTimeRegistration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/factory')
+                      navigate('/factory/button-work-order-time')
                     }}
                   >
                     はい
@@ -586,4 +586,4 @@ const WorkOrderTimeRegistration = () => {
   )
 }
 
-export { WorkOrderTimeRegistration }
+export { WorkOrderTimeRegistrationGosen }
