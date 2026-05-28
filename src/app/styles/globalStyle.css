@@ -1109,9 +1109,14 @@
   gap: 60px;
 }
 
+.box-padding-innput{
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
 
 .wot-info-grid-2 {
-  padding-bottom: 50px;
+  /* padding-bottom: 50px; */
   gap: 0px;
 }
 

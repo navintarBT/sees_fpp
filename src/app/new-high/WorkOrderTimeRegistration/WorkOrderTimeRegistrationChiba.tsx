@@ -270,7 +270,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-formnew_high '>
               <div className='wot-header-container '>
                 {/* Left side: Info Grid */}
-                <div className='wot-info-soll '>
+                <div className='wot-info-soll box-padding-innput'>
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-blue'>人</label>
                     <input className='wot-grid-value2' autoFocus />
