@@ -1546,7 +1546,7 @@ min-width: 130px;
 /* ####################################table wOHandInputPage ########################################### */
 
 .wOHandInputPage-table .col-Interior {
-  min-width: 240px;
+  min-width: 410px;
 }
 
 .wOHandInputPage-table .col-lot {
@@ -1554,16 +1554,21 @@ min-width: 130px;
 }
 
 .wOHandInputPage-table .col-numOfShipments {
-  min-width: 114px;
+  min-width: 120px;
 }
 
 .wOHandInputPage-table .col-storage {
-  min-width: 230px;
+  min-width: 240px;
 }
 
 .wOHandInputPage-table .col-office {
-  min-width: 230px;
+  min-width: 236px;
 }
+
+.wOHandInputPage-table .col-arrow-head {
+  min-width: 50px;
+}
+
 
 /* ####################################table WOPartsIssuanceDetail########################################### */
 
@@ -1576,7 +1581,7 @@ min-width: 130px;
 }
 
 .woPartsIssuanceDetail-table .col-numOfShipments {
-  min-width: 245px;
+  min-width: 250px;
 }
 
 

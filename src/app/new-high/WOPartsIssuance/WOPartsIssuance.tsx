@@ -29,13 +29,13 @@ type SelectedRowPayload = {
 }
 
 const INTERNAL_LABEL_PRESETS: Record<string, InternalLabelPreset> = {
-  '部品001_LOT0130': {
+  '部品001 LOT0130': {
     shipmentQty: '8',
     storage: 'LOC-001',
     office: 'Fxxx',
     lot: 'LOT-0130',
   },
-  '部品001_LOT-0202': {
+  '部品001 LOT-0202': {
     shipmentQty: '2',
     storage: 'LOC-001',
     office: 'Fxxx',
@@ -609,7 +609,7 @@ const WOPartsIssuance = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>変更を確認しますか？</div>
+                  <div className='set-modal-body'>登録しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -750,7 +750,7 @@ const WOPartsIssuance = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>メニューに戻ります。読込データを破棄しますか？</div>
+                  <div className='set-modal-body'>メニューに戻ります。<br /> 読込データを破棄しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
