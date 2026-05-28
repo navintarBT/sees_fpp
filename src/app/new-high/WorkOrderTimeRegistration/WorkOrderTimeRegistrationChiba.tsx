@@ -270,10 +270,10 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-formnew_high '>
               <div className='wot-header-container '>
                 {/* Left side: Info Grid */}
-                <div className='wot-info-soll'>
+                <div className='wot-info-soll '>
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-blue'>人</label>
-                    <input className='wot-grid-value2' />
+                    <input className='wot-grid-value2' autoFocus />
                   </div>
 
                   <div className='wot-info-grid wot-info-grid-2'>
@@ -412,26 +412,33 @@ const WorkOrderTimeRegistrationChiba = () => {
             </div>
 
             <ActionFooter columns={4}>
+
               <button
                 className='set-btn set-danger'
                 onClick={handleDeleteSelected}
               >
                 選択行削除
               </button>
+
               <button
                 className='set-btn set-primary'
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 実績登録
               </button>
-
+              <button
+                className='set-btn-footer set-primary'
+                style={{ visibility: 'hidden' }}
+              >
+                {'\u624b\u5165\u529b'}
+              </button>
               <button
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
               </button>
-              
+
             </ActionFooter>
           </div>
 

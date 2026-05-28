@@ -1109,14 +1109,14 @@
   gap: 60px;
 }
 
+
 .wot-info-grid-2 {
-  padding: 15px 0;
+  padding-bottom: 50px;
   gap: 0px;
 }
 
-input.wot-grid-value2{
+.wot-grid-value2 {
   background-color: #fff;
-  outline: none;
   font-family: inherit;
   width: 100%;
   border: 2px solid #5b6d86;
@@ -1131,11 +1131,9 @@ input.wot-grid-value2{
   display: inline-block;
 }
 
-
 .wot-grid-label,
 .wot-grid-value {
   padding: 15px 25px;
-  border: none;
   background-color: #fff;
   font-size: 30px;
   min-height: 90px;
@@ -1147,7 +1145,6 @@ input.wot-grid-value2{
 
 input.wot-grid-value {
   background-color: #fff;
-  outline: none;
   font-family: inherit;
   width: 100%;
   border: 2px solid #5b6d86;
