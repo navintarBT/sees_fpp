@@ -1758,6 +1758,9 @@ input.wot-grid-value {
 .col-item-delivery {
   min-width: 830px;
 }
+.col-item-delivery-wo {
+  min-width: 1009px;
+}
 
 
 /* ####################################table equipment zang ########################################### */

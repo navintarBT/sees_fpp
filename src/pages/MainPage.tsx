@@ -33,7 +33,7 @@ import { ShippingRecordDetail } from '../app/New-normal/ShippingRecord/ShippingR
 import { ShelfTransfer } from '../app/New-normal/ShelfTransfer/ShelfTransfer'
 import { IncomingProcessRegistration } from '../app/New-normal/IncomingProcessRegistration/IncomingProcessRegistration'
 import { ButtonWorkOrderTime } from '../app/new-high/WorkOrderTimeRegistration/ButtonWorkOrderTime'
-
+import { WorkOrderCompletion_Choose_WO } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion_Choose_WO'
 const MainPage = () => {
   return (
     <Routes>
@@ -72,6 +72,7 @@ const MainPage = () => {
         <Route path='shipping-detail' element={<ShippingRecordDetail />} />
         <Route path='shelf-transfer' element={<ShelfTransfer />} />
         <Route path='incoming-process-registration' element={<IncomingProcessRegistration />} />
+        <Route path='work-order-completion-select-wo' element={<WorkOrderCompletion_Choose_WO />} />
       </Route>
     </Routes>
   )

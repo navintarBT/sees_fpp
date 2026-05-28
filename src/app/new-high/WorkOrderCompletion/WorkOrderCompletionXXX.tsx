@@ -1,5 +1,5 @@
-import {useEffect, useState} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {FaRegCalendarAlt} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
@@ -52,7 +52,6 @@ const getCalendarDays = (monthDate: Date) => {
 
 const WorkOrderCompletion = () => {
   const navigate = useNavigate()
-  const location = useLocation()
   const todayValue = toDateValue(new Date())
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
   const [showWoCalendar, setShowWoCalendar] = useState(false)
@@ -65,14 +64,6 @@ const WorkOrderCompletion = () => {
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
   const [showRegisterComplete, setShowRegisterComplete] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-
-  useEffect(() => {
-    const selectedWoNumber = (location.state as {selectedWoNumber?: string} | null)?.selectedWoNumber
-    if (!selectedWoNumber) return
-
-    setWoNumber(selectedWoNumber)
-    setWoData(WO_MOCKUP_DATA[selectedWoNumber] ?? {completed: 0, defective: 0})
-  }, [location.state])
 
   const openWoDatePicker = () => {
     setWoCalendarMonth(parseDateValue(woDatePickerValue || todayValue))
@@ -245,7 +236,7 @@ const WorkOrderCompletion = () => {
                     }}
                     style={{textAlign: 'center', width: '540px'}}
                   />
-                  <button type='button' className='set-btnnew_high set-primary' onClick={() => navigate("/factory/work-order-completion-select-wo")}>WO選択</button>
+                  <button type='button' className='set-btnnew_high set-primary' onClick={openWoSelect}>WO選択</button>
                 </div>
               </div>
               <div className='hand-row' style={{marginTop: '11px', fontSize: '30px'}}>
@@ -288,7 +279,34 @@ const WorkOrderCompletion = () => {
                   aria-label='WO selection'
                   style={{width: '680px', maxWidth: '90vw'}}
                 >
-                  <div className='set-modal-header'>WO選択</div>
+                  <div className='set-modal-header' style={{position: 'relative', paddingRight: '56px'}}>
+                    WO選択
+                    <button
+                      type='button'
+                      aria-label='Close WO selection'
+                      onClick={() => {
+                        setShowWoSelect(false)
+                        setSelectedWoNumber('')
+                      }}
+                      style={{
+                        position: 'absolute',
+                        right: '16px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '38px',
+                        height: '38px',
+                        border: '1px solid #5b6d86',
+                        borderRadius: '4px',
+                        background: '#fff',
+                        color: '#1a2a4a',
+                        fontSize: '24px',
+                        lineHeight: 1,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
                   <div className='set-modal-body' style={{paddingTop: '8px'}}>
                     <div
                       style={{
@@ -341,17 +359,6 @@ const WorkOrderCompletion = () => {
                         ))}
                       </div>
                     </div>
-                  </div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowWoSelect(false)
-                        setSelectedWoNumber('')
-                      }}
-                    >
-                      閉じる
-                    </button>
                   </div>
                 </div>
               </div>
