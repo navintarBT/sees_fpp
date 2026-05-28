@@ -227,12 +227,12 @@ const ShelfTransfer = () => {
     resetTableScroll()
   }
 
-  // ✅ ใช้ parentStorage แทน parentWarehouse
+  // ✅ parentStorage
   const handleSearchsource_location = () => {
     const selectedLocation = form.parentStorage
 
     if (activeRowId !== null) {
-      // มีการเลือก row → ใส่ค่าให้เฉพาะ row นั้น
+      
       setRows(prevRows =>
         prevRows.map(row =>
           row.id === activeRowId

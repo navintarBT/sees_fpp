@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useEffect, useState} from 'react'
+import {useLocation, useNavigate} from 'react-router-dom'
 import {FaRegCalendarAlt} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
@@ -52,6 +52,7 @@ const getCalendarDays = (monthDate: Date) => {
 
 const WorkOrderCompletion = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const todayValue = toDateValue(new Date())
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
   const [showWoCalendar, setShowWoCalendar] = useState(false)
@@ -64,6 +65,14 @@ const WorkOrderCompletion = () => {
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
   const [showRegisterComplete, setShowRegisterComplete] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+
+  useEffect(() => {
+    const selectedWoNumber = (location.state as {selectedWoNumber?: string} | null)?.selectedWoNumber
+    if (!selectedWoNumber) return
+
+    setWoNumber(selectedWoNumber)
+    setWoData(WO_MOCKUP_DATA[selectedWoNumber] ?? {completed: 0, defective: 0})
+  }, [location.state])
 
   const openWoDatePicker = () => {
     setWoCalendarMonth(parseDateValue(woDatePickerValue || todayValue))
