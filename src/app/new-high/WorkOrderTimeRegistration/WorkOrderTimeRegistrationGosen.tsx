@@ -52,7 +52,7 @@ type Row = {
   remarks?: string
 }
 
-const WorkOrderTimeRegistration = () => {
+const WorkOrderTimeRegistrationGosen = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
     {
@@ -292,8 +292,8 @@ const WorkOrderTimeRegistration = () => {
                 {/* Left side: Info Grid */}
                 <div className='wot-info-soll'>
                   <div className='wot-info-grid'>
-                    <label className='wot-grid-label wot-bg-blue'>人</label>
-                    <input className='wot-grid-value' />
+                    <label className='wot-grid-label wot-bg-blue' >人</label>
+                    <input className='wot-grid-value' autoFocus/>
                   </div>
 
                   <div className='wot-info-grid'>
@@ -448,7 +448,7 @@ const WorkOrderTimeRegistration = () => {
               </div>
             </div>
 
-            <ActionFooter columns={3}>
+            <ActionFooter columns={4}>
               <button
                 className='set-btn set-danger'
                 onClick={handleDeleteSelected}
@@ -461,7 +461,12 @@ const WorkOrderTimeRegistration = () => {
               >
                 実績登録
               </button>
-
+              <button
+                className='set-btn-footer set-primary'
+                style={{ visibility: 'hidden' }}
+              >
+                {'\u624b\u5165\u529b'}
+              </button>
               <button
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
@@ -565,7 +570,7 @@ const WorkOrderTimeRegistration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/factory')
+                      navigate('/factory/button-work-order-time')
                     }}
                   >
                     はい
@@ -586,4 +591,4 @@ const WorkOrderTimeRegistration = () => {
   )
 }
 
-export { WorkOrderTimeRegistration }
+export { WorkOrderTimeRegistrationGosen }

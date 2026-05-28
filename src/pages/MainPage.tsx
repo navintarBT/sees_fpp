@@ -22,7 +22,8 @@ import { WOPartsIssuance } from '../app/new-high/WOPartsIssuance/WOPartsIssuance
 import { WOPartsIssuanceHandInputPage } from '../app/new-high/WOPartsIssuance/WOPartsIssuanceHandInputPage'
 import { WOPartsIssuanceDetail } from '../app/new-high/WOPartsIssuance/WOPartsIssuanceDetail'
 import { ButtonAccess } from '../app/new-high/WOPartsIssuance/ButtonAccess'
-import { WorkOrderTimeRegistration } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistration'
+import { WorkOrderTimeRegistrationGosen } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistrationGosen'
+import { WorkOrderTimeRegistrationChiba } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistrationChiba'
 import { InventoryRecordsPage } from '../app/New-normal/InventoryRecord/InventoryRecordsPage'
 import { InventoryRecordsHandInputPage } from '../app/New-normal/InventoryRecord/InventoryRecordsHandInputPage'
 import { InventoryRecordDetail } from '../app/New-normal/InventoryRecord/InventoryRecordDetail'
@@ -31,6 +32,7 @@ import { ShippingRecordHandInputPage } from '../app/New-normal/ShippingRecord/Sh
 import { ShippingRecordDetail } from '../app/New-normal/ShippingRecord/ShippingRecordDetail'
 import { ShelfTransfer } from '../app/New-normal/ShelfTransfer/ShelfTransfer'
 import { IncomingProcessRegistration } from '../app/New-normal/IncomingProcessRegistration/IncomingProcessRegistration'
+import { ButtonWorkOrderTime } from '../app/new-high/WorkOrderTimeRegistration/ButtonWorkOrderTime'
 
 const MainPage = () => {
   return (
@@ -57,9 +59,11 @@ const MainPage = () => {
         <Route path='wo-parts-issuance' element={<WOPartsIssuance />} />
         <Route path='wo-parts-issuance-hand-input' element={<WOPartsIssuanceHandInputPage />} />
         <Route path='button-access' element={<ButtonAccess />} />
+        <Route path='button-work-order-time' element={<ButtonWorkOrderTime />} />
         <Route path='wo-parts-issuance-detail' element={<WOPartsIssuanceDetail />} />
         <Route path='work-order-completion' element={<WorkOrderCompletion />} />
-        <Route path='work-order-time-registration' element={<WorkOrderTimeRegistration />} />
+        <Route path='work-order-time-registration-gosen' element={<WorkOrderTimeRegistrationGosen />} />
+        <Route path='work-order-time-registration-chiba' element={<WorkOrderTimeRegistrationChiba />} />
         <Route path='inventory-records' element={<InventoryRecordsPage />} />
         <Route path='inventory-hand-input' element={<InventoryRecordsHandInputPage />} />
         <Route path='inventory-detail' element={<InventoryRecordDetail />} />
