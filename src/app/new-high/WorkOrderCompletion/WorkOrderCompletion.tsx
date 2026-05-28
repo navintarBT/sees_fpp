@@ -248,7 +248,7 @@ const WorkOrderCompletion = () => {
                   <button type='button' className='set-btnnew_high set-primary' onClick={() => navigate("/factory/work-order-completion-select-wo")}>WO選択</button>
                 </div>
               </div>
-              <div className='hand-row' style={{marginTop: '11px', fontSize: '30px'}}>
+              <div className='hand-row' style={{marginTop: '-2px', fontSize: '30px'}}>
                 <label>WO完了数</label>
                 <div style={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center'}}>
                   <input
@@ -259,7 +259,7 @@ const WorkOrderCompletion = () => {
                   />
                 </div>
               </div>
-              <div className='hand-row' style={{marginTop: '22px', fontSize: '30px'}}>
+              <div className='hand-row' style={{marginTop: '-2px', fontSize: '30px'}}>
                 <label>WO仕損数</label>
                 <div style={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center'}}>
                   <input
