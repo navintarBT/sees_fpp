@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 import { FaRegCalendarAlt } from 'react-icons/fa'
@@ -52,72 +52,82 @@ type Row = {
   remarks?: string
 }
 
+const SESSION_STORAGE_KEY = 'workOrderTimeRegistrationSelectedWoNumbers'
+const SESSION_STORAGE_ROWS_KEY = 'workOrderTimeRegistrationGosenRows'
+
+const DEFAULT_ROWS: Row[] = [
+  {
+    id: 1,
+    woNo: 'WO-001',
+    itemNo: 'a',
+    itemName: '製品a',
+    targetTime: '50',
+    acceptedQty: '9',
+    defectiveQty: '1',
+    opOrder: '10',
+    opDesc: '研磨3',
+    processStatus: '90',
+    remarks: 'xxxxx',
+  },
+  {
+    id: 2,
+    woNo: 'WO-002',
+    itemNo: 'b',
+    itemName: '製品b',
+    targetTime: '50',
+    acceptedQty: '3',
+    defectiveQty: '',
+    opOrder: '10',
+    opDesc: '研磨3',
+    processStatus: '',
+    remarks: '',
+  },
+  {
+    id: 3,
+    woNo: 'WO-003',
+    itemNo: 'c',
+    itemName: '製品c',
+  },
+  {
+    id: 4,
+    woNo: 'WO-004',
+    itemNo: 'd',
+    itemName: '製品d',
+  },
+  {
+    id: 5,
+    woNo: 'WO-005',
+    itemNo: 'e',
+    itemName: '製品e',
+  },
+  {
+    id: 6,
+    woNo: 'WO-006',
+    itemNo: 'f',
+    itemName: '製品f',
+  },
+  {
+    id: 7,
+    woNo: 'WO-007',
+    itemNo: 'g',
+    itemName: '製品g',
+  },
+  {
+    id: 8,
+    woNo: 'WO-008',
+    itemNo: 'h',
+    itemName: '製品h',
+  },
+]
+
 const WorkOrderTimeRegistrationGosen = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      woNo: 'wo-1',
-      itemNo: 'a',
-      itemName: '製品a',
-      targetTime: '50',
-      acceptedQty: '9',
-      defectiveQty: '1',
-      opOrder: '10',
-      opDesc: '研磨3',
-      processStatus: '90',
-      remarks: 'xxxxx',
-    },
-    {
-      id: 2,
-      woNo: 'wo-2',
-      itemNo: 'b',
-      itemName: '製品b',
-      targetTime: '50',
-      acceptedQty: '3',
-      defectiveQty: '',
-      opOrder: '10',
-      opDesc: '研磨3',
-      processStatus: '',
-      remarks: '',
-    },
-    {
-      id: 3,
-      woNo: 'wo-3',
-      itemNo: 'c',
-      itemName: '製品c',
-    },
-    {
-      id: 4,
-      woNo: 'wo-4',
-      itemNo: 'd',
-      itemName: '製品d',
-    },
-    {
-      id: 5,
-      woNo: 'wo-5',
-      itemNo: 'e',
-      itemName: '製品e',
-    },
-    {
-      id: 6,
-      woNo: 'wo-6',
-      itemNo: 'f',
-      itemName: '製品f',
-    },
-    {
-      id: 7,
-      woNo: 'wo-7',
-      itemNo: 'g',
-      itemName: '製品g',
-    },
-    {
-      id: 8,
-      woNo: 'wo-8',
-      itemNo: 'h',
-      itemName: '製品h',
-    },
-  ])
+  const location = useLocation()
+  const [rows, setRows] = useState<Row[]>([])
+
+  const saveRowsToStorage = (rowsToSave: Row[]) => {
+    sessionStorage.setItem(SESSION_STORAGE_ROWS_KEY, JSON.stringify(rowsToSave))
+  }
 
   const todayValue = toDateValue(new Date())
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
@@ -175,13 +185,18 @@ const WorkOrderTimeRegistrationGosen = () => {
   }
 
   const confirmDeleteSelected = () => {
-    setRows((prev) => prev.filter((row) => !checkedRowIds.includes(row.id)))
+    setRows((prev) => {
+      const nextRows = prev.filter((row) => !checkedRowIds.includes(row.id))
+      saveRowsToStorage(nextRows)
+      return nextRows
+    })
     setCheckedRowIds([])
     setShowDeleteSelectedConfirm(false)
   }
 
   const clearAll = () => {
     setRows([])
+    saveRowsToStorage([])
     setCheckedRowIds([])
   }
 
@@ -213,7 +228,61 @@ const WorkOrderTimeRegistrationGosen = () => {
     })
   }
 
+  const updateRowField = (
+    rowId: number,
+    field: keyof Omit<Row, 'id' | 'woNo'>,
+    value: string,
+  ) => {
+    setRows((prevRows) => {
+      const nextRows = prevRows.map((row) =>
+        row.id === rowId ? { ...row, [field]: value } : row,
+      )
+      saveRowsToStorage(nextRows)
+      return nextRows
+    })
+  }
+
   useEffect(() => {
+    const state = location.state as { selectedWoNumbers?: string[] } | null
+    const selectedWoNumbers = state?.selectedWoNumbers
+
+    if (Array.isArray(selectedWoNumbers) && selectedWoNumbers.length > 0) {
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedWoNumbers))
+      const matchedRows = DEFAULT_ROWS.filter((row) => selectedWoNumbers.includes(row.woNo))
+      setRows(matchedRows)
+      saveRowsToStorage(matchedRows)
+    } else {
+      const savedRows = sessionStorage.getItem(SESSION_STORAGE_ROWS_KEY)
+      if (savedRows) {
+        try {
+          const parsedRows = JSON.parse(savedRows)
+          if (Array.isArray(parsedRows)) {
+            setRows(parsedRows.filter((item): item is Row => item && typeof item === 'object' && typeof item.id === 'number'))
+            return
+          }
+        } catch {
+          // ignore invalid stored rows
+        }
+      }
+
+      const saved = sessionStorage.getItem(SESSION_STORAGE_KEY)
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved)
+          if (Array.isArray(parsed)) {
+            const validSelection = parsed.filter((item): item is string => typeof item === 'string')
+            if (validSelection.length > 0) {
+              const matchedRows = DEFAULT_ROWS.filter((row) => validSelection.includes(row.woNo))
+              setRows(matchedRows)
+              saveRowsToStorage(matchedRows)
+            }
+          }
+        } catch {
+          // ignore invalid storage data
+        }
+      }
+    }
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (isAnyModalOpen) return
 
@@ -238,7 +307,7 @@ const WorkOrderTimeRegistrationGosen = () => {
     return () => {
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [checkedRowIds, isAnyModalOpen])
+  }, [checkedRowIds, isAnyModalOpen, location.state])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
@@ -261,8 +330,8 @@ const WorkOrderTimeRegistrationGosen = () => {
           className='tf-tableCheckbox'
           checked={checkedRowIds.includes(row.id)}
           onChange={(e) => {
-            e.stopPropagation();  // Stop propagation here
-            toggleRowChecked(row.id, e.target.checked);
+            e.stopPropagation()
+            toggleRowChecked(row.id, e.target.checked)
           }}
           onClick={(e) => e.stopPropagation()}
           aria-label={`Select row ${row.id}`}
@@ -270,15 +339,141 @@ const WorkOrderTimeRegistrationGosen = () => {
       ),
     },
     { key: 'woNo', headClassName: 'col-wo', cellClassName: 'col-wo', header: 'WoNo', render: (row) => row.woNo },
-    { key: 'itemNo', headClassName: 'col-item-no', cellClassName: 'col-item-no', header: '品番', render: (row) => row.itemNo },
-    { key: 'itemName', headClassName: 'col-item-name', cellClassName: 'col-item-name', header: '品名', render: (row) => row.itemName },
-    { key: 'targetTime', headClassName: 'col-target-time', cellClassName: 'col-target-time col-text-purple', header: '目標時間', render: (row) => row.targetTime },
-    { key: 'acceptedQty', headClassName: 'col-qty', cellClassName: 'col-qty', header: '合格数', render: (row) => row.acceptedQty },
-    { key: 'defectiveQty', headClassName: 'col-qty', cellClassName: 'col-qty', header: '不良数', render: (row) => row.defectiveQty },
-    { key: 'opOrder', headClassName: 'col-op', cellClassName: 'col-op', header: '作業順序', render: (row) => row.opOrder },
-    { key: 'opDesc', headClassName: 'col-op', cellClassName: 'col-op', header: '作業記述', render: (row) => row.opDesc },
-    { key: 'processStatus', headClassName: 'col-process', cellClassName: 'col-process', header: '工程状況', render: (row) => row.processStatus },
-    { key: 'remarks', headClassName: 'col-remarks', cellClassName: 'col-remarks', header: '備考', render: (row) => row.remarks },
+    {
+      key: 'itemNo',
+      headClassName: 'col-item-no',
+      cellClassName: 'col-item-no',
+      header: '品番',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.itemNo}
+          onChange={(e) => updateRowField(row.id, 'itemNo', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'itemName',
+      headClassName: 'col-item-name',
+      cellClassName: 'col-item-name',
+      header: '品名',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.itemName}
+          onChange={(e) => updateRowField(row.id, 'itemName', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'targetTime',
+      headClassName: 'col-target-time',
+      cellClassName: 'col-target-time col-text-purple',
+      header: '目標時間',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.targetTime ?? ''}
+          onChange={(e) => updateRowField(row.id, 'targetTime', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'acceptedQty',
+      headClassName: 'col-qty',
+      cellClassName: 'col-qty',
+      header: '合格数',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.acceptedQty ?? ''}
+          onChange={(e) => updateRowField(row.id, 'acceptedQty', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'defectiveQty',
+      headClassName: 'col-qty',
+      cellClassName: 'col-qty',
+      header: '不良数',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.defectiveQty ?? ''}
+          onChange={(e) => updateRowField(row.id, 'defectiveQty', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'opOrder',
+      headClassName: 'col-op',
+      cellClassName: 'col-op',
+      header: '作業順序',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.opOrder ?? ''}
+          onChange={(e) => updateRowField(row.id, 'opOrder', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'opDesc',
+      headClassName: 'col-op',
+      cellClassName: 'col-op',
+      header: '作業記述',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.opDesc ?? ''}
+          onChange={(e) => updateRowField(row.id, 'opDesc', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'processStatus',
+      headClassName: 'col-process',
+      cellClassName: 'col-process',
+      header: '工程状況',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.processStatus ?? ''}
+          onChange={(e) => updateRowField(row.id, 'processStatus', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'remarks',
+      headClassName: 'col-remarks',
+      cellClassName: 'col-remarks',
+      header: '備考',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.remarks ?? ''}
+          onChange={(e) => updateRowField(row.id, 'remarks', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
   ]
 
   return (
@@ -293,7 +488,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                 <div className='wot-info-soll'>
                   <div className='wot-info-grid'>
                     <label className='wot-grid-label wot-bg-blue' >人</label>
-                    <input className='wot-grid-value' autoFocus/>
+                    <input className='wot-grid-value' autoFocus />
                   </div>
 
                   <div className='wot-info-grid'>
@@ -379,7 +574,9 @@ const WorkOrderTimeRegistrationGosen = () => {
 
                 <div className='wot-header-actions'>
                   <div className='wot-top-row'>
-                    <button className='set-btnnew_high set-primary'>WO選択</button>
+                    <button className='set-btnnew_high set-primary' onClick={() => navigate('/factory/work-order-time-registration-choose')}>
+                      WO選択
+                    </button>
                   </div>
                   <div className='wot-radio-container'>
                     <div className='wot-radio-title'>登録時間種類</div>

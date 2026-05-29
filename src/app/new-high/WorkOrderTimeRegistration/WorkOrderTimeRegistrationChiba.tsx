@@ -199,6 +199,10 @@ const WorkOrderTimeRegistrationChiba = () => {
     })
   }
 
+  const updateRowField = (rowId: number, field: keyof Omit<Row, 'id' | 'woNo'>, value: string) => {
+    setRows((prevRows) => prevRows.map((row) => (row.id === rowId ? { ...row, [field]: value } : row)))
+  }
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (isAnyModalOpen) return
@@ -256,8 +260,36 @@ const WorkOrderTimeRegistrationChiba = () => {
       ),
     },
     { key: 'woNo', headClassName: 'col-wo', cellClassName: 'col-wo', header: 'WoNo', render: (row) => row.woNo },
-    { key: 'itemNo', headClassName: 'col-item-no', cellClassName: 'col-item-no', header: '品番', render: (row) => row.itemNo },
-    { key: 'itemName', headClassName: 'col-item-name', cellClassName: 'col-item-name', header: '品名', render: (row) => row.itemName },
+    {
+      key: 'itemNo',
+      headClassName: 'col-item-no',
+      cellClassName: 'col-item-no',
+      header: '品番',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.itemNo}
+          onChange={(e) => updateRowField(row.id, 'itemNo', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'itemName',
+      headClassName: 'col-item-name',
+      cellClassName: 'col-item-name',
+      header: '品名',
+      render: (row) => (
+        <input
+          type='text'
+          className='table-cell-input'
+          value={row.itemName}
+          onChange={(e) => updateRowField(row.id, 'itemName', e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
 
   ]
 
@@ -411,7 +443,7 @@ const WorkOrderTimeRegistrationChiba = () => {
               </div>
             </div>
 
-            <ActionFooter columns={4}>
+            <ActionFooter columns={5}>
 
               <button
                 className='set-btn set-danger'
@@ -426,11 +458,29 @@ const WorkOrderTimeRegistrationChiba = () => {
               >
                 実績登録
               </button>
-              <button
-                className='set-btn-footer set-primary'
-                style={{ visibility: 'hidden' }}
+         
+              {/* <button
+                className='set-btn set-success'
+                onClick={() => handleReleaseClick()}
               >
-                {'\u624b\u5165\u529b'}
+                削除
+              </button>
+              <button
+                className='set-btn set-primary set-hand-input-btn'
+                onClick={() => handleReleaseClick({ forceHandInput: true })}
+              >
+                手入力
+              </button> */}
+           
+              <button
+                className='set-btn set-success'
+              >
+                登録(WOクリア)
+              </button>
+              <button
+                className='set-btn set-hand-input-btn'
+              >
+                登録(WO維持)
               </button>
               <button
                 className='set-btn set-warning'
