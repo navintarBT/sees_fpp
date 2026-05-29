@@ -265,7 +265,7 @@ const WorkOrderCompletion = () => {
                   <input
                     readOnly
                     value={woData ? String(woData.defective) : ''}
-                    style={{textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px', color: '#e05555'}}
+                    style={{textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px', color: ''}}
                     aria-label='WO defective count'
                   />
                 </div>
