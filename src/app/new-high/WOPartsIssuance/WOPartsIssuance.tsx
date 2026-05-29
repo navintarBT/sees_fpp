@@ -1,5 +1,5 @@
 ﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
@@ -26,6 +26,38 @@ type SelectedRowPayload = {
   woNumber: string
   partNumber: string
   reqNumber: string
+}
+
+type FormState = {
+  parentWarehouse: string
+  parentItemNo: string
+  moveWarehouse: string
+  woNumber: string
+  internalLabel: string
+  shipmentQty: string
+  storage: string
+  office: string
+  janCode: string
+}
+
+type WOPartsIssuanceReturnState = {
+  rows: Row[]
+  form: FormState
+  activeRowId: number | null
+  isInternalLabelLocked: boolean
+  isIssueDetailLocked: boolean
+}
+
+const initialForm: FormState = {
+  parentWarehouse: '羽田製品倉庫：W0040',
+  parentItemNo: '0193090',
+  moveWarehouse: '千葉倉庫（WMS）：W002',
+  woNumber: '',
+  internalLabel: '',
+  shipmentQty: '',
+  storage: '',
+  office: '',
+  janCode: '',
 }
 
 const INTERNAL_LABEL_PRESETS: Record<string, InternalLabelPreset> = {
@@ -178,19 +210,10 @@ const initialRows: Row[] = [
 
 const WOPartsIssuance = () => {
   const navigate = useNavigate()
-  const initialForm = {
-    parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '0193090',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
-    woNumber: '',
-    internalLabel: '',
-    shipmentQty: '',
-    storage: '',
-    office: '',
-    janCode: '',
-  }
-  const [rows, setRows] = useState<Row[]>([])
-  const [form, setForm] = useState(initialForm)
+  const location = useLocation()
+  const restoredState = (location.state as WOPartsIssuanceReturnState | null) ?? null
+  const [rows, setRows] = useState<Row[]>(restoredState?.rows ?? [])
+  const [form, setForm] = useState<FormState>(restoredState?.form ?? initialForm)
   const [showDetailConfirm, setShowDetailConfirm] = useState(false)
   const [showNoSelectionAlert, setShowNoSelectionAlert] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -203,10 +226,10 @@ const WOPartsIssuance = () => {
   const woNumberInputRef = useRef<HTMLInputElement | null>(null)
   const internalLabelInputRef = useRef<HTMLInputElement | null>(null)
   const shipmentQtyInputRef = useRef<HTMLInputElement | null>(null)
-  const [isInternalLabelLocked, setIsInternalLabelLocked] = useState(true)
-  const [isIssueDetailLocked, setIsIssueDetailLocked] = useState(true)
+  const [isInternalLabelLocked, setIsInternalLabelLocked] = useState(restoredState?.isInternalLabelLocked ?? true)
+  const [isIssueDetailLocked, setIsIssueDetailLocked] = useState(restoredState?.isIssueDetailLocked ?? true)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-  const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [activeRowId, setActiveRowId] = useState<number | null>(restoredState?.activeRowId ?? null)
   const sourceRowsRef = useRef<Row[]>(initialRows)
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
@@ -383,6 +406,14 @@ const WOPartsIssuance = () => {
     }
   })()
 
+  const returnState: WOPartsIssuanceReturnState = {
+    rows,
+    form,
+    activeRowId,
+    isInternalLabelLocked,
+    isIssueDetailLocked,
+  }
+
   const handleInternalLabelEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
     event.preventDefault()
@@ -404,6 +435,10 @@ const WOPartsIssuance = () => {
 
 
   useEffect(() => {
+    if (restoredState) {
+      internalLabelInputRef.current?.focus()
+      return
+    }
     woNumberInputRef.current?.focus()
   }, [])
 
@@ -727,9 +762,13 @@ const WOPartsIssuance = () => {
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        if (!selectedRowPayload) return
                         setShowDetailConfirm(false)
                         navigate('/factory/wo-parts-issuance-detail', {
-                          state: selectedRowPayload,
+                          state: {
+                            ...selectedRowPayload,
+                            returnState,
+                          },
                         })
                       }}
                     >
