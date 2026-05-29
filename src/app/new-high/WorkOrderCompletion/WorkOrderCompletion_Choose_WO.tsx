@@ -35,9 +35,8 @@ const WorkOrderCompletion_Choose_WO = () => {
   }))
   const activeRowId = rows.find((row) => row.woNumber === selectedWoNumber)?.id ?? null
 
-  const openWoLoadConfirm = (woNumber: string) => {
+  const selectWoNumber = (woNumber: string) => {
     setSelectedWoNumber(woNumber)
-    setShowWoLoadConfirm(true)
   }
 
   const completeWoSelection = () => {
@@ -82,7 +81,7 @@ const WorkOrderCompletion_Choose_WO = () => {
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               isRowActive={(_rowKey, row) => row.woNumber === selectedWoNumber}
-              onRowActivate={(_rowKey, row) => openWoLoadConfirm(row.woNumber)}
+              onRowActivate={(_rowKey, row) => selectWoNumber(row.woNumber)}
             />
 
             <ActionFooter columns={4}>

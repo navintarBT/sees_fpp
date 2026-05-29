@@ -17,22 +17,44 @@ type SelectedRowPayload = {
   reqNumber: string
 }
 
+type WOPartsIssuanceReturnState = {
+  rows: unknown[]
+  form: {
+    parentWarehouse: string
+    parentItemNo: string
+    moveWarehouse: string
+    woNumber: string
+    internalLabel: string
+    shipmentQty: string
+    storage: string
+    office: string
+    janCode: string
+  }
+  activeRowId: number | null
+  isInternalLabelLocked: boolean
+  isIssueDetailLocked: boolean
+}
+
+type DetailLocationState = SelectedRowPayload & {
+  returnState?: WOPartsIssuanceReturnState
+}
+
 const WOPartsIssuanceDetail = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const selectedRow = (location.state as SelectedRowPayload | null) ?? null
+  const selectedRow = (location.state as DetailLocationState | null) ?? null
   const [rows, setRows] = useState<Row[]>([
     {
       id: 1,
       Interior: 'LOC-001',
-      office:'Fxxxxx', 
+      office:'Fxxx', 
       numOfShipments: '8',
       lot: 'LOT-0130',
     },
     {
       id: 2,
-      Interior: 'LOC-00',
-      office:'Fxxxxx', 
+      Interior: 'LOC-001',
+      office:'Fxxx', 
       numOfShipments: '2',
       lot: 'LOT-0202',
     },
@@ -423,7 +445,9 @@ const WOPartsIssuanceDetail = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowDeleteConfirm(false)
-                        navigate('/factory/wo-parts-issuance')
+                        navigate('/factory/wo-parts-issuance', {
+                          state: selectedRow?.returnState,
+                        })
                       }}
                     >
                       はい
@@ -449,7 +473,9 @@ const WOPartsIssuanceDetail = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/wo-parts-issuance')
+                        navigate('/factory/wo-parts-issuance', {
+                          state: selectedRow?.returnState,
+                        })
                       }}
                     >
                       {'\u306f\u3044'}
