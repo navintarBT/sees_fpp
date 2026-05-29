@@ -29,7 +29,7 @@ type SelectedRowPayload = {
 }
 
 const INTERNAL_LABEL_PRESETS: Record<string, InternalLabelPreset> = {
-  '部品001 LOT0130': {
+  '部品001 LOT-0130': {
     shipmentQty: '8',
     storage: 'LOC-001',
     office: 'Fxxx',
@@ -496,7 +496,7 @@ const WOPartsIssuance = () => {
                 <label>WO番号</label>
                 <input
                   ref={woNumberInputRef}
-                  style={{textAlign: 'center'}}
+                  style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
                   value={form.woNumber}
                   onChange={(e) => setForm({...form, woNumber: e.target.value})}
                   className='set-small'
@@ -516,7 +516,7 @@ const WOPartsIssuance = () => {
                   value={form.internalLabel}
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                   onKeyDown={handleInternalLabelEnter}
-                  style={{textAlign: 'center'}}
+                  style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
                 />
               </div>
               <div className='set-row'>
@@ -526,7 +526,7 @@ const WOPartsIssuance = () => {
                   disabled={isIssueDetailLocked}
                   value={form.shipmentQty}
                   onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
-                  style={{textAlign: 'center'}}
+                  style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
                 />
               </div>
               <div className='set-row'>

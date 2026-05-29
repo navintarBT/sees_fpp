@@ -169,6 +169,8 @@ const WOPartsIssuanceHandInputPage = () => {
             width: '100%',
             height: '100%',
             border: 0,
+            outline: 'none',
+            boxShadow: 'none',
             background: 'transparent',
             font: 'inherit',
             textAlign: 'center',
@@ -202,7 +204,7 @@ const WOPartsIssuanceHandInputPage = () => {
                 <label>{'\u54c1\u756a'}</label>
                 <input
                   ref={itemInputRef}
-                  style={{textAlign: 'center'}}
+                  style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
                   value={parentItem}
                   onChange={(e) => setParentItem(e.target.value)}
                   onKeyDown={(e) => {
