@@ -21,6 +21,35 @@ const parseDateValue = (value: string) => {
   return year && month && day ? new Date(year, month - 1, day) : new Date()
 }
 
+const parseTimeValue = (value: string) => {
+  const [hours, minutes] = value.split(':').map(Number)
+  if (!Number.isInteger(hours) || !Number.isInteger(minutes)) return null
+  return hours * 60 + minutes
+}
+
+const formatTimeValue = (value: string) => {
+  const minutes = parseTimeValue(value)
+  return minutes === null ? '' : value
+}
+
+const formatDuration = (minutes: number) => {
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  return {
+    hours: hours.toString(),
+    minutes: mins.toString().padStart(2, '0'),
+  }
+}
+
+const calculateDuration = (start: string, end: string) => {
+  const startMinutes = parseTimeValue(start)
+  const endMinutes = parseTimeValue(end)
+  if (startMinutes === null || endMinutes === null) return null
+  const diff = endMinutes - startMinutes
+  if (diff < 0) return null
+  return formatDuration(diff)
+}
+
 const getCalendarDays = (monthDate: Date) => {
   const year = monthDate.getFullYear()
   const month = monthDate.getMonth()
@@ -118,6 +147,38 @@ const DEFAULT_ROWS: Row[] = [
     itemNo: 'h',
     itemName: '製品h',
   },
+  {
+    id: 9,
+    woNo: 'wo-10',
+    itemNo: 'a',
+    itemName: '製品a',
+    targetTime: '50',
+    acceptedQty: '9',
+    defectiveQty: '1',
+    opOrder: '10',
+    opDesc: '研磨3',
+    processStatus: '90',
+    remarks: 'xxxxx',
+  },
+  {
+    id: 10,
+    woNo: 'wo-20',
+    itemNo: 'b',
+    itemName: '製品b',
+    targetTime: '50',
+    acceptedQty: '3',
+    defectiveQty: '',
+    opOrder: '10',
+    opDesc: '研磨3',
+    processStatus: '',
+    remarks: '',
+  },
+  {
+    id: 11,
+    woNo: 'wo-30',
+    itemNo: 'c',
+    itemName: '製品c',
+  },
 ]
 
 const WorkOrderTimeRegistrationGosen = () => {
@@ -157,6 +218,10 @@ const WorkOrderTimeRegistrationGosen = () => {
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [workStartTime, setWorkStartTime] = useState('')
+  const [workEndTime, setWorkEndTime] = useState('')
+  const [workDurationHours, setWorkDurationHours] = useState('')
+  const [workDurationMinutes, setWorkDurationMinutes] = useState('')
 
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
@@ -228,6 +293,28 @@ const WorkOrderTimeRegistrationGosen = () => {
     })
   }
 
+  const updateWorkDuration = (start: string, end: string) => {
+    const duration = calculateDuration(start, end)
+    if (duration) {
+      setWorkDurationHours(duration.hours)
+      setWorkDurationMinutes(duration.minutes)
+      return
+    }
+    setWorkDurationHours('')
+    setWorkDurationMinutes('')
+  }
+
+  useEffect(() => {
+    const duration = calculateDuration(workStartTime, workEndTime)
+    if (duration) {
+      setWorkDurationHours(duration.hours)
+      setWorkDurationMinutes(duration.minutes)
+      return
+    }
+    setWorkDurationHours('')
+    setWorkDurationMinutes('')
+  }, [workStartTime, workEndTime])
+
   const updateRowField = (
     rowId: number,
     field: keyof Omit<Row, 'id' | 'woNo'>,
@@ -243,14 +330,54 @@ const WorkOrderTimeRegistrationGosen = () => {
   }
 
   useEffect(() => {
-    const state = location.state as { selectedWoNumbers?: string[] } | null
+    const state = location.state as {
+      selectedWoNumbers?: string[]
+      selectedRows?: Array<{ id: number; woNumber: string; orderQuantity: number }>
+    } | null
     const selectedWoNumbers = state?.selectedWoNumbers
+    const selectedRows = state?.selectedRows
+
+    if (Array.isArray(selectedRows) && selectedRows.length > 0) {
+      const mappedRows: Row[] = selectedRows.map((row) => ({
+        id: row.id,
+        woNo: row.woNumber,
+        itemNo: '',
+        itemName: '',
+        targetTime: '',
+        acceptedQty: '',
+        defectiveQty: '',
+        opOrder: '',
+        opDesc: '',
+        processStatus: '',
+        remarks: '',
+      }))
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedWoNumbers ?? []))
+      setRows(mappedRows)
+      saveRowsToStorage(mappedRows)
+      return
+    }
 
     if (Array.isArray(selectedWoNumbers) && selectedWoNumbers.length > 0) {
       sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedWoNumbers))
       const matchedRows = DEFAULT_ROWS.filter((row) => selectedWoNumbers.includes(row.woNo))
-      setRows(matchedRows)
-      saveRowsToStorage(matchedRows)
+      const missingRows = selectedWoNumbers
+        .filter((woNo) => !matchedRows.some((row) => row.woNo === woNo))
+        .map((woNo, index) => ({
+          id: Date.now() + index,
+          woNo,
+          itemNo: '',
+          itemName: '',
+          targetTime: '',
+          acceptedQty: '',
+          defectiveQty: '',
+          opOrder: '',
+          opDesc: '',
+          processStatus: '',
+          remarks: '',
+        }))
+      const allRows = [...matchedRows, ...missingRows]
+      setRows(allRows)
+      saveRowsToStorage(allRows)
     } else {
       const savedRows = sessionStorage.getItem(SESSION_STORAGE_ROWS_KEY)
       if (savedRows) {
@@ -273,8 +400,24 @@ const WorkOrderTimeRegistrationGosen = () => {
             const validSelection = parsed.filter((item): item is string => typeof item === 'string')
             if (validSelection.length > 0) {
               const matchedRows = DEFAULT_ROWS.filter((row) => validSelection.includes(row.woNo))
-              setRows(matchedRows)
-              saveRowsToStorage(matchedRows)
+              const missingRows = validSelection
+                .filter((woNo) => !matchedRows.some((row) => row.woNo === woNo))
+                .map((woNo, index) => ({
+                  id: Date.now() + index,
+                  woNo,
+                  itemNo: '',
+                  itemName: '',
+                  targetTime: '',
+                  acceptedQty: '',
+                  defectiveQty: '',
+                  opOrder: '',
+                  opDesc: '',
+                  processStatus: '',
+                  remarks: '',
+                }))
+              const allRows = [...matchedRows, ...missingRows]
+              setRows(allRows)
+              saveRowsToStorage(allRows)
             }
           }
         } catch {
@@ -595,8 +738,34 @@ const WorkOrderTimeRegistrationGosen = () => {
                       </label>
                     </div>
                     <ActionFooter columns={2}>
-                      <button className='set-btnnew_high set-primary'>作業開始</button>
-                      <button className='set-btnnew_high set-success'>作業終了</button>
+                      <button
+                        className='set-btnnew_high set-primary'
+                        type='button'
+                        onClick={() => {
+                          const now = new Date()
+                          const hours = now.getHours().toString().padStart(2, '0')
+                          const minutes = now.getMinutes().toString().padStart(2, '0')
+                          const value = `${hours}:${minutes}`
+                          setWorkStartTime(value)
+                          updateWorkDuration(value, workEndTime)
+                        }}
+                      >
+                        作業開始
+                      </button>
+                      <button
+                        className='set-btnnew_high set-success'
+                        type='button'
+                        onClick={() => {
+                          const now = new Date()
+                          const hours = now.getHours().toString().padStart(2, '0')
+                          const minutes = now.getMinutes().toString().padStart(2, '0')
+                          const value = `${hours}:${minutes}`
+                          setWorkEndTime(value)
+                          updateWorkDuration(workStartTime, value)
+                        }}
+                      >
+                        作業終了
+                      </button>
                     </ActionFooter>
                   </div>
                 </div>
@@ -616,22 +785,32 @@ const WorkOrderTimeRegistrationGosen = () => {
               <div className='wot-footer-row'>
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>開始</label>
-                  <input className='wot-grid-value' type='time' />
+                  <input
+                    className='wot-grid-value'
+                    type='time'
+                    value={workStartTime}
+                    onChange={(e) => setWorkStartTime(e.target.value)}
+                  />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>終了</label>
-                  <input className='wot-grid-value' type='time' />
+                  <input
+                    className='wot-grid-value'
+                    type='time'
+                    value={workEndTime}
+                    onChange={(e) => setWorkEndTime(e.target.value)}
+                  />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>作業時間</label>
-                  <input className='wot-grid-value' placeholder='時間' />
+                  <input className='wot-grid-value' value={workDurationHours} readOnly placeholder='時間' />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'></label>
-                  <input className='wot-grid-value addspanto' placeholder='分' />
+                  <input className='wot-grid-value addspanto' value={workDurationMinutes} readOnly placeholder='分' />
                 </div>
 
                 <div className='wot-footer-item'>

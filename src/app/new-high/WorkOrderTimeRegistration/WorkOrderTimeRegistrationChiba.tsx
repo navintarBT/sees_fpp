@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 import { FaRegCalendarAlt } from 'react-icons/fa'
@@ -19,6 +19,30 @@ const toDateValue = (date: Date) => (
 const parseDateValue = (value: string) => {
   const [year, month, day] = value.split('-').map(Number)
   return year && month && day ? new Date(year, month - 1, day) : new Date()
+}
+
+const parseTimeValue = (value: string) => {
+  const [hours, minutes] = value.split(':').map(Number)
+  if (!Number.isInteger(hours) || !Number.isInteger(minutes)) return null
+  return hours * 60 + minutes
+}
+
+const formatDuration = (minutes: number) => {
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  return {
+    hours: hours.toString(),
+    minutes: mins.toString().padStart(2, '0'),
+  }
+}
+
+const calculateDuration = (start: string, end: string) => {
+  const startMinutes = parseTimeValue(start)
+  const endMinutes = parseTimeValue(end)
+  if (startMinutes === null || endMinutes === null) return null
+  const diff = endMinutes - startMinutes
+  if (diff < 0) return null
+  return formatDuration(diff)
 }
 
 const getCalendarDays = (monthDate: Date) => {
@@ -52,58 +76,60 @@ type Row = {
   remarks?: string
 }
 
+const DEFAULT_ROWS: Row[] = [
+  {
+    id: 1,
+    woNo: 'wo-1',
+    itemNo: 'a',
+    itemName: '製品a',
+  },
+  {
+    id: 2,
+    woNo: 'wo-2',
+    itemNo: 'b',
+    itemName: '製品b',
+  },
+  {
+    id: 3,
+    woNo: 'wo-3',
+    itemNo: 'c',
+    itemName: '製品c',
+  },
+  {
+    id: 4,
+    woNo: 'wo-4',
+    itemNo: 'd',
+    itemName: '製品d',
+  },
+  {
+    id: 5,
+    woNo: 'wo-5',
+    itemNo: 'e',
+    itemName: '製品e',
+  },
+  {
+    id: 6,
+    woNo: 'wo-6',
+    itemNo: 'f',
+    itemName: '製品f',
+  },
+  {
+    id: 7,
+    woNo: 'wo-7',
+    itemNo: 'g',
+    itemName: '製品g',
+  },
+  {
+    id: 8,
+    woNo: 'wo-8',
+    itemNo: 'h',
+    itemName: '製品h',
+  },
+]
+
 const WorkOrderTimeRegistrationChiba = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      woNo: 'wo-1',
-      itemNo: 'a',
-      itemName: '製品a',
-    },
-    {
-      id: 2,
-      woNo: 'wo-2',
-      itemNo: 'b',
-      itemName: '製品b',
-    },
-    {
-      id: 3,
-      woNo: 'wo-3',
-      itemNo: 'c',
-      itemName: '製品c',
-    },
-    {
-      id: 4,
-      woNo: 'wo-4',
-      itemNo: 'd',
-      itemName: '製品d',
-    },
-    {
-      id: 5,
-      woNo: 'wo-5',
-      itemNo: 'e',
-      itemName: '製品e',
-    },
-    {
-      id: 6,
-      woNo: 'wo-6',
-      itemNo: 'f',
-      itemName: '製品f',
-    },
-    {
-      id: 7,
-      woNo: 'wo-7',
-      itemNo: 'g',
-      itemName: '製品g',
-    },
-    {
-      id: 8,
-      woNo: 'wo-8',
-      itemNo: 'h',
-      itemName: '製品h',
-    },
-  ])
+  const [rows, setRows] = useState<Row[]>(DEFAULT_ROWS)
 
   const todayValue = toDateValue(new Date())
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
@@ -132,7 +158,13 @@ const WorkOrderTimeRegistrationChiba = () => {
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showRegisterClearConfirm, setShowRegisterClearConfirm] = useState(false)
+  const [showRegisterKeepConfirm, setShowRegisterKeepConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [workStartTime, setWorkStartTime] = useState('')
+  const [workEndTime, setWorkEndTime] = useState('')
+  const [workDurationHours, setWorkDurationHours] = useState('')
+  const [workDurationMinutes, setWorkDurationMinutes] = useState('')
 
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
@@ -142,6 +174,8 @@ const WorkOrderTimeRegistrationChiba = () => {
     showNoSelectionConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
+    showRegisterClearConfirm ||
+    showRegisterKeepConfirm ||
     showBackConfirm
 
   const closeAllModals = () => {
@@ -149,6 +183,8 @@ const WorkOrderTimeRegistrationChiba = () => {
     setShowNoSelectionConfirm(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
+    setShowRegisterClearConfirm(false)
+    setShowRegisterKeepConfirm(false)
     setShowBackConfirm(false)
   }
 
@@ -169,6 +205,33 @@ const WorkOrderTimeRegistrationChiba = () => {
   const clearAll = () => {
     setRows([])
     setCheckedRowIds([])
+  }
+
+  const handleRegisterClear = () => {
+    setShowRegisterClearConfirm(true)
+  }
+
+  const confirmRegisterClear = () => {
+    // Register the data (in real app, would call API)
+    setShowRegisterClearConfirm(false)
+    // Clear all rows and reset
+    clearAll()
+    // Show success message
+    setShowCompleteConfirm(true)
+  }
+
+  const handleRegisterKeep = () => {
+    setShowRegisterKeepConfirm(true)
+  }
+
+  const confirmRegisterKeep = () => {
+    // Register the data (in real app, would call API)
+    setShowRegisterKeepConfirm(false)
+    // Clear current rows but keep WO data for more entries
+    setRows([])
+    setCheckedRowIds([])
+    // Show success message
+    setShowCompleteConfirm(true)
   }
 
   const resetTableScroll = () => {
@@ -202,6 +265,68 @@ const WorkOrderTimeRegistrationChiba = () => {
   const updateRowField = (rowId: number, field: keyof Omit<Row, 'id' | 'woNo'>, value: string) => {
     setRows((prevRows) => prevRows.map((row) => (row.id === rowId ? { ...row, [field]: value } : row)))
   }
+
+  const updateWorkDuration = (start: string, end: string) => {
+    const duration = calculateDuration(start, end)
+    if (duration) {
+      setWorkDurationHours(duration.hours)
+      setWorkDurationMinutes(duration.minutes)
+      return
+    }
+    setWorkDurationHours('')
+    setWorkDurationMinutes('')
+  }
+
+  useEffect(() => {
+    updateWorkDuration(workStartTime, workEndTime)
+  }, [workStartTime, workEndTime])
+
+  const location = useLocation()
+  const storedRowsKey = 'workOrderTimeRegistrationChibaRows'
+  const sessionKey = 'workOrderTimeRegistrationSelectedWoNumbers'
+
+  useEffect(() => {
+    const state = location.state as { selectedWoNumbers?: string[] } | null
+    const selectedWoNumbers = state?.selectedWoNumbers
+
+    if (Array.isArray(selectedWoNumbers) && selectedWoNumbers.length > 0) {
+      sessionStorage.setItem(sessionKey, JSON.stringify(selectedWoNumbers))
+      const matchedRows = DEFAULT_ROWS.filter((row) => selectedWoNumbers.includes(row.woNo))
+      setRows(matchedRows)
+      sessionStorage.setItem(storedRowsKey, JSON.stringify(matchedRows))
+      return
+    }
+
+    const savedRows = sessionStorage.getItem(storedRowsKey)
+    if (savedRows) {
+      try {
+        const parsedRows = JSON.parse(savedRows)
+        if (Array.isArray(parsedRows)) {
+          setRows(parsedRows.filter((item): item is Row => item && typeof item === 'object' && typeof item.id === 'number'))
+          return
+        }
+      } catch {
+        // ignore invalid stored rows
+      }
+    }
+
+    const savedSelection = sessionStorage.getItem(sessionKey)
+    if (savedSelection) {
+      try {
+        const parsedSelection = JSON.parse(savedSelection)
+        if (Array.isArray(parsedSelection)) {
+          const validSelection = parsedSelection.filter((item): item is string => typeof item === 'string')
+          if (validSelection.length > 0) {
+            const matchedRows = DEFAULT_ROWS.filter((row) => validSelection.includes(row.woNo))
+            setRows(matchedRows)
+            sessionStorage.setItem(storedRowsKey, JSON.stringify(matchedRows))
+          }
+        }
+      } catch {
+        // ignore invalid stored selection
+      }
+    }
+  }, [location.state])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -383,7 +508,17 @@ const WorkOrderTimeRegistrationChiba = () => {
 
                 <div className='wot-header-actions'>
                   <div className='wot-top-row'>
-                    <button className='set-btnnew_high set-primary'>WO選択</button>
+                    <button
+                      className='set-btnnew_high set-primary'
+                      type='button'
+                      onClick={() =>
+                        navigate('/factory/work-order-time-registration-choose', {
+                          state: { targetPath: '/factory/work-order-time-registration-chiba' },
+                        })
+                      }
+                    >
+                      WO選択
+                    </button>
                   </div>
                   <div className='wot-radio-container'>
                     <div className='wot-radio-title'>登録時間種類</div>
@@ -402,8 +537,32 @@ const WorkOrderTimeRegistrationChiba = () => {
                       </label>
                     </div>
                     <ActionFooter columns={2}>
-                      <button className='set-btnnew_high set-primary'>作業開始</button>
-                      <button className='set-btnnew_high set-success'>作業終了</button>
+                      <button
+                      className='set-btnnew_high set-primary'
+                      type='button'
+                      onClick={() => {
+                        const now = new Date()
+                        const hours = now.getHours().toString().padStart(2, '0')
+                        const minutes = now.getMinutes().toString().padStart(2, '0')
+                        const value = `${hours}:${minutes}`
+                        setWorkStartTime(value)
+                      }}
+                    >
+                      作業開始
+                    </button>
+                      <button
+                        className='set-btnnew_high set-success'
+                        type='button'
+                        onClick={() => {
+                          const now = new Date()
+                          const hours = now.getHours().toString().padStart(2, '0')
+                          const minutes = now.getMinutes().toString().padStart(2, '0')
+                          const value = `${hours}:${minutes}`
+                          setWorkEndTime(value)
+                        }}
+                      >
+                        作業終了
+                      </button>
                     </ActionFooter>
                   </div>
                 </div>
@@ -423,22 +582,32 @@ const WorkOrderTimeRegistrationChiba = () => {
               <div className='wot-footer-row'>
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>開始</label>
-                  <input className='wot-grid-value2' type='time' />
+                  <input
+                    className='wot-grid-value2'
+                    type='time'
+                    value={workStartTime}
+                    onChange={(e) => setWorkStartTime(e.target.value)}
+                  />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>終了</label>
-                  <input className='wot-grid-value2' type='time' />
+                  <input
+                    className='wot-grid-value2'
+                    type='time'
+                    value={workEndTime}
+                    onChange={(e) => setWorkEndTime(e.target.value)}
+                  />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>作業時間</label>
-                  <input className='wot-grid-value2' placeholder='時間' />
+                  <input className='wot-grid-value2' value={workDurationHours} readOnly placeholder='時間' />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'></label>
-                  <input className='wot-grid-value2 addspanto' placeholder='分' />
+                  <input className='wot-grid-value2 addspanto' value={workDurationMinutes} readOnly placeholder='分' />
                 </div>
               </div>
             </div>
@@ -474,11 +643,13 @@ const WorkOrderTimeRegistrationChiba = () => {
            
               <button
                 className='set-btn set-success'
+                onClick={handleRegisterClear}
               >
                 登録(WOクリア)
               </button>
               <button
                 className='set-btn set-hand-input-btn'
+                onClick={handleRegisterKeep}
               >
                 登録(WO維持)
               </button>
@@ -570,6 +741,52 @@ const WorkOrderTimeRegistrationChiba = () => {
                     onClick={() => setShowCompleteConfirm(false)}
                   >
                     OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showRegisterClearConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>実績を登録してWOデータを破棄しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={confirmRegisterClear}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowRegisterClearConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showRegisterKeepConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>実績を登録してWOデータを保持しますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={confirmRegisterKeep}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowRegisterKeepConfirm(false)}
+                  >
+                    いいえ
                   </button>
                 </div>
               </div>
