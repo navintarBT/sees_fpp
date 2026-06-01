@@ -1297,10 +1297,6 @@ input.wot-grid-value {
   gap: 20px;
 }
 
-.addspanto {
-  margin-top: 43.5px;
-}
-
 .wot-footer-label,
 .wot-footer-value {
   font-size: 28px;
@@ -1343,6 +1339,24 @@ input.wot-grid-value {
 
 .col-move-SetMis {
   min-width: 130px;
+}
+/* #################################### work-order-choose-table */
+
+.work-order-choose-table {
+  width: 102%;
+  grid-template-columns: 45px minmax(0, 1fr) 300px minmax(0, 1fr) minmax(0, 1fr) !important;
+}
+
+.work-order-choose-table .tf-tableCell {
+  min-width: 0;
+}
+
+.work-order-choose-table .col-arrow-head {
+  min-width: 45px;
+}
+
+.work-order-choose-table .tf-tableRow .col-arrow {
+  min-width: 45px;
 }
 
 /* ####################################table dispatch ########################################### */
@@ -1473,22 +1487,6 @@ input.wot-grid-value {
   min-width: 200px;
 }
 
-.work-order-choose-table {
-  width: 102%;
-  grid-template-columns: 45px minmax(0, 1fr) minmax(0, 1fr) !important;
-}
-
-.work-order-choose-table .tf-tableCell {
-  min-width: 0;
-}
-
-.work-order-choose-table .col-arrow-head {
-  min-width: 45px;
-}
-
-.work-order-choose-table .tf-tableRow .col-arrow {
-  min-width: 45px;
-}
 
 .delivery-table .col-item {
   min-width: 796px;

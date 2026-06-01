@@ -809,8 +809,8 @@ const WorkOrderTimeRegistrationGosen = () => {
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'></label>
-                  <input className='wot-grid-value addspanto' value={workDurationMinutes} readOnly placeholder='分' />
+                  <label className='wot-footer-label'>&nbsp;</label>
+                  <input className='wot-grid-value' value={workDurationMinutes} readOnly placeholder='分' />
                 </div>
 
                 <div className='wot-footer-item'>
@@ -819,6 +819,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                 </div>
 
                 <div className='wot-footer-item'>
+                  <label className='wot-footer-label'>&nbsp;</label>
                   <input className='wot-grid-value addspanto' placeholder='分' />
                 </div>
               </div>

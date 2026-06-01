@@ -5,6 +5,7 @@ import { TableSection, type TableColumn as TFTableColumn } from '../../component
 import { FaRegCalendarAlt } from 'react-icons/fa'
 
 const formatWoDate = (value: string) => {
+  if (!value) return 'yy/mm/dd'
   const [year, month, day] = value.split('-')
   if (!year || !month || !day) return 'yy/mm/dd'
   return `${year}/${month}/${day}`
@@ -62,69 +63,23 @@ const getCalendarDays = (monthDate: Date) => {
   })
 }
 
+// Row type - only WoNo, 品番, 品名 are needed (合格数から右の項目は不要)
 type Row = {
   id: number
   woNo: string
   itemNo: string
   itemName: string
-  targetTime?: string
-  acceptedQty?: string
-  defectiveQty?: string
-  opOrder?: string
-  opDesc?: string
-  processStatus?: string
-  remarks?: string
 }
 
 const DEFAULT_ROWS: Row[] = [
-  {
-    id: 1,
-    woNo: 'wo-1',
-    itemNo: 'a',
-    itemName: '製品a',
-  },
-  {
-    id: 2,
-    woNo: 'wo-2',
-    itemNo: 'b',
-    itemName: '製品b',
-  },
-  {
-    id: 3,
-    woNo: 'wo-3',
-    itemNo: 'c',
-    itemName: '製品c',
-  },
-  {
-    id: 4,
-    woNo: 'wo-4',
-    itemNo: 'd',
-    itemName: '製品d',
-  },
-  {
-    id: 5,
-    woNo: 'wo-5',
-    itemNo: 'e',
-    itemName: '製品e',
-  },
-  {
-    id: 6,
-    woNo: 'wo-6',
-    itemNo: 'f',
-    itemName: '製品f',
-  },
-  {
-    id: 7,
-    woNo: 'wo-7',
-    itemNo: 'g',
-    itemName: '製品g',
-  },
-  {
-    id: 8,
-    woNo: 'wo-8',
-    itemNo: 'h',
-    itemName: '製品h',
-  },
+  { id: 1, woNo: 'wo-1', itemNo: 'a', itemName: '製品a' },
+  { id: 2, woNo: 'wo-2', itemNo: 'b', itemName: '製品b' },
+  { id: 3, woNo: 'wo-3', itemNo: 'c', itemName: '製品c' },
+  { id: 4, woNo: 'wo-4', itemNo: 'd', itemName: '製品d' },
+  { id: 5, woNo: 'wo-5', itemNo: 'e', itemName: '製品e' },
+  { id: 6, woNo: 'wo-6', itemNo: 'f', itemName: '製品f' },
+  { id: 7, woNo: 'wo-7', itemNo: 'g', itemName: '製品g' },
+  { id: 8, woNo: 'wo-8', itemNo: 'h', itemName: '製品h' },
 ]
 
 const WorkOrderTimeRegistrationChiba = () => {
@@ -156,36 +111,33 @@ const WorkOrderTimeRegistrationChiba = () => {
 
   const [showDeleteSelectedConfirm, setShowDeleteSelectedConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
-  const [showClearConfirm, setShowClearConfirm] = useState(false)
-  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [showRegisterClearConfirm, setShowRegisterClearConfirm] = useState(false)
   const [showRegisterKeepConfirm, setShowRegisterKeepConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [workStartTime, setWorkStartTime] = useState('')
   const [workEndTime, setWorkEndTime] = useState('')
   const [workDurationHours, setWorkDurationHours] = useState('')
   const [workDurationMinutes, setWorkDurationMinutes] = useState('')
-
+  const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
 
   const isAnyModalOpen =
     showDeleteSelectedConfirm ||
     showNoSelectionConfirm ||
-    showClearConfirm ||
-    showCompleteConfirm ||
     showRegisterClearConfirm ||
     showRegisterKeepConfirm ||
-    showBackConfirm
+    showBackConfirm ||
+    showCompleteConfirm
 
   const closeAllModals = () => {
     setShowDeleteSelectedConfirm(false)
     setShowNoSelectionConfirm(false)
-    setShowClearConfirm(false)
-    setShowCompleteConfirm(false)
     setShowRegisterClearConfirm(false)
     setShowRegisterKeepConfirm(false)
     setShowBackConfirm(false)
+    setShowCompleteConfirm(false)
   }
 
   const handleDeleteSelected = () => {
@@ -207,20 +159,32 @@ const WorkOrderTimeRegistrationChiba = () => {
     setCheckedRowIds([])
   }
 
+  // 登録(WOクリア) - Register and clear WO data
   const handleRegisterClear = () => {
+    if (rows.length === 0) {
+      setShowCompleteConfirm(true)
+      return
+    }
     setShowRegisterClearConfirm(true)
   }
 
   const confirmRegisterClear = () => {
-    // Register the data (in real app, would call API)
+    // Register the data (in real app, would call API with workStartTime, workEndTime, workDuration)
     setShowRegisterClearConfirm(false)
-    // Clear all rows and reset
     clearAll()
-    // Show success message
+    setWorkStartTime('')
+    setWorkEndTime('')
+    setWorkDurationHours('')
+    setWorkDurationMinutes('')
     setShowCompleteConfirm(true)
   }
 
+  // 登録(WO維持) - Register and keep WO data
   const handleRegisterKeep = () => {
+    if (rows.length === 0) {
+      setShowCompleteConfirm(true)
+      return
+    }
     setShowRegisterKeepConfirm(true)
   }
 
@@ -230,7 +194,10 @@ const WorkOrderTimeRegistrationChiba = () => {
     // Clear current rows but keep WO data for more entries
     setRows([])
     setCheckedRowIds([])
-    // Show success message
+    setWorkStartTime('')
+    setWorkEndTime('')
+    setWorkDurationHours('')
+    setWorkDurationMinutes('')
     setShowCompleteConfirm(true)
   }
 
@@ -340,7 +307,7 @@ const WorkOrderTimeRegistrationChiba = () => {
 
       if (event.key === 'F2') {
         event.preventDefault()
-        setShowCompleteConfirm(true)
+        handleRegisterClear()
         return
       }
 
@@ -353,8 +320,24 @@ const WorkOrderTimeRegistrationChiba = () => {
     return () => {
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [checkedRowIds, isAnyModalOpen])
+  }, [checkedRowIds, isAnyModalOpen, rows.length])
 
+  // 実績登録 - Register only, keep data on screen
+  const handleRegister = () => {
+    if (rows.length === 0) {
+      setShowCompleteConfirm(true)
+      return
+    }
+    setShowRegisterConfirm(true) // ต้องเพิ่ม modal นี้
+  }
+
+  const confirmRegister = () => {
+    // Register the data (in real app, would call API)
+    setShowRegisterConfirm(false)
+    setShowCompleteConfirm(true)
+  }
+
+  // Table columns - only checkbox, WoNo, 品番, 品名 (合格数から右の項目は不要)
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'check',
@@ -376,15 +359,21 @@ const WorkOrderTimeRegistrationChiba = () => {
           className='tf-tableCheckbox'
           checked={checkedRowIds.includes(row.id)}
           onChange={(e) => {
-            e.stopPropagation();  // Stop propagation here
-            toggleRowChecked(row.id, e.target.checked);
+            e.stopPropagation()
+            toggleRowChecked(row.id, e.target.checked)
           }}
           onClick={(e) => e.stopPropagation()}
           aria-label={`Select row ${row.id}`}
         />
       ),
     },
-    { key: 'woNo', headClassName: 'col-wo', cellClassName: 'col-wo', header: 'WoNo', render: (row) => row.woNo },
+    {
+      key: 'woNo',
+      headClassName: 'col-wo',
+      cellClassName: 'col-wo',
+      header: 'WoNo',
+      render: (row) => row.woNo
+    },
     {
       key: 'itemNo',
       headClassName: 'col-item-no',
@@ -415,7 +404,6 @@ const WorkOrderTimeRegistrationChiba = () => {
         />
       ),
     },
-
   ]
 
   return (
@@ -429,12 +417,12 @@ const WorkOrderTimeRegistrationChiba = () => {
                 {/* Left side: Info Grid */}
                 <div className='wot-info-soll box-padding-innput'>
                   <div className='wot-info-grid wot-info-grid-2'>
-                    <label className='wot-grid-label wot-bg-blue'>人</label>
+                    <label className='wot-grid-label '>人</label>
                     <input className='wot-grid-value2' autoFocus />
                   </div>
 
                   <div className='wot-info-grid wot-info-grid-2'>
-                    <label className='wot-grid-label wot-bg-blue'>日付</label>
+                    <label className='wot-grid-label '>日付</label>
                     <div className='hand-date-field'>
                       <input
                         readOnly
@@ -538,18 +526,18 @@ const WorkOrderTimeRegistrationChiba = () => {
                     </div>
                     <ActionFooter columns={2}>
                       <button
-                      className='set-btnnew_high set-primary'
-                      type='button'
-                      onClick={() => {
-                        const now = new Date()
-                        const hours = now.getHours().toString().padStart(2, '0')
-                        const minutes = now.getMinutes().toString().padStart(2, '0')
-                        const value = `${hours}:${minutes}`
-                        setWorkStartTime(value)
-                      }}
-                    >
-                      作業開始
-                    </button>
+                        className='set-btnnew_high set-primary'
+                        type='button'
+                        onClick={() => {
+                          const now = new Date()
+                          const hours = now.getHours().toString().padStart(2, '0')
+                          const minutes = now.getMinutes().toString().padStart(2, '0')
+                          const value = `${hours}:${minutes}`
+                          setWorkStartTime(value)
+                        }}
+                      >
+                        作業開始
+                      </button>
                       <button
                         className='set-btnnew_high set-success'
                         type='button'
@@ -581,7 +569,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='wot-footer-summary wot-radio-container'>
               <div className='wot-footer-row'>
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>開始</label>
+                  <label className='wot-footer-label '>開始</label>
                   <input
                     className='wot-grid-value2'
                     type='time'
@@ -591,7 +579,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>終了</label>
+                  <label className='wot-footer-label'>終了</label>
                   <input
                     className='wot-grid-value2'
                     type='time'
@@ -601,19 +589,19 @@ const WorkOrderTimeRegistrationChiba = () => {
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>作業時間</label>
+                  <label className='wot-footer-label'>作業時間</label>
                   <input className='wot-grid-value2' value={workDurationHours} readOnly placeholder='時間' />
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'></label>
-                  <input className='wot-grid-value2 addspanto' value={workDurationMinutes} readOnly placeholder='分' />
+                  <label className='wot-footer-label'>&nbsp;</label>
+                  <input className='wot-grid-value2' value={workDurationMinutes} readOnly placeholder='分' />
                 </div>
               </div>
             </div>
 
+            {/* Action buttons as per document: 選択行削除, 登録(WOクリア), 登録(WO維持), 戻る */}
             <ActionFooter columns={5}>
-
               <button
                 className='set-btn set-danger'
                 onClick={handleDeleteSelected}
@@ -623,64 +611,56 @@ const WorkOrderTimeRegistrationChiba = () => {
 
               <button
                 className='set-btn set-primary'
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={handleRegister}
               >
                 実績登録
               </button>
-         
-              {/* <button
-                className='set-btn set-success'
-                onClick={() => handleReleaseClick()}
-              >
-                削除
-              </button>
-              <button
-                className='set-btn set-primary set-hand-input-btn'
-                onClick={() => handleReleaseClick({ forceHandInput: true })}
-              >
-                手入力
-              </button> */}
-           
+
               <button
                 className='set-btn set-success'
                 onClick={handleRegisterClear}
               >
                 登録(WOクリア)
               </button>
+
               <button
                 className='set-btn set-hand-input-btn'
                 onClick={handleRegisterKeep}
               >
                 登録(WO維持)
               </button>
+
               <button
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
               </button>
-
             </ActionFooter>
           </div>
 
+          {/* Modals */}
           {showDeleteSelectedConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>選択された行を削除しますか？</div>
                 <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={confirmDeleteSelected}
-                  >
-                    はい
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowDeleteSelectedConfirm(false)}
-                  >
-                    いいえ
-                  </button>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmDeleteSelected}>はい</button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowDeleteSelectedConfirm(false)}>いいえ</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showRegisterConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>実績を登録しますか？</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegister}>はい</button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowRegisterConfirm(false)}>いいえ</button>
                 </div>
               </div>
             </div>
@@ -692,56 +672,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>選択行がありません。</div>
                 <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={() => setShowNoSelectionConfirm(false)}
-                  >
-                    OK
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showClearConfirm && (
-            <div className='set-modal-backdrop' role='presentation'>
-              <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>読み込みデータを破棄します。<br />宜しいですか？</div>
-                <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={() => {
-                      setShowClearConfirm(false)
-                      clearAll()
-                      resetTableScroll()
-                    }}
-                  >
-                    はい
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowClearConfirm(false)}
-                  >
-                    いいえ
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showCompleteConfirm && (
-            <div className='set-modal-backdrop' role='presentation'>
-              <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>実績を登録しました。</div>
-                <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={() => setShowCompleteConfirm(false)}
-                  >
-                    OK
-                  </button>
+                  <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoSelectionConfirm(false)}>OK</button>
                 </div>
               </div>
             </div>
@@ -753,18 +684,8 @@ const WorkOrderTimeRegistrationChiba = () => {
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>実績を登録してWOデータを破棄しますか？</div>
                 <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={confirmRegisterClear}
-                  >
-                    はい
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowRegisterClearConfirm(false)}
-                  >
-                    いいえ
-                  </button>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterClear}>はい</button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowRegisterClearConfirm(false)}>いいえ</button>
                 </div>
               </div>
             </div>
@@ -776,18 +697,20 @@ const WorkOrderTimeRegistrationChiba = () => {
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>実績を登録してWOデータを保持しますか？</div>
                 <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={confirmRegisterKeep}
-                  >
-                    はい
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowRegisterKeepConfirm(false)}
-                  >
-                    いいえ
-                  </button>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterKeep}>はい</button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowRegisterKeepConfirm(false)}>いいえ</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showCompleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>実績を登録しました。</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={() => setShowCompleteConfirm(false)}>OK</button>
                 </div>
               </div>
             </div>
@@ -808,12 +731,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                   >
                     はい
                   </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowBackConfirm(false)}
-                  >
-                    いいえ
-                  </button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowBackConfirm(false)}>いいえ</button>
                 </div>
               </div>
             </div>
