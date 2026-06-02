@@ -211,7 +211,7 @@
 }
 
 .WorkOrderTimeRegistrationChiba-table {
-  width: 100%;
+  width: 102%;
   grid-template-columns: 56px repeat(3, minmax(0, 1fr)) !important;
 }
 
@@ -239,6 +239,35 @@
   height: 100%;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
   font-size: 28px;
+}
+
+.table-cell-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  padding: 0 6px;
+  outline: none;
+  text-align: left;
+}
+
+/* Narrow specific columns in the delivery/gosen table */
+.delivery-table .tf-tableCell.col-item-no {
+  min-width: 80px;
+  max-width: 120px;
+  width: 100px;
+  padding: 0 6px;
+  justify-content: flex-start;
+}
+
+.delivery-table .tf-tableCell.col-item-name, .col-target-time, .col-qty, .col-op, .col-process, .col-remarks {
+  min-width: 120px;
+  max-width: 220px;
+  width: 160px;
+  padding: 0 6px;
+  justify-content: flex-start;
 }
 
 .tf-tableHead,
@@ -1268,10 +1297,6 @@ input.wot-grid-value {
   gap: 20px;
 }
 
-.addspanto {
-  margin-top: 43.5px;
-}
-
 .wot-footer-label,
 .wot-footer-value {
   font-size: 28px;
@@ -1314,6 +1339,24 @@ input.wot-grid-value {
 
 .col-move-SetMis {
   min-width: 130px;
+}
+/* #################################### work-order-choose-table */
+
+.work-order-choose-table {
+  width: 102%;
+  grid-template-columns: 45px minmax(0, 1fr) 300px minmax(0, 1fr) !important;
+}
+
+.work-order-choose-table .tf-tableCell {
+  min-width: 0;
+}
+
+.work-order-choose-table .col-arrow-head {
+  min-width: 45px;
+}
+
+.work-order-choose-table .tf-tableRow .col-arrow {
+  min-width: 45px;
 }
 
 /* ####################################table dispatch ########################################### */
@@ -1443,6 +1486,7 @@ input.wot-grid-value {
 .delivery-table .col-situation {
   min-width: 200px;
 }
+
 
 .delivery-table .col-item {
   min-width: 796px;
