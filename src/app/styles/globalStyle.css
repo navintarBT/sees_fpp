@@ -211,7 +211,7 @@
 }
 
 .WorkOrderTimeRegistrationChiba-table {
-  width: 100%;
+  width: 102%;
   grid-template-columns: 56px repeat(3, minmax(0, 1fr)) !important;
 }
 
@@ -1344,7 +1344,7 @@ input.wot-grid-value {
 
 .work-order-choose-table {
   width: 102%;
-  grid-template-columns: 45px minmax(0, 1fr) 300px minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-columns: 45px minmax(0, 1fr) 300px minmax(0, 1fr) !important;
 }
 
 .work-order-choose-table .tf-tableCell {

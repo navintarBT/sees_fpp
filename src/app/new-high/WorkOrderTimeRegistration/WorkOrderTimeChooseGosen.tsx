@@ -126,14 +126,7 @@ const WorkOrderTimeRegistrationChoose = () => {
             cellClassName: 'col-item-name',
             header: '品名',
             render: (row) => row.itemName,
-        },
-        {
-            key: 'orderQuantity',
-            headClassName: 'col-order-quantity',
-            cellClassName: 'col-order-quantity',
-            header: 'オーダー数量',
-            render: (row) => row.orderQuantity,
-        },
+        }
     ]
 
     return (
@@ -142,8 +135,7 @@ const WorkOrderTimeRegistrationChoose = () => {
                 <div className='mockup-frame'>
                     <div className='set-header'>WO選択</div>
                     <div className='set-body'>
-                        <div className='set-form'>
-                            {/* 作業場 filter field - according to document */}
+                        {/* <div className='set-form'>
                             <div className='wot-info-grid wot-info-grid-2' style={{ marginBottom: '16px' }}>
                                 <label className='wot-grid-label wot-bg-blue'>作業場</label>
                                 <select className='wot-grid-value2'>
@@ -153,7 +145,7 @@ const WorkOrderTimeRegistrationChoose = () => {
                                     <option value='9004'>加工班 (9004)</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> */}
 
                         <TableSection
                             columns={tableColumns}

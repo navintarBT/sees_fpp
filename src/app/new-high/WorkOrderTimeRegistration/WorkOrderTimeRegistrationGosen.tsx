@@ -332,7 +332,13 @@ const WorkOrderTimeRegistrationGosen = () => {
   useEffect(() => {
     const state = location.state as {
       selectedWoNumbers?: string[]
-      selectedRows?: Array<{ id: number; woNumber: string; orderQuantity: number }>
+      selectedRows?: Array<{
+        id: number
+        woNumber: string
+        itemNumber?: string
+        itemName?: string
+        orderQuantity?: number
+      }>
     } | null
     const selectedWoNumbers = state?.selectedWoNumbers
     const selectedRows = state?.selectedRows
@@ -341,8 +347,8 @@ const WorkOrderTimeRegistrationGosen = () => {
       const mappedRows: Row[] = selectedRows.map((row) => ({
         id: row.id,
         woNo: row.woNumber,
-        itemNo: '',
-        itemName: '',
+        itemNo: row.itemNumber ?? '',
+        itemName: row.itemName ?? '',
         targetTime: '',
         acceptedQty: '',
         defectiveQty: '',

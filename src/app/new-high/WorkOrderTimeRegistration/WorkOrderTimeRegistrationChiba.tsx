@@ -253,8 +253,38 @@ const WorkOrderTimeRegistrationChiba = () => {
   const sessionKey = 'workOrderTimeRegistrationSelectedWoNumbers'
 
   useEffect(() => {
-    const state = location.state as { selectedWoNumbers?: string[] } | null
+    const state = location.state as {
+      selectedWoNumbers?: string[]
+      selectedRows?: Array<{
+        id: number
+        woNumber: string
+        itemNumber?: string
+        itemName?: string
+        orderQuantity?: number
+      }>
+    } | null
     const selectedWoNumbers = state?.selectedWoNumbers
+    const selectedRows = state?.selectedRows
+
+    if (Array.isArray(selectedRows) && selectedRows.length > 0) {
+      const mappedRows = selectedRows.map((row) => ({
+        id: row.id,
+        woNo: row.woNumber,
+        itemNo: row.itemNumber ?? '',
+        itemName: row.itemName ?? '',
+        targetTime: '',
+        acceptedQty: '',
+        defectiveQty: '',
+        opOrder: '',
+        opDesc: '',
+        processStatus: '',
+        remarks: '',
+      }))
+      sessionStorage.setItem(sessionKey, JSON.stringify(selectedWoNumbers ?? []))
+      setRows(mappedRows)
+      sessionStorage.setItem(storedRowsKey, JSON.stringify(mappedRows))
+      return
+    }
 
     if (Array.isArray(selectedWoNumbers) && selectedWoNumbers.length > 0) {
       sessionStorage.setItem(sessionKey, JSON.stringify(selectedWoNumbers))
