@@ -707,6 +707,7 @@ const Equipment = () => {
                     onClick={() => {
                       setShowCompleteConfirm(false);
                       clearAfterComplete();
+                      focusJanCodeInput();
                     }}
                   >
                     YES
