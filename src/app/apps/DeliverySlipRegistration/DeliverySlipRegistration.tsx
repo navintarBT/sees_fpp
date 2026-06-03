@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+﻿import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlay } from "react-icons/fa";
 import { ActionFooter } from "../../components/ActionFooter/ActionFooter";
@@ -83,6 +83,8 @@ const DeliverySlipRegistration = () => {
   const [showDeleteRowConfirm, setShowDeleteRowConfirm] = useState(false);
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showCompleteRegistrationConfirm, setShowCompleteRegistrationConfirm] =
+    useState(false);
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const [showErrorConfirm, setShowErrorConfirm] = useState(false);
@@ -113,6 +115,7 @@ const DeliverySlipRegistration = () => {
     showDeleteRowConfirm ||
     showNoSelectionConfirm ||
     showClearConfirm ||
+    showCompleteRegistrationConfirm ||
     showCompleteConfirm ||
     showBackConfirm ||
     showErrorConfirm;
@@ -123,6 +126,7 @@ const DeliverySlipRegistration = () => {
     setShowDeleteRowConfirm(false);
     setShowNoSelectionConfirm(false);
     setShowClearConfirm(false);
+    setShowCompleteRegistrationConfirm(false);
     setShowCompleteConfirm(false);
     setShowBackConfirm(false);
     setShowErrorConfirm(false);
@@ -388,7 +392,7 @@ const DeliverySlipRegistration = () => {
       if (event.key === "F2") {
         event.preventDefault();
         closeAllModals();
-        completeRegistration();
+        setShowCompleteRegistrationConfirm(true);
         return;
       }
       if (event.key === "F3") {
@@ -543,7 +547,7 @@ const DeliverySlipRegistration = () => {
               </button>
               <button
                 className="set-btn set-primary"
-                onClick={() => completeRegistration()}
+                onClick={() => setShowCompleteRegistrationConfirm(true)}
               >
                 完了
               </button>
@@ -684,6 +688,36 @@ const DeliverySlipRegistration = () => {
                   <button
                     className="set-modal-btn set-modal-no"
                     onClick={() => setShowClearConfirm(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showCompleteRegistrationConfirm && (
+            <div className="set-modal-backdrop" role="presentation">
+              <div className="set-modal" role="dialog" aria-modal="true">
+                <div className="set-modal-header">確認</div>
+                <div className="set-modal-body">
+                  配送伝票登録を
+                  <br />
+                  完了しますか？
+                </div>
+                <div className="set-modal-actions">
+                  <button
+                    className="set-modal-btn set-modal-yes"
+                    onClick={async () => {
+                      setShowCompleteRegistrationConfirm(false);
+                      await completeRegistration();
+                    }}
+                  >
+                    OK
+                  </button>
+                  <button
+                    className="set-modal-btn set-modal-no"
+                    onClick={() => setShowCompleteRegistrationConfirm(false)}
                   >
                     Cancel
                   </button>
