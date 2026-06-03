@@ -169,9 +169,11 @@ const BundlePage = () => {
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const janCodeInputRef = useRef<HTMLInputElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [shouldFocusJanCodeAfterComplete, setShouldFocusJanCodeAfterComplete] = useState(false)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
@@ -221,6 +223,61 @@ const BundlePage = () => {
     clearRows()
     resetTableScroll()
   }
+
+  const handleBackCancelClick = () => {
+    setShowBackConfirm(false)
+    setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+    }, 0)
+  }
+
+  const handleHandInputNoClick = () => {
+    setShowHandInputConfirm(false)
+    setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+    }, 0)
+  }
+
+  const handleClearNoClick = () => {
+    setShowClearConfirm(false)
+    setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+    }, 0)
+  }
+
+  const handleCompleteNoClick = () => {
+    setShowCompleteConfirm(false)
+    setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+    }, 0)
+  }
+
+  const handleCompleteYesClick = () => {
+    setShowCompleteConfirm(false)
+    setRows([])
+    setActiveRowId(null)
+    setForm((prev) => ({
+      ...prev,
+      moveStorage: '',
+      janCode: '',
+    }))
+    resetTableScroll()
+    setShouldFocusJanCodeAfterComplete(true)
+  }
+
+  useEffect(() => {
+    if (!shouldFocusJanCodeAfterComplete || showCompleteConfirm) return
+    const timer = window.setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+      setShouldFocusJanCodeAfterComplete(false)
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [shouldFocusJanCodeAfterComplete, showCompleteConfirm])
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
     if (isAnyModalOpen) return
@@ -440,6 +497,7 @@ const BundlePage = () => {
                 <div className='set-row set-row-bundle'>
                 <label>JANコード</label>
                 <input
+                  ref={janCodeInputRef}
                   inputMode='numeric'
                   maxLength={14}
                   value={form.janCode}
@@ -513,15 +571,13 @@ const BundlePage = () => {
                         navigate('/factory/bundle-hand-input')
                       }}
                     >
-                      はい
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
+                      onClick={handleHandInputNoClick}
                     >
-                      いいえ
+                      NO
                     </button>
                   </div>
                 </div>
@@ -582,13 +638,13 @@ const BundlePage = () => {
                         clearFormAndRows()
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowClearConfirm(false)}
+                      onClick={handleClearNoClick}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>
@@ -599,13 +655,19 @@ const BundlePage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                  <div className='set-modal-body'>備品振分登録<br />を完了しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
+                      onClick={handleCompleteYesClick}
                     >
-                      {'\u004f\u004b'}
+                      YES
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={handleCompleteNoClick}
+                    >
+                      NO
                     </button>
                   </div>
                 </div>
@@ -625,13 +687,19 @@ const BundlePage = () => {
                         navigate('/factory')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowBackConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={handleBackCancelClick}
+                    >
+                      取消
                     </button>
                   </div>
                 </div>

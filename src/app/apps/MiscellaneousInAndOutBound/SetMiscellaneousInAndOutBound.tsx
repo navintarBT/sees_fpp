@@ -18,7 +18,6 @@ type Row = {
   moveStorage2?: string
 }
 
-// ข้อมูลทั้งหมด
 const allRowsData: Row[] = [
   { id: 1, error: '', item: 'A01', lot: 'L01', status: 'W0020', build: 'W0023', release: 1, move: '品目1', moveStorage: 'S1', name: '部品A', moveStorage2: '棚A' },
   { id: 2, error: '', item: 'B02', lot: 'L02', status: 'W0021', build: 'W0023', release: 3, move: '品目2', moveStorage: 'S2', name: '部品B', moveStorage2: '棚B' },
@@ -28,14 +27,11 @@ const allRowsData: Row[] = [
   { id: 8, error: '', item: 'H08', lot: 'L08', status: 'W0027', build: 'W0023', release: 1, move: '品目8', moveStorage: 'S8', name: '部品H', moveStorage2: '棚H' },
   { id: 9, error: '', item: 'I09', lot: 'L09', status: 'W0028', build: 'W0023', release: 1, move: '品目9', moveStorage: 'S9', name: '部品I', moveStorage2: '棚I' },
   { id: 10, error: '', item: 'J10', lot: 'L10', status: 'W0029', build: 'W0023', release: 1, move: '品目10', moveStorage: 'S10', name: '部品J', moveStorage2: '棚J' },
-  { id: 11, error: '', item: 'J11', lot: 'L11', status: 'W0030', build: 'W0023', release: 1, move: '品目11', moveStorage: 'S11', name: '部品J', moveStorage2: '棚J' },
-  { id: 12, error: '', item: 'J12', lot: 'L12', status: 'W0031', build: 'W0023', release: 2, move: '品目12', moveStorage: 'S12', name: '部品J', moveStorage2: '棚J' },
 ]
 
 const SetMiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
   const [quantity, setQuantity] = useState('1')
-  // เริ่มต้นเป็น array ว่าง ไม่แสดงข้อมูล
   const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
     parentItemNo: '0193090',
@@ -186,13 +182,9 @@ const SetMiscellaneousInAndOutBound = () => {
 
   const janCodeRef = useRef<HTMLInputElement>(null)
 
-  // ฟังก์ชันจัดการเมื่อกด Enter ใน JAN code
   const handleJanCodeEnter = () => {
-    // แสดงข้อมูลทั้งหมด
     setRows(allRowsData)
-    // เคลียร์ค่าใน input
     setForm({ ...form })
-    // โฟกัสกลับที่ input
     setTimeout(() => {
       janCodeRef.current?.focus()
     }, 0)
@@ -390,7 +382,7 @@ const SetMiscellaneousInAndOutBound = () => {
                       navigate('/factory/miscellaneous-in-and-out-bound')
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
@@ -398,7 +390,7 @@ const SetMiscellaneousInAndOutBound = () => {
                       setShowHandInputConfirm(false)
                     }}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -421,13 +413,13 @@ const SetMiscellaneousInAndOutBound = () => {
                       }
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowDeleteConfirm(false)}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -464,13 +456,13 @@ const SetMiscellaneousInAndOutBound = () => {
                       clearFormAndRows()
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -506,13 +498,13 @@ const SetMiscellaneousInAndOutBound = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={simulateServerResponse}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowNormalConfirm(false)}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -530,7 +522,6 @@ const SetMiscellaneousInAndOutBound = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowStockError(false)
-                      // ３－７－１－１．カーソルをJANコードへ移動
                       setTimeout(() => janCodeRef.current?.focus(), 0)
                     }}
                   >
@@ -552,7 +543,6 @@ const SetMiscellaneousInAndOutBound = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowSerialError(false)
-                      // ３－７－２－１．戻るボタンにカーソルを配置
                       setTimeout(() => backBtnRef.current?.focus(), 0)
                     }}
                   >
@@ -574,7 +564,6 @@ const SetMiscellaneousInAndOutBound = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowCompleteConfirm(false)
-                      // ３－７－３－１．画面の設定は初期処理時の状態
                     }}
                   >
                     OK
@@ -597,20 +586,28 @@ const SetMiscellaneousInAndOutBound = () => {
                       navigate('/factory')
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowBackConfirm(false)}
                   >
-                    いいえ
+                    NO
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      setTimeout(() => janCodeRef.current?.focus(), 0)
+                    }}
+                  > 
+                    取消
                   </button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* JANコードエラー (ตามเอกสาร) */}
           {showInvalidJanCode && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -631,7 +628,6 @@ const SetMiscellaneousInAndOutBound = () => {
             </div>
           )}
 
-          {/* ロットシリアル桁数エラー HT004-E (ตามเอกสาร) */}
           {showInvalidLotSerial && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>

@@ -1,4 +1,4 @@
-.set-header {
+﻿.set-header {
   height: 140px;
   background: linear-gradient(90deg, #e3f0fa 0%, #b6d0e2 100%);
   color: #1a2a4a;
@@ -470,19 +470,20 @@
 }
 
 .set-modal-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: nowrap;
   gap: 22px;
   padding: 18px 28px 26px;
   background: white;
 }
 
 .set-modal-actions .set-modal-btn:only-child {
-  grid-column: 1 / -1;
   width: 100%;
 }
 
 .set-modal-btn {
+  flex: 1 1 0;
+  min-width: 0;
   height: 64px;
   border-radius: 6px;
   border: 2px solid #475469;

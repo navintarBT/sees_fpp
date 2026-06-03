@@ -650,14 +650,14 @@ const WorkOrderTimeRegistrationChiba = () => {
                 className='set-btn set-success'
                 onClick={handleRegisterClear}
               >
-                登録(WOクリア)
+                登録
               </button>
 
               <button
                 className='set-btn set-hand-input-btn'
                 onClick={handleRegisterKeep}
               >
-                登録(WO維持)
+               作業開始
               </button>
 
               <button

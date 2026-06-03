@@ -567,7 +567,6 @@ const Equipment = () => {
               <button
                 className="set-btn set-primary"
                 onClick={() => setShowCompleteConfirm(true)}
-                
               >
                 完了
               </button>
@@ -598,15 +597,16 @@ const Equipment = () => {
                       navigate("/factory/equipment-hand-input");
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
                     onClick={() => {
                       setShowHandInputConfirm(false);
+                      focusJanCodeInput();  
                     }}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -677,13 +677,15 @@ const Equipment = () => {
                       clearFormAndRows();
                     }}
                   >
-                    {"\u306f\u3044"}
+                 YES
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() => setShowClearConfirm(false)}
+                    onClick={() => {setShowClearConfirm(false)
+                      focusJanCodeInput();
+                    }}
                   >
-                    {"\u3044\u3044\u3048"}
+                NO
                   </button>
                 </div>
               </div>
@@ -695,9 +697,9 @@ const Equipment = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
                 <div className="set-modal-body">
-                  {
-                    "\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002"
-                  }
+                  備品振分登録
+                  <br />
+                  を完了しますか？
                 </div>
                 <div className="set-modal-actions">
                   <button
@@ -705,9 +707,19 @@ const Equipment = () => {
                     onClick={() => {
                       setShowCompleteConfirm(false);
                       clearAfterComplete();
+                      focusJanCodeInput();
                     }}
                   >
-                    {"\u004f\u004b"}
+                    YES
+                  </button>
+                  <button
+                    className="set-modal-btn set-modal-no"
+                    onClick={() => {
+                      setShowCompleteConfirm(false);
+                      focusJanCodeInput();
+                    }}
+                  >
+                    NO
                   </button>
                 </div>
               </div>
@@ -758,14 +770,23 @@ const Equipment = () => {
                       navigate("/factory");
                     }}
                   >
-                    {"\u306f\u3044"}
+                  YES
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
                     onClick={() => setShowBackConfirm(false)}
                   >
-                    {"\u3044\u3044\u3048"}
-                  </button>
+                    NO
+                  </button>   
+                   <button
+  className="set-modal-btn set-m"
+  onClick={() => {
+    setShowBackConfirm(false);
+    focusJanCodeInput();
+  }}
+>
+  取消
+</button>
                 </div>
               </div>
             </div>
