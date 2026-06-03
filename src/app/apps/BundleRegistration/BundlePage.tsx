@@ -231,6 +231,14 @@ const BundlePage = () => {
     }, 0)
   }
 
+  const handleHandInputNoClick = () => {
+    setShowHandInputConfirm(false)
+    setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+    }, 0)
+  }
+
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
     if (isAnyModalOpen) return
     if (options?.forceHandInput) {
@@ -527,9 +535,7 @@ const BundlePage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
+                      onClick={handleHandInputNoClick}
                     >
                       NO
                     </button>
