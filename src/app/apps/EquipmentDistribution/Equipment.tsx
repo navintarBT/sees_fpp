@@ -567,7 +567,6 @@ const Equipment = () => {
               <button
                 className="set-btn set-primary"
                 onClick={() => setShowCompleteConfirm(true)}
-                
               >
                 完了
               </button>
@@ -695,9 +694,9 @@ const Equipment = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
                 <div className="set-modal-body">
-                  {
-                    "\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002"
-                  }
+                  備品振分登録
+                  <br />
+                  を完了しますか？
                 </div>
                 <div className="set-modal-actions">
                   <button
@@ -707,7 +706,16 @@ const Equipment = () => {
                       clearAfterComplete();
                     }}
                   >
-                    {"\u004f\u004b"}
+                    YES
+                  </button>
+                  <button
+                    className="set-modal-btn set-modal-no"
+                    onClick={() => {
+                      setShowCompleteConfirm(false);
+                      focusJanCodeInput();
+                    }}
+                  >
+                    NO
                   </button>
                 </div>
               </div>
