@@ -31,13 +31,14 @@ const SetReturnConfiguration = () => {
   const [hasLoadedData, setHasLoadedData] = useState(false)
 
   // Form state
-  const [parentJanCode, setParentJanCode] = useState('')      // JANコード(親)
-  const [parentStatus, setParentStatus] = useState('')        // 状態 (ブランク or 04)
-  const [parentQty, setParentQty] = useState(1)               // 数量 (固定1)
-  const [janCode, setJanCode] = useState('')                  // JANコード
+  const [parentJanCode, setParentJanCode] = useState('')      
+  const [parentStatus, setParentStatus] = useState('')        
+  const [parentQty, setParentQty] = useState(1)               
+  const [janCode, setJanCode] = useState('')                  
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const parentJanCodeInputRef = useRef<HTMLInputElement | null>(null)
 
   // Modal states
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -69,7 +70,7 @@ const SetReturnConfiguration = () => {
   const activeRow = loadedData.find((row) => row.id === activeRowId) ?? null
 
   // Check if parent JAN code is editable (has loaded data)
-  const isParentJanCodeEditable = !hasLoadedData
+  const isParentJanCodeEditable = true
 
   // Close all modals
   const closeAllModals = () => {
@@ -359,8 +360,8 @@ const SetReturnConfiguration = () => {
 
     // สำหรับทดสอบ: ถ้าพิมพ์ตัวเลขธรรมดา ให้ค้นหาจาก itemNo
     const matchedRow = loadedData.find(row =>
-      row.itemNo === janCode ||  // ทดสอบด้วยการพิมพ์ itemNo เช่น "A01"
-      row.lotSerial === janCode  // ทดสอบด้วยการพิมพ์ lotSerial
+      row.itemNo === janCode ||  
+      row.lotSerial === janCode  
     )
 
     if (!matchedRow) {
@@ -423,6 +424,7 @@ const SetReturnConfiguration = () => {
               <div className='set-row'>
                 <label>JANコード(親)</label>
                 <input
+                  ref={parentJanCodeInputRef}
                   autoFocus
                   value={parentJanCode}
                   onChange={(e) => setParentJanCode(e.target.value)}
@@ -489,9 +491,8 @@ const SetReturnConfiguration = () => {
                       handleJanCodeScan()
                     }
                   }}
-                  readOnly={!hasLoadedData}
-                  className={!hasLoadedData ? 'set-input-gray' : ''}
-                  style={!hasLoadedData ? { backgroundColor: '#e5e7eb' } : {}}
+                  readOnly={true}
+                  style={{ backgroundColor: '#e5e7eb' } }
                 />
               </div>
             </div>
@@ -555,13 +556,13 @@ const SetReturnConfiguration = () => {
                       navigate('/factory/return-configuration', { state: { parentItemNo: parentJanCode } })
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowHandInputConfirm(false)}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -579,13 +580,13 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={executeDelete}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowDeleteConfirm(false)}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -621,13 +622,13 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={executeClear}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -681,13 +682,13 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={confirmRegistration}
                   >
-                    はい
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowNormalConfirm(false)}
                   >
-                    いいえ
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -708,13 +709,13 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={confirmRegistration}
                   >
-                    はい
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowIncompleteConfirm(false)}
                   >
-                    いいえ
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -736,13 +737,13 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={toggleRowStatus}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowStatusChangeConfirm(false)}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -764,7 +765,7 @@ const SetReturnConfiguration = () => {
                       navigate('/factory')
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
@@ -772,7 +773,16 @@ const SetReturnConfiguration = () => {
                       setShowBackConfirm(false)
                     }}
                   >
-                    いいえ
+                    NO
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      parentJanCodeInputRef.current?.focus()
+                    }}
+                  >
+                    取消
                   </button>
                 </div>
               </div>
