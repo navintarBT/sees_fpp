@@ -173,6 +173,7 @@ const BundlePage = () => {
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [shouldFocusJanCodeAfterComplete, setShouldFocusJanCodeAfterComplete] = useState(false)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
@@ -238,6 +239,45 @@ const BundlePage = () => {
       janCodeInputRef.current?.select()
     }, 0)
   }
+
+  const handleClearNoClick = () => {
+    setShowClearConfirm(false)
+    setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+    }, 0)
+  }
+
+  const handleCompleteNoClick = () => {
+    setShowCompleteConfirm(false)
+    setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+    }, 0)
+  }
+
+  const handleCompleteYesClick = () => {
+    setShowCompleteConfirm(false)
+    setRows([])
+    setActiveRowId(null)
+    setForm((prev) => ({
+      ...prev,
+      moveStorage: '',
+      janCode: '',
+    }))
+    resetTableScroll()
+    setShouldFocusJanCodeAfterComplete(true)
+  }
+
+  useEffect(() => {
+    if (!shouldFocusJanCodeAfterComplete || showCompleteConfirm) return
+    const timer = window.setTimeout(() => {
+      janCodeInputRef.current?.focus()
+      janCodeInputRef.current?.select()
+      setShouldFocusJanCodeAfterComplete(false)
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [shouldFocusJanCodeAfterComplete, showCompleteConfirm])
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
     if (isAnyModalOpen) return
@@ -602,7 +642,7 @@ const BundlePage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowClearConfirm(false)}
+                      onClick={handleClearNoClick}
                     >
                       NO
                     </button>
@@ -619,13 +659,13 @@ const BundlePage = () => {
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
+                      onClick={handleCompleteYesClick}
                     >
                       YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowCompleteConfirm(false)}
+                      onClick={handleCompleteNoClick}
                     >
                       NO
                     </button>

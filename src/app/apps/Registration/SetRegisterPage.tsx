@@ -741,7 +741,7 @@ const SetRegisterPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => setShowCompleteConfirm(false)}
                     >
-                      {'\u004f\u004b'}
+                      NO
                     </button>
                   </div>
                 </div>
