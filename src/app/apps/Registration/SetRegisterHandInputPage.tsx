@@ -105,13 +105,13 @@ const SetRegisterHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => setShowReadConfirm(false)}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowReadConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>
@@ -131,13 +131,13 @@ const SetRegisterHandInputPage = () => {
                         navigate('/factory/set-register')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowBackConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>

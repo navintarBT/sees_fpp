@@ -166,17 +166,19 @@ const MOCK_PARENT_PASS_CODE = '0123456789012AB'
 const MOCK_SCAN_JAN_LENGTH = 13
 const MOCK_SCAN_PASS_CODE = '0123456789012BC'
 
+const initialForm = {
+  parentWarehouse: '',
+  parentItemNo: '',
+  moveWarehouse: '',
+  moveStorage: '',
+  qty: '1',
+  janCode: '',
+}
+
 const SetRegisterPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
-  const [form, setForm] = useState({
-    parentWarehouse: '',
-    parentItemNo: '',
-    moveWarehouse: '',
-    moveStorage: '',
-    qty: '1',
-    janCode: '',
-  })
+  const [form, setForm] = useState(initialForm)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
@@ -324,14 +326,7 @@ const SetRegisterPage = () => {
 
   const clearRows = () => setRows([])
   const clearForm = () =>
-    setForm({
-      parentWarehouse: '',
-      parentItemNo: '',
-      moveWarehouse: '',
-      moveStorage: '',
-      qty: '',
-      janCode: '',
-    })
+    setForm(initialForm)
 
   const resetTableScroll = () => {
     const el = tableScrollRef.current
@@ -350,7 +345,17 @@ const SetRegisterPage = () => {
     setIsParentConfirmed(false)
     clearForm()
     clearRows()
+    setActiveRowId(null)
     resetTableScroll()
+  }
+
+  const handleCancelClick = () => {
+    closeAllModals()
+    clearFormAndRows()
+    setTimeout(() => {
+      parentJanCodeInputRef.current?.focus()
+      parentJanCodeInputRef.current?.select()
+    }, 0)
   }
 
   useEffect(() => {
@@ -627,7 +632,7 @@ const SetRegisterPage = () => {
                         navigate('/factory/set-register/hand-input')
                       }}
                     >
-                      はい
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
@@ -635,7 +640,7 @@ const SetRegisterPage = () => {
                         setShowHandInputConfirm(false)
                       }}
                     >
-                      いいえ
+                      NO
                     </button>
                   </div>
                 </div>
@@ -664,13 +669,13 @@ const SetRegisterPage = () => {
                         setShowDeleteConfirm(false)
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowDeleteConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>
@@ -707,13 +712,13 @@ const SetRegisterPage = () => {
                         clearFormAndRows()
                       }}
                     >
-                      {'\u306f\u3044'}
+                      OK
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowClearConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      Cancel
                     </button>
                   </div>
                 </div>
@@ -724,8 +729,14 @@ const SetRegisterPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                  <div className='set-modal-body'>セット構成登録を完了しますか？</div>
                   <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => {setShowCompleteConfirm(false)}}
+                    >
+                      YES
+                    </button>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => setShowCompleteConfirm(false)}
@@ -750,13 +761,19 @@ const SetRegisterPage = () => {
                         navigate('/factory')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowBackConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={handleCancelClick}
+                    >
+                      取消
                     </button>
                   </div>
                 </div>

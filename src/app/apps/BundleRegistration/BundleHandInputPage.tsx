@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
@@ -13,7 +13,16 @@ const BundleHandInputPage = () => {
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
+  const itemNoInputRef = useRef<HTMLInputElement | null>(null)
   const isEnabled = fromWarehouse && toWarehouse && parentItem && parentSerial
+
+  const handleBackNoClick = () => {
+    setShowBackConfirm(false)
+    setTimeout(() => {
+      itemNoInputRef.current?.focus()
+      itemNoInputRef.current?.select()
+    }, 0)
+  }
 
   return (
     <div className='mockup-page'>
@@ -50,7 +59,7 @@ const BundleHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>品目No</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                <input ref={itemNoInputRef} value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロットシリアル</label>
@@ -117,13 +126,13 @@ const BundleHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => setShowReadConfirm(false)}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowReadConfirm(false)}
+                      onClick={handleBackNoClick}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>
@@ -143,13 +152,13 @@ const BundleHandInputPage = () => {
                         navigate('/factory/bundle-page')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
+                      onClick={handleBackNoClick}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>
