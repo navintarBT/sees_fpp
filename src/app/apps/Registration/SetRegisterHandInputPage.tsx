@@ -1,4 +1,4 @@
-﻿import {useState} from 'react'
+import {useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
@@ -11,6 +11,15 @@ const SetRegisterHandInputPage = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const itemNoInputRef = useRef<HTMLInputElement | null>(null)
+
+  const handleNoClick = (closeModal: () => void) => {
+    closeModal()
+    setTimeout(() => {
+      itemNoInputRef.current?.focus()
+      itemNoInputRef.current?.select()
+    }, 0)
+  }
 
   return (
     <div className='mockup-page'>
@@ -55,7 +64,7 @@ const SetRegisterHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input placeholder=' ' />
+                <input ref={itemNoInputRef} placeholder=' ' />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
@@ -70,20 +79,22 @@ const SetRegisterHandInputPage = () => {
             <ActionFooter columns={5}>
               <button
                 className='set-btn set-danger'
-                style={{ visibility: 'hidden' }}
+                style={{visibility: 'hidden'}}
               >
                 {'\u7834\u68C4'}
               </button>
-              <button className='set-btn set-primary' onClick={() => setShowReadConfirm(true)}>{'\u8AAD\u8FBC'}</button>
+              <button className='set-btn set-primary' onClick={() => setShowReadConfirm(true)}>
+                {'\u8AAD\u8FBC'}
+              </button>
               <button
                 className='set-btn set-success'
-                style={{ visibility: 'hidden' }}
+                style={{visibility: 'hidden'}}
               >
                 {'\u89E3\u9664'}
               </button>
               <button
                 className='set-btn set-primary'
-                style={{ visibility: 'hidden' }}
+                style={{visibility: 'hidden'}}
               >
                 {'\u624b\u5165\u529b'}
               </button>
@@ -109,7 +120,7 @@ const SetRegisterHandInputPage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowReadConfirm(false)}
+                      onClick={() => handleNoClick(() => setShowReadConfirm(false))}
                     >
                       NO
                     </button>
@@ -135,7 +146,7 @@ const SetRegisterHandInputPage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
+                      onClick={() => handleNoClick(() => setShowBackConfirm(false))}
                     >
                       NO
                     </button>

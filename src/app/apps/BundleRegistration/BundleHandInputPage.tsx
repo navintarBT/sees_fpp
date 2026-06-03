@@ -24,6 +24,14 @@ const BundleHandInputPage = () => {
     }, 0)
   }
 
+  const handleReadNoClick = () => {
+    setShowReadConfirm(false)
+    setTimeout(() => {
+      itemNoInputRef.current?.focus()
+      itemNoInputRef.current?.select()
+    }, 0)
+  }
+
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
@@ -130,7 +138,7 @@ const BundleHandInputPage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={handleBackNoClick}
+                      onClick={handleReadNoClick}
                     >
                       NO
                     </button>
