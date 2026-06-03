@@ -634,18 +634,19 @@ const WorkOrderTimeRegistrationGosen = () => {
             <div className='set-formnew_high '>
               <div className='wot-header-container '>
                 {/* Left side: Info Grid */}
-                <div className='wot-info-soll'>
-                  <div className='wot-info-grid'>
-                    <label className='wot-grid-label wot-bg-blue' >人</label>
-                    <input className='wot-grid-value' autoFocus />
+                <div className='wot-info-soll box-padding-innput'>
+                  <div className='wot-info-grid wot-info-grid-2'>
+                    <label className='wot-grid-label wot-bg-blue'>人</label>
+                    <input className='wot-grid-value2' autoFocus />
+                    <input className='wot-grid-value2' style={{ backgroundColor: '#e5e7eb' }} />
                   </div>
 
-                  <div className='wot-info-grid'>
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-blue'>日付</label>
                     <div className='hand-date-field'>
                       <input
                         readOnly
-                        className='wot-grid-value'
+                        className='wot-grid-value2'
                         value={formatWoDate(woDatePickerValue)}
                         onClick={openWoDatePicker}
                         style={{ cursor: 'pointer' }}
@@ -707,29 +708,27 @@ const WorkOrderTimeRegistrationGosen = () => {
                     </div>
                   </div>
 
-                  <div className='wot-info-grid'>
+
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>工程状況初期値</label>
-                    <input className='wot-grid-value wot-text-red' />
+                    <input className='wot-grid-value2 wot-text-red' />
                   </div>
-                  <div className='wot-info-grid'>
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>作業順序</label>
-                    <input className='wot-grid-value wot-text-red' />
+                    <input className='wot-grid-value2 wot-text-red' />
                   </div>
-                  <div className='wot-info-grid'>
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>備考</label>
-                    <input className='wot-grid-value wot-text-red' />
+                    <input className='wot-grid-value2 wot-text-red' />
                   </div>
+
                 </div>
 
                 <div className='wot-header-actions'>
-                  <div className='wot-top-row'>
-                    <button className='set-btnnew_high set-primary' onClick={() => navigate('/factory/work-order-time-registration-choose')}>
-                      WO選択
-                    </button>
-                  </div>
+
                   <div className='wot-radio-container'>
-                    <div className='wot-radio-title'>登録時間種類</div>
                     <div className='wot-radio-group'>
+                      <div className='wot-radio-title'>登録時間種類</div>
                       <label className='wot-radio-item'>
                         <input type='radio' name='timeType' defaultChecked />
                         <span>労務</span>
@@ -742,8 +741,14 @@ const WorkOrderTimeRegistrationGosen = () => {
                         <input type='radio' name='timeType' />
                         <span>機械</span>
                       </label>
+                      <div className='wot-top-row'>
+                        <button className='set-btnnew_high set-primary' onClick={() => navigate('/factory/work-order-time-registration-choose')}>
+                          WO選択
+                        </button>
+                      </div>
                     </div>
-                    <ActionFooter columns={2}>
+
+                    {/* <ActionFooter columns={2}>
                       <button
                         className='set-btnnew_high set-primary'
                         type='button'
@@ -772,7 +777,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                       >
                         作業終了
                       </button>
-                    </ActionFooter>
+                    </ActionFooter> */}
                   </div>
                 </div>
               </div>
@@ -792,7 +797,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>開始</label>
                   <input
-                    className='wot-grid-value'
+                    className='wot-grid-value2'
                     type='time'
                     value={workStartTime}
                     onChange={(e) => setWorkStartTime(e.target.value)}
@@ -802,7 +807,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>終了</label>
                   <input
-                    className='wot-grid-value'
+                    className='wot-grid-value2'
                     type='time'
                     value={workEndTime}
                     onChange={(e) => setWorkEndTime(e.target.value)}
@@ -811,22 +816,22 @@ const WorkOrderTimeRegistrationGosen = () => {
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>作業時間</label>
-                  <input className='wot-grid-value' value={workDurationHours} readOnly placeholder='時間' />
+                  <input className='wot-grid-value2' value={workDurationHours} readOnly placeholder='時間' />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label'>&nbsp;</label>
-                  <input className='wot-grid-value' value={workDurationMinutes} readOnly placeholder='分' />
+                  <input className='wot-grid-value2' value={workDurationMinutes} readOnly placeholder='分' />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>目標時間計</label>
-                  <input className='wot-grid-value' placeholder='時間' />
+                  <input className='wot-grid-value2' placeholder='時間' />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label'>&nbsp;</label>
-                  <input className='wot-grid-value addspanto' placeholder='分' />
+                  <input className='wot-grid-value2 addspanto' placeholder='分' />
                 </div>
               </div>
             </div>

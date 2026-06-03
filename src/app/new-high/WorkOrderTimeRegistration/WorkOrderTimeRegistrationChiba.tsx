@@ -633,7 +633,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             {/* Action buttons as per document: 選択行削除, 登録(WOクリア), 登録(WO維持), 戻る */}
             <ActionFooter columns={5}>
               <button
-                className='set-btn set-danger'
+                className='set-btn set-danger set-delete-btn-size'
                 onClick={handleDeleteSelected}
               >
                 選択行削除
