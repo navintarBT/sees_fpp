@@ -603,6 +603,7 @@ const Equipment = () => {
                     className="set-modal-btn set-modal-no"
                     onClick={() => {
                       setShowHandInputConfirm(false);
+                      focusJanCodeInput();  
                     }}
                   >
                     NO
@@ -680,7 +681,9 @@ const Equipment = () => {
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() => setShowClearConfirm(false)}
+                    onClick={() => {setShowClearConfirm(false)
+                      focusJanCodeInput();
+                    }}
                   >
                 NO
                   </button>
