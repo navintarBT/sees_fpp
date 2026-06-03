@@ -598,7 +598,7 @@ const Equipment = () => {
                       navigate("/factory/equipment-hand-input");
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
@@ -606,7 +606,7 @@ const Equipment = () => {
                       setShowHandInputConfirm(false);
                     }}
                   >
-                    いいえ
+                    NO
                   </button>
                 </div>
               </div>
@@ -677,13 +677,13 @@ const Equipment = () => {
                       clearFormAndRows();
                     }}
                   >
-                    {"\u306f\u3044"}
+                 YES
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    {"\u3044\u3044\u3048"}
+                NO
                   </button>
                 </div>
               </div>
@@ -758,14 +758,23 @@ const Equipment = () => {
                       navigate("/factory");
                     }}
                   >
-                    {"\u306f\u3044"}
+                  YES
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
                     onClick={() => setShowBackConfirm(false)}
                   >
-                    {"\u3044\u3044\u3048"}
-                  </button>
+                    NO
+                  </button>   
+                   <button
+  className="set-modal-btn set-m"
+  onClick={() => {
+    setShowBackConfirm(false);
+    focusJanCodeInput();
+  }}
+>
+  取消
+</button>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
@@ -33,7 +33,7 @@ const YymmDatePicker = ({
   }
 
   const display = value.length === 4 ? `${value.slice(0, 2)}/${value.slice(2, 4)}` : ''
-
+    
   return (
     <div style={{ position: 'relative', flex: 1 }}>
       <input
@@ -172,7 +172,7 @@ const EquipmentHandInputPage = () => {
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
-
+  const itemNoInputRef = useRef<HTMLInputElement | null>(null)
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
@@ -215,10 +215,10 @@ const EquipmentHandInputPage = () => {
                 <input value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
               </div>
 
-              <div className='hand-row hand-row-always'>
-                <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
-              </div>
+       <div className='hand-row hand-row-always'>
+  <label>品目No.</label>
+  <input ref={itemNoInputRef} value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+</div>
 
               <div className='hand-row hand-row-always'>
                 <label>ロットシリアル</label>
@@ -301,14 +301,19 @@ const EquipmentHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => setShowReadConfirm(false)}
                     >
-                      {'\u306f\u3044'}
+                     YES
                     </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowReadConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
+      <button
+  className='set-modal-btn set-modal-no'
+  onClick={() => {
+    setShowReadConfirm(false)
+    requestAnimationFrame(() => {
+      itemNoInputRef.current?.focus()
+    })
+  }}
+>
+  NO
+</button>
                   </div>
                 </div>
               </div>
@@ -331,14 +336,19 @@ const EquipmentHandInputPage = () => {
                         navigate('/factory/equipment')
                       }}
                     >
-                      {'\u306f\u3044'}
+                     YES
                     </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
-                    >
-                      {'\u3044\u3044\u3048'}
-                    </button>
+              <button
+  className='set-modal-btn set-modal-no'
+  onClick={() => {
+    setShowBackConfirm(false)
+    requestAnimationFrame(() => {
+      itemNoInputRef.current?.focus()
+    })
+  }}
+>
+  NO
+</button>
                   </div>
                 </div>
               </div>

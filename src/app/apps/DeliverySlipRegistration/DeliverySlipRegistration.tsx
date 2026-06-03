@@ -54,7 +54,7 @@ const SHIPPING_INFO_MAP: Record<
   }
 > = {
   "12345678": { exclusiveLocked: false },
-  
+
   "10000002": { exclusiveLocked: true },
 };
 
@@ -598,9 +598,9 @@ const DeliverySlipRegistration = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">確認</div>
                 <div className="set-modal-body">
-                 選択行を削除しますか？						
+                 選択行を削除しますか？
                   <br />
-             
+
                 </div>
                 <div className="set-modal-actions">
                   <button
@@ -610,13 +610,13 @@ const DeliverySlipRegistration = () => {
                       await deleteSelectedRows();
                     }}
                   >
-                    はい
+                    OK
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
                     onClick={() => setShowDeleteRowConfirm(false)}
                   >
-                    いいえ
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -679,13 +679,13 @@ const DeliverySlipRegistration = () => {
                       clearFormAndRows();
                     }}
                   >
-                    はい
+                    OK
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    いいえ
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -735,7 +735,7 @@ const DeliverySlipRegistration = () => {
                   <br />
                   読込データを破棄しますか？
                 </div>
-                <div className="set-modal-actions">
+                <div className="set-modal-actions set-modal-actions-inline">
                   <button
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
@@ -743,13 +743,13 @@ const DeliverySlipRegistration = () => {
                       navigate("/factory");
                     }}
                   >
-                    はい
+                    OK
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
                     onClick={() => setShowBackConfirm(false)}
                   >
-                    いいえ
+                    Cancel
                   </button>
                 </div>
               </div>
