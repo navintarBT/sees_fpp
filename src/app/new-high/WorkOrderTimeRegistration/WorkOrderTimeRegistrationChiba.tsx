@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
-import { FaRegCalendarAlt } from 'react-icons/fa'
+import { FaRegCalendarAlt, FaRegClock } from 'react-icons/fa'
 
 const formatWoDate = (value: string) => {
   if (!value) return 'yy/mm/dd'
@@ -82,6 +82,51 @@ const DEFAULT_ROWS: Row[] = [
   { id: 8, woNo: 'wo-8', itemNo: 'h', itemName: '製品h' },
 ]
 
+const TimePickerDropdown = ({ value, onChange, onClose }: { value: string; onChange: (val: string) => void; onClose: () => void }) => {
+  const currentHour = value && value.includes(':') ? value.split(':')[0] : '00'
+  const currentMinute = value && value.includes(':') ? value.split(':')[1] : '00'
+
+  return (
+    <div className='hand-timepicker'>
+      <div className='hand-timepicker-col'>
+        {Array.from({ length: 24 }).map((_, i) => {
+          const h = i.toString().padStart(2, '0')
+          return (
+            <div
+              key={`h-${h}`}
+              className={`hand-timepicker-item ${currentHour === h ? 'selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                onChange(`${h}:${currentMinute}`)
+              }}
+            >
+              {h}
+            </div>
+          )
+        })}
+      </div>
+      <div className='hand-timepicker-col'>
+        {Array.from({ length: 60 }).map((_, i) => {
+          const m = i.toString().padStart(2, '0')
+          return (
+            <div
+              key={`m-${m}`}
+              className={`hand-timepicker-item ${currentMinute === m ? 'selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                onChange(`${currentHour}:${m}`)
+                onClose()
+              }}
+            >
+              {m}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 const WorkOrderTimeRegistrationChiba = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>(DEFAULT_ROWS)
@@ -111,12 +156,12 @@ const WorkOrderTimeRegistrationChiba = () => {
 
   const [showDeleteSelectedConfirm, setShowDeleteSelectedConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
-  const [showRegisterClearConfirm, setShowRegisterClearConfirm] = useState(false)
-  const [showRegisterKeepConfirm, setShowRegisterKeepConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [workStartTime, setWorkStartTime] = useState('')
   const [workEndTime, setWorkEndTime] = useState('')
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false)
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false)
   const [workDurationHours, setWorkDurationHours] = useState('')
   const [workDurationMinutes, setWorkDurationMinutes] = useState('')
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
@@ -126,16 +171,12 @@ const WorkOrderTimeRegistrationChiba = () => {
   const isAnyModalOpen =
     showDeleteSelectedConfirm ||
     showNoSelectionConfirm ||
-    showRegisterClearConfirm ||
-    showRegisterKeepConfirm ||
     showBackConfirm ||
     showCompleteConfirm
 
   const closeAllModals = () => {
     setShowDeleteSelectedConfirm(false)
     setShowNoSelectionConfirm(false)
-    setShowRegisterClearConfirm(false)
-    setShowRegisterKeepConfirm(false)
     setShowBackConfirm(false)
     setShowCompleteConfirm(false)
   }
@@ -161,16 +202,6 @@ const WorkOrderTimeRegistrationChiba = () => {
 
   // 登録(WOクリア) - Register and clear WO data
   const handleRegisterClear = () => {
-    if (rows.length === 0) {
-      setShowCompleteConfirm(true)
-      return
-    }
-    setShowRegisterClearConfirm(true)
-  }
-
-  const confirmRegisterClear = () => {
-    // Register the data (in real app, would call API with workStartTime, workEndTime, workDuration)
-    setShowRegisterClearConfirm(false)
     clearAll()
     setWorkStartTime('')
     setWorkEndTime('')
@@ -181,24 +212,10 @@ const WorkOrderTimeRegistrationChiba = () => {
 
   // 登録(WO維持) - Register and keep WO data
   const handleRegisterKeep = () => {
-    if (rows.length === 0) {
-      setShowCompleteConfirm(true)
-      return
-    }
-    setShowRegisterKeepConfirm(true)
-  }
-
-  const confirmRegisterKeep = () => {
-    // Register the data (in real app, would call API)
-    setShowRegisterKeepConfirm(false)
-    // Clear current rows but keep WO data for more entries
-    setRows([])
-    setCheckedRowIds([])
     setWorkStartTime('')
     setWorkEndTime('')
     setWorkDurationHours('')
     setWorkDurationMinutes('')
-    setShowCompleteConfirm(true)
   }
 
   const resetTableScroll = () => {
@@ -448,7 +465,8 @@ const WorkOrderTimeRegistrationChiba = () => {
                 <div className='wot-info-soll box-padding-innput'>
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label '>人</label>
-                    <input className='wot-grid-value2' autoFocus />
+                    <input className='wot-grid-value1' autoFocus />
+                    <input className='wot-grid-value1' readOnly style={{ backgroundColor: '#e5e7eb' }} />
                   </div>
 
                   <div className='wot-info-grid wot-info-grid-2'>
@@ -456,7 +474,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                     <div className='hand-date-field'>
                       <input
                         readOnly
-                        className='wot-grid-value2'
+                        className='wot-grid-value1'
                         value={formatWoDate(woDatePickerValue)}
                         onClick={openWoDatePicker}
                         style={{ cursor: 'pointer' }}
@@ -520,27 +538,16 @@ const WorkOrderTimeRegistrationChiba = () => {
 
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>作業場</label>
-                    <input className='wot-grid-value2 wot-text-red' />
+                    <input className='wot-grid-value1 wot-text-red' />
+                    <input className='wot-grid-value1' readOnly style={{ backgroundColor: '#e5e7eb' }} />
                   </div>
                 </div>
 
                 <div className='wot-header-actions'>
-                  <div className='wot-top-row'>
-                    <button
-                      className='set-btnnew_high set-primary'
-                      type='button'
-                      onClick={() =>
-                        navigate('/factory/work-order-time-registration-choose', {
-                          state: { targetPath: '/factory/work-order-time-registration-chiba' },
-                        })
-                      }
-                    >
-                      WO選択
-                    </button>
-                  </div>
+
                   <div className='wot-radio-container'>
-                    <div className='wot-radio-title'>登録時間種類</div>
                     <div className='wot-radio-group'>
+                      <div className='wot-radio-title'>登録時間種類</div>
                       <label className='wot-radio-item'>
                         <input type='radio' name='timeType' defaultChecked />
                         <span>労務</span>
@@ -553,8 +560,21 @@ const WorkOrderTimeRegistrationChiba = () => {
                         <input type='radio' name='timeType' />
                         <span>機械</span>
                       </label>
+                      <div className='wot-top-row'>
+                        <button
+                          className='set-btnnew_high set-primary'
+                          type='button'
+                          onClick={() =>
+                            navigate('/factory/work-order-time-registration-choose', {
+                              state: { targetPath: '/factory/work-order-time-registration-chiba' },
+                            })
+                          }
+                        >
+                          WO選択
+                        </button>
+                      </div>
                     </div>
-                    <ActionFooter columns={2}>
+                    {/* <ActionFooter columns={2}>
                       <button
                         className='set-btnnew_high set-primary'
                         type='button'
@@ -581,7 +601,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                       >
                         作業終了
                       </button>
-                    </ActionFooter>
+                    </ActionFooter> */}
                   </div>
                 </div>
               </div>
@@ -602,20 +622,62 @@ const WorkOrderTimeRegistrationChiba = () => {
                   <label className='wot-footer-label '>開始</label>
                   <input
                     className='wot-grid-value2'
-                    type='time'
+                    type='text'
+                    maxLength={5}
                     value={workStartTime}
-                    onChange={(e) => setWorkStartTime(e.target.value)}
+                    onChange={(e) => {
+                      const v = e.target.value.replace(/[^0-9:]/g, '')
+                      setWorkStartTime(v)
+                    }}
+                    onClick={() => setShowStartTimePicker(true)}
+                    placeholder='--:--'
                   />
+                  <button
+                    type='button'
+                    className='hand-date-btn'
+                    aria-label='Choose time'
+                    onClick={() => setShowStartTimePicker(!showStartTimePicker)}
+                  >
+                    <FaRegClock />
+                  </button>
+                  {showStartTimePicker && (
+                    <TimePickerDropdown
+                      value={workStartTime}
+                      onChange={setWorkStartTime}
+                      onClose={() => setShowStartTimePicker(false)}
+                    />
+                  )}
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label'>終了</label>
+                  <label className='wot-footer-label wot-bg-span'>終了</label>
                   <input
                     className='wot-grid-value2'
-                    type='time'
+                    type='text'
+                    maxLength={5}
                     value={workEndTime}
-                    onChange={(e) => setWorkEndTime(e.target.value)}
+                    onChange={(e) => {
+                      const v = e.target.value.replace(/[^0-9:]/g, '')
+                      setWorkEndTime(v)
+                    }}
+                    onClick={() => setShowEndTimePicker(true)}
+                    placeholder='--:--'
                   />
+                  <button
+                    type='button'
+                    className='hand-date-btn'
+                    aria-label='Choose time'
+                    onClick={() => setShowEndTimePicker(!showEndTimePicker)}
+                  >
+                    <FaRegClock />
+                  </button>
+                  {showEndTimePicker && (
+                    <TimePickerDropdown
+                      value={workEndTime}
+                      onChange={setWorkEndTime}
+                      onClose={() => setShowEndTimePicker(false)}
+                    />
+                  )}
                 </div>
 
                 <div className='wot-footer-item'>
@@ -624,7 +686,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label'>&nbsp;</label>
+                  <label className='wot-footer-label wot-bg-span'>時間</label>
                   <input className='wot-grid-value2' value={workDurationMinutes} readOnly placeholder='分' />
                 </div>
               </div>
@@ -657,7 +719,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                 className='set-btn set-hand-input-btn'
                 onClick={handleRegisterKeep}
               >
-               作業開始
+                作業開始
               </button>
 
               <button
@@ -703,32 +765,6 @@ const WorkOrderTimeRegistrationChiba = () => {
                 <div className='set-modal-body'>選択行がありません。</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoSelectionConfirm(false)}>OK</button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showRegisterClearConfirm && (
-            <div className='set-modal-backdrop' role='presentation'>
-              <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>実績を登録してWOデータを破棄しますか？</div>
-                <div className='set-modal-actions'>
-                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterClear}>はい</button>
-                  <button className='set-modal-btn set-modal-no' onClick={() => setShowRegisterClearConfirm(false)}>いいえ</button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showRegisterKeepConfirm && (
-            <div className='set-modal-backdrop' role='presentation'>
-              <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>実績を登録してWOデータを保持しますか？</div>
-                <div className='set-modal-actions'>
-                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterKeep}>はい</button>
-                  <button className='set-modal-btn set-modal-no' onClick={() => setShowRegisterKeepConfirm(false)}>いいえ</button>
                 </div>
               </div>
             </div>
