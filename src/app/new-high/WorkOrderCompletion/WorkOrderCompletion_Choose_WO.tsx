@@ -1,28 +1,31 @@
-import {useState} from 'react'
-import {FaPlay} from 'react-icons/fa'
-import {useNavigate} from 'react-router-dom'
-import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import { useState } from 'react'
+import { FaPlay } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import {
   TableSection,
   type TableColumn as TFTableColumn,
 } from '../../components/TableSection/TableSection'
 
-const WO_MOCKUP_DATA: Record<string, {completed: number; defective: number}> = {
-  'WO-001': {completed: 9, defective: 1},
-  'WO-002': {completed: 5, defective: 5},
-  'WO-003': {completed: 8, defective: 2},
-  'WO-004': {completed: 2, defective: 5},
-  'WO-005': {completed: 6, defective: 4},
-  'WO-006': {completed: 4, defective: 6},
-  'WO-007': {completed: 9, defective: 1},
-  'WO-008': {completed: 7, defective: 3},
-  'WO-009': {completed: 4, defective: 6},
-  'WO-010': {completed: 5, defective: 5},
+const WO_MOCKUP_DATA: Record<string, { completed: number; defective: number }> = {
+  'WO-001': { completed: 9, defective: 1 },
+  'WO-002': { completed: 5, defective: 5 },
+  'WO-003': { completed: 8, defective: 2 },
+  'WO-004': { completed: 2, defective: 5 },
+  'WO-005': { completed: 6, defective: 4 },
+  'WO-006': { completed: 4, defective: 6 },
+  'WO-007': { completed: 9, defective: 1 },
+  'WO-008': { completed: 7, defective: 3 },
+  'WO-009': { completed: 4, defective: 6 },
+  'WO-010': { completed: 5, defective: 5 },
 }
 
 type Row = {
   id: number
   woNumber: string
+  itemNumber: string
+  requestDate: string
+  status: string
 }
 
 const WorkOrderCompletion_Choose_WO = () => {
@@ -32,6 +35,9 @@ const WorkOrderCompletion_Choose_WO = () => {
   const rows: Row[] = Object.keys(WO_MOCKUP_DATA).map((woNumber, index) => ({
     id: index + 1,
     woNumber,
+    itemNumber: `品番${String(index + 1).padStart(3, '0')}`,
+    requestDate: `2026/6/${index + 1}`,
+    status: '10',
   }))
   const activeRowId = rows.find((row) => row.woNumber === selectedWoNumber)?.id ?? null
 
@@ -41,7 +47,7 @@ const WorkOrderCompletion_Choose_WO = () => {
 
   const completeWoSelection = () => {
     navigate('/factory/work-order-completion', {
-      state: {selectedWoNumber},
+      state: { selectedWoNumber },
     })
   }
 
@@ -56,13 +62,34 @@ const WorkOrderCompletion_Choose_WO = () => {
       ),
     },
     {
-      key: 'item',
+      key: 'woNumber',
       headClassName: 'col-item-delivery-wo',
       cellClassName: 'col-item-delivery-wo',
       header: 'WO番号',
       render: (row) => row.woNumber,
     },
-  ]             
+    {
+      key: 'itemNumber',
+      headClassName: 'col-item-delivery-wo',
+      cellClassName: 'col-item-delivery-wo',
+      header: '品番',
+      render: (row) => row.itemNumber,
+    },
+    {
+      key: 'requestDate',
+      headClassName: 'col-item-delivery-wo',
+      cellClassName: 'col-item-delivery-wo',
+      header: '要求日',
+      render: (row) => row.requestDate,
+    },
+    {
+      key: 'status',
+      headClassName: 'col-item-delivery-wo',
+      cellClassName: 'col-item-delivery-wo',
+      header: '状況',
+      render: (row) => row.status,
+    },
+  ]
 
   return (
     <div className='mockup-page'>
@@ -85,7 +112,7 @@ const WorkOrderCompletion_Choose_WO = () => {
             />
 
             <ActionFooter columns={4}>
-              <button className='set-btn set-primary' style={{visibility: 'hidden'}}>{'\u8AAD\u8FBC'}</button>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
               <button
                 className='set-btn set-primary'
                 disabled={!selectedWoNumber}
@@ -93,7 +120,7 @@ const WorkOrderCompletion_Choose_WO = () => {
               >
                 読込
               </button>
-              <button className='set-btn set-primary' style={{visibility: 'hidden'}}>{'\u8AAD\u8FBC'}</button>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
               <button className='set-btn set-warning' onClick={() => navigate('/factory/work-order-completion')}>
                 戻る
               </button>
@@ -105,8 +132,8 @@ const WorkOrderCompletion_Choose_WO = () => {
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>
-                  {selectedWoNumber}<br />
-                  選択したWO番号で読込を完了しますか？
+                  {/* {selectedWoNumber}<br /> */}
+                  選択したWO番号を読込みますか？
                 </div>
                 <div className='set-modal-actions'>
                   <button
@@ -131,4 +158,4 @@ const WorkOrderCompletion_Choose_WO = () => {
   )
 }
 
-export {WorkOrderCompletion_Choose_WO}
+export { WorkOrderCompletion_Choose_WO }

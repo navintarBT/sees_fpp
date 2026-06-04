@@ -1,19 +1,19 @@
-import {useEffect, useState} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {FaRegCalendarAlt} from 'react-icons/fa'
-import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { FaRegCalendarAlt } from 'react-icons/fa'
+import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
-const WO_MOCKUP_DATA: Record<string, {completed: number; defective: number}> = {
-  'WO-001': {completed: 9, defective: 1},
-  'WO-002': {completed: 5, defective: 5},
-  'WO-003': {completed: 8, defective: 2},
-  'WO-004': {completed: 2, defective: 5},
-  'WO-005': {completed: 6, defective: 4},
-  'WO-006': {completed: 4, defective: 6},
-  'WO-007': {completed: 9, defective: 1},
-  'WO-008': {completed: 7, defective: 3},
-  'WO-009': {completed: 4, defective: 6},
-  'WO-010': {completed: 5, defective: 5},
+const WO_MOCKUP_DATA: Record<string, { completed: number; defective: number }> = {
+  'WO-001': { completed: 9, defective: 1 },
+  'WO-002': { completed: 5, defective: 5 },
+  'WO-003': { completed: 8, defective: 2 },
+  'WO-004': { completed: 2, defective: 5 },
+  'WO-005': { completed: 6, defective: 4 },
+  'WO-006': { completed: 4, defective: 6 },
+  'WO-007': { completed: 9, defective: 1 },
+  'WO-008': { completed: 7, defective: 3 },
+  'WO-009': { completed: 4, defective: 6 },
+  'WO-010': { completed: 5, defective: 5 },
 }
 
 const formatWoDate = (value: string) => {
@@ -38,7 +38,7 @@ const getCalendarDays = (monthDate: Date) => {
   const month = monthDate.getMonth()
   const startDate = new Date(year, month, 1 - new Date(year, month, 1).getDay())
 
-  return Array.from({length: 42}, (_, index) => {
+  return Array.from({ length: 42 }, (_, index) => {
     const date = new Date(startDate)
     date.setDate(startDate.getDate() + index)
 
@@ -58,7 +58,7 @@ const WorkOrderCompletion = () => {
   const [showWoCalendar, setShowWoCalendar] = useState(false)
   const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(todayValue))
   const [woNumber, setWoNumber] = useState('')
-  const [woData, setWoData] = useState<{completed: number; defective: number} | null>(null)
+  const [woData, setWoData] = useState<{ completed: number; defective: number } | null>(null)
   const [showWoSelect, setShowWoSelect] = useState(false)
   const [selectedWoNumber, setSelectedWoNumber] = useState('')
   const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
@@ -67,11 +67,11 @@ const WorkOrderCompletion = () => {
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   useEffect(() => {
-    const selectedWoNumber = (location.state as {selectedWoNumber?: string} | null)?.selectedWoNumber
+    const selectedWoNumber = (location.state as { selectedWoNumber?: string } | null)?.selectedWoNumber
     if (!selectedWoNumber) return
 
     setWoNumber(selectedWoNumber)
-    setWoData(WO_MOCKUP_DATA[selectedWoNumber] ?? {completed: 0, defective: 0})
+    setWoData(WO_MOCKUP_DATA[selectedWoNumber] ?? { completed: 0, defective: 0 })
   }, [location.state])
 
   const openWoDatePicker = () => {
@@ -103,7 +103,7 @@ const WorkOrderCompletion = () => {
   const loadWoData = () => {
     const normalizedWoNumber = woNumber.trim()
     setWoNumber(normalizedWoNumber)
-    setWoData(normalizedWoNumber ? WO_MOCKUP_DATA[normalizedWoNumber] ?? {completed: 0, defective: 0} : null)
+    setWoData(normalizedWoNumber ? WO_MOCKUP_DATA[normalizedWoNumber] ?? { completed: 0, defective: 0 } : null)
   }
 
   const openWoSelect = () => {
@@ -113,7 +113,7 @@ const WorkOrderCompletion = () => {
 
   const completeWoSelection = () => {
     setWoNumber(selectedWoNumber)
-    setWoData(WO_MOCKUP_DATA[selectedWoNumber] ?? {completed: 0, defective: 0})
+    setWoData(WO_MOCKUP_DATA[selectedWoNumber] ?? { completed: 0, defective: 0 })
     setShowWoLoadConfirm(false)
     setShowWoSelect(false)
   }
@@ -130,13 +130,13 @@ const WorkOrderCompletion = () => {
   }
 
   const calendarDays = getCalendarDays(woCalendarMonth)
-  const calendarMonthLabel = woCalendarMonth.toLocaleString('en-US', {month: 'long', year: 'numeric'})
+  const calendarMonthLabel = woCalendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header' style={{textAlign: 'center'}}>WO完了登録</div>
+          <div className='set-header' style={{ textAlign: 'center' }}>WO完了登録</div>
           <div className='hand-body'>
             <div className='hand-form'>
               <div className='hand-row'>
@@ -146,7 +146,7 @@ const WorkOrderCompletion = () => {
                     readOnly
                     value={formatWoDate(woDatePickerValue)}
                     onClick={openWoDatePicker}
-                    style={{textAlign: 'center'}}
+                    style={{ textAlign: 'center' }}
                   />
                   <button
                     type='button'
@@ -161,21 +161,20 @@ const WorkOrderCompletion = () => {
                       className='hand-calendar'
                       role='dialog'
                       aria-label='Choose WO completion date'
-                      style={{left: '50%', transform: 'translateX(-50%)'}}
+                      style={{ left: '50%', transform: 'translateX(-50%)', width: '520px', padding: '24px' }}
                     >
-                      <div className='hand-calendar-header'>
-                        <button type='button' onClick={() => changeWoCalendarMonth(-1)}>{'<'}</button>
+                      <div className='hand-calendar-header' style={{ gridTemplateColumns: '60px 1fr 60px', marginBottom: '14px', fontSize: '32px' }}>
+                        <button type='button' style={{ width: '60px', height: '48px', fontSize: '43px' }} onClick={() => changeWoCalendarMonth(-1)}>{'<'}</button>
                         <span>{calendarMonthLabel}</span>
-                        <button type='button' onClick={() => changeWoCalendarMonth(1)}>{'>'}</button>
+                        <button type='button' style={{ width: '60px', height: '48px', fontSize: '43px' }} onClick={() => changeWoCalendarMonth(1)}>{'>'}</button>
                       </div>
-                      <div className='hand-calendar-weekdays'>
-                        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
+                      <div className='hand-calendar-weekdays' style={{ fontSize: '29px', marginBottom: '10px', gap: '8px' }}>
+                        {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
                           <span key={day}>{day}</span>
                         ))}
-
                       </div>
-                      <div className='hand-calendar-days'>
-                        {calendarDays.map(({date, value, inMonth}) => (
+                      <div className='hand-calendar-days' style={{ gap: '8px' }}>
+                        {calendarDays.map(({ date, value, inMonth }) => (
                           <button
                             type='button'
                             key={value}
@@ -184,45 +183,29 @@ const WorkOrderCompletion = () => {
                               inMonth ? '' : 'hand-calendar-muted',
                               value === woDatePickerValue ? 'hand-calendar-selected' : '',
                             ].filter(Boolean).join(' ')}
+                            style={{ width: '60px', height: '55px', fontSize: '30px' }}
                             onClick={() => selectWoDate(value)}
                           >
                             {date.getDate()}
                           </button>
                         ))}
-
                       </div>
-                      <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 4px 4px', gap: '6px'}}>
+                      <div className='hand-calendar-footer'>
                         <button
                           type='button'
-                          style={{
-                            flex: 1,
-                            padding: '6px 0',
-                            borderRadius: '4px',
-                            border: '1px solid #4a90d9',
-                            background: '#4a90d9',
-                            color: '#fff',
-                            fontSize: '13px',
-                            cursor: 'pointer',
-                          }}
+                          className='hand-calendar-btn-today'
+                          style={{ padding: '10px 18px', fontSize: '29px' }}
                           onClick={selectToday}
                         >
-                          Today
+                          今日
                         </button>
                         <button
                           type='button'
-                          style={{
-                            flex: 1,
-                            padding: '6px 0',
-                            borderRadius: '4px',
-                            border: '1px solid #ccc',
-                            background: '#f5f5f5',
-                            color: '#555',
-                            fontSize: '13px',
-                            cursor: 'pointer',
-                          }}
+                          className='hand-calendar-btn-clear'
+                          style={{ padding: '10px 18px', fontSize: '29px' }}
                           onClick={clearDate}
                         >
-                          Clear
+                          クリア
                         </button>
                       </div>
                     </div>
@@ -231,7 +214,7 @@ const WorkOrderCompletion = () => {
               </div>
               <div className='hand-row'>
                 <label>WO番号</label>
-                <div style={{display: 'flex', gap: '15px', alignItems: 'center', justifyContent: 'center'}}>
+                <div style={{ display: 'flex', gap: '15px', alignItems: 'center', justifyContent: 'center' }}>
                   <input
                     value={woNumber}
                     onChange={(e) => {
@@ -243,39 +226,52 @@ const WorkOrderCompletion = () => {
                         loadWoData()
                       }
                     }}
-                    style={{textAlign: 'center', width: '540px'}}
+                    style={{ textAlign: 'center', width: '540px' }}
                   />
                   <button type='button' className='set-btnnew_high set-primary' onClick={() => navigate("/factory/work-order-completion-select-wo")}>WO選択</button>
                 </div>
               </div>
-              <div className='hand-row' style={{marginTop: '-2px', fontSize: '30px'}}>
+              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
                 <label>WO完了数</label>
-                <div style={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center'}}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
                   <input
                     readOnly
                     value={woData ? String(woData.completed) : ''}
-                    style={{textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '10px'}}
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '10px' }}
                     aria-label='WO completed count'
                   />
                 </div>
               </div>
-              <div className='hand-row' style={{marginTop: '-2px', fontSize: '30px'}}>
+              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
                 <label>WO仕損数</label>
-                <div style={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center'}}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
                   <input
                     readOnly
                     value={woData ? String(woData.defective) : ''}
-                    style={{textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px', color: ''}}
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px', color: '' }}
                     aria-label='WO defective count'
                   />
                 </div>
+
+              </div>
+              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
+                <label>WO計画数</label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                  <input
+                    readOnly
+                    value={woData ? String(woData.defective) : ''}
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px', color: '' }}
+                    aria-label='WO defective count'
+                  />
+                </div>
+
               </div>
             </div>
 
             <ActionFooter columns={4}>
-              <button className='set-btn set-primary' style={{visibility: 'hidden'}}>{'\u8AAD\u8FBC'}</button>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
               <button type='button' className='set-btn set-success' onClick={() => setShowRegisterConfirm(true)}>{'登録'}</button>
-              <button className='set-btn set-primary' style={{visibility: 'hidden'}}>{'\u8AAD\u8FBC'}</button>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
               <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>{'戻る'}</button>
             </ActionFooter>
 
@@ -286,10 +282,10 @@ const WorkOrderCompletion = () => {
                   role='dialog'
                   aria-modal='true'
                   aria-label='WO selection'
-                  style={{width: '680px', maxWidth: '90vw'}}
+                  style={{ width: '680px', maxWidth: '90vw' }}
                 >
                   <div className='set-modal-header'>WO選択</div>
-                  <div className='set-modal-body' style={{paddingTop: '8px'}}>
+                  <div className='set-modal-body' style={{ paddingTop: '8px' }}>
                     <div
                       style={{
                         border: '2px solid #5b6d86',
@@ -313,7 +309,7 @@ const WorkOrderCompletion = () => {
                       >
                         <span>WO番号</span>
                       </div> */}
-                      <div style={{maxHeight: '360px', overflowY: 'auto'}}>
+                      <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
                         {Object.keys(WO_MOCKUP_DATA).map((selectableWoNumber) => (
                           <button
                             key={selectableWoNumber}
@@ -433,7 +429,7 @@ const WorkOrderCompletion = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>メニューに戻ります。<br />読み込みデータを破棄しますか？</div>
+                  <div className='set-modal-body'>メニューに戻ります。<br />よろしいですか？		</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -461,4 +457,4 @@ const WorkOrderCompletion = () => {
   )
 }
 
-export {WorkOrderCompletion}
+export { WorkOrderCompletion }
