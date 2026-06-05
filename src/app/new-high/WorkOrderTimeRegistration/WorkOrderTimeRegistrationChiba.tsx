@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
@@ -71,6 +71,51 @@ type Row = {
   itemName: string
 }
 
+const getColumnTextValue = (key: string, row: Row): string => {
+  switch (key) {
+    case 'woNo': return row.woNo
+    case 'itemNo': return row.itemNo
+    case 'itemName': return row.itemName
+    default: return ''
+  }
+}
+
+const COLUMN_DEFS: Array<{ key: string; header: string }> = [
+  { key: 'check', header: '' },
+  { key: 'woNo', header: 'WoNo' },
+  { key: 'itemNo', header: '品番' },
+  { key: 'itemName', header: '品名' },
+]
+
+const measureColumnWidths = (rows: Row[]): React.CSSProperties | undefined => {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return undefined
+
+  ctx.font = '400 28px sans-serif'
+  const cellPadding = 36
+
+  const colWidths = COLUMN_DEFS.map(({ key, header }) => {
+    if (key === 'check') return '56px'
+
+    let maxWidth = ctx.measureText(header).width + cellPadding
+
+    for (const row of rows) {
+      const text = getColumnTextValue(key, row)
+      const w = ctx.measureText(text).width + cellPadding
+      if (w > maxWidth) maxWidth = w
+    }
+
+    if (key === 'itemNo' || key === 'itemName') {
+      return `minmax(${Math.ceil(maxWidth)}px, 1fr)`
+    }
+
+    return `${Math.ceil(maxWidth)}px`
+  })
+
+  return { gridTemplateColumns: colWidths.join(' ') }
+}
+
 const DEFAULT_ROWS: Row[] = [
   { id: 1, woNo: 'wo-1', itemNo: 'a', itemName: '製品a' },
   { id: 2, woNo: 'wo-2', itemNo: 'b', itemName: '製品b' },
@@ -129,7 +174,7 @@ const TimePickerDropdown = ({ value, onChange, onClose }: { value: string; onCha
 
 const WorkOrderTimeRegistrationChiba = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>(DEFAULT_ROWS)
+  const [rows, setRows] = useState<Row[]>([])
 
   const todayValue = toDateValue(new Date())
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
@@ -167,6 +212,8 @@ const WorkOrderTimeRegistrationChiba = () => {
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
+
+  const gridStyle = useMemo(() => measureColumnWidths(rows), [rows])
 
   const isAnyModalOpen =
     showDeleteSelectedConfirm ||
@@ -207,6 +254,14 @@ const WorkOrderTimeRegistrationChiba = () => {
     setWorkEndTime('')
     setWorkDurationHours('')
     setWorkDurationMinutes('')
+    sessionStorage.removeItem('workOrderTimeRegistrationChibaRows')
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_gosen')
+    
+    // Clear location state so that a page reload doesn't repopulate the data
+    navigate(location.pathname, { replace: true, state: {} })
+    
     setShowCompleteConfirm(true)
   }
 
@@ -611,6 +666,7 @@ const WorkOrderTimeRegistrationChiba = () => {
               columns={tableColumns}
               rows={rows}
               gridClassName='WorkOrderTimeRegistrationChiba-table'
+              gridStyle={gridStyle}
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               isRowActive={(rowKey) => checkedRowIds.includes(Number(rowKey))}
