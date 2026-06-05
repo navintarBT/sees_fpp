@@ -1640,6 +1640,14 @@ input.wot-grid-value {
 
 /* ####################################table wOHandInputPage ########################################### */
 
+.wOHandInputPage-table .tf-tableGrid {
+  grid-template-columns: 50px 410px 120px 240px 236px !important;
+}
+
+.wOHandInputPage-table .tf-tableCell {
+  min-width: 0;
+}
+
 .wOHandInputPage-table .col-Interior {
   min-width: 410px;
 }
@@ -1662,6 +1670,23 @@ input.wot-grid-value {
 
 .wOHandInputPage-table .col-arrow-head {
   min-width: 50px;
+}
+
+.wOHandInputPage-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.wOHandInputPage-table .tf-tableRowActive .col-arrow {
+  background: #d1d5db;
+}
+
+.wOHandInputPage-table .tf-tableHead .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 3;
 }
 
 

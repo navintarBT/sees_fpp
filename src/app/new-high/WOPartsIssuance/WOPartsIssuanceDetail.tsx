@@ -17,8 +17,27 @@ type SelectedRowPayload = {
   reqNumber: string
 }
 
+type DetailRow = {
+  id: number
+  Interior: string
+  lot: string
+  numOfShipments: string
+  office: string
+}
+
+type MainRow = {
+  id: number
+  woNumber: string
+  partNumber: string
+  reqNumber: string
+  lot: string
+  numOfShipments: string
+  office: string
+  storage: string
+}
+
 type WOPartsIssuanceReturnState = {
-  rows: unknown[]
+  rows: MainRow[]
   form: {
     parentWarehouse: string
     parentItemNo: string
@@ -33,31 +52,19 @@ type WOPartsIssuanceReturnState = {
   activeRowId: number | null
   isInternalLabelLocked: boolean
   isIssueDetailLocked: boolean
+  detailHistory: Record<number, DetailRow[]>
 }
 
 type DetailLocationState = SelectedRowPayload & {
   returnState?: WOPartsIssuanceReturnState
+  detailRows?: DetailRow[]
 }
 
 const WOPartsIssuanceDetail = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const selectedRow = (location.state as DetailLocationState | null) ?? null
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      Interior: 'LOC-001',
-      office:'Fxxx', 
-      numOfShipments: '8',
-      lot: 'LOT-0130',
-    },
-    {
-      id: 2,
-      Interior: 'LOC-001',
-      office:'Fxxx', 
-      numOfShipments: '2',
-      lot: 'LOT-0202',
-    },
+  const [rows, setRows] = useState<Row[]>(selectedRow?.detailRows ?? [
     // {
     //   id: 3,
     //   Interior: '部品003',
@@ -196,6 +203,36 @@ const WOPartsIssuanceDetail = () => {
     setShowCompleteConfirm(false)
     setShowDetailConfirm(false)
     setShowBackConfirm(false)
+  }
+
+  const buildUpdatedReturnState = (currentRows: Row[]) => {
+    const rs = selectedRow?.returnState
+    if (!rs) return undefined
+    const activeRowId = rs.activeRowId
+
+    const updatedDetailHistory = {
+      ...(rs.detailHistory ?? {}),
+      ...(activeRowId != null ? {[activeRowId]: currentRows} : {}),
+    }
+
+    const updatedMainRows = rs.rows.map((mainRow) => {
+      if (mainRow.id !== activeRowId) return mainRow
+      if (currentRows.length === 0) {
+        return {...mainRow, lot: '', numOfShipments: '', office: ''}
+      }
+      const totalQty = currentRows.reduce((sum, e) => sum + Number(e.numOfShipments), 0)
+      const allSameStorage = currentRows.every((e) => e.Interior === currentRows[0].Interior)
+      const allSameLot = currentRows.every((e) => e.lot === currentRows[0].lot)
+      return {
+        ...mainRow,
+        storage: allSameStorage ? currentRows[0].Interior : '*',
+        lot: allSameLot ? currentRows[0].lot : '*',
+        numOfShipments: String(totalQty),
+        office: currentRows[currentRows.length - 1].office,
+      }
+    })
+
+    return {...rs, rows: updatedMainRows, detailHistory: updatedDetailHistory}
   }
 
   const clearRows = () => {
@@ -444,10 +481,10 @@ const WOPartsIssuanceDetail = () => {
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        const nextRows = rows.filter((row) => !checkedRowIds.includes(row.id))
+                        setRows(nextRows)
+                        setCheckedRowIds([])
                         setShowDeleteConfirm(false)
-                        navigate('/factory/wo-parts-issuance', {
-                          state: selectedRow?.returnState,
-                        })
                       }}
                     >
                       はい
@@ -474,7 +511,7 @@ const WOPartsIssuanceDetail = () => {
                       onClick={() => {
                         setShowBackConfirm(false)
                         navigate('/factory/wo-parts-issuance', {
-                          state: selectedRow?.returnState,
+                          state: buildUpdatedReturnState(rows),
                         })
                       }}
                     >

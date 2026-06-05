@@ -40,12 +40,21 @@ type FormState = {
   janCode: string
 }
 
+type DetailEntry = {
+  id: number
+  Interior: string
+  lot: string
+  numOfShipments: string
+  office: string
+}
+
 type WOPartsIssuanceReturnState = {
   rows: Row[]
   form: FormState
   activeRowId: number | null
   isInternalLabelLocked: boolean
   isIssueDetailLocked: boolean
+  detailHistory: Record<number, DetailEntry[]>
 }
 
 const initialForm: FormState = {
@@ -72,6 +81,18 @@ const INTERNAL_LABEL_PRESETS: Record<string, InternalLabelPreset> = {
     storage: 'LOC-001',
     office: 'Fxxx',
     lot: '*',
+  },
+  '部品002 LOT-0130': {
+    shipmentQty: '8',
+    storage: 'LOC-002',
+    office: 'Fxxx',
+    lot: 'LOT-0130',
+  },
+  '部品002 LOT-0202': {
+    shipmentQty: '2',
+    storage: 'LOC-003',
+    office: 'Fxxx',
+    lot: 'LOT-0202',
   },
 }
 
@@ -230,6 +251,7 @@ const WOPartsIssuance = () => {
   const [isIssueDetailLocked, setIsIssueDetailLocked] = useState(restoredState?.isIssueDetailLocked ?? true)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [activeRowId, setActiveRowId] = useState<number | null>(restoredState?.activeRowId ?? null)
+  const [detailHistory, setDetailHistory] = useState<Record<number, DetailEntry[]>>(restoredState?.detailHistory ?? {})
   const sourceRowsRef = useRef<Row[]>(initialRows)
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
@@ -330,45 +352,70 @@ const WOPartsIssuance = () => {
   }
 
   const applyDecide = () => {
+    const internalLabel = form.internalLabel.trim()
+    const partNumberFromLabel = internalLabel.substring(0, 5)
+    const lotFromLabel = internalLabel.slice(-8)
+
     const shipmentQty = form.shipmentQty.trim()
     const storage = form.storage.trim()
     const office = form.office.trim()
-    const lot = INTERNAL_LABEL_PRESETS[form.internalLabel.trim()]?.lot
 
-    if (!shipmentQty || !storage || !office) {
-      return
-    }
+    if (!partNumberFromLabel || !shipmentQty || !storage || !office) return
 
     const qtyToAdd = Number(shipmentQty)
-    if (!Number.isFinite(qtyToAdd)) {
-      return
-    }
+    if (!Number.isFinite(qtyToAdd)) return
 
-    const woKeywords = form.woNumber
-      .split(/[,\.\u3001]+/)
+    const enteredWoNumbers = form.woNumber
+      .split(/[,.\u3001]+/)
       .map((v) => v.trim().toUpperCase())
       .filter((v) => v.length > 0)
 
-    setRows((prev) => {
-      const targetIndex = prev.findIndex(
-        (row) =>
-          row.storage.trim().toUpperCase() === storage.toUpperCase() &&
-          (woKeywords.length === 0 || woKeywords.includes(row.woNumber.toUpperCase())),
-      )
+    const targetRow = rows.find(
+      (row) =>
+        (enteredWoNumbers.length === 0 || enteredWoNumbers.includes(row.woNumber.toUpperCase())) &&
+        row.partNumber.trim() === partNumberFromLabel,
+    )
 
-      if (targetIndex === -1) {
-        return prev
-      }
+    if (!targetRow) return
 
-      const targetRow = prev[targetIndex]
-      const currentQty = Number(targetRow.numOfShipments || '0')
-      const nextQty = (Number.isFinite(currentQty) ? currentQty : 0) + qtyToAdd
-
-      const updatedRow: Row = {
-        ...targetRow,
-        lot: lot ?? targetRow.lot,
-        numOfShipments: String(nextQty),
+    setDetailHistory((prev) => {
+      const existing = prev[targetRow.id] ?? []
+      const newEntry: DetailEntry = {
+        id: existing.length + 1,
+        Interior: storage,
+        lot: lotFromLabel,
+        numOfShipments: shipmentQty,
         office,
+      }
+      return {...prev, [targetRow.id]: [...existing, newEntry]}
+    })
+
+    setRows((prev) => {
+      const targetIndex = prev.findIndex((row) => row.id === targetRow.id)
+      if (targetIndex === -1) return prev
+
+      const current = prev[targetIndex]
+      const isFirstTime = current.numOfShipments === ''
+
+      let updatedRow: Row
+      if (isFirstTime) {
+        updatedRow = {
+          ...current,
+          lot: lotFromLabel,
+          numOfShipments: shipmentQty,
+          storage,
+          office,
+        }
+      } else {
+        const currentQty = Number(current.numOfShipments)
+        const nextQty = (Number.isFinite(currentQty) ? currentQty : 0) + qtyToAdd
+        updatedRow = {
+          ...current,
+          lot: current.lot === lotFromLabel ? current.lot : '*',
+          numOfShipments: String(nextQty),
+          storage: current.storage === storage ? storage : '*',
+          office,
+        }
       }
 
       const nextRows = [...prev]
@@ -412,6 +459,7 @@ const WOPartsIssuance = () => {
     activeRowId,
     isInternalLabelLocked,
     isIssueDetailLocked,
+    detailHistory,
   }
 
   const handleInternalLabelEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -611,13 +659,14 @@ const WOPartsIssuance = () => {
               >
                 出庫登録
               </button>
-              <button
-                className='set-btn set-primary'
-                onClick={() => setShowPrinting(true)}
-                style={{fontSize: '35px'}}
+                <button
+                className='set-btn set-danger'
+                onClick={() => setShowRegistration(true)}
+                style={{visibility: 'hidden'}}
+
               >
-                出庫票印刷
-              </button>   
+                出庫登録
+              </button>
               <button
                 className='set-btn set-primary set-hand-input-btn'
                 onClick={() => {
@@ -653,7 +702,7 @@ const WOPartsIssuance = () => {
                         setShowHandInputConfirm(false)
                       }}
                     >
-                      はい
+                    はい
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
@@ -681,13 +730,13 @@ const WOPartsIssuance = () => {
                         setShowRegistrationComplete(true)
                       }}
                     >
-                      {'\u306f\u3044'}
+                      はい
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowRegistration(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      いいえ
                     </button>
                   </div>
                 </div>
@@ -723,13 +772,13 @@ const WOPartsIssuance = () => {
                         setShowPrinting(false)
                       }}
                     >
-                      {'\u306f\u3044'}
+                      はい
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowPrinting(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      いいえ
                     </button>
                   </div>
                 </div>
@@ -768,6 +817,7 @@ const WOPartsIssuance = () => {
                           state: {
                             ...selectedRowPayload,
                             returnState,
+                            detailRows: activeRowId != null ? (detailHistory[activeRowId] ?? []) : [],
                           },
                         })
                       }}
@@ -795,19 +845,25 @@ const WOPartsIssuance = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/button-access')
+                        navigate('/factory/factory')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/button-access')
+                        navigate('/factory/factory')
                       }}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={() => setShowBackConfirm(false)}
+                    >
+                      取消
                     </button>
                   </div>
                 </div>

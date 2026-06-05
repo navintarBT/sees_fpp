@@ -9,6 +9,7 @@ type Row = {
   storage: string
   numOfShipments: string
   Interior: string
+  locked?: boolean
 }
 
 const INTERIOR_LABEL_DATA: Record<string, Omit<Row, 'id'>> = {
@@ -24,6 +25,18 @@ const INTERIOR_LABEL_DATA: Record<string, Omit<Row, 'id'>> = {
     storage: 'LOC-001',
     office: 'Fxxx',
   },
+}
+
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  minWidth: 0,
+  height: '100%',
+  border: 0,
+  outline: 'none',
+  boxShadow: 'none',
+  background: 'transparent',
+  font: 'inherit',
+  textAlign: 'center',
 }
 
 const WOPartsIssuanceHandInputPage = () => {
@@ -95,7 +108,7 @@ const WOPartsIssuanceHandInputPage = () => {
     setRows((prev) => {
       const hasNextEmptyRow = prev.some((row) => row.id > rowId && row.Interior === '')
       const updatedRows = prev.map((row) =>
-        row.id === rowId ? {...row, ...scannedData} : row,
+        row.id === rowId ? {...row, ...scannedData, locked: true} : row,
       )
 
       if (hasNextEmptyRow) return updatedRows
@@ -153,55 +166,93 @@ const WOPartsIssuanceHandInputPage = () => {
       headClassName: 'col-arrow-head',
       cellClassName: 'col-arrow',
       header: '',
-      render: (row) => (selectedRowIds.includes(row.id) ? '\u25b6' : ''),
+      render: (row) => (selectedRowIds.includes(row.id) ? '▶' : ''),
     },
     {
       key: 'Interior',
       headClassName: 'col-Interior',
       cellClassName: 'col-Interior',
       header: '庫内ラベル',
+      render: (row) => {
+        const isLocked = !!row.locked
+        return (
+          <input
+            ref={(el) => {
+              interiorInputRefs.current[row.id] = el
+            }}
+            style={{
+              ...inputStyle,
+              background: 'transparent',
+              cursor: isLocked ? 'default' : 'text',
+            }}
+            value={row.Interior}
+            disabled={isLocked}
+            onChange={(e) => updateRow(row.id, {Interior: e.target.value})}
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                e.stopPropagation()
+                handleInteriorScan(row.id)
+              }
+            }}
+          />
+        )
+      },
+    },
+    {
+      key: 'numOfShipments',
+      headClassName: 'col-numOfShipments',
+      cellClassName: 'col-numOfShipments',
+      header: '出庫数',
       render: (row) => (
         <input
-          ref={(el) => {
-            interiorInputRefs.current[row.id] = el
-          }}
-          style={{
-            width: '100%',
-            height: '100%',
-            border: 0,
-            outline: 'none',
-            boxShadow: 'none',
-            background: 'transparent',
-            font: 'inherit',
-            textAlign: 'center',
-          }}
-          value={row.Interior}
-          onChange={(e) => updateRow(row.id, {Interior: e.target.value})}
+          style={{...inputStyle, width: '120px'}}
+          value={row.numOfShipments}
+          onChange={(e) => updateRow(row.id, {numOfShipments: e.target.value})}
           onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-              e.stopPropagation()
-              handleInteriorScan(row.id)
-            }
-          }}
         />
       ),
     },
-    {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '\u51fa\u5eab\u6570', render: (row) => row.numOfShipments},
-    {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '\u4fdd\u7ba1\u5834\u6240', render: (row) => row.storage},
-    {key: 'office', headClassName: 'col-office', cellClassName: 'col-office', header: '\u4e8b\u696d\u6240', render: (row) => row.office},
+    {
+      key: 'storage',
+      headClassName: 'col-storage',
+      cellClassName: 'col-storage',
+      header: '保管場所',
+      render: (row) => (
+        <input
+          style={{...inputStyle, width: '240px'}}
+          value={row.storage}
+          onChange={(e) => updateRow(row.id, {storage: e.target.value})}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
+    {
+      key: 'office',
+      headClassName: 'col-office',
+      cellClassName: 'col-office',
+      header: '事業所',
+      render: (row) => (
+        <input
+          style={{...inputStyle, width: '236px'}}
+          value={row.office}
+          onChange={(e) => updateRow(row.id, {office: e.target.value})}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+    },
   ]
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>{'WO\u90e8\u54c1\u51fa\u5eab \u54c1\u756a\u5225'}</div>
+          <div className='set-header'>{'WO部品出庫 品番別'}</div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
-                <label>{'\u54c1\u756a'}</label>
+                <label>{'品番'}</label>
                 <input
                   ref={itemInputRef}
                   style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
@@ -216,7 +267,7 @@ const WOPartsIssuanceHandInputPage = () => {
                 />
               </div>
               <div className='set-row'>
-                <label>{'WO\u756a\u53f7'}</label>
+                <label>{'WO番号'}</label>
                 <input
                   style={{textAlign: 'center'}}
                   value={parentSerial}
@@ -224,7 +275,7 @@ const WOPartsIssuanceHandInputPage = () => {
                 />
               </div>
               <div className='set-row'>
-                <label>{'\u5fc5\u8981\u6570'}</label>
+                <label>{'必要数'}</label>
                 <input
                   style={{textAlign: 'center'}}
                   value={moveStorage}
@@ -249,20 +300,20 @@ const WOPartsIssuanceHandInputPage = () => {
                 onClick={() => setShowHandInputConfirm(true)}
                 style={{visibility: 'hidden'}}
               >
-                {'\u51fa\u5eab\u767b\u9332'}
+                {'出庫登録'}
               </button>
               <button
                 className='set-btn set-danger'
                 onClick={() => setShowHandInputConfirm(true)}
               >
-                {'\u51fa\u5eab\u767b\u9332'}
+                {'出庫登録'}
               </button>
               <button
                 className='set-btn set-success'
                 onClick={() => setShowHandInputConfirm(true)}
                 style={{visibility: 'hidden'}}
               >
-                {'\u51fa\u5eab\u767b\u9332'}
+                {'出庫登録'}
               </button>
               <button
                 className='set-btn set-hand-input-btn'
@@ -274,7 +325,7 @@ const WOPartsIssuanceHandInputPage = () => {
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}
               >
-                {'\u623b\u308b'}
+                {'戻る'}
               </button>
 
             </ActionFooter>
@@ -283,7 +334,7 @@ const WOPartsIssuanceHandInputPage = () => {
           {showHandInputConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-header'>{'確認'}</div>
                 <div className='set-modal-body'>登録しますか？</div>
                 <div className='set-modal-actions'>
                   <button
@@ -293,7 +344,7 @@ const WOPartsIssuanceHandInputPage = () => {
                       setShowRegisteredComplete(true)
                     }}
                   >
-                    {'\u306f\u3044'}
+                    はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
@@ -301,7 +352,7 @@ const WOPartsIssuanceHandInputPage = () => {
                       setShowHandInputConfirm(false)
                     }}
                   >
-                    {'\u3044\u3044\u3048'}
+                    いいえ
                   </button>
                 </div>
               </div>
@@ -311,7 +362,7 @@ const WOPartsIssuanceHandInputPage = () => {
           {showRegisteredComplete && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-header'>{'確認'}</div>
                 <div className='set-modal-body'>登録しました。</div>
                 <div className='set-modal-actions'>
                   <button
@@ -331,26 +382,32 @@ const WOPartsIssuanceHandInputPage = () => {
           {showBackConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-header'>{'確認'}</div>
                 <div className='set-modal-body'>メニューに戻ります。<br />読込データを破棄しますか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/button-access')
+                      navigate('/factory/factory')
                     }}
                   >
-                    {'\u306f\u3044'}
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/button-access')
+                      navigate('/factory/factory')
                     }}
                   >
-                    {'\u3044\u3044\u3048'}
+                    NO
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowBackConfirm(false)}
+                  >
+                    取消
                   </button>
                 </div>
               </div>
@@ -360,7 +417,7 @@ const WOPartsIssuanceHandInputPage = () => {
           {showNoSelectionConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-header'>{'確認'}</div>
                 <div className='set-modal-body'>選択行がありません</div>
                 <div className='set-modal-actions'>
                   <button
@@ -377,7 +434,7 @@ const WOPartsIssuanceHandInputPage = () => {
           {showDeleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
+                <div className='set-modal-header'>{'確認'}</div>
                 <div className='set-modal-body'>選択行を削除しますか？</div>
                 <div className='set-modal-actions'>
                   <button
