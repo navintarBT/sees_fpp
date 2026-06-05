@@ -175,6 +175,10 @@ const TimePickerDropdown = ({ value, onChange, onClose }: { value: string; onCha
 const WorkOrderTimeRegistrationChiba = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
+  const storedRowsKey = 'workOrderTimeRegistrationChibaRows'
+  const saveRowsToStorage = (rowsToSave: Row[]) => {
+    sessionStorage.setItem(storedRowsKey, JSON.stringify(rowsToSave))
+  }
 
   const todayValue = toDateValue(new Date())
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
@@ -237,13 +241,20 @@ const WorkOrderTimeRegistrationChiba = () => {
   }
 
   const confirmDeleteSelected = () => {
-    setRows((prev) => prev.filter((row) => !checkedRowIds.includes(row.id)))
+    setRows((prev) => {
+      const nextRows = prev.filter((row) => !checkedRowIds.includes(row.id))
+      saveRowsToStorage(nextRows)
+      return nextRows
+    })
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
     setCheckedRowIds([])
     setShowDeleteSelectedConfirm(false)
   }
 
   const clearAll = () => {
     setRows([])
+    saveRowsToStorage([])
     setCheckedRowIds([])
   }
 
@@ -321,7 +332,6 @@ const WorkOrderTimeRegistrationChiba = () => {
   }, [workStartTime, workEndTime])
 
   const location = useLocation()
-  const storedRowsKey = 'workOrderTimeRegistrationChibaRows'
   const sessionKey = 'workOrderTimeRegistrationSelectedWoNumbers'
 
   useEffect(() => {

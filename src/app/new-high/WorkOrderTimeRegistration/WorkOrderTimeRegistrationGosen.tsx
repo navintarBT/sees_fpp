@@ -360,6 +360,8 @@ const WorkOrderTimeRegistrationGosen = () => {
       saveRowsToStorage(nextRows)
       return nextRows
     })
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_gosen')
     setCheckedRowIds([])
     setShowDeleteSelectedConfirm(false)
   }

@@ -1,4 +1,4 @@
-.set-header {
+﻿.set-header {
   height: 140px;
   background: linear-gradient(90deg, #e3f0fa 0%, #b6d0e2 100%);
   color: #1a2a4a;
@@ -764,11 +764,11 @@
 
 .hand-timepicker {
   position: absolute;
-  top: -210px;
+  top: -270px;
   right: 0;
   z-index: 20;
-  width: 200px;
-  height: 200px;
+  width: 260px;
+  height: 260px;
   display: flex;
   background: #ffffff;
   border: 1px solid #cbd5e1;
@@ -801,9 +801,9 @@
 }
 
 .hand-timepicker-item {
-  padding: 8px;
+  padding: 10px;
   text-align: center;
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
 }
 
