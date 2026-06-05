@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
-import { FaRegCalendarAlt } from 'react-icons/fa'
+import { FaRegCalendarAlt, FaRegClock } from 'react-icons/fa'
 
 const formatWoDate = (value: string) => {
   const [year, month, day] = value.split('-')
@@ -79,6 +79,106 @@ type Row = {
   opDesc?: string
   processStatus?: string
   remarks?: string
+}
+
+const getColumnTextValue = (key: string, row: Row): string => {
+  switch (key) {
+    case 'woNo': return row.woNo
+    case 'itemNo': return row.itemNo
+    case 'itemName': return row.itemName
+    case 'targetTime': return row.targetTime ?? ''
+    case 'acceptedQty': return row.acceptedQty ?? ''
+    case 'defectiveQty': return row.defectiveQty ?? ''
+    case 'opOrder': return row.opOrder ?? ''
+    case 'opDesc': return row.opDesc ?? ''
+    case 'processStatus': return row.processStatus ?? ''
+    case 'remarks': return row.remarks ?? ''
+    default: return ''
+  }
+}
+
+const COLUMN_DEFS: Array<{ key: string; header: string }> = [
+  { key: 'check', header: '' },
+  { key: 'woNo', header: 'WoNo' },
+  { key: 'itemNo', header: '品番' },
+  { key: 'itemName', header: '品名' },
+  { key: 'targetTime', header: '目標時間' },
+  { key: 'acceptedQty', header: '合格数' },
+  { key: 'defectiveQty', header: '不良数' },
+  { key: 'opOrder', header: '作業順序' },
+  { key: 'opDesc', header: '作業記述' },
+  { key: 'processStatus', header: '工程状況' },
+  { key: 'remarks', header: '備考' },
+]
+
+const measureColumnWidths = (rows: Row[]): React.CSSProperties | undefined => {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return undefined
+
+  ctx.font = '400 28px sans-serif'
+  const cellPadding = 36
+
+  const colWidths = COLUMN_DEFS.map(({ key, header }) => {
+    if (key === 'check') return '56px'
+
+    let maxWidth = ctx.measureText(header).width + cellPadding
+
+    for (const row of rows) {
+      const text = getColumnTextValue(key, row)
+      const w = ctx.measureText(text).width + cellPadding
+      if (w > maxWidth) maxWidth = w
+    }
+
+    return `${Math.ceil(maxWidth)}px`
+  })
+
+  return { gridTemplateColumns: colWidths.join(' ') }
+}
+
+const TimePickerDropdown = ({ value, onChange, onClose }: { value: string; onChange: (val: string) => void; onClose: () => void }) => {
+  const currentHour = value && value.includes(':') ? value.split(':')[0] : '00'
+  const currentMinute = value && value.includes(':') ? value.split(':')[1] : '00'
+
+  return (
+    <div className='hand-timepicker'>
+      <div className='hand-timepicker-col'>
+        {Array.from({ length: 24 }).map((_, i) => {
+          const h = i.toString().padStart(2, '0')
+          return (
+            <div
+              key={`h-${h}`}
+              className={`hand-timepicker-item ${currentHour === h ? 'selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                onChange(`${h}:${currentMinute}`)
+              }}
+            >
+              {h}
+            </div>
+          )
+        })}
+      </div>
+      <div className='hand-timepicker-col'>
+        {Array.from({ length: 60 }).map((_, i) => {
+          const m = i.toString().padStart(2, '0')
+          return (
+            <div
+              key={`m-${m}`}
+              className={`hand-timepicker-item ${currentMinute === m ? 'selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                onChange(`${currentHour}:${m}`)
+                onClose()
+              }}
+            >
+              {m}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 const SESSION_STORAGE_KEY = 'workOrderTimeRegistrationSelectedWoNumbers'
@@ -190,6 +290,8 @@ const WorkOrderTimeRegistrationGosen = () => {
     sessionStorage.setItem(SESSION_STORAGE_ROWS_KEY, JSON.stringify(rowsToSave))
   }
 
+  const gridStyle = useMemo(() => measureColumnWidths(rows), [rows])
+
   const todayValue = toDateValue(new Date())
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
   const [showWoCalendar, setShowWoCalendar] = useState(false)
@@ -220,9 +322,11 @@ const WorkOrderTimeRegistrationGosen = () => {
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [workStartTime, setWorkStartTime] = useState('')
   const [workEndTime, setWorkEndTime] = useState('')
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false)
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false)
   const [workDurationHours, setWorkDurationHours] = useState('')
   const [workDurationMinutes, setWorkDurationMinutes] = useState('')
-
+  const [showRegisterKeepConfirm, setShowRegisterKeepConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
 
@@ -238,6 +342,7 @@ const WorkOrderTimeRegistrationGosen = () => {
     setShowNoSelectionConfirm(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
+    setShowRegisterKeepConfirm(false)
     setShowBackConfirm(false)
   }
 
@@ -255,6 +360,8 @@ const WorkOrderTimeRegistrationGosen = () => {
       saveRowsToStorage(nextRows)
       return nextRows
     })
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_gosen')
     setCheckedRowIds([])
     setShowDeleteSelectedConfirm(false)
   }
@@ -300,6 +407,14 @@ const WorkOrderTimeRegistrationGosen = () => {
       setWorkDurationMinutes(duration.minutes)
       return
     }
+    setWorkDurationHours('')
+    setWorkDurationMinutes('')
+  }
+
+  // 登録(WO維持) - Register and keep WO data
+  const handleRegisterKeep = () => {
+    setWorkStartTime('')
+    setWorkEndTime('')
     setWorkDurationHours('')
     setWorkDurationMinutes('')
   }
@@ -634,18 +749,19 @@ const WorkOrderTimeRegistrationGosen = () => {
             <div className='set-formnew_high '>
               <div className='wot-header-container '>
                 {/* Left side: Info Grid */}
-                <div className='wot-info-soll'>
-                  <div className='wot-info-grid'>
-                    <label className='wot-grid-label wot-bg-blue' >人</label>
-                    <input className='wot-grid-value' autoFocus />
+                <div className='wot-info-soll box-padding-innput'>
+                  <div className='wot-info-grid wot-info-grid-2'>
+                    <label className='wot-grid-label wot-bg-blue'>人</label>
+                    <input className='wot-grid-value1' autoFocus />
+                    <input className='wot-grid-value1' style={{ backgroundColor: '#e5e7eb' }} />
                   </div>
 
-                  <div className='wot-info-grid'>
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-blue'>日付</label>
                     <div className='hand-date-field'>
                       <input
                         readOnly
-                        className='wot-grid-value'
+                        className='wot-grid-value1'
                         value={formatWoDate(woDatePickerValue)}
                         onClick={openWoDatePicker}
                         style={{ cursor: 'pointer' }}
@@ -707,29 +823,27 @@ const WorkOrderTimeRegistrationGosen = () => {
                     </div>
                   </div>
 
-                  <div className='wot-info-grid'>
+
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>工程状況初期値</label>
-                    <input className='wot-grid-value wot-text-red' />
+                    <input className='wot-grid-value1 wot-text-red' />
                   </div>
-                  <div className='wot-info-grid'>
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>作業順序</label>
-                    <input className='wot-grid-value wot-text-red' />
+                    <input className='wot-grid-value1 wot-text-red' />
                   </div>
-                  <div className='wot-info-grid'>
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>備考</label>
-                    <input className='wot-grid-value wot-text-red' />
+                    <input className='wot-grid-value1 wot-text-red' />
                   </div>
+
                 </div>
 
                 <div className='wot-header-actions'>
-                  <div className='wot-top-row'>
-                    <button className='set-btnnew_high set-primary' onClick={() => navigate('/factory/work-order-time-registration-choose')}>
-                      WO選択
-                    </button>
-                  </div>
+
                   <div className='wot-radio-container'>
-                    <div className='wot-radio-title'>登録時間種類</div>
                     <div className='wot-radio-group'>
+                      <div className='wot-radio-title'>登録時間種類</div>
                       <label className='wot-radio-item'>
                         <input type='radio' name='timeType' defaultChecked />
                         <span>労務</span>
@@ -742,8 +856,14 @@ const WorkOrderTimeRegistrationGosen = () => {
                         <input type='radio' name='timeType' />
                         <span>機械</span>
                       </label>
+                      <div className='wot-top-row'>
+                        <button className='set-btnnew_high set-primary' onClick={() => navigate('/factory/work-order-time-registration-choose')}>
+                          WO選択
+                        </button>
+                      </div>
                     </div>
-                    <ActionFooter columns={2}>
+
+                    {/* <ActionFooter columns={2}>
                       <button
                         className='set-btnnew_high set-primary'
                         type='button'
@@ -772,7 +892,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                       >
                         作業終了
                       </button>
-                    </ActionFooter>
+                    </ActionFooter> */}
                   </div>
                 </div>
               </div>
@@ -782,6 +902,7 @@ const WorkOrderTimeRegistrationGosen = () => {
               columns={tableColumns}
               rows={rows}
               gridClassName='delivery-table'
+              gridStyle={gridStyle}
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               isRowActive={(rowKey) => checkedRowIds.includes(Number(rowKey))}
@@ -792,48 +913,90 @@ const WorkOrderTimeRegistrationGosen = () => {
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-blue'>開始</label>
                   <input
-                    className='wot-grid-value'
-                    type='time'
+                    className='wot-grid-value2'
+                    type='text'
+                    placeholder='--:--'
+                    maxLength={5}
                     value={workStartTime}
-                    onChange={(e) => setWorkStartTime(e.target.value)}
+                    onChange={(e) => {
+                      const v = e.target.value.replace(/[^0-9:]/g, '')
+                      setWorkStartTime(v)
+                    }}
+                    onClick={() => setShowStartTimePicker(true)}
                   />
+                  <button
+                    type='button'
+                    className='hand-date-btn'
+                    aria-label='Choose time'
+                    onClick={() => setShowStartTimePicker(!showStartTimePicker)}
+                  >
+                    <FaRegClock />
+                  </button>
+                  {showStartTimePicker && (
+                    <TimePickerDropdown
+                      value={workStartTime}
+                      onChange={setWorkStartTime}
+                      onClose={() => setShowStartTimePicker(false)}
+                    />
+                  )}
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>終了</label>
+                  <label className='wot-footer-label wot-bg-span'>終了</label>
                   <input
-                    className='wot-grid-value'
-                    type='time'
+                    className='wot-grid-value2'
+                    type='text'
+                    placeholder='--:--'
+                    maxLength={5}
                     value={workEndTime}
-                    onChange={(e) => setWorkEndTime(e.target.value)}
+                    onChange={(e) => {
+                      const v = e.target.value.replace(/[^0-9:]/g, '')
+                      setWorkEndTime(v)
+                    }}
+                    onClick={() => setShowEndTimePicker(true)}
                   />
+                  <button
+                    type='button'
+                    className='hand-date-btn'
+                    aria-label='Choose time'
+                    onClick={() => setShowEndTimePicker(!showEndTimePicker)}
+                  >
+                    <FaRegClock />
+                  </button>
+                  {showEndTimePicker && (
+                    <TimePickerDropdown
+                      value={workEndTime}
+                      onChange={setWorkEndTime}
+                      onClose={() => setShowEndTimePicker(false)}
+                    />
+                  )}
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>作業時間</label>
-                  <input className='wot-grid-value' value={workDurationHours} readOnly placeholder='時間' />
+                  <label className='wot-footer-label '>作業時間</label>
+                  <input className='wot-grid-value2' value={workDurationHours} />
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label'>&nbsp;</label>
-                  <input className='wot-grid-value' value={workDurationMinutes} readOnly placeholder='分' />
+                  <label className='wot-footer-label wot-bg-span'>時間</label>
+                  <input className='wot-grid-value2' value={workDurationMinutes} placeholder='分' />
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-blue'>目標時間計</label>
-                  <input className='wot-grid-value' placeholder='時間' />
+                  <label className='wot-footer-label'>目標時間計</label>
+                  <input className='wot-grid-value2' />
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label'>&nbsp;</label>
-                  <input className='wot-grid-value addspanto' placeholder='分' />
+                  <label className='wot-footer-label wot-bg-span'>時間</label>
+                  <input className='wot-grid-value2 addspanto' placeholder='分' />
                 </div>
               </div>
             </div>
 
-            <ActionFooter columns={4}>
+            <ActionFooter columns={5}>
               <button
-                className='set-btn set-danger'
+                className='set-btn set-danger set-delete-btn-size'
                 onClick={handleDeleteSelected}
               >
                 選択行削除
@@ -850,6 +1013,14 @@ const WorkOrderTimeRegistrationGosen = () => {
               >
                 {'\u624b\u5165\u529b'}
               </button>
+
+              <button
+                className='set-btn set-hand-input-btn'
+                onClick={handleRegisterKeep}
+              >
+                作業開始
+              </button>
+
               <button
                 className='set-btn set-warning'
                 onClick={() => setShowBackConfirm(true)}

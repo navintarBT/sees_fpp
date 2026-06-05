@@ -19,6 +19,7 @@ type TableSectionProps<Row> = {
   empty?: ReactNode
   className?: string
   gridClassName?: string
+  gridStyle?: CSSProperties
   scrollRef?: Ref<HTMLDivElement>
   rowTabIndex?: number
 }
@@ -34,11 +35,13 @@ function TableSection<Row>({
   empty,
   className,
   gridClassName,
+  gridStyle,
   scrollRef,
   rowTabIndex = 0,
 }: TableSectionProps<Row>) {
   const style: CSSProperties = {
     ['--tf-table-cols' as any]: columns.length,
+    ...gridStyle,
   }
   const isEmpty = rows.length === 0
   const wrapClassName = [
