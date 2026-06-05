@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { FaRegCalendarAlt } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
-const WO_MOCKUP_DATA: Record<string, { completed: number; defective: number }> = {
-  'WO-001': { completed: 9, defective: 1 },
-  'WO-002': { completed: 5, defective: 5 },
-  'WO-003': { completed: 8, defective: 2 },
-  'WO-004': { completed: 2, defective: 5 },
-  'WO-005': { completed: 6, defective: 4 },
-  'WO-006': { completed: 4, defective: 6 },
-  'WO-007': { completed: 9, defective: 1 },
-  'WO-008': { completed: 7, defective: 3 },
-  'WO-009': { completed: 4, defective: 6 },
-  'WO-010': { completed: 5, defective: 5 },
+const WO_MOCKUP_DATA: Record<string, { planned: number; completed: number; defective: number }> = {
+  'WO-001': { planned: 10, completed: 9, defective: 1 },
+  'WO-002': { planned: 10, completed: 5, defective: 5 },
+  'WO-003': { planned: 10, completed: 8, defective: 2 },
+  'WO-004': { planned: 7, completed: 2, defective: 5 },
+  'WO-005': { planned: 10, completed: 6, defective: 4 },
+  'WO-006': { planned: 10, completed: 4, defective: 6 },
+  'WO-007': { planned: 10, completed: 9, defective: 1 },
+  'WO-008': { planned: 10, completed: 7, defective: 3 },
+  'WO-009': { planned: 10, completed: 4, defective: 6 },
+  'WO-010': { planned: 10, completed: 5, defective: 5 },
 }
 
 const formatWoDate = (value: string) => {
@@ -58,20 +58,51 @@ const WorkOrderCompletion = () => {
   const [showWoCalendar, setShowWoCalendar] = useState(false)
   const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(todayValue))
   const [woNumber, setWoNumber] = useState('')
-  const [woData, setWoData] = useState<{ completed: number; defective: number } | null>(null)
+  const [woData, setWoData] = useState<{ planned: number; completed: number; defective: number } | null>(null)
+  const [plannedCount, setPlannedCount] = useState('')
+  const [completedCount, setCompletedCount] = useState('')
+  const [defectiveCount, setDefectiveCount] = useState('')
   const [showWoSelect, setShowWoSelect] = useState(false)
   const [selectedWoNumber, setSelectedWoNumber] = useState('')
   const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
   const [showRegisterComplete, setShowRegisterComplete] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [showOverPlanConfirm, setShowOverPlanConfirm] = useState(false)
+  const [showUnderPlanConfirm, setShowUnderPlanConfirm] = useState(false)
+  const completedCountInputRef = useRef<HTMLInputElement>(null)
+
+  const focusCompletedCount = () => {
+    window.requestAnimationFrame(() => completedCountInputRef.current?.focus())
+  }
+
+  const toCountNumber = (value: string) => {
+    const parsedValue = Number(value)
+    return Number.isFinite(parsedValue) ? parsedValue : 0
+  }
+
+  const applyWoData = (selectedNumber: string) => {
+    const nextWoData = WO_MOCKUP_DATA[selectedNumber] ?? { planned: 0, completed: 0, defective: 0 }
+    setWoData(nextWoData)
+    setPlannedCount(String(nextWoData.planned))
+    setCompletedCount(String(nextWoData.completed))
+    setDefectiveCount(String(nextWoData.defective))
+    focusCompletedCount()
+  }
+
+  const clearWoData = () => {
+    setWoData(null)
+    setPlannedCount('')
+    setCompletedCount('')
+    setDefectiveCount('')
+  }
 
   useEffect(() => {
     const selectedWoNumber = (location.state as { selectedWoNumber?: string } | null)?.selectedWoNumber
     if (!selectedWoNumber) return
 
     setWoNumber(selectedWoNumber)
-    setWoData(WO_MOCKUP_DATA[selectedWoNumber] ?? { completed: 0, defective: 0 })
+    applyWoData(selectedWoNumber)
   }, [location.state])
 
   const openWoDatePicker = () => {
@@ -103,7 +134,11 @@ const WorkOrderCompletion = () => {
   const loadWoData = () => {
     const normalizedWoNumber = woNumber.trim()
     setWoNumber(normalizedWoNumber)
-    setWoData(normalizedWoNumber ? WO_MOCKUP_DATA[normalizedWoNumber] ?? { completed: 0, defective: 0 } : null)
+    if (normalizedWoNumber) {
+      applyWoData(normalizedWoNumber)
+    } else {
+      clearWoData()
+    }
   }
 
   const openWoSelect = () => {
@@ -113,9 +148,33 @@ const WorkOrderCompletion = () => {
 
   const completeWoSelection = () => {
     setWoNumber(selectedWoNumber)
-    setWoData(WO_MOCKUP_DATA[selectedWoNumber] ?? { completed: 0, defective: 0 })
+    applyWoData(selectedWoNumber)
     setShowWoLoadConfirm(false)
     setShowWoSelect(false)
+  }
+
+  const handleRegisterClick = () => {
+    if (!woData || !plannedCount || !completedCount || !defectiveCount) return
+
+    const planned = toCountNumber(plannedCount)
+    const totalResult = toCountNumber(completedCount) + toCountNumber(defectiveCount)
+
+    if (totalResult > planned) {
+      setShowOverPlanConfirm(true)
+      return
+    }
+
+    if (totalResult < planned) {
+      setShowUnderPlanConfirm(true)
+      return
+    }
+
+    setShowRegisterConfirm(true)
+  }
+
+  const cancelUnderPlanRegister = () => {
+    setShowUnderPlanConfirm(false)
+    focusCompletedCount()
   }
 
   const resetInitialDisplay = () => {
@@ -123,7 +182,7 @@ const WorkOrderCompletion = () => {
     setWoCalendarMonth(parseDateValue(todayValue))
     setShowWoCalendar(false)
     setWoNumber('')
-    setWoData(null)
+    clearWoData()
     setShowWoSelect(false)
     setSelectedWoNumber('')
     setShowWoLoadConfirm(false)
@@ -219,7 +278,7 @@ const WorkOrderCompletion = () => {
                     value={woNumber}
                     onChange={(e) => {
                       setWoNumber(e.target.value)
-                      setWoData(null)
+                      clearWoData()
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -232,11 +291,26 @@ const WorkOrderCompletion = () => {
                 </div>
               </div>
               <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
+                <label>WO計画数</label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                  <input
+                    disabled={!woData}
+                    value={plannedCount}
+                    onChange={(e) => setPlannedCount(e.target.value)}
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
+                    aria-label='WO planned count'
+                  />
+                </div>
+
+              </div>
+              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
                 <label>WO完了数</label>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
                   <input
-                    readOnly
-                    value={woData ? String(woData.completed) : ''}
+                    ref={completedCountInputRef}
+                    disabled={!woData}
+                    value={completedCount}
+                    onChange={(e) => setCompletedCount(e.target.value)}
                     style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '10px' }}
                     aria-label='WO completed count'
                   />
@@ -246,31 +320,22 @@ const WorkOrderCompletion = () => {
                 <label>WO仕損数</label>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
                   <input
-                    readOnly
-                    value={woData ? String(woData.defective) : ''}
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px', color: '' }}
+                    disabled={!woData}
+                    value={defectiveCount}
+                    onChange={(e) => setDefectiveCount(e.target.value)}
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
                     aria-label='WO defective count'
                   />
                 </div>
 
               </div>
-              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
-                <label>WO計画数</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    readOnly
-                    value={woData ? String(woData.defective) : ''}
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px', color: '' }}
-                    aria-label='WO defective count'
-                  />
-                </div>
 
-              </div>
             </div>
 
-            <ActionFooter columns={4}>
+            <ActionFooter columns={5}>
               <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
-              <button type='button' className='set-btn set-success' onClick={() => setShowRegisterConfirm(true)}>{'登録'}</button>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
+              <button type='button' className='set-btn set-success' onClick={handleRegisterClick}>{'登録'}</button>
               <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
               <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>{'戻る'}</button>
             </ActionFooter>
@@ -397,6 +462,56 @@ const WorkOrderCompletion = () => {
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowRegisterConfirm(false)}
+                    >
+                      いいえ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showOverPlanConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>
+                    WO完了数とWO仕損数の合計が<br />
+                    WO計画数を超えています。
+                  </div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => setShowOverPlanConfirm(false)}
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showUnderPlanConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>
+                    WO完了数とWO仕損数の合計が<br />
+                    WO計画数に足りません。<br />
+                    登録しますか？
+                  </div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowUnderPlanConfirm(false)
+                        setShowRegisterComplete(true)
+                      }}
+                    >
+                      はい
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
+                      onClick={cancelUnderPlanRegister}
                     >
                       いいえ
                     </button>

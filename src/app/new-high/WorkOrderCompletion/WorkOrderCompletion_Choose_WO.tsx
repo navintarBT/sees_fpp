@@ -111,7 +111,8 @@ const WorkOrderCompletion_Choose_WO = () => {
               onRowActivate={(_rowKey, row) => selectWoNumber(row.woNumber)}
             />
 
-            <ActionFooter columns={4}>
+            <ActionFooter columns={5}>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
               <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
               <button
                 className='set-btn set-primary'
