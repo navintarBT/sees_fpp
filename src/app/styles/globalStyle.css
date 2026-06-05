@@ -1,4 +1,4 @@
-.set-header {
+﻿.set-header {
   height: 140px;
   background: linear-gradient(90deg, #e3f0fa 0%, #b6d0e2 100%);
   color: #1a2a4a;
@@ -258,14 +258,6 @@
   min-width: 80px;
   max-width: 120px;
   width: 100px;
-  padding: 0 6px;
-  justify-content: flex-start;
-}
-
-.delivery-table .tf-tableCell.col-item-name, .col-target-time, .col-qty, .col-op, .col-process, .col-remarks {
-  min-width: 120px;
-  max-width: 220px;
-  width: 160px;
   padding: 0 6px;
   justify-content: flex-start;
 }
@@ -1341,6 +1333,26 @@ input.wot-grid-value {
 .col-move-SetMis {
   min-width: 130px;
 }
+
+
+/* Narrow specific columns in the delivery/gosen table */
+.delivery-table .tf-tableCell.col-item-no {
+  min-width: 80px;
+  max-width: 120px;
+  width: 100px;
+  padding: 0 6px;
+  justify-content: flex-start;
+}
+
+.delivery-table .tf-tableCell.col-item-name, .col-target-time, .col-qty, .col-op, .col-process, .col-remarks {
+  min-width: 120px;
+  max-width: 220px;
+  width: 160px;
+  padding: 0 6px;
+  justify-content: flex-start;
+}
+
+
 /* #################################### work-order-choose-table */
 
 .work-order-choose-table {
