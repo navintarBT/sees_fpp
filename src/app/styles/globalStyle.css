@@ -262,7 +262,12 @@
   justify-content: flex-start;
 }
 
-.delivery-table .tf-tableCell.col-item-name, .col-target-time, .col-qty, .col-op, .col-process, .col-remarks {
+.delivery-table .tf-tableCell.col-item-name,
+.col-target-time,
+.col-qty,
+.col-op,
+.col-process,
+.col-remarks {
   min-width: 120px;
   max-width: 220px;
   width: 160px;
@@ -1139,7 +1144,7 @@
   gap: 60px;
 }
 
-.box-padding-innput{
+.box-padding-innput {
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -1341,6 +1346,7 @@ input.wot-grid-value {
 .col-move-SetMis {
   min-width: 130px;
 }
+
 /* #################################### work-order-choose-table */
 
 .work-order-choose-table {
@@ -1640,6 +1646,14 @@ input.wot-grid-value {
 
 /* ####################################table wOHandInputPage ########################################### */
 
+.wOHandInputPage-table .tf-tableGrid {
+  grid-template-columns: 50px 410px 120px 240px 236px !important;
+}
+
+.wOHandInputPage-table .tf-tableCell {
+  min-width: 0;
+}
+
 .wOHandInputPage-table .col-Interior {
   min-width: 410px;
 }
@@ -1664,6 +1678,23 @@ input.wot-grid-value {
   min-width: 50px;
 }
 
+.wOHandInputPage-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.wOHandInputPage-table .tf-tableRowActive .col-arrow {
+  background: #d1d5db;
+}
+
+.wOHandInputPage-table .tf-tableHead .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+}
+
 
 /* ####################################table WOPartsIssuanceDetail########################################### */
 
@@ -1684,7 +1715,7 @@ input.wot-grid-value {
   min-width: 250px;
 }
 
-.woPartsIssuanceDetail-table .col-check{
+.woPartsIssuanceDetail-table .col-check {
   min-width: 55px;
 }
 
@@ -1803,8 +1834,9 @@ input.wot-grid-value {
 .col-item-delivery {
   min-width: 830px;
 }
+
 .col-item-delivery-wo {
-  min-width: 1009px;
+  min-width: 255px;
 }
 
 
