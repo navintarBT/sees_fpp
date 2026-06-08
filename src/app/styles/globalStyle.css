@@ -1924,3 +1924,10 @@ input[type='time'].wot-grid-value2 {
 .col-productName-equipment {
   min-width: 95px;
 }
+
+/* min-width  choose wo */
+.col-item-choose-wo{
+
+  min-width: 253px;
+}
+/* min-width  choose wo */
