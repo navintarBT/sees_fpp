@@ -177,6 +177,16 @@ const WorkOrderCompletion = () => {
     focusCompletedCount()
   }
 
+  const cancelRegisterConfirm = () => {
+    setShowRegisterConfirm(false)
+    focusCompletedCount()
+  }
+
+  const closeOverPlanConfirm = () => {
+    setShowOverPlanConfirm(false)
+    focusCompletedCount()
+  }
+
   const resetInitialDisplay = () => {
     setWoDatePickerValue(todayValue)
     setWoCalendarMonth(parseDateValue(todayValue))
@@ -461,7 +471,7 @@ const WorkOrderCompletion = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowRegisterConfirm(false)}
+                      onClick={cancelRegisterConfirm}
                     >
                       いいえ
                     </button>
@@ -481,7 +491,7 @@ const WorkOrderCompletion = () => {
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowOverPlanConfirm(false)}
+                      onClick={closeOverPlanConfirm}
                     >
                       OK
                     </button>
