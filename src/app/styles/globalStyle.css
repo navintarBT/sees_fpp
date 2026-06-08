@@ -642,6 +642,12 @@
   width: 100%;
 }
 
+.hand-date-field>input:first-child {
+  width: 100%;
+  padding-right: 82px;
+  cursor: pointer;
+}
+
 .hand-date-btn {
   position: absolute;
   top: 50%;
@@ -1229,6 +1235,11 @@ input.wot-grid-value {
   box-sizing: border-box;
   min-height: 0;
   display: inline-block;
+}
+
+.hand-date-field-register {
+  position: relative;
+  width: 100%;
 }
 
 /* Force 24-hour time format */

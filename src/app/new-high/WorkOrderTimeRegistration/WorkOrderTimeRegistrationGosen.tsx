@@ -758,7 +758,7 @@ const WorkOrderTimeRegistrationGosen = () => {
 
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-blue'>日付</label>
-                    <div className='hand-date-field'>
+                    <div className='hand-date-field-register'>
                       <input
                         readOnly
                         className='wot-grid-value1'
