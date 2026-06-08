@@ -1264,13 +1264,6 @@ input[type='time'].wot-grid-value2 {
   flex-shrink: 0;
 }
 
-.wot-top-row {
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-  margin-top: -5px;
-}
-
 .set-btnnew_high {
   width: 220px !important;
   height: 85px !important;
@@ -1299,14 +1292,6 @@ input[type='time'].wot-grid-value2 {
 .wot-radio-title {
   font-size: 33px;
   color: #343a40;
-}
-
-.wot-radio-group {
-  display: flex;
-  gap: 40px;
-  align-items: center;
-  width: 100%;
-  justify-content: space-between;
 }
 
 .wot-radio-item {
@@ -1421,6 +1406,33 @@ input[type='time'].wot-grid-value2 {
 .set-delete-btn-size {
   font-size: 35px;
 }
+
+/* #################################### WorkOrderTimeRegistrationGosen */
+
+.wot-radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  height: 85px;
+}
+
+.wot-radio-items-box {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.wot-radio-items-box .wot-radio-item {
+  display: flex;
+  align-items: center;
+  width: 130px;
+}
+
+.wot-top-row {
+  text-align: right;
+}
+
 
 /* #################################### work-order-choose-table */
 
@@ -1926,8 +1938,9 @@ input[type='time'].wot-grid-value2 {
 }
 
 /* min-width  choose wo */
-.col-item-choose-wo{
+.col-item-choose-wo {
 
   min-width: 253px;
 }
+
 /* min-width  choose wo */

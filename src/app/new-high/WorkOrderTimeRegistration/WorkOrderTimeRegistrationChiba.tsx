@@ -63,7 +63,7 @@ const getCalendarDays = (monthDate: Date) => {
   })
 }
 
-// Row type - only WoNo, 品番, 品名 are needed (合格数から右の項目は不要)
+// Row type - only WoNo, 品番, 品名 are needed
 type Row = {
   id: number
   woNo: string
@@ -174,16 +174,21 @@ const TimePickerDropdown = ({ value, onChange, onClose }: { value: string; onCha
 
 const WorkOrderTimeRegistrationChiba = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const [rows, setRows] = useState<Row[]>([])
   const storedRowsKey = 'workOrderTimeRegistrationChibaRows'
+  const sessionKey = 'workOrderTimeRegistrationSelectedWoNumbers_chiba'
+
   const saveRowsToStorage = (rowsToSave: Row[]) => {
     sessionStorage.setItem(storedRowsKey, JSON.stringify(rowsToSave))
   }
 
+  const showWoSelectButton = false
   const todayValue = toDateValue(new Date())
   const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
   const [showWoCalendar, setShowWoCalendar] = useState(false)
   const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(todayValue))
+  const parentJanCodeInputRef = useRef<HTMLInputElement | null>(null)
 
   const openWoDatePicker = () => {
     setWoCalendarMonth(parseDateValue(woDatePickerValue))
@@ -214,8 +219,33 @@ const WorkOrderTimeRegistrationChiba = () => {
   const [workDurationHours, setWorkDurationHours] = useState('')
   const [workDurationMinutes, setWorkDurationMinutes] = useState('')
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
+  const [showRegisterSuccessConfirm, setShowRegisterSuccessConfirm] = useState(false)
+  const [registrationMode, setRegistrationMode] = useState<'maintain' | 'clear' | null>(null)
+  const [workerCode, setWorkerCode] = useState('')
+  const [workerName, setWorkerName] = useState('')
+  const [workplaceCode, setWorkplaceCode] = useState('')
+  const [workplaceName, setWorkplaceName] = useState('')
+  const [workStartStopState, setWorkStartStopState] = useState<'idle' | 'started'>('idle')
+  const [workStartStopDisabled, setWorkStartStopDisabled] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
+
+  const getWorkerNameFromCode = (code: string) => {
+    switch (code.trim()) {
+      case 'XXXXX':
+        return '作業者X'
+      case 'YYYYY':
+        return '作業者Y'
+      case 'ZZZZZ':
+        return '作業者Z'
+      default:
+        return ''
+    }
+  }
+
+  const getWorkplaceNameFromCode = (code: string) => {
+    return code.trim() === '9005' ? '研磨班' : ''
+  }
 
   const gridStyle = useMemo(() => measureColumnWidths(rows), [rows])
 
@@ -223,15 +253,11 @@ const WorkOrderTimeRegistrationChiba = () => {
     showDeleteSelectedConfirm ||
     showNoSelectionConfirm ||
     showBackConfirm ||
-    showCompleteConfirm
+    showCompleteConfirm ||
+    showRegisterConfirm ||
+    showRegisterSuccessConfirm
 
-  const closeAllModals = () => {
-    setShowDeleteSelectedConfirm(false)
-    setShowNoSelectionConfirm(false)
-    setShowBackConfirm(false)
-    setShowCompleteConfirm(false)
-  }
-
+  // Handle delete selected rows
   const handleDeleteSelected = () => {
     if (checkedRowIds.length === 0) {
       setShowNoSelectionConfirm(true)
@@ -240,61 +266,161 @@ const WorkOrderTimeRegistrationChiba = () => {
     setShowDeleteSelectedConfirm(true)
   }
 
+  // Confirm delete - delete ONLY selected rows
   const confirmDeleteSelected = () => {
-    setRows((prev) => {
-      const nextRows = prev.filter((row) => !checkedRowIds.includes(row.id))
-      saveRowsToStorage(nextRows)
-      return nextRows
-    })
-    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
-    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
+    // Find wo numbers of rows to delete
+    const rowsToDelete = rows.filter(row => checkedRowIds.includes(row.id))
+    const woNumbersToDelete = rowsToDelete.map(row => row.woNo)
+
+    // Update rows state
+    const remainingRows = rows.filter((row) => !checkedRowIds.includes(row.id))
+    setRows(remainingRows)
+    saveRowsToStorage(remainingRows)
+
+    // Remove deleted wo numbers from session storage
+    // Remove from 'workOrderTimeRegistrationSelectedWoNumbers_chiba'
+    const savedWos_chiba = sessionStorage.getItem(sessionKey)
+    if (savedWos_chiba) {
+      try {
+        const selectedWoNumbers = JSON.parse(savedWos_chiba) as string[]
+        const remainingWoNumbers = selectedWoNumbers.filter(wo => !woNumbersToDelete.includes(wo))
+        if (remainingWoNumbers.length > 0) {
+          sessionStorage.setItem(sessionKey, JSON.stringify(remainingWoNumbers))
+        } else {
+          sessionStorage.removeItem(sessionKey)
+        }
+      } catch {
+        // ignore parse error
+      }
+    }
+
+    // Remove from 'workOrderTimeRegistrationSelectedWoNumbers'
+    const savedWos = sessionStorage.getItem('workOrderTimeRegistrationSelectedWoNumbers')
+    if (savedWos) {
+      try {
+        const selectedWoNumbers = JSON.parse(savedWos) as string[]
+        const remainingWoNumbers = selectedWoNumbers.filter(wo => !woNumbersToDelete.includes(wo))
+        if (remainingWoNumbers.length > 0) {
+          sessionStorage.setItem('workOrderTimeRegistrationSelectedWoNumbers', JSON.stringify(remainingWoNumbers))
+        } else {
+          sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
+        }
+      } catch {
+        // ignore parse error
+      }
+    }
+
+    // Clear checked row ids
     setCheckedRowIds([])
     setShowDeleteSelectedConfirm(false)
   }
 
+  // Clear all function
   const clearAll = () => {
     setRows([])
     saveRowsToStorage([])
     setCheckedRowIds([])
+
+    // Clear all possible session storage keys
+    const sessionKeysToClear = [
+      storedRowsKey,
+      'workOrderTimeRegistrationSelectedWoNumbers',
+      sessionKey,
+      'workOrderTimeRegistrationSelectedWoNumbers_gosen'
+    ]
+
+    sessionKeysToClear.forEach(key => sessionStorage.removeItem(key))
+
+    // Clear location state
+    navigate(location.pathname, { replace: true, state: {} })
   }
 
-  // 登録(WOクリア) - Register and clear WO data
+  // Register clear
   const handleRegisterClear = () => {
     clearAll()
     setWorkStartTime('')
     setWorkEndTime('')
     setWorkDurationHours('')
     setWorkDurationMinutes('')
-    sessionStorage.removeItem('workOrderTimeRegistrationChibaRows')
-    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
-    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
-    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_gosen')
-    
-    // Clear location state so that a page reload doesn't repopulate the data
-    navigate(location.pathname, { replace: true, state: {} })
-    
     setShowCompleteConfirm(true)
   }
 
-  // 登録(WO維持) - Register and keep WO data
-  const handleRegisterKeep = () => {
-    setWorkStartTime('')
-    setWorkEndTime('')
-    setWorkDurationHours('')
-    setWorkDurationMinutes('')
+  // Get current time in HH:MM format
+  const getCurrentTime = () => {
+    const now = new Date()
+    const hours = now.getHours().toString().padStart(2, '0')
+    const minutes = now.getMinutes().toString().padStart(2, '0')
+    return `${hours}:${minutes}`
   }
 
-  const resetTableScroll = () => {
-    const el = tableScrollRef.current
-    if (!el) return
-    requestAnimationFrame(() => {
-      el.scrollTop = 0
-      el.scrollLeft = 0
-    })
+  // Work start/stop handler
+  const handleWorkStartStop = () => {
+    if (workStartStopDisabled) return
+
+    setWorkStartStopDisabled(true)
+    setTimeout(() => setWorkStartStopDisabled(false), 1500)
+
+    if (workStartStopState === 'idle') {
+      const currentTime = getCurrentTime()
+      setWorkStartTime(currentTime)
+      setWorkStartStopState('started')
+    } else if (workStartStopState === 'started') {
+      const currentTime = getCurrentTime()
+      setWorkEndTime(currentTime)
+      updateWorkDuration(workStartTime, currentTime)
+      setWorkStartStopState('idle')
+    }
+  }
+
+  // Handle registration
+  const handleRegister = () => {
+    if (rows.length === 0) {
+      setShowCompleteConfirm(true)
+      return
+    }
+    setShowRegisterConfirm(true)
+  }
+
+  // Confirm registration
+  const confirmRegisterMaintain = () => {
+    setRegistrationMode('maintain')
+    setShowRegisterConfirm(false)
+    setShowRegisterSuccessConfirm(true)
+  }
+
+  const confirmRegisterClear = () => {
+    setRegistrationMode('clear')
+    setShowRegisterConfirm(false)
+    setShowRegisterSuccessConfirm(true)
+  }
+
+  const handleRegisterSuccess = () => {
+    if (registrationMode === 'maintain') {
+      setWorkerCode('')
+      setWorkerName('')
+      setWorkplaceCode('')
+      setWorkplaceName('')
+      setWorkStartTime('')
+      setWorkEndTime('')
+      setWorkDurationHours('')
+      setWorkDurationMinutes('')
+    } else if (registrationMode === 'clear') {
+      clearAll()
+      setWorkerCode('')
+      setWorkerName('')
+      setWorkplaceCode('')
+      setWorkplaceName('')
+      setWorkStartTime('')
+      setWorkEndTime('')
+      setWorkDurationHours('')
+      setWorkDurationMinutes('')
+      setCheckedRowIds([])
+    }
+    setShowRegisterSuccessConfirm(false)
+    setRegistrationMode(null)
   }
 
   const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
-
   const toggleAllChecked = (checked: boolean) => {
     if (checked) {
       setCheckedRowIds(rows.map((row) => row.id))
@@ -331,9 +457,7 @@ const WorkOrderTimeRegistrationChiba = () => {
     updateWorkDuration(workStartTime, workEndTime)
   }, [workStartTime, workEndTime])
 
-  const location = useLocation()
-  const sessionKey = 'workOrderTimeRegistrationSelectedWoNumbers'
-
+  // Load data from location state or session storage
   useEffect(() => {
     const state = location.state as {
       selectedWoNumbers?: string[]
@@ -354,13 +478,6 @@ const WorkOrderTimeRegistrationChiba = () => {
         woNo: row.woNumber,
         itemNo: row.itemNumber ?? '',
         itemName: row.itemName ?? '',
-        targetTime: '',
-        acceptedQty: '',
-        defectiveQty: '',
-        opOrder: '',
-        opDesc: '',
-        processStatus: '',
-        remarks: '',
       }))
       sessionStorage.setItem(sessionKey, JSON.stringify(selectedWoNumbers ?? []))
       setRows(mappedRows)
@@ -434,22 +551,7 @@ const WorkOrderTimeRegistrationChiba = () => {
     }
   }, [checkedRowIds, isAnyModalOpen, rows.length])
 
-  // 実績登録 - Register only, keep data on screen
-  const handleRegister = () => {
-    if (rows.length === 0) {
-      setShowCompleteConfirm(true)
-      return
-    }
-    setShowRegisterConfirm(true) // ต้องเพิ่ม modal นี้
-  }
-
-  const confirmRegister = () => {
-    // Register the data (in real app, would call API)
-    setShowRegisterConfirm(false)
-    setShowCompleteConfirm(true)
-  }
-
-  // Table columns - only checkbox, WoNo, 品番, 品名 (合格数から右の項目は不要)
+  // Table columns
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'check',
@@ -530,8 +632,25 @@ const WorkOrderTimeRegistrationChiba = () => {
                 <div className='wot-info-soll box-padding-innput'>
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label '>人</label>
-                    <input className='wot-grid-value1' autoFocus />
-                    <input className='wot-grid-value1' readOnly style={{ backgroundColor: '#e5e7eb' }} />
+                    <input
+                      className='wot-grid-value1'
+                      autoFocus
+                      ref={parentJanCodeInputRef}
+                      value={workerCode}
+                      onChange={(e) => setWorkerCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
+                        }
+                      }}
+                    />
+                    <input
+                      className='wot-grid-value1'
+                      readOnly
+                      value={workerName}
+                      style={{ backgroundColor: '#e5e7eb' }}
+                    />
                   </div>
 
                   <div className='wot-info-grid wot-info-grid-2'>
@@ -603,16 +722,30 @@ const WorkOrderTimeRegistrationChiba = () => {
 
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>作業場</label>
-                    <input className='wot-grid-value1 wot-text-red' />
-                    <input className='wot-grid-value1' readOnly style={{ backgroundColor: '#e5e7eb' }} />
+                    <input
+                      className='wot-grid-value1 wot-text-red'
+                      value={workplaceCode}
+                      onChange={(e) => setWorkplaceCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          setWorkplaceName(getWorkplaceNameFromCode(e.currentTarget.value))
+                        }
+                      }}
+                    />
+                    <input
+                      className='wot-grid-value1'
+                      readOnly
+                      value={workplaceName}
+                      style={{ backgroundColor: '#e5e7eb' }}
+                    />
                   </div>
                 </div>
 
-                <div className='wot-header-actions'>
-
-                  <div className='wot-radio-container'>
-                    <div className='wot-radio-group'>
-                      <div className='wot-radio-title'>登録時間種類</div>
+                <div className='wot-radio-container'>
+                  <div className='wot-radio-group'>
+                    <div className='wot-radio-title'>登録時間種類</div>
+                    <div className='wot-radio-items-box'>
                       <label className='wot-radio-item'>
                         <input type='radio' name='timeType' defaultChecked />
                         <span>労務</span>
@@ -625,48 +758,17 @@ const WorkOrderTimeRegistrationChiba = () => {
                         <input type='radio' name='timeType' />
                         <span>機械</span>
                       </label>
-                      <div className='wot-top-row'>
-                        <button
-                          className='set-btnnew_high set-primary'
-                          type='button'
-                          onClick={() =>
-                            navigate('/factory/work-order-time-registration-choose', {
-                              state: { targetPath: '/factory/work-order-time-registration-chiba' },
-                            })
-                          }
-                        >
-                          WO選択
-                        </button>
-                      </div>
                     </div>
-                    {/* <ActionFooter columns={2}>
+                    <div className='wot-top-row'>
                       <button
                         className='set-btnnew_high set-primary'
-                        type='button'
-                        onClick={() => {
-                          const now = new Date()
-                          const hours = now.getHours().toString().padStart(2, '0')
-                          const minutes = now.getMinutes().toString().padStart(2, '0')
-                          const value = `${hours}:${minutes}`
-                          setWorkStartTime(value)
-                        }}
+                        onClick={() => navigate('/factory/work-order-time-registration-choose', {
+                          state: { targetPath: '/factory/work-order-time-registration-chiba' },
+                        })}
                       >
-                        作業開始
+                        WO選択
                       </button>
-                      <button
-                        className='set-btnnew_high set-success'
-                        type='button'
-                        onClick={() => {
-                          const now = new Date()
-                          const hours = now.getHours().toString().padStart(2, '0')
-                          const minutes = now.getMinutes().toString().padStart(2, '0')
-                          const value = `${hours}:${minutes}`
-                          setWorkEndTime(value)
-                        }}
-                      >
-                        作業終了
-                      </button>
-                    </ActionFooter> */}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -758,7 +860,7 @@ const WorkOrderTimeRegistrationChiba = () => {
               </div>
             </div>
 
-            {/* Action buttons as per document: 選択行削除, 登録(WOクリア), 登録(WO維持), 戻る */}
+            {/* Action buttons */}
             <ActionFooter columns={5}>
               <button
                 className='set-btn set-danger set-delete-btn-size'
@@ -775,17 +877,23 @@ const WorkOrderTimeRegistrationChiba = () => {
               </button>
 
               <button
-                className='set-btn set-success'
-                onClick={handleRegisterClear}
+                className='set-btn-footer set-primary'
+                style={{ visibility: 'hidden' }}
               >
-                登録
+                {'\u624b\u5165\u529b'}
               </button>
 
               <button
                 className='set-btn set-hand-input-btn'
-                onClick={handleRegisterKeep}
+                onClick={handleWorkStartStop}
+                disabled={workStartStopDisabled}
+                style={{
+                  opacity: workStartStopDisabled ? 0.5 : 1,
+                  cursor: workStartStopDisabled ? 'not-allowed' : 'pointer',
+                }}
               >
-                作業開始
+                {workStartStopState === 'idle' && '作業開始'}
+                {workStartStopState === 'started' && '作業終了'}
               </button>
 
               <button
@@ -802,10 +910,29 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>選択された行を削除しますか？</div>
+                <div className='set-modal-body'>
+                  読込データを破棄します。<br />
+                  宜しいですか？
+                </div>
                 <div className='set-modal-actions'>
-                  <button className='set-modal-btn set-modal-yes' onClick={confirmDeleteSelected}>はい</button>
-                  <button className='set-modal-btn set-modal-no' onClick={() => setShowDeleteSelectedConfirm(false)}>いいえ</button>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmDeleteSelected}>
+                    YES
+                  </button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowDeleteSelectedConfirm(false)}>
+                    NO
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showRegisterSuccessConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>作業実績を登録しました。</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={handleRegisterSuccess}>OK</button>
                 </div>
               </div>
             </div>
@@ -815,10 +942,11 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>実績を登録しますか？</div>
+                <div className='set-modal-body'>作業実績を登録します。<br />WOは維持しますか？</div>
                 <div className='set-modal-actions'>
-                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegister}>はい</button>
-                  <button className='set-modal-btn set-modal-no' onClick={() => setShowRegisterConfirm(false)}>いいえ</button>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterMaintain}>YES</button>
+                  <button className='set-modal-btn set-modal-no' onClick={confirmRegisterClear}>NO</button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowRegisterConfirm(false)}>取消</button>
                 </div>
               </div>
             </div>
@@ -858,12 +986,21 @@ const WorkOrderTimeRegistrationChiba = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/button-work-order-time')
+                      navigate('/factory/factory')
                     }}
                   >
-                    はい
+                    YES
                   </button>
-                  <button className='set-modal-btn set-modal-no' onClick={() => setShowBackConfirm(false)}>いいえ</button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowBackConfirm(false)}>NO</button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      parentJanCodeInputRef.current?.focus()
+                    }}
+                  >
+                    取消
+                  </button>
                 </div>
               </div>
             </div>
