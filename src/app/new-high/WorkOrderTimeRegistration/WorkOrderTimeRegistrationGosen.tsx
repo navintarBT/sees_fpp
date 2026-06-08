@@ -327,8 +327,16 @@ const WorkOrderTimeRegistrationGosen = () => {
   const [workDurationHours, setWorkDurationHours] = useState('')
   const [workDurationMinutes, setWorkDurationMinutes] = useState('')
   const [showRegisterKeepConfirm, setShowRegisterKeepConfirm] = useState(false)
+  const [workerCode, setWorkerCode] = useState('')
+  const [workerName, setWorkerName] = useState('')
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
+  const parentJanCodeInputRef = useRef<HTMLInputElement | null>(null)
+
+  const showWorkPlaceSection = false
+  const showWoSelectButton = false
+  const showWorkTimeFields = false
+  const showWorkStartButton = false
 
   const isAnyModalOpen =
     showDeleteSelectedConfirm ||
@@ -346,6 +354,19 @@ const WorkOrderTimeRegistrationGosen = () => {
     setShowBackConfirm(false)
   }
 
+  const getWorkerNameFromCode = (code: string) => {
+    switch (code.trim()) {
+      case 'XXXXX':
+        return '作業者X'
+      case 'YYYYY':
+        return '作業者Y'
+      case 'ZZZZZ':
+        return '作業者Z'
+      default:
+        return ''
+    }
+  }
+
   const handleDeleteSelected = () => {
     if (checkedRowIds.length === 0) {
       setShowNoSelectionConfirm(true)
@@ -354,14 +375,45 @@ const WorkOrderTimeRegistrationGosen = () => {
     setShowDeleteSelectedConfirm(true)
   }
 
+  //confirmDeleteSelected function
   const confirmDeleteSelected = () => {
+    const rowsToDelete = rows.filter(row => checkedRowIds.includes(row.id))
+    const woNumbersToDelete = rowsToDelete.map(row => row.woNo)
+
     setRows((prev) => {
       const nextRows = prev.filter((row) => !checkedRowIds.includes(row.id))
-      saveRowsToStorage(nextRows)
+      saveRowsToStorage(nextRows) // บันทึกข้อมูลที่เหลือลง session storage
       return nextRows
     })
-    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
-    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_gosen')
+
+    const savedWos_chiba = sessionStorage.getItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
+    if (savedWos_chiba) {
+      try {
+        const selectedWoNumbers = JSON.parse(savedWos_chiba) as string[]
+        const remainingWoNumbers = selectedWoNumbers.filter(wo => !woNumbersToDelete.includes(wo))
+        sessionStorage.setItem('workOrderTimeRegistrationSelectedWoNumbers_chiba', JSON.stringify(remainingWoNumbers))
+
+        if (remainingWoNumbers.length === 0) {
+          sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
+        }
+      } catch {
+      }
+    }
+
+    const savedWos = sessionStorage.getItem('workOrderTimeRegistrationSelectedWoNumbers')
+    if (savedWos) {
+      try {
+        const selectedWoNumbers = JSON.parse(savedWos) as string[]
+        const remainingWoNumbers = selectedWoNumbers.filter(wo => !woNumbersToDelete.includes(wo))
+        sessionStorage.setItem('workOrderTimeRegistrationSelectedWoNumbers', JSON.stringify(remainingWoNumbers))
+
+        if (remainingWoNumbers.length === 0) {
+          sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
+        }
+      } catch {
+      }
+    }
+
     setCheckedRowIds([])
     setShowDeleteSelectedConfirm(false)
   }
@@ -752,8 +804,25 @@ const WorkOrderTimeRegistrationGosen = () => {
                 <div className='wot-info-soll box-padding-innput'>
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-blue'>人</label>
-                    <input className='wot-grid-value1' autoFocus />
-                    <input className='wot-grid-value1' style={{ backgroundColor: '#e5e7eb' }} />
+                    <input
+                      className='wot-grid-value1'
+                      autoFocus
+                      ref={parentJanCodeInputRef}
+                      value={workerCode}
+                      onChange={(e) => setWorkerCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
+                        }
+                      }}
+                    />
+                    <input
+                      className='wot-grid-value1'
+                      style={{ backgroundColor: '#e5e7eb' }}
+                      value={workerName}
+                      readOnly
+                    />
                   </div>
 
                   <div className='wot-info-grid wot-info-grid-2'>
@@ -823,6 +892,13 @@ const WorkOrderTimeRegistrationGosen = () => {
                     </div>
                   </div>
 
+                  <div>
+                    <div className='wot-info-grid wot-info-grid-2' style={{ display: showWorkPlaceSection ? undefined : 'none' }}>
+                      <label className='wot-grid-label wot-bg-red'>作業場</label>
+                      <input className='wot-grid-value1 wot-text-red' />
+                      <input className='wot-grid-value1' style={{ backgroundColor: '#e5e7eb' }} />
+                    </div>
+                  </div>
 
                   <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>工程状況初期値</label>
@@ -840,59 +916,29 @@ const WorkOrderTimeRegistrationGosen = () => {
                 </div>
 
                 <div className='wot-header-actions'>
-
                   <div className='wot-radio-container'>
                     <div className='wot-radio-group'>
                       <div className='wot-radio-title'>登録時間種類</div>
-                      <label className='wot-radio-item'>
-                        <input type='radio' name='timeType' defaultChecked />
-                        <span>労務</span>
-                      </label>
-                      <label className='wot-radio-item'>
-                        <input type='radio' name='timeType' />
-                        <span>段取</span>
-                      </label>
-                      <label className='wot-radio-item'>
-                        <input type='radio' name='timeType' />
-                        <span>機械</span>
-                      </label>
-                      <div className='wot-top-row'>
+                      <div className='wot-radio-items-box'>
+                        <label className='wot-radio-item'>
+                          <input type='radio' name='timeType' defaultChecked />
+                          <span>労務</span>
+                        </label>
+                        <label className='wot-radio-item'>
+                          <input type='radio' name='timeType' />
+                          <span>段取</span>
+                        </label>
+                        <label className='wot-radio-item'>
+                          <input type='radio' name='timeType' />
+                          <span>機械</span>
+                        </label>
+                      </div>
+                      <div className='wot-top-row' style={{ display: showWoSelectButton ? undefined : 'none' }}>
                         <button className='set-btnnew_high set-primary' onClick={() => navigate('/factory/work-order-time-registration-choose')}>
                           WO選択
                         </button>
                       </div>
                     </div>
-
-                    {/* <ActionFooter columns={2}>
-                      <button
-                        className='set-btnnew_high set-primary'
-                        type='button'
-                        onClick={() => {
-                          const now = new Date()
-                          const hours = now.getHours().toString().padStart(2, '0')
-                          const minutes = now.getMinutes().toString().padStart(2, '0')
-                          const value = `${hours}:${minutes}`
-                          setWorkStartTime(value)
-                          updateWorkDuration(value, workEndTime)
-                        }}
-                      >
-                        作業開始
-                      </button>
-                      <button
-                        className='set-btnnew_high set-success'
-                        type='button'
-                        onClick={() => {
-                          const now = new Date()
-                          const hours = now.getHours().toString().padStart(2, '0')
-                          const minutes = now.getMinutes().toString().padStart(2, '0')
-                          const value = `${hours}:${minutes}`
-                          setWorkEndTime(value)
-                          updateWorkDuration(workStartTime, value)
-                        }}
-                      >
-                        作業終了
-                      </button>
-                    </ActionFooter> */}
                   </div>
                 </div>
               </div>
@@ -910,7 +956,7 @@ const WorkOrderTimeRegistrationGosen = () => {
 
             <div className='wot-footer-summary wot-radio-container'>
               <div className='wot-footer-row'>
-                <div className='wot-footer-item'>
+                <div className='wot-footer-item' style={{ display: showWorkTimeFields ? undefined : 'none' }}>
                   <label className='wot-footer-label wot-bg-blue'>開始</label>
                   <input
                     className='wot-grid-value2'
@@ -941,7 +987,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                   )}
                 </div>
 
-                <div className='wot-footer-item'>
+                <div className='wot-footer-item' style={{ display: showWorkTimeFields ? undefined : 'none' }}>
                   <label className='wot-footer-label wot-bg-span'>終了</label>
                   <input
                     className='wot-grid-value2'
@@ -1014,12 +1060,15 @@ const WorkOrderTimeRegistrationGosen = () => {
                 {'\u624b\u5165\u529b'}
               </button>
 
-              <button
-                className='set-btn set-hand-input-btn'
-                onClick={handleRegisterKeep}
-              >
-                作業開始
-              </button>
+              <div>
+                <button
+                  className='set-btn set-hand-input-btn'
+                  onClick={handleRegisterKeep}
+                  style={{ display: showWorkStartButton ? undefined : 'none' }}
+                >
+                  作業開始
+                </button>
+              </div>
 
               <button
                 className='set-btn set-warning'
@@ -1030,23 +1079,21 @@ const WorkOrderTimeRegistrationGosen = () => {
             </ActionFooter>
           </div>
 
+          {/* Modals */}
           {showDeleteSelectedConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>選択された行を削除しますか？</div>
+                <div className='set-modal-body'>
+                  読込データを破棄します。<br />
+                  宜しいですか？
+                </div>
                 <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={confirmDeleteSelected}
-                  >
-                    はい
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmDeleteSelected}>
+                    YES
                   </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowDeleteSelectedConfirm(false)}
-                  >
-                    いいえ
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowDeleteSelectedConfirm(false)}>
+                    NO
                   </button>
                 </div>
               </div>
@@ -1124,16 +1171,25 @@ const WorkOrderTimeRegistrationGosen = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/button-work-order-time')
+                      navigate('/factory/factory')
                     }}
                   >
-                    はい
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowBackConfirm(false)}
                   >
-                    いいえ
+                    No
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      parentJanCodeInputRef.current?.focus()
+                    }}
+                  >
+                    取消
                   </button>
                 </div>
               </div>
