@@ -86,7 +86,7 @@ const WorkOrderCompletion_Choose_WO = () => {
       key: 'status',
       headClassName: 'col-item-delivery-wo',
       cellClassName: 'col-item-delivery-wo',
-      header: '状況',
+      header: '作業状況',
       render: (row) => row.status,
     },
   ]
