@@ -46,26 +46,41 @@ const CHIBA_ROWS: Row[] = [
     { id: 8, woNumber: 'wo-8', itemNumber: 'h', itemName: '製品h', orderQuantity: 15 },
 ]
 
+// Helper to read current selection from localStorage
+const readStoredSelection = (targetPath: string): string[] => {
+    const storageKey = getSessionStorageKey(targetPath)
+    const storedSelection = localStorage.getItem(storageKey)
+    if (!storedSelection) return []
+    try {
+        const parsed = JSON.parse(storedSelection)
+        return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === 'string') : []
+    } catch {
+        return []
+    }
+}
+
 const WorkOrderTimeRegistrationChoose = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const locationState = location.state as { selectedWoNumbers?: string[]; targetPath?: string } | null
     const targetPath = locationState?.targetPath ?? DEFAULT_TARGET_PATH
     const rows = targetPath === '/factory/work-order-time-registration-chiba' ? CHIBA_ROWS : GOSEN_ROWS
-    const [selectedWoNumbers, setSelectedWoNumbers] = useState<string[]>([])
+
+    // Initialize directly from localStorage
+    const [selectedWoNumbers, setSelectedWoNumbers] = useState<string[]>(() =>
+        readStoredSelection(targetPath)
+    )
     const [showLoadConfirm, setShowLoadConfirm] = useState(false)
 
-    // Restore selected WO numbers from sessionStorage on mount or when targetPath changes
+    // Re-sync selection when the page becomes visible again
     useEffect(() => {
-        const storageKey = getSessionStorageKey(targetPath)
-        const storedSelection = sessionStorage.getItem(storageKey)
-        if (storedSelection) {
-            try {
-                setSelectedWoNumbers(JSON.parse(storedSelection))
-            } catch (e) {
-                console.error('Failed to parse stored selection:', e)
-            }
+        const syncFromStorage = () => {
+            setSelectedWoNumbers(readStoredSelection(targetPath))
         }
+
+        syncFromStorage()
+        window.addEventListener('focus', syncFromStorage)
+        return () => window.removeEventListener('focus', syncFromStorage)
     }, [targetPath])
 
     const handleLoad = () => {
@@ -81,21 +96,23 @@ const WorkOrderTimeRegistrationChoose = () => {
             state: { selectedWoNumbers, selectedRows },
         })
     }
- 
+
     const toggleWoSelection = (row: Row) => {
         setSelectedWoNumbers((prev) =>
-            prev.includes(row.woNumber) ? prev.filter((item) => item !== row.woNumber) : [...prev, row.woNumber]
+            prev.includes(row.woNumber)
+                ? prev.filter((item) => item !== row.woNumber)
+                : [...prev, row.woNumber]
         )
     }
 
     const storeSelection = () => {
         const storageKey = getSessionStorageKey(targetPath)
-        sessionStorage.setItem(storageKey, JSON.stringify(selectedWoNumbers))
+        localStorage.setItem(storageKey, JSON.stringify(selectedWoNumbers))
     }
 
     const isSelectedWoNumber = (woNumber: string) => selectedWoNumbers.includes(woNumber)
 
-    // Table columns: arrow, WoNo, 品番, 品名, オーダー数量
+    // Table columns: arrow, WoNo, 品番, 品名
     const tableColumns: Array<TFTableColumn<Row>> = [
         {
             key: 'arrow',
@@ -126,7 +143,7 @@ const WorkOrderTimeRegistrationChoose = () => {
             cellClassName: 'col-item-name',
             header: '品名',
             render: (row) => row.itemName,
-        }
+        },
     ]
 
     return (
@@ -135,18 +152,6 @@ const WorkOrderTimeRegistrationChoose = () => {
                 <div className='mockup-frame'>
                     <div className='set-header'>WO選択</div>
                     <div className='set-body'>
-                        {/* <div className='set-form'>
-                            <div className='wot-info-grid wot-info-grid-2' style={{ marginBottom: '16px' }}>
-                                <label className='wot-grid-label wot-bg-blue'>作業場</label>
-                                <select className='wot-grid-value2'>
-                                    <option value=''>選択してください</option>
-                                    <option value='9005'>研磨班 (9005)</option>
-                                    <option value='9003'>組立班 (9003)</option>
-                                    <option value='9004'>加工班 (9004)</option>
-                                </select>
-                            </div>
-                        </div> */}
-
                         <TableSection
                             columns={tableColumns}
                             rows={rows}
