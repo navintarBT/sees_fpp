@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 import { FaRegCalendarAlt, FaRegClock } from 'react-icons/fa'
+import { FaPlay } from 'react-icons/fa'
 
 const formatWoDate = (value: string) => {
+  if (!value) return 'yy/mm/dd'
   const [year, month, day] = value.split('-')
   if (!year || !month || !day) return 'yy/mm/dd'
   return `${year}/${month}/${day}`
@@ -25,11 +27,6 @@ const parseTimeValue = (value: string) => {
   const [hours, minutes] = value.split(':').map(Number)
   if (!Number.isInteger(hours) || !Number.isInteger(minutes)) return null
   return hours * 60 + minutes
-}
-
-const formatTimeValue = (value: string) => {
-  const minutes = parseTimeValue(value)
-  return minutes === null ? '' : value
 }
 
 const formatDuration = (minutes: number) => {
@@ -184,107 +181,173 @@ const TimePickerDropdown = ({ value, onChange, onClose }: { value: string; onCha
 const SESSION_STORAGE_KEY = 'workOrderTimeRegistrationSelectedWoNumbers'
 const SESSION_STORAGE_ROWS_KEY = 'workOrderTimeRegistrationGosenRows'
 
-const DEFAULT_ROWS: Row[] = [
-  {
-    id: 1,
+// Master data - single source of truth for work order details
+const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
+  'WO-001': {
     woNo: 'WO-001',
-    itemNo: 'a',
-    itemName: '製品a',
+    itemNo: 'PRD-001',
+    itemName: '製品A',
     targetTime: '50',
     acceptedQty: '9',
     defectiveQty: '1',
     opOrder: '10',
     opDesc: '研磨3',
     processStatus: '90',
-    remarks: 'xxxxx',
+    remarks: '高品質製品'
   },
-  {
-    id: 2,
+  'WO-002': {
     woNo: 'WO-002',
-    itemNo: 'b',
-    itemName: '製品b',
-    targetTime: '50',
+    itemNo: 'PRD-002',
+    itemName: '製品B',
+    targetTime: '45',
     acceptedQty: '3',
-    defectiveQty: '',
-    opOrder: '10',
-    opDesc: '研磨3',
-    processStatus: '',
-    remarks: '',
+    defectiveQty: '0',
+    opOrder: '20',
+    opDesc: '組立2',
+    processStatus: '50',
+    remarks: ''
   },
-  {
-    id: 3,
+  'WO-003': {
     woNo: 'WO-003',
-    itemNo: 'c',
-    itemName: '製品c',
-  },
-  {
-    id: 4,
-    woNo: 'WO-004',
-    itemNo: 'd',
-    itemName: '製品d',
-  },
-  {
-    id: 5,
-    woNo: 'WO-005',
-    itemNo: 'e',
-    itemName: '製品e',
-  },
-  {
-    id: 6,
-    woNo: 'WO-006',
-    itemNo: 'f',
-    itemName: '製品f',
-  },
-  {
-    id: 7,
-    woNo: 'WO-007',
-    itemNo: 'g',
-    itemName: '製品g',
-  },
-  {
-    id: 8,
-    woNo: 'WO-008',
-    itemNo: 'h',
-    itemName: '製品h',
-  },
-  {
-    id: 9,
-    woNo: 'wo-10',
-    itemNo: 'a',
-    itemName: '製品a',
-    targetTime: '50',
-    acceptedQty: '9',
-    defectiveQty: '1',
-    opOrder: '10',
-    opDesc: '研磨3',
-    processStatus: '90',
-    remarks: 'xxxxx',
-  },
-  {
-    id: 10,
-    woNo: 'wo-20',
-    itemNo: 'b',
-    itemName: '製品b',
-    targetTime: '50',
-    acceptedQty: '3',
+    itemNo: 'PRD-003',
+    itemName: '製品C',
+    targetTime: '60',
+    acceptedQty: '',
     defectiveQty: '',
-    opOrder: '10',
-    opDesc: '研磨3',
+    opOrder: '',
+    opDesc: '',
     processStatus: '',
-    remarks: '',
+    remarks: ''
   },
-  {
-    id: 11,
-    woNo: 'wo-30',
-    itemNo: 'c',
-    itemName: '製品c',
+  'WO-004': {
+    woNo: 'WO-004',
+    itemNo: 'PRD-004',
+    itemName: '製品D',
+    targetTime: '55',
+    acceptedQty: '',
+    defectiveQty: '',
+    opOrder: '',
+    opDesc: '',
+    processStatus: '',
+    remarks: ''
   },
-]
+  'WO-005': {
+    woNo: 'WO-005',
+    itemNo: 'PRD-005',
+    itemName: '製品E',
+    targetTime: '70',
+    acceptedQty: '',
+    defectiveQty: '',
+    opOrder: '',
+    opDesc: '',
+    processStatus: '',
+    remarks: ''
+  },
+  'WO-006': {
+    woNo: 'WO-006',
+    itemNo: 'PRD-006',
+    itemName: '製品F',
+    targetTime: '40',
+    acceptedQty: '',
+    defectiveQty: '',
+    opOrder: '',
+    opDesc: '',
+    processStatus: '',
+    remarks: ''
+  },
+  'WO-007': {
+    woNo: 'WO-007',
+    itemNo: 'PRD-007',
+    itemName: '製品G',
+    targetTime: '65',
+    acceptedQty: '',
+    defectiveQty: '',
+    opOrder: '',
+    opDesc: '',
+    processStatus: '',
+    remarks: ''
+  },
+  'WO-008': {
+    woNo: 'WO-008',
+    itemNo: 'PRD-008',
+    itemName: '製品H',
+    targetTime: '35',
+    acceptedQty: '',
+    defectiveQty: '',
+    opOrder: '',
+    opDesc: '',
+    processStatus: '',
+    remarks: ''
+  }
+}
+
+// Function to fetch work order details from master data
+const fetchWorkOrderDetails = async (woNo: string): Promise<Partial<Row> | null> => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 300))
+  return MASTER_WORK_ORDERS[woNo] || null
+}
 
 const WorkOrderTimeRegistrationGosen = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [rows, setRows] = useState<Row[]>([])
+  const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [fetchingWoNos, setFetchingWoNos] = useState<Set<string>>(new Set())
+
+  // Create an empty row
+  const createEmptyRow = (id?: number): Row => {
+    const maxId = rows.length > 0 ? Math.max(...rows.map(r => r.id)) : 0
+    return {
+      id: id || maxId + 1,
+      woNo: '',
+      itemNo: '',
+      itemName: '',
+      targetTime: '',
+      acceptedQty: '',
+      defectiveQty: '',
+      opOrder: '',
+      opDesc: '',
+      processStatus: '',
+      remarks: '',
+    }
+  }
+
+  // Clean up consecutive empty rows - keep only one empty row at the end
+  const cleanupConsecutiveEmptyRows = (currentRows: Row[]): Row[] => {
+    if (currentRows.length === 0) {
+      return [createEmptyRow(1)]
+    }
+
+    // Find last non-empty row
+    let lastNonEmptyIndex = -1
+    for (let i = 0; i < currentRows.length; i++) {
+      const row = currentRows[i]
+      const isEmpty = !row.woNo && !row.itemNo && !row.itemName
+      if (!isEmpty) {
+        lastNonEmptyIndex = i
+      }
+    }
+
+    // If no non-empty rows, return single empty row
+    if (lastNonEmptyIndex === -1) {
+      return [createEmptyRow(1)]
+    }
+
+    // Keep rows up to last non-empty row
+    const rowsWithData = currentRows.slice(0, lastNonEmptyIndex + 1)
+    
+    // Add empty row at the end if last row is not empty
+    const lastRow = rowsWithData[rowsWithData.length - 1]
+    const isLastRowEmpty = !lastRow.woNo && !lastRow.itemNo && !lastRow.itemName
+    
+    if (!isLastRowEmpty) {
+      const nextId = Math.max(...rowsWithData.map(r => r.id), 0) + 1
+      return [...rowsWithData, createEmptyRow(nextId)]
+    }
+    
+    return rowsWithData
+  }
 
   const saveRowsToStorage = (rowsToSave: Row[]) => {
     sessionStorage.setItem(SESSION_STORAGE_ROWS_KEY, JSON.stringify(rowsToSave))
@@ -314,11 +377,10 @@ const WorkOrderTimeRegistrationGosen = () => {
 
   const calendarDays = getCalendarDays(woCalendarMonth)
   const calendarMonthLabel = woCalendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
-
+  
   const [showDeleteSelectedConfirm, setShowDeleteSelectedConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
-  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [workStartTime, setWorkStartTime] = useState('')
   const [workEndTime, setWorkEndTime] = useState('')
@@ -326,11 +388,12 @@ const WorkOrderTimeRegistrationGosen = () => {
   const [showEndTimePicker, setShowEndTimePicker] = useState(false)
   const [workDurationHours, setWorkDurationHours] = useState('')
   const [workDurationMinutes, setWorkDurationMinutes] = useState('')
-  const [showRegisterKeepConfirm, setShowRegisterKeepConfirm] = useState(false)
+  const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
+  const [showRegisterSuccessConfirm, setShowRegisterSuccessConfirm] = useState(false)
+  const [registrationMode, setRegistrationMode] = useState<'maintain' | 'clear' | null>(null)
   const [workerCode, setWorkerCode] = useState('')
   const [workerName, setWorkerName] = useState('')
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
-  const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
   const parentJanCodeInputRef = useRef<HTMLInputElement | null>(null)
 
   const showWorkPlaceSection = false
@@ -342,86 +405,78 @@ const WorkOrderTimeRegistrationGosen = () => {
     showDeleteSelectedConfirm ||
     showNoSelectionConfirm ||
     showClearConfirm ||
-    showCompleteConfirm ||
-    showBackConfirm
-
-  const closeAllModals = () => {
-    setShowDeleteSelectedConfirm(false)
-    setShowNoSelectionConfirm(false)
-    setShowClearConfirm(false)
-    setShowCompleteConfirm(false)
-    setShowRegisterKeepConfirm(false)
-    setShowBackConfirm(false)
-  }
+    showBackConfirm ||
+    showRegisterConfirm ||
+    showRegisterSuccessConfirm
 
   const getWorkerNameFromCode = (code: string) => {
     switch (code.trim()) {
-      case 'XXXXX':
-        return '作業者X'
-      case 'YYYYY':
-        return '作業者Y'
-      case 'ZZZZZ':
-        return '作業者Z'
-      default:
-        return ''
+      case 'XXXXX': return '作業者X'
+      case 'YYYYY': return '作業者Y'
+      case 'ZZZZZ': return '作業者Z'
+      default: return ''
     }
   }
 
   const handleDeleteSelected = () => {
-    if (checkedRowIds.length === 0) {
+    if (activeRowId === null) {
       setShowNoSelectionConfirm(true)
       return
     }
     setShowDeleteSelectedConfirm(true)
   }
 
-  //confirmDeleteSelected function
   const confirmDeleteSelected = () => {
-    const rowsToDelete = rows.filter(row => checkedRowIds.includes(row.id))
-    const woNumbersToDelete = rowsToDelete.map(row => row.woNo)
+    if (activeRowId === null) return
 
-    setRows((prev) => {
-      const nextRows = prev.filter((row) => !checkedRowIds.includes(row.id))
-      saveRowsToStorage(nextRows) // บันทึกข้อมูลที่เหลือลง session storage
-      return nextRows
-    })
+    const rowToDelete = rows.find(row => row.id === activeRowId)
+    const woNumberToDelete = rowToDelete?.woNo
 
+    let nextRows = rows.filter((row) => row.id !== activeRowId)
+    nextRows = cleanupConsecutiveEmptyRows(nextRows)
+    setRows(nextRows)
+    saveRowsToStorage(nextRows)
+
+    // Delete from session storage
     const savedWos_chiba = sessionStorage.getItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
-    if (savedWos_chiba) {
+    if (savedWos_chiba && woNumberToDelete) {
       try {
         const selectedWoNumbers = JSON.parse(savedWos_chiba) as string[]
-        const remainingWoNumbers = selectedWoNumbers.filter(wo => !woNumbersToDelete.includes(wo))
-        sessionStorage.setItem('workOrderTimeRegistrationSelectedWoNumbers_chiba', JSON.stringify(remainingWoNumbers))
-
-        if (remainingWoNumbers.length === 0) {
+        const remainingWoNumbers = selectedWoNumbers.filter(wo => wo !== woNumberToDelete)
+        if (remainingWoNumbers.length > 0) {
+          sessionStorage.setItem('workOrderTimeRegistrationSelectedWoNumbers_chiba', JSON.stringify(remainingWoNumbers))
+        } else {
           sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
         }
       } catch {
+        // ignore
       }
     }
 
-    const savedWos = sessionStorage.getItem('workOrderTimeRegistrationSelectedWoNumbers')
-    if (savedWos) {
+    const savedWos = sessionStorage.getItem(SESSION_STORAGE_KEY)
+    if (savedWos && woNumberToDelete) {
       try {
         const selectedWoNumbers = JSON.parse(savedWos) as string[]
-        const remainingWoNumbers = selectedWoNumbers.filter(wo => !woNumbersToDelete.includes(wo))
-        sessionStorage.setItem('workOrderTimeRegistrationSelectedWoNumbers', JSON.stringify(remainingWoNumbers))
-
-        if (remainingWoNumbers.length === 0) {
-          sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
+        const remainingWoNumbers = selectedWoNumbers.filter(wo => wo !== woNumberToDelete)
+        if (remainingWoNumbers.length > 0) {
+          sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(remainingWoNumbers))
+        } else {
+          sessionStorage.removeItem(SESSION_STORAGE_KEY)
         }
       } catch {
+        // ignore
       }
     }
 
-    setCheckedRowIds([])
+    setActiveRowId(null)
     setShowDeleteSelectedConfirm(false)
   }
 
   const clearAll = () => {
-    setRows([])
-    saveRowsToStorage([])
-    setCheckedRowIds([])
+    const emptyRow = createEmptyRow(1)
+    setRows([emptyRow])
+    saveRowsToStorage([emptyRow])
+    setActiveRowId(null)
   }
 
   const resetTableScroll = () => {
@@ -433,42 +488,164 @@ const WorkOrderTimeRegistrationGosen = () => {
     })
   }
 
-  const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
-
-  const toggleAllChecked = (checked: boolean) => {
-    if (checked) {
-      setCheckedRowIds(rows.map((row) => row.id))
+  // Handle register button click - shows confirmation modal
+  const handleRegister = () => {
+    if (rows.length === 0 || (rows.length === 1 && !rows[0].woNo)) {
+      setShowRegisterSuccessConfirm(true)
       return
     }
-    setCheckedRowIds([])
+    setShowRegisterConfirm(true)
   }
 
-  const toggleRowChecked = (rowId: number, checked: boolean) => {
-    setCheckedRowIds((prev) => {
-      if (checked) {
-        return prev.includes(rowId) ? prev : [...prev, rowId]
+  // Confirm register and maintain WO data
+  const confirmRegisterMaintain = () => {
+    setRegistrationMode('maintain')
+    setShowRegisterConfirm(false)
+    setShowRegisterSuccessConfirm(true)
+  }
+
+  // Confirm register and clear WO data
+  const confirmRegisterClear = () => {
+    setRegistrationMode('clear')
+    setShowRegisterConfirm(false)
+    setShowRegisterSuccessConfirm(true)
+  }
+
+  // Handle register success - clear fields based on mode
+  const handleRegisterSuccess = () => {
+    if (registrationMode === 'maintain') {
+      // Maintain WO data - only clear time and worker fields
+      setWorkerCode('')
+      setWorkerName('')
+      setWorkStartTime('')
+      setWorkEndTime('')
+      setWorkDurationHours('')
+      setWorkDurationMinutes('')
+    } else if (registrationMode === 'clear') {
+      // Clear all data
+      clearAll()
+      setWorkerCode('')
+      setWorkerName('')
+      setWorkStartTime('')
+      setWorkEndTime('')
+      setWorkDurationHours('')
+      setWorkDurationMinutes('')
+      setActiveRowId(null)
+    }
+    setShowRegisterSuccessConfirm(false)
+    setRegistrationMode(null)
+  }
+
+  // Check if WoNo has 6 or more characters (excluding hyphen)
+  const hasMinWoNoLength = (woNo: string): boolean => {
+    return woNo.length >= 6
+  }
+
+  // Update row field with auto-fetch for woNo when length >= 6 chars
+  const updateRowField = async (
+    rowId: number,
+    field: keyof Omit<Row, 'id'>,
+    value: string,
+  ) => {
+    // If updating woNo and value has 6+ characters (excluding hyphens), fetch details
+    if (field === 'woNo' && value.trim() !== '' && hasMinWoNoLength(value)) {
+      // Prevent multiple simultaneous fetches for the same woNo
+      if (fetchingWoNos.has(value)) return
+      
+      setFetchingWoNos(prev => new Set(prev).add(value))
+      
+      const details = await fetchWorkOrderDetails(value.trim())
+      
+      setFetchingWoNos(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(value)
+        return newSet
+      })
+      
+      if (details) {
+        // Update with fetched data, but preserve user-editable fields
+        setRows((prevRows) => {
+          const nextRows = prevRows.map((row) =>
+            row.id === rowId
+              ? { 
+                  ...row, 
+                  ...details, 
+                  id: row.id,
+                  // Preserve any user-edited values that might have been set
+                  acceptedQty: row.acceptedQty || details.acceptedQty,
+                  defectiveQty: row.defectiveQty || details.defectiveQty,
+                }
+              : row,
+          )
+          const cleanedRows = cleanupConsecutiveEmptyRows(nextRows)
+          saveRowsToStorage(cleanedRows)
+          return cleanedRows
+        })
+      } else {
+        // WO not found, just update woNo
+        setRows((prevRows) => {
+          const nextRows = prevRows.map((row) =>
+            row.id === rowId ? { ...row, woNo: value } : row,
+          )
+          const cleanedRows = cleanupConsecutiveEmptyRows(nextRows)
+          saveRowsToStorage(cleanedRows)
+          return cleanedRows
+        })
       }
-      return prev.filter((id) => id !== rowId)
-    })
-  }
-
-  const updateWorkDuration = (start: string, end: string) => {
-    const duration = calculateDuration(start, end)
-    if (duration) {
-      setWorkDurationHours(duration.hours)
-      setWorkDurationMinutes(duration.minutes)
-      return
+    } 
+    else if (field === 'woNo' && value.trim() === '') {
+      // Clear woNo and all related fields
+      setRows((prevRows) => {
+        const nextRows = prevRows.map((row) =>
+          row.id === rowId 
+            ? { 
+                ...row, 
+                woNo: '', 
+                itemNo: '', 
+                itemName: '',
+                targetTime: '',
+                acceptedQty: '',
+                defectiveQty: '',
+                opOrder: '',
+                opDesc: '',
+                processStatus: '',
+                remarks: ''
+              } 
+            : row,
+        )
+        const cleanedRows = cleanupConsecutiveEmptyRows(nextRows)
+        saveRowsToStorage(cleanedRows)
+        return cleanedRows
+      })
     }
-    setWorkDurationHours('')
-    setWorkDurationMinutes('')
+    else if (field === 'woNo' && value.trim() !== '' && !hasMinWoNoLength(value)) {
+      // WoNo is too short, just update woNo without fetching
+      setRows((prevRows) => {
+        const nextRows = prevRows.map((row) =>
+          row.id === rowId ? { ...row, woNo: value } : row,
+        )
+        const cleanedRows = cleanupConsecutiveEmptyRows(nextRows)
+        saveRowsToStorage(cleanedRows)
+        return cleanedRows
+      })
+    }
+    else {
+      // Update other fields normally (itemNo and itemName are now editable)
+      setRows((prevRows) => {
+        const nextRows = prevRows.map((row) =>
+          row.id === rowId ? { ...row, [field]: value } : row,
+        )
+        saveRowsToStorage(nextRows)
+        return nextRows
+      })
+    }
   }
 
-  // 登録(WO維持) - Register and keep WO data
-  const handleRegisterKeep = () => {
-    setWorkStartTime('')
-    setWorkEndTime('')
-    setWorkDurationHours('')
-    setWorkDurationMinutes('')
+  // Add a new empty row at the end
+  const addNewRow = () => {
+    const newId = Math.max(...rows.map(r => r.id), 0) + 1
+    const newRow = createEmptyRow(newId)
+    setRows(prev => [...prev, newRow])
   }
 
   useEffect(() => {
@@ -476,26 +653,13 @@ const WorkOrderTimeRegistrationGosen = () => {
     if (duration) {
       setWorkDurationHours(duration.hours)
       setWorkDurationMinutes(duration.minutes)
-      return
+    } else {
+      setWorkDurationHours('')
+      setWorkDurationMinutes('')
     }
-    setWorkDurationHours('')
-    setWorkDurationMinutes('')
   }, [workStartTime, workEndTime])
 
-  const updateRowField = (
-    rowId: number,
-    field: keyof Omit<Row, 'id' | 'woNo'>,
-    value: string,
-  ) => {
-    setRows((prevRows) => {
-      const nextRows = prevRows.map((row) =>
-        row.id === rowId ? { ...row, [field]: value } : row,
-      )
-      saveRowsToStorage(nextRows)
-      return nextRows
-    })
-  }
-
+  // Load data from location.state or sessionStorage
   useEffect(() => {
     const state = location.state as {
       selectedWoNumbers?: string[]
@@ -504,15 +668,16 @@ const WorkOrderTimeRegistrationGosen = () => {
         woNumber: string
         itemNumber?: string
         itemName?: string
-        orderQuantity?: number
       }>
     } | null
+    
     const selectedWoNumbers = state?.selectedWoNumbers
     const selectedRows = state?.selectedRows
 
+    // Load from location.state (WO selection page)
     if (Array.isArray(selectedRows) && selectedRows.length > 0) {
-      const mappedRows: Row[] = selectedRows.map((row) => ({
-        id: row.id,
+      const mappedRows: Row[] = selectedRows.map((row, index) => ({
+        id: row.id || index + 1,
         woNo: row.woNumber,
         itemNo: row.itemNumber ?? '',
         itemName: row.itemName ?? '',
@@ -524,20 +689,45 @@ const WorkOrderTimeRegistrationGosen = () => {
         processStatus: '',
         remarks: '',
       }))
-      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedWoNumbers ?? []))
-      setRows(mappedRows)
-      saveRowsToStorage(mappedRows)
+      
+      // Fetch details for each WO that has 6+ characters
+      const fetchAllDetails = async () => {
+        const updatedRows = await Promise.all(
+          mappedRows.map(async (row) => {
+            if (row.woNo && hasMinWoNoLength(row.woNo) && MASTER_WORK_ORDERS[row.woNo]) {
+              return { ...row, ...MASTER_WORK_ORDERS[row.woNo], id: row.id }
+            }
+            return row
+          })
+        )
+        const rowsWithEmpty = [...updatedRows, createEmptyRow(updatedRows.length + 1)]
+        setRows(rowsWithEmpty)
+        saveRowsToStorage(rowsWithEmpty)
+      }
+      
+      fetchAllDetails()
+      if (selectedWoNumbers) {
+        sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedWoNumbers))
+      }
+      // Clear location state
+      navigate(location.pathname, { replace: true, state: null })
       return
     }
 
     if (Array.isArray(selectedWoNumbers) && selectedWoNumbers.length > 0) {
       sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedWoNumbers))
-      const matchedRows = DEFAULT_ROWS.filter((row) => selectedWoNumbers.includes(row.woNo))
-      const missingRows = selectedWoNumbers
-        .filter((woNo) => !matchedRows.some((row) => row.woNo === woNo))
-        .map((woNo, index) => ({
-          id: Date.now() + index,
-          woNo,
+      
+      const mappedRows: Row[] = selectedWoNumbers.map((woNo, index) => {
+        const masterData = MASTER_WORK_ORDERS[woNo]
+        if (masterData && hasMinWoNoLength(woNo)) {
+          return {
+            id: index + 1,
+            ...masterData,
+          } as Row
+        }
+        return {
+          id: index + 1,
+          woNo: woNo,
           itemNo: '',
           itemName: '',
           targetTime: '',
@@ -547,114 +737,72 @@ const WorkOrderTimeRegistrationGosen = () => {
           opDesc: '',
           processStatus: '',
           remarks: '',
-        }))
-      const allRows = [...matchedRows, ...missingRows]
-      setRows(allRows)
-      saveRowsToStorage(allRows)
-    } else {
-      const savedRows = sessionStorage.getItem(SESSION_STORAGE_ROWS_KEY)
-      if (savedRows) {
-        try {
-          const parsedRows = JSON.parse(savedRows)
-          if (Array.isArray(parsedRows)) {
-            setRows(parsedRows.filter((item): item is Row => item && typeof item === 'object' && typeof item.id === 'number'))
-            return
-          }
-        } catch {
-          // ignore invalid stored rows
         }
-      }
+      })
+      
+      const rowsWithEmpty = [...mappedRows, createEmptyRow(mappedRows.length + 1)]
+      setRows(rowsWithEmpty)
+      saveRowsToStorage(rowsWithEmpty)
+      navigate(location.pathname, { replace: true, state: null })
+      return
+    }
 
-      const saved = sessionStorage.getItem(SESSION_STORAGE_KEY)
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          if (Array.isArray(parsed)) {
-            const validSelection = parsed.filter((item): item is string => typeof item === 'string')
-            if (validSelection.length > 0) {
-              const matchedRows = DEFAULT_ROWS.filter((row) => validSelection.includes(row.woNo))
-              const missingRows = validSelection
-                .filter((woNo) => !matchedRows.some((row) => row.woNo === woNo))
-                .map((woNo, index) => ({
-                  id: Date.now() + index,
-                  woNo,
-                  itemNo: '',
-                  itemName: '',
-                  targetTime: '',
-                  acceptedQty: '',
-                  defectiveQty: '',
-                  opOrder: '',
-                  opDesc: '',
-                  processStatus: '',
-                  remarks: '',
-                }))
-              const allRows = [...matchedRows, ...missingRows]
-              setRows(allRows)
-              saveRowsToStorage(allRows)
-            }
-          }
-        } catch {
-          // ignore invalid storage data
+    // Load from sessionStorage
+    const savedRows = sessionStorage.getItem(SESSION_STORAGE_ROWS_KEY)
+    if (savedRows) {
+      try {
+        const parsedRows = JSON.parse(savedRows)
+        if (Array.isArray(parsedRows) && parsedRows.length > 0) {
+          setRows(parsedRows)
+          return
         }
+      } catch {
+        // ignore
       }
     }
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (isAnyModalOpen) return
-
-      if (event.key === 'F1') {
-        event.preventDefault()
-        handleDeleteSelected()
-        return
-      }
-
-      if (event.key === 'F2') {
-        event.preventDefault()
-        setShowCompleteConfirm(true)
-        return
-      }
-
-      if (event.key === 'F4') {
-        event.preventDefault()
-        setShowBackConfirm(true)
-      }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => {
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  }, [checkedRowIds, isAnyModalOpen, location.state])
+    // Initialize with empty row
+    setRows([createEmptyRow(1)])
+  }, [location.state, navigate, location.pathname])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'check',
       headClassName: 'col-check',
       cellClassName: 'col-check',
-      header: (
-        <input
-          type='checkbox'
-          className='tf-tableCheckbox'
-          checked={isAllChecked}
-          onChange={(e) => toggleAllChecked(e.target.checked)}
-          onClick={(e) => e.stopPropagation()}
-          aria-label='Select all rows'
-        />
+      header: '',
+      render: (row) => (
+        <div 
+          className="row-selector"
+          onClick={() => setActiveRowId(row.id)}
+          style={{ cursor: 'pointer' }}
+        >
+          {activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null}
+        </div>
       ),
+    },
+    {
+      key: 'woNo',
+      headClassName: 'col-wo',
+      cellClassName: 'col-wo',
+      header: 'WoNo',
       render: (row) => (
         <input
-          type='checkbox'
-          className='tf-tableCheckbox'
-          checked={checkedRowIds.includes(row.id)}
-          onChange={(e) => {
-            e.stopPropagation()
-            toggleRowChecked(row.id, e.target.checked)
+          type='text'
+          className='table-cell-input'
+          value={row.woNo}
+          onChange={(e) => updateRowField(row.id, 'woNo', e.target.value)}
+          onBlur={() => {
+            // Check if we need to add a new row when user finishes editing the last row
+            const lastRow = rows[rows.length - 1]
+            if (lastRow.woNo && lastRow.id === row.id) {
+              addNewRow()
+            }
           }}
           onClick={(e) => e.stopPropagation()}
-          aria-label={`Select row ${row.id}`}
         />
       ),
     },
-    { key: 'woNo', headClassName: 'col-wo', cellClassName: 'col-wo', header: 'WoNo', render: (row) => row.woNo },
     {
       key: 'itemNo',
       headClassName: 'col-item-no',
@@ -667,6 +815,7 @@ const WorkOrderTimeRegistrationGosen = () => {
           value={row.itemNo}
           onChange={(e) => updateRowField(row.id, 'itemNo', e.target.value)}
           onClick={(e) => e.stopPropagation()}
+          // 品番 can now be edited freely
         />
       ),
     },
@@ -682,6 +831,7 @@ const WorkOrderTimeRegistrationGosen = () => {
           value={row.itemName}
           onChange={(e) => updateRowField(row.id, 'itemName', e.target.value)}
           onClick={(e) => e.stopPropagation()}
+          // 品名 can now be edited freely
         />
       ),
     },
@@ -951,7 +1101,9 @@ const WorkOrderTimeRegistrationGosen = () => {
               gridStyle={gridStyle}
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
-              isRowActive={(rowKey) => checkedRowIds.includes(Number(rowKey))}
+              activeRowKey={activeRowId}
+              isRowActive={(rowKey) => activeRowId === Number(rowKey)}
+              onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
             />
 
             <div className='wot-footer-summary wot-radio-container'>
@@ -1020,22 +1172,32 @@ const WorkOrderTimeRegistrationGosen = () => {
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label '>作業時間</label>
-                  <input className='wot-grid-value2' value={workDurationHours} />
+                  <input 
+                    className='wot-grid-value2' 
+                    value={workDurationHours}
+                    readOnly
+                    placeholder='時間'
+                  />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-span'>時間</label>
-                  <input className='wot-grid-value2' value={workDurationMinutes} placeholder='分' />
+                  <input 
+                    className='wot-grid-value2' 
+                    value={workDurationMinutes}
+                    readOnly
+                    placeholder='分'
+                  />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label'>目標時間計</label>
-                  <input className='wot-grid-value2' />
+                  <input className='wot-grid-value2' readOnly />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-span'>時間</label>
-                  <input className='wot-grid-value2 addspanto' placeholder='分' />
+                  <input className='wot-grid-value2 addspanto' readOnly placeholder='分' />
                 </div>
               </div>
             </div>
@@ -1049,21 +1211,21 @@ const WorkOrderTimeRegistrationGosen = () => {
               </button>
               <button
                 className='set-btn set-primary'
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={handleRegister}
               >
-                実績登録
+                登録
               </button>
               <button
                 className='set-btn-footer set-primary'
                 style={{ visibility: 'hidden' }}
               >
-                {'\u624b\u5165\u529b'}
+                手入力
               </button>
 
               <div>
                 <button
                   className='set-btn set-hand-input-btn'
-                  onClick={handleRegisterKeep}
+                  onClick={() => {}}
                   style={{ display: showWorkStartButton ? undefined : 'none' }}
                 >
                   作業開始
@@ -1144,16 +1306,42 @@ const WorkOrderTimeRegistrationGosen = () => {
             </div>
           )}
 
-          {showCompleteConfirm && (
+          {/* Register Confirmation Modal - WO維持しますか？ */}
+          {showRegisterConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>実績を登録しました。</div>
+                <div className='set-modal-body'>
+                  作業実績を登録します。
+                  <br />
+                  WOは維持しますか？
+                </div>
                 <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterMaintain}>
+                    YES
+                  </button>
+                  <button className='set-modal-btn set-modal-no' onClick={confirmRegisterClear}>
+                    NO
+                  </button>
                   <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={() => setShowCompleteConfirm(false)}
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowRegisterConfirm(false)}
                   >
+                    取消
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Register Success Modal */}
+          {showRegisterSuccessConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>作業実績を登録しました。</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={handleRegisterSuccess}>
                     OK
                   </button>
                 </div>
@@ -1178,7 +1366,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
-                    onClick={() => setShowBackConfirm(false)}
+                    onClick={() => navigate('/factory/factory')}
                   >
                     No
                   </button>
