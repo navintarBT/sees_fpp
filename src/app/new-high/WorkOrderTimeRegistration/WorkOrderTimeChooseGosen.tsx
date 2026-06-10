@@ -25,31 +25,26 @@ type Row = {
 
 // Gosen factory data (from document example)
 const GOSEN_ROWS: Row[] = [
-    { id: 1, woNumber: 'wo-10', itemNumber: 'A001', itemName: '製品A', orderQuantity: 10 },
-    { id: 2, woNumber: 'wo-20', itemNumber: 'B002', itemName: '製品B', orderQuantity: 10 },
-    { id: 3, woNumber: 'wo-30', itemNumber: 'C003', itemName: '製品C', orderQuantity: 25 },
-    { id: 4, woNumber: 'wo-40', itemNumber: 'D004', itemName: '製品D', orderQuantity: 25 },
-    { id: 5, woNumber: 'wo-50', itemNumber: 'E005', itemName: '製品E', orderQuantity: 15 },
-    { id: 6, woNumber: 'wo-60', itemNumber: 'F006', itemName: '製品F', orderQuantity: 15 },
-    { id: 7, woNumber: 'wo-70', itemNumber: 'G007', itemName: '製品G', orderQuantity: 20 },
+    { id: 1, woNumber: 'WO-001', itemNumber: 'PRD-001', itemName: '製品A', orderQuantity: 10 },
+    { id: 2, woNumber: 'WO-002', itemNumber: 'PRD-002', itemName: '製品B', orderQuantity: 10 },
+    { id: 3, woNumber: 'WO-003', itemNumber: 'PRD-003', itemName: '製品C', orderQuantity: 25 },
+    { id: 4, woNumber: 'WO-004', itemNumber: 'PRD-004', itemName: '製品D', orderQuantity: 25 },
+    { id: 5, woNumber: 'WO-005', itemNumber: 'PRD-005', itemName: '製品E', orderQuantity: 15 },
 ]
 
 // Chiba factory data (according to document)
 const CHIBA_ROWS: Row[] = [
-    { id: 1, woNumber: 'wo-1', itemNumber: 'a', itemName: '製品a', orderQuantity: 10 },
-    { id: 2, woNumber: 'wo-2', itemNumber: 'b', itemName: '製品b', orderQuantity: 10 },
-    { id: 3, woNumber: 'wo-3', itemNumber: 'c', itemName: '製品c', orderQuantity: 10 },
-    { id: 4, woNumber: 'wo-4', itemNumber: 'd', itemName: '製品d', orderQuantity: 15 },
-    { id: 5, woNumber: 'wo-5', itemNumber: 'e', itemName: '製品e', orderQuantity: 15 },
-    { id: 6, woNumber: 'wo-6', itemNumber: 'f', itemName: '製品f', orderQuantity: 10 },
-    { id: 7, woNumber: 'wo-7', itemNumber: 'g', itemName: '製品g', orderQuantity: 20 },
-    { id: 8, woNumber: 'wo-8', itemNumber: 'h', itemName: '製品h', orderQuantity: 15 },
+    { id: 1, woNumber: 'WO-001', itemNumber: 'PRD-001', itemName: '製品A', orderQuantity: 10 },
+    { id: 2, woNumber: 'WO-002', itemNumber: 'PRD-002', itemName: '製品B', orderQuantity: 10 },
+    { id: 3, woNumber: 'WO-003', itemNumber: 'PRD-003', itemName: '製品C', orderQuantity: 10 },
+    { id: 4, woNumber: 'WO-004', itemNumber: 'PRD-004', itemName: '製品D', orderQuantity: 15 },
+    { id: 5, woNumber: 'WO-005', itemNumber: 'PRD-005', itemName: '製品E', orderQuantity: 15 },
 ]
 
-// Helper to read current selection from localStorage
+// Helper to read current selection from sessionStorage (changed from localStorage)
 const readStoredSelection = (targetPath: string): string[] => {
     const storageKey = getSessionStorageKey(targetPath)
-    const storedSelection = localStorage.getItem(storageKey)
+    const storedSelection = sessionStorage.getItem(storageKey) // Changed to sessionStorage
     if (!storedSelection) return []
     try {
         const parsed = JSON.parse(storedSelection)
@@ -66,7 +61,7 @@ const WorkOrderTimeRegistrationChoose = () => {
     const targetPath = locationState?.targetPath ?? DEFAULT_TARGET_PATH
     const rows = targetPath === '/factory/work-order-time-registration-chiba' ? CHIBA_ROWS : GOSEN_ROWS
 
-    // Initialize directly from localStorage
+    // Initialize directly from sessionStorage (changed from localStorage)
     const [selectedWoNumbers, setSelectedWoNumbers] = useState<string[]>(() =>
         readStoredSelection(targetPath)
     )
@@ -107,7 +102,13 @@ const WorkOrderTimeRegistrationChoose = () => {
 
     const storeSelection = () => {
         const storageKey = getSessionStorageKey(targetPath)
-        localStorage.setItem(storageKey, JSON.stringify(selectedWoNumbers))
+        sessionStorage.setItem(storageKey, JSON.stringify(selectedWoNumbers)) // Changed to sessionStorage
+    }
+
+    const clearSelection = () => {
+        const storageKey = getSessionStorageKey(targetPath)
+        sessionStorage.removeItem(storageKey)
+        setSelectedWoNumbers([])
     }
 
     const isSelectedWoNumber = (woNumber: string) => selectedWoNumbers.includes(woNumber)
