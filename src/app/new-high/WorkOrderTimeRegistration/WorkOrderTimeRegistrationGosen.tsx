@@ -313,6 +313,28 @@ const WorkOrderTimeRegistrationGosen = () => {
     }
   }
 
+  const clearAllData = () => {
+    // Clear table data
+    const emptyRow = createEmptyRow(1)
+    setRows([emptyRow])
+    saveRowsToStorage([emptyRow])
+
+    // Clear all session storage keys
+    sessionStorage.removeItem(SESSION_STORAGE_ROWS_KEY)
+    sessionStorage.removeItem(SESSION_STORAGE_KEY)
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_chiba')
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_gosen')
+
+    // Clear worker and time fields
+    setWorkerCode('')
+    setWorkerName('')
+    setWorkStartTime('')
+    setWorkEndTime('')
+    setWorkDurationHours('')
+    setWorkDurationMinutes('')
+    setActiveRowId(null)
+  }
+
   // Clean up consecutive empty rows - keep only one empty row at the end
   const cleanupConsecutiveEmptyRows = (currentRows: Row[]): Row[] => {
     if (currentRows.length === 0) {
@@ -336,16 +358,16 @@ const WorkOrderTimeRegistrationGosen = () => {
 
     // Keep rows up to last non-empty row
     const rowsWithData = currentRows.slice(0, lastNonEmptyIndex + 1)
-    
+
     // Add empty row at the end if last row is not empty
     const lastRow = rowsWithData[rowsWithData.length - 1]
     const isLastRowEmpty = !lastRow.woNo && !lastRow.itemNo && !lastRow.itemName
-    
+
     if (!isLastRowEmpty) {
       const nextId = Math.max(...rowsWithData.map(r => r.id), 0) + 1
       return [...rowsWithData, createEmptyRow(nextId)]
     }
-    
+
     return rowsWithData
   }
 
@@ -377,7 +399,7 @@ const WorkOrderTimeRegistrationGosen = () => {
 
   const calendarDays = getCalendarDays(woCalendarMonth)
   const calendarMonthLabel = woCalendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
-  
+
   const [showDeleteSelectedConfirm, setShowDeleteSelectedConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
@@ -551,30 +573,30 @@ const WorkOrderTimeRegistrationGosen = () => {
     if (field === 'woNo' && value.trim() !== '' && hasMinWoNoLength(value)) {
       // Prevent multiple simultaneous fetches for the same woNo
       if (fetchingWoNos.has(value)) return
-      
+
       setFetchingWoNos(prev => new Set(prev).add(value))
-      
+
       const details = await fetchWorkOrderDetails(value.trim())
-      
+
       setFetchingWoNos(prev => {
         const newSet = new Set(prev)
         newSet.delete(value)
         return newSet
       })
-      
+
       if (details) {
         // Update with fetched data, but preserve user-editable fields
         setRows((prevRows) => {
           const nextRows = prevRows.map((row) =>
             row.id === rowId
-              ? { 
-                  ...row, 
-                  ...details, 
-                  id: row.id,
-                  // Preserve any user-edited values that might have been set
-                  acceptedQty: row.acceptedQty || details.acceptedQty,
-                  defectiveQty: row.defectiveQty || details.defectiveQty,
-                }
+              ? {
+                ...row,
+                ...details,
+                id: row.id,
+                // Preserve any user-edited values that might have been set
+                acceptedQty: row.acceptedQty || details.acceptedQty,
+                defectiveQty: row.defectiveQty || details.defectiveQty,
+              }
               : row,
           )
           const cleanedRows = cleanupConsecutiveEmptyRows(nextRows)
@@ -592,25 +614,25 @@ const WorkOrderTimeRegistrationGosen = () => {
           return cleanedRows
         })
       }
-    } 
+    }
     else if (field === 'woNo' && value.trim() === '') {
       // Clear woNo and all related fields
       setRows((prevRows) => {
         const nextRows = prevRows.map((row) =>
-          row.id === rowId 
-            ? { 
-                ...row, 
-                woNo: '', 
-                itemNo: '', 
-                itemName: '',
-                targetTime: '',
-                acceptedQty: '',
-                defectiveQty: '',
-                opOrder: '',
-                opDesc: '',
-                processStatus: '',
-                remarks: ''
-              } 
+          row.id === rowId
+            ? {
+              ...row,
+              woNo: '',
+              itemNo: '',
+              itemName: '',
+              targetTime: '',
+              acceptedQty: '',
+              defectiveQty: '',
+              opOrder: '',
+              opDesc: '',
+              processStatus: '',
+              remarks: ''
+            }
             : row,
         )
         const cleanedRows = cleanupConsecutiveEmptyRows(nextRows)
@@ -670,7 +692,7 @@ const WorkOrderTimeRegistrationGosen = () => {
         itemName?: string
       }>
     } | null
-    
+
     const selectedWoNumbers = state?.selectedWoNumbers
     const selectedRows = state?.selectedRows
 
@@ -689,7 +711,7 @@ const WorkOrderTimeRegistrationGosen = () => {
         processStatus: '',
         remarks: '',
       }))
-      
+
       // Fetch details for each WO that has 6+ characters
       const fetchAllDetails = async () => {
         const updatedRows = await Promise.all(
@@ -704,7 +726,7 @@ const WorkOrderTimeRegistrationGosen = () => {
         setRows(rowsWithEmpty)
         saveRowsToStorage(rowsWithEmpty)
       }
-      
+
       fetchAllDetails()
       if (selectedWoNumbers) {
         sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedWoNumbers))
@@ -716,7 +738,7 @@ const WorkOrderTimeRegistrationGosen = () => {
 
     if (Array.isArray(selectedWoNumbers) && selectedWoNumbers.length > 0) {
       sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedWoNumbers))
-      
+
       const mappedRows: Row[] = selectedWoNumbers.map((woNo, index) => {
         const masterData = MASTER_WORK_ORDERS[woNo]
         if (masterData && hasMinWoNoLength(woNo)) {
@@ -739,7 +761,7 @@ const WorkOrderTimeRegistrationGosen = () => {
           remarks: '',
         }
       })
-      
+
       const rowsWithEmpty = [...mappedRows, createEmptyRow(mappedRows.length + 1)]
       setRows(rowsWithEmpty)
       saveRowsToStorage(rowsWithEmpty)
@@ -772,7 +794,7 @@ const WorkOrderTimeRegistrationGosen = () => {
       cellClassName: 'col-check',
       header: '',
       render: (row) => (
-        <div 
+        <div
           className="row-selector"
           onClick={() => setActiveRowId(row.id)}
           style={{ cursor: 'pointer' }}
@@ -815,7 +837,7 @@ const WorkOrderTimeRegistrationGosen = () => {
           value={row.itemNo}
           onChange={(e) => updateRowField(row.id, 'itemNo', e.target.value)}
           onClick={(e) => e.stopPropagation()}
-          // 品番 can now be edited freely
+        // 品番 can now be edited freely
         />
       ),
     },
@@ -831,7 +853,7 @@ const WorkOrderTimeRegistrationGosen = () => {
           value={row.itemName}
           onChange={(e) => updateRowField(row.id, 'itemName', e.target.value)}
           onClick={(e) => e.stopPropagation()}
-          // 品名 can now be edited freely
+        // 品名 can now be edited freely
         />
       ),
     },
@@ -1172,32 +1194,28 @@ const WorkOrderTimeRegistrationGosen = () => {
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label '>作業時間</label>
-                  <input 
-                    className='wot-grid-value2' 
-                    value={workDurationHours}
-                    readOnly
+                  <input
+                    className='wot-grid-value2'
                     placeholder='時間'
                   />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-span'>時間</label>
-                  <input 
-                    className='wot-grid-value2' 
-                    value={workDurationMinutes}
-                    readOnly
+                  <input
+                    className='wot-grid-value2'
                     placeholder='分'
                   />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label'>目標時間計</label>
-                  <input className='wot-grid-value2' readOnly />
+                  <input className='wot-grid-value2' />
                 </div>
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label wot-bg-span'>時間</label>
-                  <input className='wot-grid-value2 addspanto' readOnly placeholder='分' />
+                  <input className='wot-grid-value2 ' placeholder='分' />
                 </div>
               </div>
             </div>
@@ -1225,7 +1243,7 @@ const WorkOrderTimeRegistrationGosen = () => {
               <div>
                 <button
                   className='set-btn set-hand-input-btn'
-                  onClick={() => {}}
+                  onClick={() => { }}
                   style={{ display: showWorkStartButton ? undefined : 'none' }}
                 >
                   作業開始
@@ -1353,11 +1371,16 @@ const WorkOrderTimeRegistrationGosen = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>メニューに戻ります。<br />読み込みデータを破棄しますか？</div>
+                <div className='set-modal-body'>
+                  メニューに戻ります。
+                  <br />
+                  読み込みデータを破棄しますか？
+                </div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
+                      clearAllData() // ใช้ฟังก์ชันใหม่
                       setShowBackConfirm(false)
                       navigate('/factory/factory')
                     }}
@@ -1366,9 +1389,12 @@ const WorkOrderTimeRegistrationGosen = () => {
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
-                    onClick={() => navigate('/factory/factory')}
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      navigate('/factory/factory')
+                    }}
                   >
-                    No
+                    NO
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'

@@ -11,7 +11,9 @@ const formatWoDate = (value: string) => {
   if (!year || !month || !day) return 'yy/mm/dd'
   return `${year}/${month}/${day}`
 }
+
 const padDatePart = (value: number) => value.toString().padStart(2, '0')
+
 const toDateValue = (date: Date) => (
   `${date.getFullYear()}-${padDatePart(date.getMonth() + 1)}-${padDatePart(date.getDate())}`
 )
@@ -115,14 +117,11 @@ const measureColumnWidths = (rows: Row[]): React.CSSProperties | undefined => {
 }
 
 const DEFAULT_ROWS: Row[] = [
-  { id: 1, woNo: 'wo-1', itemNo: 'a', itemName: '製品a' },
-  { id: 2, woNo: 'wo-2', itemNo: 'b', itemName: '製品b' },
-  { id: 3, woNo: 'wo-3', itemNo: 'c', itemName: '製品c' },
-  { id: 4, woNo: 'wo-4', itemNo: 'd', itemName: '製品d' },
-  { id: 5, woNo: 'wo-5', itemNo: 'e', itemName: '製品e' },
-  { id: 6, woNo: 'wo-6', itemNo: 'f', itemName: '製品f' },
-  { id: 7, woNo: 'wo-7', itemNo: 'g', itemName: '製品g' },
-  { id: 8, woNo: 'wo-8', itemNo: 'h', itemName: '製品h' },
+  { id: 1, woNo: 'WO-001', itemNo: 'PRD-001', itemName: '製品A' },
+  { id: 2, woNo: 'WO-002', itemNo: 'PRD-002', itemName: '製品B' },
+  { id: 3, woNo: 'WO-003', itemNo: 'PRD-003', itemName: '製品C' },
+  { id: 4, woNo: 'WO-004', itemNo: 'PRD-004', itemName: '製品D' },
+  { id: 5, woNo: 'WO-005', itemNo: 'PRD-005', itemName: '製品E' },
 ]
 
 const TimePickerDropdown = ({
@@ -187,10 +186,10 @@ const WorkOrderTimeRegistrationChiba = () => {
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
 
   const saveRowsToStorage = (rowsToSave: Row[]) => {
-    if (rowsToSave.length === 0) {
-      localStorage.removeItem(storedRowsKey)
+    if (rowsToSave.length === 0 || (rowsToSave.length === 1 && !rowsToSave[0].woNo)) {
+      sessionStorage.removeItem(storedRowsKey)
     } else {
-      localStorage.setItem(storedRowsKey, JSON.stringify(rowsToSave))
+      sessionStorage.setItem(storedRowsKey, JSON.stringify(rowsToSave))
     }
   }
 
@@ -236,7 +235,7 @@ const WorkOrderTimeRegistrationChiba = () => {
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const DATA_CLEARED_FLAG = 'workOrderTimeRegistrationChibaCleared'
   const [isDataCleared, setIsDataCleared] = useState(
-    () => localStorage.getItem(DATA_CLEARED_FLAG) === '1',
+    () => sessionStorage.getItem(DATA_CLEARED_FLAG) === '1',
   )
   const WORKER_STORAGE_KEY = 'workOrderTimeRegistrationChiba_worker'
   const WORKPLACE_STORAGE_KEY = 'workOrderTimeRegistrationChiba_workplace'
@@ -292,7 +291,6 @@ const WorkOrderTimeRegistrationChiba = () => {
     return ''
   })
 
-  // Store the current selected WO numbers from the last load
   const [currentSelectedWoNumbers, setCurrentSelectedWoNumbers] = useState<string[]>([])
 
   const getWorkerNameFromCode = (code: string) => {
@@ -343,14 +341,40 @@ const WorkOrderTimeRegistrationChiba = () => {
       sessionKey,
       'workOrderTimeRegistrationSelectedWoNumbers_gosen',
     ]
-    sessionKeysToClear.forEach((key) => localStorage.removeItem(key))
+    sessionKeysToClear.forEach((key) => sessionStorage.removeItem(key))
 
-    localStorage.setItem(DATA_CLEARED_FLAG, '1')
+    sessionStorage.setItem(DATA_CLEARED_FLAG, '1')
     sessionStorage.removeItem(WORKER_STORAGE_KEY)
     sessionStorage.removeItem(WORKPLACE_STORAGE_KEY)
     setRows([])
     setActiveRowId(null)
     setIsDataCleared(true)
+    setCurrentSelectedWoNumbers([])
+  }
+
+  const clearAllDataForBack = () => {
+    // Clear table data
+    setRows([])
+    setActiveRowId(null)
+    
+    // Clear all session storage keys
+    sessionStorage.removeItem(storedRowsKey)
+    sessionStorage.removeItem(sessionKey)
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers')
+    sessionStorage.removeItem('workOrderTimeRegistrationSelectedWoNumbers_gosen')
+    sessionStorage.removeItem(DATA_CLEARED_FLAG)
+    sessionStorage.removeItem(WORKER_STORAGE_KEY)
+    sessionStorage.removeItem(WORKPLACE_STORAGE_KEY)
+    
+    // Clear worker and time fields
+    setWorkerCode('')
+    setWorkerName('')
+    setWorkplaceCode('')
+    setWorkplaceName('')
+    setWorkStartTime('')
+    setWorkEndTime('')
+    setWorkDurationHours('')
+    setWorkDurationMinutes('')
     setCurrentSelectedWoNumbers([])
   }
 
@@ -372,7 +396,7 @@ const WorkOrderTimeRegistrationChiba = () => {
     if ((Array.isArray(selectedRows) && selectedRows.length > 0) ||
       (Array.isArray(selectedWoNumbers) && selectedWoNumbers.length > 0)) {
 
-      localStorage.removeItem(DATA_CLEARED_FLAG)
+      sessionStorage.removeItem(DATA_CLEARED_FLAG)
       setIsDataCleared(false)
 
       if (Array.isArray(selectedRows) && selectedRows.length > 0) {
@@ -385,9 +409,9 @@ const WorkOrderTimeRegistrationChiba = () => {
 
         const woNumbers = selectedWoNumbers ?? mappedRows.map(r => r.woNo)
         setCurrentSelectedWoNumbers(woNumbers)
-        localStorage.setItem(sessionKey, JSON.stringify(woNumbers))
+        sessionStorage.setItem(sessionKey, JSON.stringify(woNumbers))
         setRows(mappedRows)
-        localStorage.setItem(storedRowsKey, JSON.stringify(mappedRows))
+        saveRowsToStorage(mappedRows)
         setActiveRowId(null)
 
         navigate(location.pathname, { replace: true, state: null })
@@ -396,10 +420,10 @@ const WorkOrderTimeRegistrationChiba = () => {
 
       if (Array.isArray(selectedWoNumbers) && selectedWoNumbers.length > 0) {
         setCurrentSelectedWoNumbers(selectedWoNumbers)
-        localStorage.setItem(sessionKey, JSON.stringify(selectedWoNumbers))
+        sessionStorage.setItem(sessionKey, JSON.stringify(selectedWoNumbers))
         const matchedRows = DEFAULT_ROWS.filter((row) => selectedWoNumbers.includes(row.woNo))
         setRows(matchedRows)
-        localStorage.setItem(storedRowsKey, JSON.stringify(matchedRows))
+        saveRowsToStorage(matchedRows)
         setActiveRowId(null)
 
         navigate(location.pathname, { replace: true, state: null })
@@ -415,7 +439,7 @@ const WorkOrderTimeRegistrationChiba = () => {
 
     if (isDataCleared) return
 
-    const savedRows = localStorage.getItem(storedRowsKey)
+    const savedRows = sessionStorage.getItem(storedRowsKey)
     if (savedRows) {
       try {
         const parsedRows = JSON.parse(savedRows)
@@ -428,7 +452,7 @@ const WorkOrderTimeRegistrationChiba = () => {
       }
     }
 
-    const savedSelection = localStorage.getItem(sessionKey)
+    const savedSelection = sessionStorage.getItem(sessionKey)
     if (savedSelection) {
       try {
         const parsedSelection = JSON.parse(savedSelection)
@@ -436,7 +460,7 @@ const WorkOrderTimeRegistrationChiba = () => {
           setCurrentSelectedWoNumbers(parsedSelection)
           const matchedRows = DEFAULT_ROWS.filter((row) => parsedSelection.includes(row.woNo))
           setRows(matchedRows)
-          localStorage.setItem(storedRowsKey, JSON.stringify(matchedRows))
+          saveRowsToStorage(matchedRows)
         }
       } catch {
         // ignore invalid stored selection
@@ -461,15 +485,15 @@ const WorkOrderTimeRegistrationChiba = () => {
     setCurrentSelectedWoNumbers(updatedWoNumbers)
 
     const removeWoNumbers = (storageKey: string) => {
-      const saved = localStorage.getItem(storageKey)
+      const saved = sessionStorage.getItem(storageKey)
       if (!saved) return
       try {
         const selected = JSON.parse(saved) as string[]
         const remaining = selected.filter((wo) => wo !== woNumberToDelete)
         if (remaining.length > 0) {
-          localStorage.setItem(storageKey, JSON.stringify(remaining))
+          sessionStorage.setItem(storageKey, JSON.stringify(remaining))
         } else {
-          localStorage.removeItem(storageKey)
+          sessionStorage.removeItem(storageKey)
         }
       } catch {
         // ignore parse error
@@ -481,8 +505,8 @@ const WorkOrderTimeRegistrationChiba = () => {
     removeWoNumbers('workOrderTimeRegistrationSelectedWoNumbers_gosen')
 
     if (remainingRows.length === 0) {
-      localStorage.removeItem(storedRowsKey)
-      localStorage.setItem(DATA_CLEARED_FLAG, '1')
+      sessionStorage.removeItem(storedRowsKey)
+      sessionStorage.setItem(DATA_CLEARED_FLAG, '1')
       setIsDataCleared(true)
       setCurrentSelectedWoNumbers([])
     } else {
@@ -504,7 +528,7 @@ const WorkOrderTimeRegistrationChiba = () => {
     if (workStartStopDisabled) return
 
     setWorkStartStopDisabled(true)
-    setTimeout(() => setWorkStartStopDisabled(false), 1500)
+    setTimeout(() => setWorkStartStopDisabled(false), 1200)
 
     if (workStartStopState === 'idle') {
       const currentTime = getCurrentTime()
@@ -1065,6 +1089,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             </div>
           )}
 
+          {/* Fixed Back Button Modal - Clears ALL data when YES */}
           {showBackConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -1078,6 +1103,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
+                      clearAllDataForBack()
                       setShowBackConfirm(false)
                       navigate('/factory/factory')
                     }}
@@ -1087,6 +1113,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => {
+                      setShowBackConfirm(false)
                       navigate('/factory/factory')
                     }}
                   >
