@@ -616,19 +616,19 @@ const SetReturnConfiguration = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>選択行を削除しますか？</div>
+                <div className='set-modal-body'>読込データを破棄します。<br />宜しいですか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={executeClear}
                   >
-                    OK
+                    YES
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    Cancel
+                    NO
                   </button>
                 </div>
               </div>
