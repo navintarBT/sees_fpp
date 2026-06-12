@@ -651,7 +651,24 @@
 .hand-date-btn {
   position: absolute;
   top: 50%;
-  right: 16px;
+  right: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border: 0;
+  background: transparent;
+  color: #111827;
+  font-size: 26px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.hand-date-btn2 {
+  position: absolute;
+  top: 45%;
+  right: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1202,11 +1219,25 @@
 }
 
 .wot-grid-value2 {
-  width: 70%;
+  width: 71%;
+}
+
+.wot-grid-value3 {
+  width: 80%;
+  margin-left: -40px;
 }
 
 .wot-bg-span {
-  margin-left: 40px;
+  margin-left: -50px;
+}
+
+.wot-bg-span2 {
+  margin-left: -8px;
+}
+
+.wot-grid-value-chiba{
+  width: 79%;
+  margin-left: -40px;
 }
 
 .wot-grid-label,
@@ -1433,7 +1464,6 @@ input[type='time'].wot-grid-value2 {
 .wot-top-row {
   text-align: right;
 }
-
 
 /* #################################### work-order-choose-table */
 
@@ -1765,6 +1795,9 @@ input[type='time'].wot-grid-value2 {
 
 
 /* ####################################table WOPartsIssuanceDetail########################################### */
+.woPartsIssuanceDetail-table .col-arrow-head  {
+  min-width: 45px;
+}
 
 .woPartsIssuanceDetail-table .col-Interior {
   min-width: 250px;
@@ -1804,6 +1837,7 @@ input[type='time'].wot-grid-value2 {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .inventory-table .tf-tableRow .col-arrow {
@@ -1885,6 +1919,7 @@ input[type='time'].wot-grid-value2 {
   left: 0;
   z-index: 4;
   background: white;
+  min-width: 45px;
 }
 
 .shipping-table .tf-tableRow .col-arrow {
@@ -1941,3 +1976,15 @@ input[type='time'].wot-grid-value2 {
 }
 
 /* min-width  choose wo */
+
+
+
+/* min-width  col-arrow-head-shelftransfer */
+
+.col-arrow-head-shelftransfer{
+  min-width: 42px;
+}
+
+
+/* min-width  col-arrow-head-shelftransfer */
+

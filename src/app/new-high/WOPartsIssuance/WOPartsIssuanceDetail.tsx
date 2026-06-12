@@ -420,13 +420,7 @@ const WOPartsIssuanceDetail = () => {
               </button>
               <button
                 className='set-btn set-danger'
-                onClick={() => {
-                  if (checkedRowIds.length === 0) {
-                    setShowNoSelectionConfirm(true)
-                  } else {
-                    setShowDeleteConfirm(true)
-                  }
-                }}
+                onClick={() => setShowDeleteConfirm(true)}
               >
                 削除
               </button>   
@@ -487,13 +481,13 @@ const WOPartsIssuanceDetail = () => {
                         setShowDeleteConfirm(false)
                       }}
                     >
-                      はい
+                      OK
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowDeleteConfirm(false)}
                     >
-                      いいえ
+                      Cancel
                     </button>
                   </div>
                 </div>

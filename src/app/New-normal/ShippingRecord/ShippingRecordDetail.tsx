@@ -525,13 +525,13 @@ const ShippingRecordDetail = () => {
                         deleteCheckedRows()
                       }}
                     >
-                      はい
+                      OK
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowDeleteConfirm(false)}
                     >
-                      いいえ
+                      Cancel
                     </button>
                   </div>
                 </div>
@@ -542,7 +542,7 @@ const ShippingRecordDetail = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>投入明細確認を閉じますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -551,13 +551,13 @@ const ShippingRecordDetail = () => {
                         navigate('/factory/shipping-records')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowBackConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>

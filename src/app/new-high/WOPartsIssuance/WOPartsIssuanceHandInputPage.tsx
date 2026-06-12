@@ -134,11 +134,6 @@ const WOPartsIssuanceHandInputPage = () => {
   }
 
   const handleDeleteClick = () => {
-    if (selectedRowIds.length === 0) {
-      setShowNoSelectionConfirm(true)
-      return
-    }
-
     setShowDeleteConfirm(true)
   }
 
@@ -383,7 +378,7 @@ const WOPartsIssuanceHandInputPage = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>{'確認'}</div>
-                <div className='set-modal-body'>メニューに戻ります。<br />読込データを破棄しますか？</div>
+                <div className='set-modal-body'>メニューに戻ります。<br /> 読込データを破棄しますか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -418,7 +413,7 @@ const WOPartsIssuanceHandInputPage = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>{'確認'}</div>
-                <div className='set-modal-body'>選択行がありません</div>
+                <div className='set-modal-body'>行が選択されていません。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -441,13 +436,13 @@ const WOPartsIssuanceHandInputPage = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={deleteSelectedRows}
                   >
-                    はい
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowDeleteConfirm(false)}
                   >
-                    いいえ
+                    Cancel
                   </button>
                 </div>
               </div>

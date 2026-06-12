@@ -106,7 +106,7 @@ const ShippingRecordHandInputPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u624b\u5165\u529b\u30c0\u30a4\u30a2\u30ed\u30b0\u3092'}<br />{'\u9589\u3058\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>手入力ダイアログを<br />閉じますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -115,13 +115,13 @@ const ShippingRecordHandInputPage = () => {
                         navigate('/factory/shipping-records')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowBackConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>

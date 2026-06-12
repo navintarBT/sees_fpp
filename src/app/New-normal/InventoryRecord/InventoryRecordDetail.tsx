@@ -433,7 +433,7 @@ const InventoryRecordDetail = () => {
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '削除', render: (row) => row.lot},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '　ロットシリアル', render: (row) => row.lot},
     {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: 'エラー', render: (row) => row.status},
     {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: 'ロットシリアル', render: (row) => row.build},
     {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.release},
@@ -481,13 +481,7 @@ const InventoryRecordDetail = () => {
             <ActionFooter columns={4}>
               <button
                 className='set-btn set-danger'
-                onClick={() => {
-                  if (checkedRowIds.length === 0) {
-                    setShowNoSelectionConfirm(true)
-                  } else {
-                    setShowDeleteConfirm(true)
-                  }
-                }}
+                onClick={() => setShowDeleteConfirm(true)}
               >
                 削除
               </button>  
@@ -520,7 +514,7 @@ const InventoryRecordDetail = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>選択した行を削除しますか？</div>
+                  <div className='set-modal-body'>選択行を削除しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -529,13 +523,13 @@ const InventoryRecordDetail = () => {
                         deleteCheckedRows()
                       }}
                     >
-                      はい
+                      OK
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowDeleteConfirm(false)}
                     >
-                      いいえ
+                      Cancel
                     </button>
                   </div>
                 </div>
@@ -546,7 +540,7 @@ const InventoryRecordDetail = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>投入明細確認を閉じますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -555,13 +549,13 @@ const InventoryRecordDetail = () => {
                         navigate('/factory/inventory-records')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowBackConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>

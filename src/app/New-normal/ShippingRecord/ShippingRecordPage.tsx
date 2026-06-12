@@ -18,14 +18,6 @@ type Row = {
   moveStorage2?: string
 }
 
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
-}
-
 const ShippingRecordPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
@@ -433,8 +425,8 @@ const ShippingRecordPage = () => {
             {showClearConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'></div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -443,13 +435,13 @@ const ShippingRecordPage = () => {
                         clearFormAndRows()
                       }}
                     >
-                      {'\u306f\u3044'}
+                    OK
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowClearConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      Cancel
                     </button>
                   </div>
                 </div>
@@ -514,13 +506,22 @@ const ShippingRecordPage = () => {
                         navigate('/factory/factory')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowBackConfirm(false)
+                        navigate('/factory/factory')
+                      }}
+                    >
+                      NO
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowBackConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      取消
                     </button>
                   </div>
                 </div>

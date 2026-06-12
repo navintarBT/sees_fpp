@@ -590,7 +590,10 @@ const SetMiscellaneousInAndOutBound = () => {
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
-                    onClick={() => setShowBackConfirm(false)}
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      navigate('/factory')
+                    }}
                   >
                     NO
                   </button>

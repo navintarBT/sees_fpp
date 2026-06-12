@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+﻿import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaPlay } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
@@ -31,10 +31,10 @@ const SetReturnConfiguration = () => {
   const [hasLoadedData, setHasLoadedData] = useState(false)
 
   // Form state
-  const [parentJanCode, setParentJanCode] = useState('')      
-  const [parentStatus, setParentStatus] = useState('')        
-  const [parentQty, setParentQty] = useState(1)               
-  const [janCode, setJanCode] = useState('')                  
+  const [parentJanCode, setParentJanCode] = useState('')
+  const [parentStatus, setParentStatus] = useState('')
+  const [parentQty, setParentQty] = useState(1)
+  const [janCode, setJanCode] = useState('')
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
@@ -360,8 +360,8 @@ const SetReturnConfiguration = () => {
 
     // สำหรับทดสอบ: ถ้าพิมพ์ตัวเลขธรรมดา ให้ค้นหาจาก itemNo
     const matchedRow = loadedData.find(row =>
-      row.itemNo === janCode ||  
-      row.lotSerial === janCode  
+      row.itemNo === janCode ||
+      row.lotSerial === janCode
     )
 
     if (!matchedRow) {
@@ -492,7 +492,7 @@ const SetReturnConfiguration = () => {
                     }
                   }}
                   readOnly={true}
-                  style={{ backgroundColor: '#e5e7eb' } }
+                  style={{ backgroundColor: '#e5e7eb' }}
                 />
               </div>
             </div>
@@ -771,6 +771,7 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-no'
                     onClick={() => {
                       setShowBackConfirm(false)
+                      navigate('/factory')
                     }}
                   >
                     NO

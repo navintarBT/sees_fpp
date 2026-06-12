@@ -638,13 +638,13 @@ const BundlePage = () => {
                         clearFormAndRows()
                       }}
                     >
-                      YES
+                      OK
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={handleClearNoClick}
                     >
-                      NO
+                      Cancel
                     </button>
                   </div>
                 </div>
