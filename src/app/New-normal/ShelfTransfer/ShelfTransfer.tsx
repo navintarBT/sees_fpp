@@ -260,8 +260,8 @@ const ShelfTransfer = () => {
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'arrow',
-      headClassName: 'col-arrow-head',
-      cellClassName: 'col-arrow',
+      headClassName: 'col-arrow-head-shelftransfer',
+      cellClassName: 'col-arrow-head-shelftransfer',
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
@@ -352,7 +352,7 @@ const ShelfTransfer = () => {
                 />
                 <button
                   className='set-search-btn set-primary'
-                  onClick={handleSearchsource_location}
+                  // onClick={handleSearchsource_location}
                 >
                   EA
                 </button>
