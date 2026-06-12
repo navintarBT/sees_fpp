@@ -32,9 +32,13 @@ const parseTimeValue = (value: string) => {
 const formatDuration = (minutes: number) => {
   const hours = Math.floor(minutes / 60)
   const mins = minutes % 60
+
   return {
-    hours: hours.toString(),
-    minutes: mins.toString().padStart(2, '0'),
+    // ถ้าน้อยกว่า 1 ชั่วโมงให้ว่าง
+    hours: hours > 0 ? hours.toString() : '',
+
+    // ไม่ต้องเติม 0 ด้านหน้า
+    minutes: mins.toString(),
   }
 }
 
@@ -356,7 +360,7 @@ const WorkOrderTimeRegistrationChiba = () => {
     // Clear table data
     setRows([])
     setActiveRowId(null)
-    
+
     // Clear all session storage keys
     sessionStorage.removeItem(storedRowsKey)
     sessionStorage.removeItem(sessionKey)
@@ -365,7 +369,7 @@ const WorkOrderTimeRegistrationChiba = () => {
     sessionStorage.removeItem(DATA_CLEARED_FLAG)
     sessionStorage.removeItem(WORKER_STORAGE_KEY)
     sessionStorage.removeItem(WORKPLACE_STORAGE_KEY)
-    
+
     // Clear worker and time fields
     setWorkerCode('')
     setWorkerName('')
@@ -898,9 +902,9 @@ const WorkOrderTimeRegistrationChiba = () => {
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-span'>終了</label>
+                  <label className='wot-footer-label wot-bg-span-chiba'>終了</label>
                   <input
-                    className='wot-grid-value2'
+                    className='wot-grid-value2 wot-grid-value-chiba'
                     type='text'
                     maxLength={5}
                     value={workEndTime}
@@ -911,6 +915,8 @@ const WorkOrderTimeRegistrationChiba = () => {
                     onClick={() => setShowEndTimePicker(true)}
                     placeholder='--:--'
                   />
+                  <label className='wot-footer-label wot-bg-span' style={{ visibility: 'hidden' }}>分</label>
+
                   <button
                     type='button'
                     className='hand-date-btn'
@@ -939,13 +945,12 @@ const WorkOrderTimeRegistrationChiba = () => {
                 </div>
 
                 <div className='wot-footer-item'>
-                  <label className='wot-footer-label wot-bg-span'>時間</label>
+                  <label className='wot-footer-label wot-bg-span-chiba'>時間</label>
                   <input
-                    className='wot-grid-value2'
+                    className='wot-grid-value2 wot-grid-value-chiba'
                     value={workDurationMinutes}
-                    readOnly
-                    placeholder='分'
                   />
+                  <label className='wot-footer-label wot-bg-span'>分</label>
                 </div>
               </div>
             </div>
@@ -995,19 +1000,17 @@ const WorkOrderTimeRegistrationChiba = () => {
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>
-                  読込データを破棄します。
-                  <br />
-                  宜しいですか？
+                  選択行を削除しますか？
                 </div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmDeleteSelected}>
-                    YES
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowDeleteSelectedConfirm(false)}
                   >
-                    NO
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -1033,22 +1036,17 @@ const WorkOrderTimeRegistrationChiba = () => {
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>
-                  作業実績を登録します。
-                  <br />
-                  WOは維持しますか？
+                  作業実績を登録しますか？
                 </div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterMaintain}>
                     YES
                   </button>
-                  <button className='set-modal-btn set-modal-no' onClick={confirmRegisterClear}>
+                  <button className='set-modal-btn set-modal-no' onClick={() => {
+                    setShowRegisterConfirm(false)
+                    parentJanCodeInputRef.current?.focus()
+                  }}>
                     NO
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowRegisterConfirm(false)}
-                  >
-                    取消
                   </button>
                 </div>
               </div>

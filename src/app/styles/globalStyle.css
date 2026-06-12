@@ -651,7 +651,7 @@
 .hand-date-btn {
   position: absolute;
   top: 50%;
-  right: 16px;
+  right: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1202,11 +1202,25 @@
 }
 
 .wot-grid-value2 {
-  width: 70%;
+  width: 71%;
+}
+
+.wot-grid-value3 {
+  width: 80%;
+  margin-left: -50px;
 }
 
 .wot-bg-span {
-  margin-left: 40px;
+  margin-left: -55px;
+}
+
+.wot-bg-span2 {
+  margin-left: -8px;
+}
+
+.wot-grid-value-chiba{
+  width: 79%;
+  margin-left: -40px;
 }
 
 .wot-grid-label,
@@ -1433,7 +1447,6 @@ input[type='time'].wot-grid-value2 {
 .wot-top-row {
   text-align: right;
 }
-
 
 /* #################################### work-order-choose-table */
 
