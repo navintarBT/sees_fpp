@@ -15,131 +15,27 @@ type Row = {
 }
 
 const initialRows: Row[] = [
-  {
-    id: 1,
-    source_location: 'WO-0001',
-    item_no: '1197101',
-    lot_serial_no: '001',
-    transfer_qty: '10',
-    product_name: 'ITE-IR11ZZ',
-    dest_location: '',
-  },
-  {
-    id: 2,
-    source_location: 'WO-0001',
-    item_no: '1197102',
-    lot_serial_no: '002',
-    transfer_qty: '20',
-    product_name: 'ITE-IR12ZZ',
-    dest_location: '',
-  },
-  {
-    id: 3,
-    source_location: 'WO-0002',
-    item_no: '1197102',
-    lot_serial_no: '002',
-    transfer_qty: '30',
-    product_name: 'ITE-IR12ZZ',
-    dest_location: '',
-  },
-  {
-    id: 4,
-    source_location: 'WO-0003',
-    item_no: '1197103',
-    lot_serial_no: '003',
-    transfer_qty: '40',
-    product_name: 'ITE-IR13ZZ',
-    dest_location: '',
-  },
-  {
-    id: 5,
-    source_location: 'WO-0004',
-    item_no: '1197104',
-    lot_serial_no: '004',
-    transfer_qty: '50',
-    product_name: 'ITE-IR14ZZ',
-    dest_location: '',
-  },
-  {
-    id: 6,
-    source_location: 'WO-0005',
-    item_no: '1197105',
-    lot_serial_no: '005',
-    transfer_qty: '60',
-    product_name: 'ITE-IR15ZZ',
-    dest_location: '',
-  },
-  {
-    id: 7,
-    source_location: 'WO-0006',
-    item_no: '1197106',
-    lot_serial_no: '006',
-    transfer_qty: '70',
-    product_name: 'ITE-IR16ZZ',
-    dest_location: '',
-  },
-  {
-    id: 8,
-    source_location: 'WO-0007',
-    item_no: '1197107',
-    lot_serial_no: '007',
-    transfer_qty: '80',
-    product_name: 'ITE-IR17ZZ',
-    dest_location: '',
-  },
-  {
-    id: 9,
-    source_location: 'WO-0008',
-    item_no: '1197108',
-    lot_serial_no: '008',
-    transfer_qty: '90',
-    product_name: 'ITE-IR18ZZ',
-    dest_location: '',
-  },
-  {
-    id: 10,
-    source_location: 'WO-0009',
-    item_no: '1197109',
-    lot_serial_no: '009',
-    transfer_qty: '100',
-    product_name: 'ITE-IR19ZZ',
-    dest_location: '',
-  },
-  {
-    id: 11,
-    source_location: 'WO-0010',
-    item_no: '1197110',
-    lot_serial_no: '010',
-    transfer_qty: '110',
-    product_name: 'ITE-IR20ZZ',
-    dest_location: '',
-  },
-  {
-    id: 12,
-    source_location: 'WO-0011',
-    item_no: '1197111',
-    lot_serial_no: '011',
-    transfer_qty: '120',
-    product_name: 'ITE-IR21ZZ',
-    dest_location: '',
-  },
-  {
-    id: 13,
-    source_location: 'WO-0012',
-    item_no: '1197112',
-    lot_serial_no: '012',
-    transfer_qty: '130',
-    product_name: 'ITE-IR22ZZ',
-    dest_location: '',
-  },
+  {id: 1, source_location: 'WO-0001', item_no: '1197101', lot_serial_no: '001', transfer_qty: '10', product_name: 'ITE-IR11ZZ', dest_location: ''},
+  {id: 2, source_location: 'WO-0001', item_no: '1197102', lot_serial_no: '002', transfer_qty: '20', product_name: 'ITE-IR12ZZ', dest_location: ''},
+  {id: 3, source_location: 'WO-0002', item_no: '1197102', lot_serial_no: '002', transfer_qty: '30', product_name: 'ITE-IR12ZZ', dest_location: ''},
+  {id: 4, source_location: 'WO-0003', item_no: '1197103', lot_serial_no: '003', transfer_qty: '40', product_name: 'ITE-IR13ZZ', dest_location: ''},
+  {id: 5, source_location: 'WO-0004', item_no: '1197104', lot_serial_no: '004', transfer_qty: '50', product_name: 'ITE-IR14ZZ', dest_location: ''},
+  {id: 6, source_location: 'WO-0005', item_no: '1197105', lot_serial_no: '005', transfer_qty: '60', product_name: 'ITE-IR15ZZ', dest_location: ''},
+  {id: 7, source_location: 'WO-0006', item_no: '1197106', lot_serial_no: '006', transfer_qty: '70', product_name: 'ITE-IR16ZZ', dest_location: ''},
+  {id: 8, source_location: 'WO-0007', item_no: '1197107', lot_serial_no: '007', transfer_qty: '80', product_name: 'ITE-IR17ZZ', dest_location: ''},
+  {id: 9, source_location: 'WO-0008', item_no: '1197108', lot_serial_no: '008', transfer_qty: '90', product_name: 'ITE-IR18ZZ', dest_location: ''},
+  {id: 10, source_location: 'WO-0009', item_no: '1197109', lot_serial_no: '009', transfer_qty: '100', product_name: 'ITE-IR19ZZ', dest_location: ''},
+  {id: 11, source_location: 'WO-0010', item_no: '1197110', lot_serial_no: '010', transfer_qty: '110', product_name: 'ITE-IR20ZZ', dest_location: ''},
+  {id: 12, source_location: 'WO-0011', item_no: '1197111', lot_serial_no: '011', transfer_qty: '120', product_name: 'ITE-IR21ZZ', dest_location: ''},
+  {id: 13, source_location: 'WO-0012', item_no: '1197112', lot_serial_no: '012', transfer_qty: '130', product_name: 'ITE-IR22ZZ', dest_location: ''},
 ]
 
 const ShelfTransfer = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
-    parentWarehouse: '葉工場：F0200',  
-    parentStorage: 'W0040',            
+    parentWarehouse: '葉工場：F0200',
+    parentStorage: 'W0040',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     source_location: '',
@@ -163,6 +59,9 @@ const ShelfTransfer = () => {
   const sourceRowsRef = useRef<Row[]>(initialRows)
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const [selectedWarehouse, setSelectedWarehouse] = useState<string>('')
+  
+  // 新增狀態：控制登録ボタンの表示と移動元登録完了ボタンの状態
+  const [isSourceRegistered, setIsSourceRegistered] = useState(false)
 
   const isAnyModalOpen =
     showHandInputConfirm ||
@@ -194,8 +93,8 @@ const ShelfTransfer = () => {
 
   const clearForm = () =>
     setForm({
-      parentWarehouse: '',   // ✅
-      parentStorage: '',     // ✅
+      parentWarehouse: '',
+      parentStorage: '',
       parentItemNo: '',
       moveWarehouse: '',
       source_location: '',
@@ -227,12 +126,10 @@ const ShelfTransfer = () => {
     resetTableScroll()
   }
 
-  // ✅ parentStorage
   const handleSearchsource_location = () => {
     const selectedLocation = form.parentStorage
 
     if (activeRowId !== null) {
-      
       setRows(prevRows =>
         prevRows.map(row =>
           row.id === activeRowId
@@ -241,7 +138,6 @@ const ShelfTransfer = () => {
         )
       )
     } else {
-      // ไม่ได้เลือก row → ใส่ค่าให้ทุก row
       setRows(prevRows =>
         prevRows.map(row => ({...row, dest_location: selectedLocation}))
       )
@@ -287,6 +183,27 @@ const ShelfTransfer = () => {
       setShowHandInputConfirm(true)
       return
     }
+  }
+
+  // 移動元登録完了ボタンの処理
+  const handleSourceRegistration = () => {
+    setShowRegistration(true)
+  }
+
+  // 確認モーダルで「はい」を押した時の処理
+  const handleRegistrationConfirm = () => {
+    setShowRegistration(false)
+    setIsSourceRegistered(true) // 移動元登録完了
+  }
+
+  // 登録ボタンの処理
+  const handleRegister = () => {
+    setShowPrinting(true)
+  }
+
+  // 完了ボタンの処理（元の移動元登録完了の位置に表示）
+  const handleComplete = () => {
+    setShowCompleteConfirm(true)
   }
 
   useEffect(() => {
@@ -343,8 +260,8 @@ const ShelfTransfer = () => {
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'arrow',
-      headClassName: 'col-arrow-head',
-      cellClassName: 'col-arrow',
+      headClassName: 'col-arrow-head-shelftransfer',
+      cellClassName: 'col-arrow-head-shelftransfer',
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
@@ -372,7 +289,6 @@ const ShelfTransfer = () => {
                 />
               </div>
 
-              {/* ✅ 倉庫 — ใช้ parentWarehouse */}
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
@@ -387,7 +303,6 @@ const ShelfTransfer = () => {
                 </select>
               </div>
 
-              {/* ✅ 保管場所 — ใช้ parentStorage แยกออกมา */}
               <div className='set-row set-row-wo'>
                 <label>保管場所</label>
                 <select
@@ -437,7 +352,7 @@ const ShelfTransfer = () => {
                 />
                 <button
                   className='set-search-btn set-primary'
-                  onClick={handleSearchsource_location}
+                  // onClick={handleSearchsource_location}
                 >
                   EA
                 </button>
@@ -454,33 +369,51 @@ const ShelfTransfer = () => {
               onRowActivate={handleRowActivate}
             />
 
-            <ActionFooter columns={4}>
-              <button
-                className='set-btn set-danger'
-                onClick={() => handleReleaseClick({forceHandInput: true})}
-              >
-                破棄
-              </button>
-              <button
-                className='set-btn set-warning'
-                onClick={() => setShowRegistration(true)}
-              >
-                {activeRowId === null ? '移動元登録完了' : '完了'}
-              </button>
-              <button
-                className='set-btn set-primary'
-                onClick={() => setShowPrinting(true)}
-                style={{fontSize: '35px', visibility: activeRowId === null ? 'hidden' : 'visible'}}
-              >
-                登録
-              </button>
-              <button
-                className='set-btn set-success'
-                onClick={() => setShowBackConfirm(true)}
-              >
-                戻る
-              </button>
-            </ActionFooter>
+<ActionFooter columns={4}>
+  <button
+    className='set-btn set-danger'
+    onClick={() => handleReleaseClick({forceHandInput: true})}
+  >
+    破棄
+  </button>
+  
+  {/* ປຸ່ມນີ້ຈະປ່ຽນແປງຕາມສະຖານະ */}
+  {!isSourceRegistered ? (
+    <button
+      className='set-btn set-warning'
+      onClick={handleSourceRegistration}
+    >
+      移動元登録完了
+    </button>
+  ) : (
+    <button
+      className='set-btn set-primary'
+      onClick={handleRegister}
+      style={{fontSize: '35px'}}
+    >
+      登録
+    </button>
+  )}
+  
+  {/* ປຸ່ມຫວ່າງເພື່ອຮັກສາຕຳແໜ່ງ, ເມື່ອຍັງບໍ່ທັນມີການລົງທະບຽນ */}
+  {!isSourceRegistered ? (
+    <div style={{width: '100%'}}></div>
+  ) : (
+    <button
+      className='set-btn set-warning'
+      onClick={handleComplete}
+    >
+      完了
+    </button>
+  )}
+  
+  <button
+    className='set-btn set-success'
+    onClick={() => setShowBackConfirm(true)}
+  >
+    戻る
+  </button>
+</ActionFooter>
           </div>
 
           {showHandInputConfirm && (
@@ -517,7 +450,7 @@ const ShelfTransfer = () => {
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => setShowRegistration(false)}
+                    onClick={handleRegistrationConfirm}
                   >
                     はい
                   </button>
