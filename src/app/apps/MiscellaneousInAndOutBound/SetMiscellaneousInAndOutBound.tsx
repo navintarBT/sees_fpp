@@ -447,7 +447,7 @@ const SetMiscellaneousInAndOutBound = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>読込データを破棄します。<br />宜しいですか？</div>
+                <div className='set-modal-body'>選択行を削除しますか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -456,13 +456,13 @@ const SetMiscellaneousInAndOutBound = () => {
                       clearFormAndRows()
                     }}
                   >
-                    YES
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    NO
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -590,7 +590,10 @@ const SetMiscellaneousInAndOutBound = () => {
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
-                    onClick={() => setShowBackConfirm(false)}
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      navigate('/factory')
+                    }}
                   >
                     NO
                   </button>
