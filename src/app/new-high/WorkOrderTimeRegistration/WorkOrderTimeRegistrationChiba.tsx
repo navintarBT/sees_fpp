@@ -737,7 +737,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                       />
                       <button
                         type='button'
-                        className='hand-date-btn'
+                        className='hand-date-btn2'
                         aria-label='Choose date'
                         onClick={openWoDatePicker}
                       >
@@ -940,7 +940,6 @@ const WorkOrderTimeRegistrationChiba = () => {
                     className='wot-grid-value2'
                     value={workDurationHours}
                     readOnly
-                    placeholder='時間'
                   />
                 </div>
 

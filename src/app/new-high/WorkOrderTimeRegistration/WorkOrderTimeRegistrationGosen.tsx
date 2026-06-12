@@ -144,6 +144,26 @@ const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
     defectiveQty: '',
     opDesc: '研磨3',
     remarks: 'xxxxx'
+  },
+  'wo-4': {
+    woNo: 'wo-4',
+    itemNo: 'd',
+    itemName: '製品d',
+    targetTime: '9',
+    acceptedQty: '',
+    defectiveQty: '',
+    opDesc: '研磨3',
+    remarks: 'xxxxx'
+  },
+  'wo-5': {
+    woNo: 'wo-5',
+    itemNo: 'e',
+    itemName: '製品e',
+    targetTime: '10',
+    acceptedQty: '',
+    defectiveQty: '',
+    opDesc: '研磨3',
+    remarks: 'xxxxx'
   }
 }
 
@@ -168,8 +188,8 @@ const calculateTotalTargetTime = (rows: Row[]): { hours: string; minutes: string
   const minutes = totalMinutes % 60
 
   return {
-    hours: hours.toString(),
-    minutes: minutes.toString().padStart(2, '0'),
+    hours: hours > 0 ? hours.toString() : '',
+    minutes: minutes > 0 ? minutes.toString() : '',
     totalMinutes: totalMinutes
   }
 }
@@ -180,7 +200,7 @@ const WorkOrderTimeRegistrationGosen = () => {
   const [rows, setRows] = useState<Row[]>([])
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const [fetchingWoNos, setFetchingWoNos] = useState<Set<string>>(new Set())
-  const [totalTargetTimeDisplay, setTotalTargetTimeDisplay] = useState({ hours: '0', minutes: '00' })
+  const [totalTargetTimeDisplay, setTotalTargetTimeDisplay] = useState({ hours: '', minutes: '' })
 
   // Header default values
   const [defaultOpOrder, setDefaultOpOrder] = useState('')
@@ -222,7 +242,7 @@ const WorkOrderTimeRegistrationGosen = () => {
     setWorkDurationHours('')
     setWorkDurationMinutes('')
     setActiveRowId(null)
-    setTotalTargetTimeDisplay({ hours: '0', minutes: '00' })
+    setTotalTargetTimeDisplay({ hours: '', minutes: '' })
 
     // Reset default values
     setDefaultOpOrder('')
@@ -281,8 +301,6 @@ const WorkOrderTimeRegistrationGosen = () => {
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [workStartTime, setWorkStartTime] = useState('')
   const [workEndTime, setWorkEndTime] = useState('')
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false)
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false)
   const [workDurationHours, setWorkDurationHours] = useState('')
   const [workDurationMinutes, setWorkDurationMinutes] = useState('')
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
@@ -350,7 +368,7 @@ const WorkOrderTimeRegistrationGosen = () => {
     setRows([emptyRow])
     saveRowsToStorage([emptyRow])
     setActiveRowId(null)
-    setTotalTargetTimeDisplay({ hours: '0', minutes: '00' })
+    setTotalTargetTimeDisplay({ hours: '', minutes: '' })
   }
 
   const resetTableScroll = () => {
@@ -465,9 +483,7 @@ const WorkOrderTimeRegistrationGosen = () => {
 
           return cleanedRows
         })
-      } else {
-        alert(`WO番号 "${woNoToFetch}" が見つかりません`)
-      }
+      } 
     }
   }
 
@@ -630,7 +646,7 @@ const WorkOrderTimeRegistrationGosen = () => {
     }
 
     setRows([createEmptyRow(1, false)])
-    setTotalTargetTimeDisplay({ hours: '0', minutes: '00' })
+    setTotalTargetTimeDisplay({ hours: '', minutes: '' })
   }, [location.state, navigate, location.pathname])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
@@ -697,7 +713,6 @@ const WorkOrderTimeRegistrationGosen = () => {
           className='table-cell-input'
           value={row.itemNo}
           readOnly
-          style={{ backgroundColor: '#e5e7eb' }}
           onClick={(e) => e.stopPropagation()}
         />
       ),
@@ -713,7 +728,6 @@ const WorkOrderTimeRegistrationGosen = () => {
           className='table-cell-input'
           value={row.itemName}
           readOnly
-          style={{ backgroundColor: '#e5e7eb' }}
           onClick={(e) => e.stopPropagation()}
         />
       ),
@@ -729,7 +743,6 @@ const WorkOrderTimeRegistrationGosen = () => {
           className='table-cell-input'
           value={row.targetTime ?? ''}
           readOnly
-          style={{ backgroundColor: '#e5e7eb' }}
           onClick={(e) => e.stopPropagation()}
         />
       ),
@@ -790,7 +803,6 @@ const WorkOrderTimeRegistrationGosen = () => {
           className='table-cell-input'
           value={row.opDesc ?? ''}
           readOnly
-          style={{ backgroundColor: '#e5e7eb' }}
           onClick={(e) => e.stopPropagation()}
         />
       ),
@@ -871,7 +883,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                       />
                       <button
                         type='button'
-                        className='hand-date-btn'
+                        className='hand-date-btn2'
                         aria-label='Choose date'
                         onClick={openWoDatePicker}
                       >
