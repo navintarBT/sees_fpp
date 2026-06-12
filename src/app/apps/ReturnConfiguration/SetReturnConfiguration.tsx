@@ -31,10 +31,10 @@ const SetReturnConfiguration = () => {
   const [hasLoadedData, setHasLoadedData] = useState(false)
 
   // Form state
-  const [parentJanCode, setParentJanCode] = useState('')      
-  const [parentStatus, setParentStatus] = useState('')        
-  const [parentQty, setParentQty] = useState(1)               
-  const [janCode, setJanCode] = useState('')                  
+  const [parentJanCode, setParentJanCode] = useState('')
+  const [parentStatus, setParentStatus] = useState('')
+  const [parentQty, setParentQty] = useState(1)
+  const [janCode, setJanCode] = useState('')
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
@@ -360,8 +360,8 @@ const SetReturnConfiguration = () => {
 
     // สำหรับทดสอบ: ถ้าพิมพ์ตัวเลขธรรมดา ให้ค้นหาจาก itemNo
     const matchedRow = loadedData.find(row =>
-      row.itemNo === janCode ||  
-      row.lotSerial === janCode  
+      row.itemNo === janCode ||
+      row.lotSerial === janCode
     )
 
     if (!matchedRow) {
@@ -492,7 +492,7 @@ const SetReturnConfiguration = () => {
                     }
                   }}
                   readOnly={true}
-                  style={{ backgroundColor: '#e5e7eb' } }
+                  style={{ backgroundColor: '#e5e7eb' }}
                 />
               </div>
             </div>
@@ -616,19 +616,19 @@ const SetReturnConfiguration = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>読込データを破棄します。<br />宜しいですか？</div>
+                <div className='set-modal-body'>選択行を削除しますか？</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={executeClear}
                   >
-                    YES
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    NO
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -771,6 +771,7 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-no'
                     onClick={() => {
                       setShowBackConfirm(false)
+                      navigate('/factory')
                     }}
                   >
                     NO
