@@ -164,6 +164,16 @@ const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
     defectiveQty: '',
     opDesc: '研磨3',
     remarks: 'xxxxx'
+  },
+  'wo-6': {
+    woNo: 'wo-6',
+    itemNo: 'f',
+    itemName: '製品f',
+    targetTime: '15',
+    acceptedQty: '',
+    defectiveQty: '',
+    opDesc: '研磨3',
+    remarks: 'xxxxx'
   }
 }
 
@@ -466,10 +476,9 @@ const WorkOrderTimeRegistrationGosen = () => {
                 ...row,
                 ...details,
                 woNo: woNoToFetch,
-                // Apply default values from header if master data doesn't have them
-                opOrder: details.opOrder || defaultOpOrder,
-                processStatus: details.processStatus || defaultProcessStatus,
-                remarks: details.remarks || defaultRemarks,
+                opOrder: defaultOpOrder || details.opOrder,
+                processStatus: defaultProcessStatus || details.processStatus,
+                remarks: defaultRemarks || details.remarks,
                 isLocked: true,
                 id: row.id,
               }
@@ -483,7 +492,7 @@ const WorkOrderTimeRegistrationGosen = () => {
 
           return cleanedRows
         })
-      } 
+      }
     }
   }
 
@@ -564,9 +573,9 @@ const WorkOrderTimeRegistrationGosen = () => {
               return {
                 ...row,
                 ...MASTER_WORK_ORDERS[row.woNo],
-                opOrder: MASTER_WORK_ORDERS[row.woNo]?.opOrder || defaultOpOrder,
-                processStatus: MASTER_WORK_ORDERS[row.woNo]?.processStatus || defaultProcessStatus,
-                remarks: MASTER_WORK_ORDERS[row.woNo]?.remarks || defaultRemarks,
+                opOrder: defaultOpOrder || MASTER_WORK_ORDERS[row.woNo]?.opOrder,
+                processStatus: defaultProcessStatus || MASTER_WORK_ORDERS[row.woNo]?.processStatus,
+                remarks: defaultRemarks || MASTER_WORK_ORDERS[row.woNo]?.remarks,
                 id: row.id,
                 isLocked: true
               }
@@ -599,9 +608,9 @@ const WorkOrderTimeRegistrationGosen = () => {
           return {
             id: index + 1,
             ...masterData,
-            opOrder: masterData.opOrder || defaultOpOrder,
-            processStatus: masterData.processStatus || defaultProcessStatus,
-            remarks: masterData.remarks || defaultRemarks,
+            opOrder: defaultOpOrder || masterData.opOrder,
+            processStatus: defaultProcessStatus || masterData.processStatus,
+            remarks: defaultRemarks || masterData.remarks,
             isLocked: true,
           } as Row
         }
@@ -1116,16 +1125,23 @@ const WorkOrderTimeRegistrationGosen = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>作業実績を登録します。<br />WOは維持しますか？</div>
+                <div className='set-modal-body'>
+                  作業実績を登録しますか？
+                </div>
                 <div className='set-modal-actions'>
-                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterMaintain}>YES</button>
-                  <button className='set-modal-btn set-modal-no' onClick={confirmRegisterClear}>NO</button>
-                  <button className='set-modal-btn set-modal-no' onClick={() => setShowRegisterConfirm(false)}>取消</button>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterMaintain}>
+                    YES
+                  </button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => {
+                    setShowRegisterConfirm(false)
+                    parentJanCodeInputRef.current?.focus()
+                  }}>
+                    NO
+                  </button>
                 </div>
               </div>
             </div>
           )}
-
           {showRegisterSuccessConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
