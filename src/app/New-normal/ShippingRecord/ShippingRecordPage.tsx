@@ -18,14 +18,6 @@ type Row = {
   moveStorage2?: string
 }
 
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
-}
-
 const ShippingRecordPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
@@ -433,8 +425,8 @@ const ShippingRecordPage = () => {
             {showClearConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'></div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>選択行を削除しましま?</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -443,13 +435,13 @@ const ShippingRecordPage = () => {
                         clearFormAndRows()
                       }}
                     >
-                      {'\u306f\u3044'}
+                    OK
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowClearConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      Cancel
                     </button>
                   </div>
                 </div>

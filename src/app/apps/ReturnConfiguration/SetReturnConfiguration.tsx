@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+﻿import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaPlay } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
