@@ -30,6 +30,9 @@ const initialRows: Row[] = [
   {id: 13, source_location: 'WO-0012', item_no: '1197112', lot_serial_no: '012', transfer_qty: '130', product_name: 'ITE-IR22ZZ', dest_location: ''},
 ]
 
+// 画面モード： source = 移動元登録, dest = 移動先登録
+type ScreenMode = 'source' | 'dest'
+
 const ShelfTransfer = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
@@ -47,49 +50,43 @@ const ShelfTransfer = () => {
     janCode: '',
     dest_location: '',
   })
-  const [showDetailConfirm, setShowDetailConfirm] = useState(false)
-  const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
-  const [showRegistration, setShowRegistration] = useState(false)
-  const [showPrinting, setShowPrinting] = useState(false)
-  const [showClearConfirm, setShowClearConfirm] = useState(false)
+
+  // 画面モード（移動元 / 移動先）
+  const [mode, setMode] = useState<ScreenMode>('source')
+
+  // 確認・警告モーダルの表示状態
+  const [showDiscardConfirm, setShowDiscardConfirm] = useState(false)
+  const [showSourceCompleteConfirm, setShowSourceCompleteConfirm] = useState(false)
+  const [showSourceErrorWarning, setShowSourceErrorWarning] = useState(false)
+  const [showIncompleteWarning, setShowIncompleteWarning] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
-  const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  // 戻る：2段階確認（Step1=中止確認 / Step2=データ保持確認）
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [showBackKeepConfirm, setShowBackKeepConfirm] = useState(false)
+
+  const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const sourceRowsRef = useRef<Row[]>(initialRows)
-  const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
-  const [selectedWarehouse, setSelectedWarehouse] = useState<string>('')
-  
-  // 新增狀態：控制登録ボタンの表示と移動元登録完了ボタンの状態
-  const [isSourceRegistered, setIsSourceRegistered] = useState(false)
 
   const isAnyModalOpen =
-    showHandInputConfirm ||
-    showRegistration ||
-    showPrinting ||
-    showClearConfirm ||
+    showDiscardConfirm ||
+    showSourceCompleteConfirm ||
+    showSourceErrorWarning ||
+    showIncompleteWarning ||
     showCompleteConfirm ||
-    showBackConfirm
+    showBackConfirm ||
+    showBackKeepConfirm
 
   useEffect(() => {
-    const allRows = sourceRowsRef.current.map(row => ({
-      ...row,
-      dest_location: '',
-    }))
-    setRows(allRows)
+    loadSourceRows()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const closeAllModals = () => {
-    setShowHandInputConfirm(false)
-    setShowRegistration(false)
-    setShowPrinting(false)
-    setShowClearConfirm(false)
-    setShowCompleteConfirm(false)
-    setShowBackConfirm(false)
-    setShowDetailConfirm(false)
+  // 移動元データを読み込み（移動先は未設定で初期化）
+  const loadSourceRows = () => {
+    const allRows = sourceRowsRef.current.map((row) => ({...row, dest_location: ''}))
+    setRows(allRows)
   }
-
-  const clearRows = () => setRows([])
 
   const clearForm = () =>
     setForm({
@@ -120,40 +117,22 @@ const ShelfTransfer = () => {
     })
   }
 
-  const clearFormAndRows = () => {
-    clearForm()
-    clearRows()
-    resetTableScroll()
+  // 入力中の移動先割り当てをすべて解除
+  const resetDestLocations = () => {
+    setRows((prev) => prev.map((row) => ({...row, dest_location: ''})))
   }
 
   const handleSearchsource_location = () => {
     const selectedLocation = form.parentStorage
 
     if (activeRowId !== null) {
-      setRows(prevRows =>
-        prevRows.map(row =>
-          row.id === activeRowId
-            ? {...row, dest_location: selectedLocation}
-            : row
+      setRows((prevRows) =>
+        prevRows.map((row) =>
+          row.id === activeRowId ? {...row, dest_location: selectedLocation} : row
         )
       )
     } else {
-      setRows(prevRows =>
-        prevRows.map(row => ({...row, dest_location: selectedLocation}))
-      )
-    }
-  }
-
-  const handleWarehouseSelect = (warehouseValue: string) => {
-    setSelectedWarehouse(warehouseValue)
-    if (warehouseValue && activeRowId !== null) {
-      setRows(prevRows =>
-        prevRows.map(row =>
-          row.id === activeRowId
-            ? {...row, dest_location: warehouseValue}
-            : row
-        )
-      )
+      setRows((prevRows) => prevRows.map((row) => ({...row, dest_location: selectedLocation})))
     }
   }
 
@@ -169,93 +148,158 @@ const ShelfTransfer = () => {
       transfer_qty: selectedRow.transfer_qty,
       dest_location: selectedRow.dest_location,
     }))
-    if (selectedRow.dest_location) {
-      setSelectedWarehouse(selectedRow.dest_location)
-    } else {
-      setSelectedWarehouse('')
-    }
   }
 
-  const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
+  // ① 破棄：入力をキャンセルし、メモリ上のデータを破棄する
+  const handleDiscard = () => {
     if (isAnyModalOpen) return
-    if (options?.forceHandInput) {
-      closeAllModals()
-      setShowHandInputConfirm(true)
+    setShowDiscardConfirm(true)
+  }
+
+  const confirmDiscard = () => {
+    // メモリ上の入力データ（移動先割り当て・フォーム）をすべて破棄
+    resetDestLocations()
+    clearForm()
+    setActiveRowId(null)
+    resetTableScroll()
+    setShowDiscardConfirm(false)
+  }
+
+  // ② 移動元登録完了：エラーが無ければ移動先登録モードへ遷移
+  const handleSourceComplete = () => {
+    if (isAnyModalOpen) return
+    // 数量などのデータにエラーが無いか確認
+    const hasError = rows.length === 0 || rows.some((row) => {
+      const qty = Number(row.transfer_qty)
+      return !row.transfer_qty || Number.isNaN(qty) || qty <= 0
+    })
+    if (hasError) {
+      setShowSourceErrorWarning(true)
       return
     }
+    setShowSourceCompleteConfirm(true)
   }
 
-  // 移動元登録完了ボタンの処理
-  const handleSourceRegistration = () => {
-    setShowRegistration(true)
+  const confirmSourceComplete = () => {
+    setShowSourceCompleteConfirm(false)
+    setMode('dest')
+    // 移動先登録は先頭行から開始
+    setActiveRowId(null)
+    resetTableScroll()
   }
 
-  // 確認モーダルで「はい」を押した時の処理
-  const handleRegistrationConfirm = () => {
-    setShowRegistration(false)
-    setIsSourceRegistered(true) // 移動元登録完了
-  }
-
-  // 登録ボタンの処理
+  // ④ 登録：選択中の行に移動先（保管場所）を確定し、次の行へ進む
   const handleRegister = () => {
-    setShowPrinting(true)
+    if (isAnyModalOpen) return
+    // 行が未選択なら先頭行を選択
+    if (activeRowId === null) {
+      if (rows.length > 0) handleRowActivate(rows[0].id)
+      return
+    }
+
+    const destLocation = form.parentStorage
+    const currentIndex = rows.findIndex((row) => row.id === activeRowId)
+
+    // 選択中の行に移動先を保存
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.id === activeRowId ? {...row, dest_location: destLocation} : row
+      )
+    )
+
+    // 次の行へ進む
+    const nextRow = rows[currentIndex + 1]
+    if (nextRow) {
+      handleRowActivate(nextRow.id)
+    }
   }
 
-  // 完了ボタンの処理（元の移動元登録完了の位置に表示）
+  // ⑤ 完了：全データを検証し、問題なければ JDE へ送信して移動元登録に戻る
   const handleComplete = () => {
+    if (isAnyModalOpen) return
+    // 移動先が未設定の行が無いか確認
+    const hasUnregistered = rows.length === 0 || rows.some((row) => !row.dest_location)
+    if (hasUnregistered) {
+      setShowIncompleteWarning(true)
+      return
+    }
     setShowCompleteConfirm(true)
+  }
+
+  const confirmComplete = () => {
+    // ここで JDE への送信処理を行う（モックアップでは省略）
+    setShowCompleteConfirm(false)
+    // 移動元登録（開始画面）に戻り、新しい作業を開始
+    setMode('source')
+    setActiveRowId(null)
+    clearForm()
+    loadSourceRows()
+    resetTableScroll()
+  }
+
+  // ③ 戻る：2段階確認
+  // Step1：棚移動登録を中止するか確認
+  const handleBack = () => {
+    if (isAnyModalOpen) return
+    setShowBackConfirm(true)
+  }
+
+  // Step1 [はい]：中止 → Step2 へ進む
+  const handleBackConfirmYes = () => {
+    setShowBackConfirm(false)
+    setShowBackKeepConfirm(true)
+  }
+
+  // Step2 [はい]：編集中のデータを保持（ロック）してメインメニューへ戻る
+  const handleBackKeepData = () => {
+    setShowBackKeepConfirm(false)
+    // 編集中のデータを保持（他端末・JDE からは一時的にロック）
+    navigate('/factory/factory')
+  }
+
+  // Step2 [いいえ]：入力データを破棄してメインメニューへ戻る
+  const handleBackDiscardData = () => {
+    setShowBackKeepConfirm(false)
+    clearForm()
+    loadSourceRows()
+    setMode('source')
+    setActiveRowId(null)
+    navigate('/factory/factory')
   }
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (isAnyModalOpen) return
 
-      if (event.key === 'F1') pressedKeysRef.current.f1 = true
-      if (event.key === 'F8') pressedKeysRef.current.f8 = true
-
-      if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
-        event.preventDefault()
-        handleReleaseClick({forceHandInput: true})
-        return
-      }
-
       if (event.key === 'F1') {
         event.preventDefault()
-        closeAllModals()
-        setShowClearConfirm(true)
+        handleDiscard()
         return
       }
       if (event.key === 'F2') {
         event.preventDefault()
-        closeAllModals()
-        setShowCompleteConfirm(true)
+        if (mode === 'source') handleSourceComplete()
+        else handleRegister()
         return
       }
       if (event.key === 'F3') {
         event.preventDefault()
-        handleReleaseClick({forceRelease: true})
+        if (mode === 'dest') handleComplete()
         return
       }
       if (event.key === 'F4') {
         event.preventDefault()
-        closeAllModals()
-        setShowBackConfirm(true)
+        handleBack()
         return
       }
     }
 
-    const onKeyUp = (event: KeyboardEvent) => {
-      if (event.key === 'F1') pressedKeysRef.current.f1 = false
-      if (event.key === 'F8') pressedKeysRef.current.f8 = false
-    }
-
     window.addEventListener('keydown', onKeyDown)
-    window.addEventListener('keyup', onKeyUp)
     return () => {
       window.removeEventListener('keydown', onKeyDown)
-      window.removeEventListener('keyup', onKeyUp)
     }
-  }, [isAnyModalOpen])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAnyModalOpen, mode, rows, activeRowId, form.parentStorage])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
@@ -277,7 +321,9 @@ const ShelfTransfer = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>棚移動登録</div>
+          <div className='set-header'>
+            棚移動登録{mode === 'source' ? '（移動元）' : '（移動先）'}
+          </div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
@@ -350,12 +396,7 @@ const ShelfTransfer = () => {
                   value={form.transfer_qty}
                   onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                 />
-                <button
-                  className='set-search-btn set-primary'
-                  // onClick={handleSearchsource_location}
-                >
-                  EA
-                </button>
+                <button className='set-search-btn set-primary'>EA</button>
               </div>
             </div>
 
@@ -369,71 +410,52 @@ const ShelfTransfer = () => {
               onRowActivate={handleRowActivate}
             />
 
-<ActionFooter columns={4}>
-  <button
-    className='set-btn set-danger'
-    onClick={() => handleReleaseClick({forceHandInput: true})}
-  >
-    破棄
-  </button>
-  
-  {/* ປຸ່ມນີ້ຈະປ່ຽນແປງຕາມສະຖານະ */}
-  {!isSourceRegistered ? (
-    <button
-      className='set-btn set-warning'
-      onClick={handleSourceRegistration}
-    >
-      移動元登録完了
-    </button>
-  ) : (
-    <button
-      className='set-btn set-primary'
-      onClick={handleRegister}
-      style={{fontSize: '35px'}}
-    >
-      登録
-    </button>
-  )}
-  
-  {/* ປຸ່ມຫວ່າງເພື່ອຮັກສາຕຳແໜ່ງ, ເມື່ອຍັງບໍ່ທັນມີການລົງທະບຽນ */}
-  {!isSourceRegistered ? (
-    <div style={{width: '100%'}}></div>
-  ) : (
-    <button
-      className='set-btn set-warning'
-      onClick={handleComplete}
-    >
-      完了
-    </button>
-  )}
-  
-  <button
-    className='set-btn set-success'
-    onClick={() => setShowBackConfirm(true)}
-  >
-    戻る
-  </button>
-</ActionFooter>
+            <ActionFooter columns={4}>
+              <button className='set-btn set-danger' onClick={handleDiscard}>
+                破棄
+              </button>
+
+              {mode === 'source' ? (
+                <button className='set-btn set-warning' onClick={handleSourceComplete}>
+                  移動元登録完了
+                </button>
+              ) : (
+                <button
+                  className='set-btn set-primary'
+                  onClick={handleRegister}
+                  style={{fontSize: '35px'}}
+                >
+                  登録
+                </button>
+              )}
+
+              {mode === 'source' ? (
+                <div style={{width: '100%'}}></div>
+              ) : (
+                <button className='set-btn set-warning' onClick={handleComplete}>
+                  完了
+                </button>
+              )}
+
+              <button className='set-btn set-success' onClick={handleBack}>
+                戻る
+              </button>
+            </ActionFooter>
           </div>
 
-          {showHandInputConfirm && (
+          {/* ① 破棄の確認 */}
+          {showDiscardConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>変更を確認しますか？</div>
+                <div className='set-modal-body'>入力をキャンセルしますか？</div>
                 <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={() => {
-                      setShowHandInputConfirm(false)
-                      navigate('')
-                    }}
-                  >
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmDiscard}>
                     はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
-                    onClick={() => setShowHandInputConfirm(false)}
+                    onClick={() => setShowDiscardConfirm(false)}
                   >
                     いいえ
                   </button>
@@ -442,99 +464,124 @@ const ShelfTransfer = () => {
             </div>
           )}
 
-          {showRegistration && (
-            <div className='set-modal-backdrop' role='presentation'>
-              <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>登録しますか？</div>
-                <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={handleRegistrationConfirm}
-                  >
-                    はい
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowRegistration(false)}
-                  >
-                    いいえ
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showPrinting && (
-            <div className='set-modal-backdrop' role='presentation'>
-              <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>印刷しますか？</div>
-                <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={() => setShowPrinting(false)}
-                  >
-                    はい
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowPrinting(false)}
-                  >
-                    いいえ
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showDetailConfirm && (
-            <div className='set-modal-backdrop' role='presentation'>
-              <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>詳細を確認しますか？</div>
-                <div className='set-modal-actions'>
-                  <button
-                    className='set-modal-btn set-modal-yes'
-                    onClick={() => {
-                      setShowDetailConfirm(false)
-                      navigate('/factory/wo-parts-issuance-detail')
-                    }}
-                  >
-                    はい
-                  </button>
-                  <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowDetailConfirm(false)}
-                  >
-                    いいえ
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showBackConfirm && (
+          {/* ② 移動元登録完了の確認 */}
+          {showSourceCompleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>
-                  メニューに戻ります。<br />読込データを破棄しますか？
+                  移動元の登録を完了し、<br />移動先の登録に進みますか？
+                </div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmSourceComplete}>
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowSourceCompleteConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ② 移動元データのエラー警告 */}
+          {showSourceErrorWarning && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>
+                  移動数量に誤りがあります。<br />データを確認してください。
                 </div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => {
-                      setShowBackConfirm(false)
-                      navigate('/factory/factory')
-                    }}
+                    onClick={() => setShowSourceErrorWarning(false)}
                   >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ⑤ 完了：移動先未設定の警告 */}
+          {showIncompleteWarning && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>エラー</div>
+                <div className='set-modal-body'>
+                  移動先が未設定の項目があります。<br />すべての移動先を登録してください。
+                </div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => setShowIncompleteWarning(false)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ⑤ 完了の確認 */}
+          {showCompleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>
+                  作業結果を JDE に送信します。<br />よろしいですか？
+                </div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmComplete}>
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowCompleteConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ③ 戻る Step1：棚移動登録を中止するか確認 */}
+          {showBackConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>棚移動登録を中止しますか？</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={handleBackConfirmYes}>
                     はい
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowBackConfirm(false)}
                   >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ③ 戻る Step2：編集中のデータを保持するか確認 */}
+          {showBackKeepConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>編集中のデータは保持しますか？</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={handleBackKeepData}>
+                    はい
+                  </button>
+                  <button className='set-modal-btn set-modal-no' onClick={handleBackDiscardData}>
                     いいえ
                   </button>
                 </div>
