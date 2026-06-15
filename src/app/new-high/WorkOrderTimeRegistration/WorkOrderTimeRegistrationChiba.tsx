@@ -1016,7 +1016,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>登録しました</div>
+                <div className='set-modal-body'>作業実績を登録しました。</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={handleRegisterSuccess}>
                     OK
@@ -1031,17 +1031,20 @@ const WorkOrderTimeRegistrationChiba = () => {
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>
-                  作業実績を登録しますか？
+                  作業実績を登録します。<br />WOは維持しますか？
                 </div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterMaintain}>
                     YES
                   </button>
+                  <button className='set-modal-btn set-modal-no' onClick={confirmRegisterClear}>
+                    NO
+                  </button>
                   <button className='set-modal-btn set-modal-no' onClick={() => {
                     setShowRegisterConfirm(false)
                     parentJanCodeInputRef.current?.focus()
                   }}>
-                    NO
+                    取消
                   </button>
                 </div>
               </div>
@@ -1069,7 +1072,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>登録しました</div>
+                <div className='set-modal-body'>作業実績を登録しました。</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
