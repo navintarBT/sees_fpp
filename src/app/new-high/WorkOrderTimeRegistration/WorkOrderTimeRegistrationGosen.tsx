@@ -315,7 +315,6 @@ const WorkOrderTimeRegistrationGosen = () => {
   const [workDurationMinutes, setWorkDurationMinutes] = useState('')
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false)
   const [showRegisterSuccessConfirm, setShowRegisterSuccessConfirm] = useState(false)
-  const [registrationMode, setRegistrationMode] = useState<'maintain' | 'clear' | null>(null)
   const [workerCode, setWorkerCode] = useState('')
   const [workerName, setWorkerName] = useState('')
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
@@ -394,38 +393,14 @@ const WorkOrderTimeRegistrationGosen = () => {
     setShowRegisterConfirm(true)
   }
 
-  const confirmRegisterMaintain = () => {
-    setRegistrationMode('maintain')
-    setShowRegisterConfirm(false)
-    setShowRegisterSuccessConfirm(true)
-  }
-
   const confirmRegisterClear = () => {
-    setRegistrationMode('clear')
     setShowRegisterConfirm(false)
     setShowRegisterSuccessConfirm(true)
   }
 
   const handleRegisterSuccess = () => {
-    if (registrationMode === 'maintain') {
-      setWorkerCode('')
-      setWorkerName('')
-      setWorkStartTime('')
-      setWorkEndTime('')
-      setWorkDurationHours('')
-      setWorkDurationMinutes('')
-    } else if (registrationMode === 'clear') {
-      clearAll()
-      setWorkerCode('')
-      setWorkerName('')
-      setWorkStartTime('')
-      setWorkEndTime('')
-      setWorkDurationHours('')
-      setWorkDurationMinutes('')
-      setActiveRowId(null)
-    }
+    clearAllData()
     setShowRegisterSuccessConfirm(false)
-    setRegistrationMode(null)
   }
 
   const updateEditableField = (rowId: number, field: keyof Row, value: string) => {
@@ -1097,7 +1072,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                   作業実績を登録しますか？
                 </div>
                 <div className='set-modal-actions'>
-                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterMaintain}>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterClear}>
                     YES
                   </button>
                   <button className='set-modal-btn set-modal-no' onClick={() => {
