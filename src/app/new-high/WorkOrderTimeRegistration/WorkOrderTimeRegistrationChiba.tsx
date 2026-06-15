@@ -547,10 +547,6 @@ const WorkOrderTimeRegistrationChiba = () => {
   }
 
   const handleRegister = () => {
-    if (rows.length === 0) {
-      setShowCompleteConfirm(true)
-      return
-    }
     setShowRegisterConfirm(true)
   }
 
@@ -1020,7 +1016,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>作業実績を登録しました。</div>
+                <div className='set-modal-body'>登録しました</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={handleRegisterSuccess}>
                     OK
@@ -1073,7 +1069,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>実績を登録しました。</div>
+                <div className='set-modal-body'>登録しました</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
