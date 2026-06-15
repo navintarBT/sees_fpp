@@ -123,7 +123,7 @@ const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
     acceptedQty: '9',
     defectiveQty: '1',
     opDesc: '研磨3',
-    remarks: 'xxxxx'
+    remarks: ''
   },
   'wo-2': {
     woNo: 'wo-2',
@@ -133,7 +133,7 @@ const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
     acceptedQty: '3',
     defectiveQty: '',
     opDesc: '研磨3',
-    remarks: 'xxxxx'
+    remarks: ''
   },
   'wo-3': {
     woNo: 'wo-3',
@@ -143,7 +143,7 @@ const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
     acceptedQty: '',
     defectiveQty: '',
     opDesc: '研磨3',
-    remarks: 'xxxxx'
+    remarks: ''
   },
   'wo-4': {
     woNo: 'wo-4',
@@ -153,7 +153,7 @@ const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
     acceptedQty: '',
     defectiveQty: '',
     opDesc: '研磨3',
-    remarks: 'xxxxx'
+    remarks: ''
   },
   'wo-5': {
     woNo: 'wo-5',
@@ -163,7 +163,7 @@ const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
     acceptedQty: '',
     defectiveQty: '',
     opDesc: '研磨3',
-    remarks: 'xxxxx'
+    remarks: ''
   },
   'wo-6': {
     woNo: 'wo-6',
@@ -173,7 +173,7 @@ const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
     acceptedQty: '',
     defectiveQty: '',
     opDesc: '研磨3',
-    remarks: 'xxxxx'
+    remarks: ''
   }
 }
 
