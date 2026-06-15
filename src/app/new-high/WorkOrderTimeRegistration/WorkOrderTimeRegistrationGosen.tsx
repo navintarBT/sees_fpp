@@ -227,10 +227,10 @@ const WorkOrderTimeRegistrationGosen = () => {
       targetTime: '',
       acceptedQty: '',
       defectiveQty: '',
-      opOrder: defaultOpOrder,
+      opOrder: '',
       opDesc: '',
-      processStatus: defaultProcessStatus,
-      remarks: defaultRemarks,
+      processStatus: '',
+      remarks: '',
       isLocked: isLocked,
     }
   }
@@ -391,10 +391,6 @@ const WorkOrderTimeRegistrationGosen = () => {
   }
 
   const handleRegister = () => {
-    if (rows.length === 0 || (rows.length === 1 && !rows[0].woNo)) {
-      setShowRegisterSuccessConfirm(true)
-      return
-    }
     setShowRegisterConfirm(true)
   }
 
@@ -506,34 +502,6 @@ const WorkOrderTimeRegistrationGosen = () => {
     const total = calculateTotalTargetTime(rows)
     setTotalTargetTimeDisplay({ hours: total.hours, minutes: total.minutes })
   }, [rows])
-
-  useEffect(() => {
-    // Update empty rows when default values change
-    setRows(prevRows => {
-      let hasChanges = false
-      const updatedRows = prevRows.map(row => {
-        if (!row.woNo && !row.isLocked) {
-          if (row.opOrder !== defaultOpOrder ||
-            row.processStatus !== defaultProcessStatus ||
-            row.remarks !== defaultRemarks) {
-            hasChanges = true
-            return {
-              ...row,
-              opOrder: defaultOpOrder,
-              processStatus: defaultProcessStatus,
-              remarks: defaultRemarks
-            }
-          }
-        }
-        return row
-      })
-      if (hasChanges) {
-        saveRowsToStorage(updatedRows)
-        return updatedRows
-      }
-      return prevRows
-    })
-  }, [defaultOpOrder, defaultProcessStatus, defaultRemarks])
 
   // Load data from location.state or sessionStorage
   useEffect(() => {
@@ -685,7 +653,7 @@ const WorkOrderTimeRegistrationGosen = () => {
           className='table-cell-input'
           value={row.woNo}
           readOnly={row.isLocked === true}
-          style={row.isLocked ? { backgroundColor: '#e5e7eb', cursor: 'not-allowed' } : {}}
+          style={row.isLocked ? { backgroundColor: '#e5e7eb' } : {}}
           onChange={(e) => {
             if (!row.isLocked) {
               setRows((prevRows) => {
@@ -1146,7 +1114,7 @@ const WorkOrderTimeRegistrationGosen = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>作業実績を登録しました。</div>
+                <div className='set-modal-body'>登録しました</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={handleRegisterSuccess}>OK</button>
                 </div>
