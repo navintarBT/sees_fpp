@@ -15,19 +15,19 @@ type Row = {
 }
 
 const initialRows: Row[] = [
-  {id: 1, source_location: 'WO-0001', item_no: '1197101', lot_serial_no: '001', transfer_qty: '10', product_name: 'ITE-IR11ZZ', dest_location: ''},
-  {id: 2, source_location: 'WO-0001', item_no: '1197102', lot_serial_no: '002', transfer_qty: '20', product_name: 'ITE-IR12ZZ', dest_location: ''},
-  {id: 3, source_location: 'WO-0002', item_no: '1197102', lot_serial_no: '002', transfer_qty: '30', product_name: 'ITE-IR12ZZ', dest_location: ''},
-  {id: 4, source_location: 'WO-0003', item_no: '1197103', lot_serial_no: '003', transfer_qty: '40', product_name: 'ITE-IR13ZZ', dest_location: ''},
-  {id: 5, source_location: 'WO-0004', item_no: '1197104', lot_serial_no: '004', transfer_qty: '50', product_name: 'ITE-IR14ZZ', dest_location: ''},
-  {id: 6, source_location: 'WO-0005', item_no: '1197105', lot_serial_no: '005', transfer_qty: '60', product_name: 'ITE-IR15ZZ', dest_location: ''},
-  {id: 7, source_location: 'WO-0006', item_no: '1197106', lot_serial_no: '006', transfer_qty: '70', product_name: 'ITE-IR16ZZ', dest_location: ''},
-  {id: 8, source_location: 'WO-0007', item_no: '1197107', lot_serial_no: '007', transfer_qty: '80', product_name: 'ITE-IR17ZZ', dest_location: ''},
-  {id: 9, source_location: 'WO-0008', item_no: '1197108', lot_serial_no: '008', transfer_qty: '90', product_name: 'ITE-IR18ZZ', dest_location: ''},
-  {id: 10, source_location: 'WO-0009', item_no: '1197109', lot_serial_no: '009', transfer_qty: '100', product_name: 'ITE-IR19ZZ', dest_location: ''},
-  {id: 11, source_location: 'WO-0010', item_no: '1197110', lot_serial_no: '010', transfer_qty: '110', product_name: 'ITE-IR20ZZ', dest_location: ''},
-  {id: 12, source_location: 'WO-0011', item_no: '1197111', lot_serial_no: '011', transfer_qty: '120', product_name: 'ITE-IR21ZZ', dest_location: ''},
-  {id: 13, source_location: 'WO-0012', item_no: '1197112', lot_serial_no: '012', transfer_qty: '130', product_name: 'ITE-IR22ZZ', dest_location: ''},
+  {id: 1, source_location: 'WO-0001', item_no: '1000001', lot_serial_no: '001', transfer_qty: '10', product_name: 'ITE-IR11ZZ', dest_location: ''},
+  {id: 2, source_location: 'WO-0001', item_no: '1000002', lot_serial_no: '002', transfer_qty: '20', product_name: 'ITE-IR12ZZ', dest_location: ''},
+  {id: 3, source_location: 'WO-0002', item_no: '1000003', lot_serial_no: '002', transfer_qty: '30', product_name: 'ITE-IR12ZZ', dest_location: ''},
+  {id: 4, source_location: 'WO-0003', item_no: '1000004', lot_serial_no: '003', transfer_qty: '40', product_name: 'ITE-IR13ZZ', dest_location: ''},
+  {id: 5, source_location: 'WO-0004', item_no: '1000005', lot_serial_no: '004', transfer_qty: '50', product_name: 'ITE-IR14ZZ', dest_location: ''},
+  {id: 6, source_location: 'WO-0005', item_no: '1000006', lot_serial_no: '005', transfer_qty: '60', product_name: 'ITE-IR15ZZ', dest_location: ''},
+  {id: 7, source_location: 'WO-0006', item_no: '1000007', lot_serial_no: '006', transfer_qty: '70', product_name: 'ITE-IR16ZZ', dest_location: ''},
+  {id: 8, source_location: 'WO-0007', item_no: '1000008', lot_serial_no: '007', transfer_qty: '80', product_name: 'ITE-IR17ZZ', dest_location: ''},
+  {id: 9, source_location: 'WO-0008', item_no: '1000009', lot_serial_no: '008', transfer_qty: '90', product_name: 'ITE-IR18ZZ', dest_location: ''},
+  {id: 10, source_location: 'WO-0009', item_no: '1000010', lot_serial_no: '009', transfer_qty: '100', product_name: 'ITE-IR19ZZ', dest_location: ''},
+  {id: 11, source_location: 'WO-0010', item_no: '1000011', lot_serial_no: '010', transfer_qty: '110', product_name: 'ITE-IR20ZZ', dest_location: ''},
+  {id: 12, source_location: 'WO-0011', item_no: '1000012', lot_serial_no: '011', transfer_qty: '120', product_name: 'ITE-IR21ZZ', dest_location: ''},
+  {id: 13, source_location: 'WO-0012', item_no: '1000012', lot_serial_no: '012', transfer_qty: '130', product_name: 'ITE-IR22ZZ', dest_location: ''},
 ]
 
 // 画面モード： source = 移動元登録, dest = 移動先登録
@@ -37,8 +37,8 @@ const ShelfTransfer = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
-    parentWarehouse: '葉工場：F0200',
-    parentStorage: 'W0040',
+    parentWarehouse: '',
+    parentStorage: '',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     source_location: '',
@@ -65,6 +65,7 @@ const ShelfTransfer = () => {
   const [showBackKeepConfirm, setShowBackKeepConfirm] = useState(false)
 
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const itemNoInputRef = useRef<HTMLInputElement | null>(null)
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const sourceRowsRef = useRef<Row[]>(initialRows)
 
@@ -77,15 +78,39 @@ const ShelfTransfer = () => {
     showBackConfirm ||
     showBackKeepConfirm
 
+  // 初回表示：テーブルは空のまま、品目No. 入力にフォーカスする
   useEffect(() => {
-    loadSourceRows()
+    itemNoInputRef.current?.focus()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // 移動元データを読み込み（移動先は未設定で初期化）
+  // テーブルを初期状態（空）に戻し、品目No. 入力へフォーカスを戻す
   const loadSourceRows = () => {
-    const allRows = sourceRowsRef.current.map((row) => ({...row, dest_location: ''}))
-    setRows(allRows)
+    setRows([])
+    requestAnimationFrame(() => itemNoInputRef.current?.focus())
+  }
+
+  // 品目No. を入力して Enter：該当する移動元データをテーブルに追加する
+  const handleItemNoEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+    event.preventDefault()
+    if (mode !== 'source') return
+
+    const itemNo = form.internalLabel.trim()
+    if (!itemNo) return
+
+    const matches = sourceRowsRef.current.filter((row) => row.item_no === itemNo)
+    if (matches.length === 0) return
+
+    setRows((prev) => {
+      const existingIds = new Set(prev.map((row) => row.id))
+      const added = matches
+        .filter((row) => !existingIds.has(row.id))
+        .map((row) => ({...row, dest_location: ''}))
+      return [...prev, ...added]
+    })
+    // 次の入力に備えて品目No. をクリア
+    setForm((prev) => ({...prev, internalLabel: ''}))
   }
 
   const clearForm = () =>
@@ -117,23 +142,10 @@ const ShelfTransfer = () => {
     })
   }
 
-  // 入力中の移動先割り当てをすべて解除
-  const resetDestLocations = () => {
-    setRows((prev) => prev.map((row) => ({...row, dest_location: ''})))
-  }
-
+  // 一括：選択中の保管場所をすべての行の移動先に適用する
   const handleSearchsource_location = () => {
     const selectedLocation = form.parentStorage
-
-    if (activeRowId !== null) {
-      setRows((prevRows) =>
-        prevRows.map((row) =>
-          row.id === activeRowId ? {...row, dest_location: selectedLocation} : row
-        )
-      )
-    } else {
-      setRows((prevRows) => prevRows.map((row) => ({...row, dest_location: selectedLocation})))
-    }
+    setRows((prevRows) => prevRows.map((row) => ({...row, dest_location: selectedLocation})))
   }
 
   const handleRowActivate = (rowKey: string | number) => {
@@ -157,12 +169,13 @@ const ShelfTransfer = () => {
   }
 
   const confirmDiscard = () => {
-    // メモリ上の入力データ（移動先割り当て・フォーム）をすべて破棄
-    resetDestLocations()
+    // テーブルのデータ・フォーム入力をすべて破棄する
+    setRows([])
     clearForm()
     setActiveRowId(null)
     resetTableScroll()
     setShowDiscardConfirm(false)
+    requestAnimationFrame(() => itemNoInputRef.current?.focus())
   }
 
   // ② 移動元登録完了：エラーが無ければ移動先登録モードへ遷移
@@ -313,7 +326,7 @@ const ShelfTransfer = () => {
     {key: 'item_no', headClassName: 'col-item_no', cellClassName: 'col-partNumber', header: '品目No', render: (row) => row.item_no},
     {key: 'lot_serial_no', headClassName: 'col-reqNumber', cellClassName: 'col-reqNumber', header: 'ロットシリアル', render: (row) => row.lot_serial_no},
     {key: 'transfer_qty', headClassName: 'col-storage', cellClassName: 'col-storage', header: '移動数', render: (row) => row.transfer_qty},
-    {key: 'product_name', headClassName: 'col-lot', cellClassName: 'col-lot', header: '品名', render: (row) => row.product_name},
+    {key: 'product_name', headClassName: 'col-lot-shelf', cellClassName: 'col-lot-shelf', header: '品名', render: (row) => row.product_name},
     {key: 'dest_location', headClassName: 'col-dest_location', cellClassName: 'col-dest_location', header: '先保管場所', render: (row) => row.dest_location || ''},
   ]
 
@@ -329,9 +342,12 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>品目No.</label>
                 <input
+                  ref={itemNoInputRef}
+                  autoFocus
                   style={{textAlign: 'center'}}
                   value={form.internalLabel}
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
+                  onKeyDown={handleItemNoEnter}
                 />
               </div>
 
@@ -368,6 +384,7 @@ const ShelfTransfer = () => {
                 <button
                   className='set-search-btn set-success'
                   onClick={handleSearchsource_location}
+                  disabled={mode === 'source'}
                 >
                   一括
                 </button>

@@ -1979,7 +1979,9 @@ input[type='time'].wot-grid-value2 {
 .col-arrow-head-shelftransfer{
   min-width: 42px;
 }
-
+.col-lot-shelf{
+  min-width: 210px;
+}
 
 /* min-width  col-arrow-head-shelftransfer */
 
