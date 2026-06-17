@@ -250,10 +250,18 @@ const ShelfTransfer = () => {
     resetTableScroll()
   }
 
-  // ③ 戻る：2段階確認
-  // Step1：棚移動登録を中止するか確認
+  // ③ 戻る
+  // 移動先登録（dest）中の場合は、移動元登録（source）へ戻す
+  // 移動元登録（source）中の場合は、2段階確認（中止 → データ保持）へ進む
   const handleBack = () => {
     if (isAnyModalOpen) return
+    if (mode === 'dest') {
+      setMode('source')
+      setActiveRowId(null)
+      resetTableScroll()
+      return
+    }
+    // Step1：棚移動登録を中止するか確認
     setShowBackConfirm(true)
   }
 
