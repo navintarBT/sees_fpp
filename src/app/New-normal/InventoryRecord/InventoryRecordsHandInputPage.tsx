@@ -20,7 +20,7 @@ const InventoryRecordsHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>入庫実績登録手入力</div>
+          <div className='set-header'>入庫実績手入力</div>
           <div className='hand-body'>
               <div className='hand-row'>
                 <label>倉庫</label>

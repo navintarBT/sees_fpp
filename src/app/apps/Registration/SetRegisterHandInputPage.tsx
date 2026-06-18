@@ -25,7 +25,7 @@ const SetRegisterHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成登録手入力</div>
+          <div className='set-header'>セット構成手入力</div>
           <div className='hand-body'>
             <div className='hand-form'>
               <div className='hand-row'>
