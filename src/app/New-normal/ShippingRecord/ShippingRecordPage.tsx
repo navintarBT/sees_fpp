@@ -9,6 +9,7 @@ type Row = {
   error: string
   item: string
   lot: string
+  lot2: string
   status: string
   build: number
   release: number
@@ -20,144 +21,13 @@ type Row = {
 
 const ShippingRecordPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      error: '',
-      item: 'A01', // 品目No.
-      lot: 'L01', // ロットシリアル
-      status: '追加', // 状態
-      build: 2, // 構成数
-      release: 1, // 解除数
-      move: 'W1', // 移動倉
-      moveStorage: 'S1', // 移動保管場所
-      name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
-    },
-    {
-      id: 2,
-      error: '',
-      item: 'B02',
-      lot: 'L02',
-      status: '解除',
-      build: 1,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S2',
-      name: '部品B',
-      moveStorage2: '棚B',
-    },
-    {
-      id: 3,
-      error: '',
-      item: 'C03',
-      lot: 'L03',
-      status: 'OV対応要',
-      build: 3,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S3',
-      name: '部品C',
-      moveStorage2: '棚C',
-    },
-    {
-      id: 4,
-      error: '',
-      item: 'D04',
-      lot: 'L04',
-      status: '構成中',
-      build: 4,
-      release: 1,
-      move: 'W1',
-      moveStorage: 'S4',
-      name: '部品D',
-      moveStorage2: '棚D',
-    },
-    {
-      id: 5,
-      error: 'E',
-      item: 'E05',
-      lot: 'L05',
-      status: '構成中',
-      build: 2,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S5',
-      name: '部品E',
-      moveStorage2: '棚E',
-    },
-    {
-      id: 6,
-      error: '',
-      item: 'F06',
-      lot: 'L06',
-      status: '構成中',
-      build: 5,
-      release: 3,
-      move: 'W3',
-      moveStorage: 'S6',
-      name: '部品F',
-      moveStorage2: '棚F',
-    },
-    {
-      id: 7,
-      error: 'E',
-      item: 'G07',
-      lot: 'L07',
-      status: '構成中',
-      build: 1,
-      release: 0,
-      move: 'W1',
-      moveStorage: 'S7',
-      name: '部品G',
-      moveStorage2: '棚G',
-    },
-    {
-      id: 8,
-      error: '',
-      item: 'H08',
-      lot: 'L08',
-      status: '構成中',
-      build: 3,
-      release: 1,
-      move: 'W2',
-      moveStorage: 'S8',
-      name: '部品H',
-      moveStorage2: '棚H',
-    },
-    {
-      id: 9,
-      error: '',
-      item: 'I09',
-      lot: 'L09',
-      status: '構成中',
-      build: 2,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S9',
-      name: '部品I',
-      moveStorage2: '棚I',
-    },
-    {
-      id: 10,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-  ])
+  const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
     parentWarehouse: '',
-    parentItemNo: '3019',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
+    parentItemNo: '',
+    moveWarehouse: '',
     moveStorage: '',
-    qty: '1',
+    qty: '',
     janCode: '',
   })
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -311,11 +181,12 @@ const ShippingRecordPage = () => {
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
+    {key: 'lot2', headClassName: 'col-lot2', cellClassName: 'col-lot2', header: '', render: (row) => row.lot2},
     {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '基本保管場所|', render: (row) => row.status},
     {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '指示', render: (row) => row.build},
     {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '数量', render: (row) => row.release},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.release},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.release},
+    {key: 'name', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.name},
+    {key: 'moveStorage', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.moveStorage},
 
   ]
 
@@ -323,13 +194,13 @@ const ShippingRecordPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>出荷実績登録</div>
+          <div className='set-header'>出庫実績登録</div>
           <div className='set-body'>
             <div className='set-form'>
                 <div className='set-row'>
                 <label>出荷指示No.</label>
                 <input
-                style={{textAlign: 'center'}}
+                  style={{textAlign: 'center'}}
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
@@ -340,6 +211,7 @@ const ShippingRecordPage = () => {
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                   style={{textAlign: 'center'}}
+                  disabled
                 >
                   <option value=''></option>
                   <option value='千葉倉庫（WMS）：W002'>千葉工場：F0200</option>
@@ -350,36 +222,40 @@ const ShippingRecordPage = () => {
               <div className='set-row'>
                 <label>保管場所</label>
                 <input
-                style={{textAlign: 'center'}}
+                  style={{textAlign: 'center'}}
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                  disabled
                 />
               </div>
 
               <div className='set-row'>
                 <label>数量</label>
                 <input
-                style={{textAlign: 'center'}}
+                  style={{textAlign: 'center'}}
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
+                  disabled
                 />
               </div>
 
               <div className='set-row'>
                 <label>品目No</label>
                 <input
-                style={{textAlign: 'center'}}
+                  style={{textAlign: 'center'}}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
+                  disabled
                 />
               </div>
               <div className='set-row'>
                 <label>移動先</label>
                 <input
-                style={{textAlign: 'center'}}
+                  style={{textAlign: 'center'}}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                  disabled
                 />
               </div>
             </div>

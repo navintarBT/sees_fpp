@@ -1438,6 +1438,24 @@ input[type='time'].wot-grid-value2 {
   font-size: 35px;
 }
 
+.WorkOrderTimeRegistrationChiba-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableRowActive .col-arrow {
+  background: #d1d5db;
+}
 
 /* #################################### WorkOrderTimeRegistrationGosen */
 
@@ -1468,9 +1486,9 @@ input[type='time'].wot-grid-value2 {
 /* #################################### work-order-choose-table */
 
 .work-order-choose-table {
-  width: 1056px;
+  min-width: 1056px;
   min-height: 1436px;
-  grid-template-columns: 45px minmax(0, 1fr) 300px minmax(0, 1fr) !important;
+  grid-template-columns: 45px minmax(max-content, 1fr) minmax(max-content, 1fr) minmax(max-content, 1fr);
 }
 
 .work-order-choose-table .tf-tableCell {
@@ -1484,6 +1502,8 @@ input[type='time'].wot-grid-value2 {
 .work-order-choose-table .tf-tableRow .col-arrow {
   min-width: 45px;
 }
+
+/* ########################## + - kongchan end ################################# */
 
 /* ####################################table dispatch ########################################### */
 .dispatch-table .col-arrow-head,
@@ -1852,24 +1872,62 @@ input[type='time'].wot-grid-value2 {
 }
 
 .inventory-table .col-item {
-  min-width: 200px;
+  min-width: 100px;
 }
 
 .inventory-table .col-lot {
-  min-width: 200px;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.inventory-table .col-lot2 {
+  min-width: 120px;
+  justify-content: center;
+}
+
+.inventory-table .tf-tableHead .col-lot {
+  border-right: none;
+}
+
+.inventory-table .tf-tableHead .col-lot2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -16px;
+  bottom: 0;
+  width: 16px;
+  background: white;
+  z-index: 1;
 }
 
 .inventory-table .col-instruct {
-  min-width: 200px;
-}
-
-
-.inventory-table .col-Load {
   min-width: 150px;
 }
 
+.inventory-table .col-Load {
+  min-width: 120px;
+}
+
 .inventory-table .col-productName {
-  min-width: 200px;
+  min-width: 135px;
+}
+
+.inventory-table .col-inspection {
+  min-width: 160px;
+}
+
+.inventory-records-form .set-row {
+  grid-template-columns: 400px 1fr;
+}
+
+.inventory-records-form .set-row label {
+  white-space: nowrap;
+  text-align: left;
+}
+
+.inventory-records-form .set-row input,
+.inventory-records-form .set-row select {
+  text-align: center;
 }
 
 /* ####################################table inventory-record-detail ########################################### */
@@ -1933,6 +1991,31 @@ input[type='time'].wot-grid-value2 {
   background: #d1d5db;
 }
 
+.shipping-table .col-lot {
+  min-width: 120px;
+  justify-content: center;
+}
+
+.shipping-table .col-lot2 {
+  min-width: 120px;
+  justify-content: center;
+}
+
+.shipping-table .tf-tableHead .col-lot {
+  border-right: none;
+}
+
+.shipping-table .tf-tableHead .col-lot2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -16px;
+  bottom: 0;
+  width: 16px;
+  background: white;
+  z-index: 1;
+}
+
 /* ####################################table delivery zang ########################################### */
 .col-item-delivery {
   min-width: 830px;
@@ -1984,7 +2067,9 @@ input[type='time'].wot-grid-value2 {
 .col-arrow-head-shelftransfer{
   min-width: 42px;
 }
-
+.col-lot-shelf{
+  min-width: 210px;
+}
 
 /* min-width  col-arrow-head-shelftransfer */
 

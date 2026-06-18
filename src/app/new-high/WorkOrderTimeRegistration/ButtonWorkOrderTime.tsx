@@ -11,7 +11,7 @@ const ButtonWorkOrderTime = () => {
         <div className='mockup-page'>
             <div className='mockup-stage'>
                 <div className='mockup-frame'>
-                    <div className='mockup-header'>作業オーダー実績時間登録</div>
+                    <div className='mockup-header'>WO作業時間実績登録</div>
                     <div className='mockup-body'>
                         <div className='mockup-grid'>
                             {factoryButtons.map((btn) => (

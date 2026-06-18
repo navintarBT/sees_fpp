@@ -604,8 +604,10 @@ const WorkOrderTimeRegistrationGosen = () => {
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'check',
-      headClassName: 'col-check',
-      cellClassName: 'col-check',
+      headClassName: 'col-arrow-head',
+      cellClassName: 'col-arrow',
+      // headClassName: 'col-check',
+      // cellClassName: 'col-check',
       header: '',
       render: (row) => (
         <div
@@ -795,7 +797,7 @@ const WorkOrderTimeRegistrationGosen = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>作業オーダー実績時間登録</div>
+          <div className='set-header'>WO作業時間実績登録</div>
           <div className='set-body'>
             <div className='set-formnew_high '>
               <div className='wot-header-container '>

@@ -11,7 +11,7 @@ const ButtonAccess = () => {
     <div className='mockup-page'>
       <div className='mockup-stage'>
         <div className='mockup-frame'>
-          <div className='mockup-header'>作業オーダー部品払出</div>
+          <div className='mockup-header'>WO部品払出</div>
           <div className='mockup-body'>
             <div className='mockup-grid'>
               {factoryButtons.map((btn) => (
