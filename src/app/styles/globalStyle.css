@@ -1438,6 +1438,24 @@ input[type='time'].wot-grid-value2 {
   font-size: 35px;
 }
 
+.WorkOrderTimeRegistrationChiba-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableRowActive .col-arrow {
+  background: #d1d5db;
+}
 
 /* #################################### WorkOrderTimeRegistrationGosen */
 

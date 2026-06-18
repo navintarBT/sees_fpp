@@ -8,9 +8,9 @@ const Warehouse = () => {
     // { label: '出庫', path: '/factory/dispatch', className: 'mockup-red' },
     // { label: '入庫', path: '/factory/inbound', className: 'mockup-blue' },
     { label: '配送伝票', path: '/factory/delivery-slip-registration', className: 'mockup-green' },
-    { label: '戻り構成', path: '/factory/set-return-configuration', className: 'mockup-yellow' },
+    { label: 'セット戻り構成登録', path: '/factory/set-return-configuration', className: 'mockup-yellow' },
     { label: 'セット構成登録', path: '/factory/set-register', className: 'mockup-gray' },
-    { label: '雑入出庫', path: '/factory/set-miscellaneous-in-and-out-bound', className: 'mockup-gray' },
+    { label: '予定なし入出庫', path: '/factory/set-miscellaneous-in-and-out-bound', className: 'mockup-gray' },
     { label: '備品振分', path: '/factory/equipment', className: 'mockup-orange' },
     { label: '販売セット登録', path: '/factory/bundle-page', className: 'mockup-pink' },
   ] as const

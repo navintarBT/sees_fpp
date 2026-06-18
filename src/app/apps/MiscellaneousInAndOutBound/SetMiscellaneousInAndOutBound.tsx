@@ -269,7 +269,7 @@ const SetMiscellaneousInAndOutBound = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>予定なし入出庫登録</div>
+          <div className='set-header'>予定なし入出庫</div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
