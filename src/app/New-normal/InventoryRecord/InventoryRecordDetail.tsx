@@ -446,7 +446,7 @@ const InventoryRecordDetail = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>入荷実績登録読込データ参照</div>
+          <div className='set-header'>入庫実績登録読込データ参照</div>
           <div className='set-body'>
                 <div className='set-form'>
                   <div className='set-row'>

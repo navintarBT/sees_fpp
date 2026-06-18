@@ -1856,13 +1856,33 @@ input[type='time'].wot-grid-value2 {
 }
 
 .inventory-table .col-lot {
-  min-width: 200px;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.inventory-table .col-lot2 {
+  min-width: 120px;
+  justify-content: center;
+}
+
+.inventory-table .tf-tableHead .col-lot {
+  border-right: none;
+}
+
+.inventory-table .tf-tableHead .col-lot2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -16px;
+  bottom: 0;
+  width: 16px;
+  background: white;
+  z-index: 1;
 }
 
 .inventory-table .col-instruct {
   min-width: 200px;
 }
-
 
 .inventory-table .col-Load {
   min-width: 150px;
@@ -1870,6 +1890,24 @@ input[type='time'].wot-grid-value2 {
 
 .inventory-table .col-productName {
   min-width: 200px;
+}
+
+.inventory-table .col-inspection {
+  min-width: 180px;
+}
+
+.inventory-records-form .set-row {
+  grid-template-columns: 400px 1fr;
+}
+
+.inventory-records-form .set-row label {
+  white-space: nowrap;
+  text-align: left;
+}
+
+.inventory-records-form .set-row input,
+.inventory-records-form .set-row select {
+  text-align: center;
 }
 
 /* ####################################table inventory-record-detail ########################################### */
@@ -1931,6 +1969,31 @@ input[type='time'].wot-grid-value2 {
 
 .shipping-table .tf-tableRowActive .col-arrow {
   background: #d1d5db;
+}
+
+.shipping-table .col-lot {
+  min-width: 120px;
+  justify-content: center;
+}
+
+.shipping-table .col-lot2 {
+  min-width: 120px;
+  justify-content: center;
+}
+
+.shipping-table .tf-tableHead .col-lot {
+  border-right: none;
+}
+
+.shipping-table .tf-tableHead .col-lot2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -16px;
+  bottom: 0;
+  width: 16px;
+  background: white;
+  z-index: 1;
 }
 
 /* ####################################table delivery zang ########################################### */

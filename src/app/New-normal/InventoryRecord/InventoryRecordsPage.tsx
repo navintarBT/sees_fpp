@@ -9,6 +9,8 @@ type Row = {
   error: string
   item: string
   lot: string
+  lot2: string
+  inspection: string
   instruct: string
   Load: number
   productName: string
@@ -16,104 +18,13 @@ type Row = {
 
 const InventoryRecordsPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      error: '',
-      item: 'A01',
-      lot: 'L01', 
-      instruct: '追加', 
-      Load: 2,
-      productName: '品目1', 
-    },
-    {
-      id: 2,
-      error: '',
-      item: 'B02',
-      lot: 'L02',
-      instruct: '解除',
-      Load: 1,
-      productName: '品目2',
-    },
-    {
-      id: 3,
-      error: '',
-      item: 'C03',
-      lot: 'L03',
-      instruct: 'OV対応要',
-      Load: 3,
-      productName: '品目3',
-    },
-    {
-      id: 4,
-      error: '',
-      item: 'D04',
-      lot: 'L04',
-      instruct: '構成中',
-      Load: 4,
-      productName: '品目4',
-    },
-    {
-      id: 5,
-      error: 'E',
-      item: 'E05',
-      lot: 'L05',
-      instruct: '構成中',
-      Load: 2,
-      productName: '品目5',
-    },
-    {
-      id: 6,
-      error: '',
-      item: 'F06',
-      lot: 'L06',
-      instruct: '構成中',
-      Load: 5,
-      productName: '品目6',
-    },
-    {
-      id: 7,
-      error: 'E',
-      item: 'G07',
-      lot: 'L07',
-      instruct: '構成中',
-      Load: 1,
-      productName: '品目7',
-    },
-    {
-      id: 8,
-      error: '',
-      item: 'H08',
-      lot: 'L08',
-      instruct: '構成中',
-      Load: 3,
-      productName: '品目8',
-    },
-    {
-      id: 9,
-      error: '',
-      item: 'I09',
-      lot: 'L09',
-      instruct: '構成中',
-      Load: 2,
-      productName: '品目9',
-    },
-    {
-      id: 10,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      instruct: '構成中',
-      Load: 6,
-      productName: '品目10',
-    },
-  ])
+  const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '3019',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
-    moveStorage: '工場：基本保管場所',
-    qty: '1',
+    parentWarehouse: '',
+    parentItemNo: '',
+    moveWarehouse: '',
+    moveStorage: '',
+    qty: '',
     janCode: '',
     source: '',
   })
@@ -259,22 +170,23 @@ const InventoryRecordsPage = () => {
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
+    {key: 'lot2', headClassName: 'col-lot2', cellClassName: 'col-lot2', header: '', render: (row) => row.lot2},
     {key: 'instruct', headClassName: 'col-instruct', cellClassName: 'col-instruct', header: '指示', render: (row) => row.instruct},
     {key: 'Load', headClassName: 'col-Load', cellClassName: 'col-Load', header: '読込', render: (row) => row.Load},
     {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
-
+    {key: 'inspection', headClassName: 'col-inspection', cellClassName: 'col-inspection', header: '検査', render: (row) => row.inspection},
   ]
 
   return (
     <div className='mockup-page' style={{textAlign: 'center'}}>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>入荷実績登録</div>
+          <div className='set-header'>入庫実績登録</div>
           <div className='set-body'>
-            <div className='set-form'>
-                <div className='set-row'>
-                <label>出荷/発注No/現品票No.</label>
-                <input style={{textAlign: 'center'}}
+            <div className='set-form inventory-records-form'>
+              <div className='set-row'>
+                <label>出荷/発注No.</label>
+                <input
                   value={form.parentItemNo}
                   onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                 />
@@ -282,9 +194,9 @@ const InventoryRecordsPage = () => {
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
-                style={{textAlign: 'center'}}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                  disabled
                 >
                   <option value=''></option>
                   <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
@@ -295,47 +207,45 @@ const InventoryRecordsPage = () => {
               <div className='set-row'>
                 <label>保管場所</label>
                 <input
-                style={{textAlign: 'center'}}
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                  disabled
                 />
               </div>
-                <div className='set-row'>
+              <div className='set-row'>
                 <label>ロット状況</label>
                 <select
-                  style={{textAlign: 'center'}}
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
+                  disabled
                 >
                   <option value=''></option>
                   <option value='千葉倉庫（WMS）：W002'>検査中</option>
                 </select>
               </div>
-
               <div className='set-row'>
                 <label>数量</label>
                 <input
-                style={{textAlign: 'center'}}
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
+                  disabled
                 />
               </div>
-
               <div className='set-row'>
                 <label>JANコード ／品目コード</label>
                 <input
-                style={{textAlign: 'center'}}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
+                  disabled
                 />
               </div>
               <div className='set-row'>
                 <label>移動元</label>
                 <input
-                style={{textAlign: 'center'}}
                   value={form.source}
                   onChange={(e) => setForm({...form, source: e.target.value})}
+                  disabled
                 />
               </div>
             </div>
