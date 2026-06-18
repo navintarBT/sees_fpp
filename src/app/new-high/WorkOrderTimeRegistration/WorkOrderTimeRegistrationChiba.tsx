@@ -636,8 +636,8 @@ const WorkOrderTimeRegistrationChiba = () => {
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'check',
-      headClassName: 'col-check',
-      cellClassName: 'col-check',
+      headClassName: 'col-arrow-head',
+      cellClassName: 'col-arrow',
       header: '',
       render: (row) => (
         <div

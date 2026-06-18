@@ -604,8 +604,10 @@ const WorkOrderTimeRegistrationGosen = () => {
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'check',
-      headClassName: 'col-check',
-      cellClassName: 'col-check',
+      headClassName: 'col-arrow-head',
+      cellClassName: 'col-arrow',
+      // headClassName: 'col-check',
+      // cellClassName: 'col-check',
       header: '',
       render: (row) => (
         <div
