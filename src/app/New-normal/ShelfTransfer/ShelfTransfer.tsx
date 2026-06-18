@@ -325,8 +325,8 @@ const ShelfTransfer = () => {
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'arrow',
-      headClassName: 'col-arrow-head-shelftransfer',
-      cellClassName: 'col-arrow-head-shelftransfer',
+      headClassName: 'col-arrow-head col-arrow-head-shelftransfer',
+      cellClassName: 'col-arrow col-arrow-head-shelftransfer',
       header: '',
       render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
