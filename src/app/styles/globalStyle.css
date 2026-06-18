@@ -1486,9 +1486,9 @@ input[type='time'].wot-grid-value2 {
 /* #################################### work-order-choose-table */
 
 .work-order-choose-table {
-  width: 1056px;
+  min-width: 1056px;
   min-height: 1436px;
-  grid-template-columns: 45px minmax(0, 1fr) 300px minmax(0, 1fr) !important;
+  grid-template-columns: 45px minmax(max-content, 1fr) minmax(max-content, 1fr) minmax(max-content, 1fr);
 }
 
 .work-order-choose-table .tf-tableCell {
@@ -1502,6 +1502,8 @@ input[type='time'].wot-grid-value2 {
 .work-order-choose-table .tf-tableRow .col-arrow {
   min-width: 45px;
 }
+
+/* ########################## + - kongchan end ################################# */
 
 /* ####################################table dispatch ########################################### */
 .dispatch-table .col-arrow-head,
