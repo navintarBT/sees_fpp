@@ -9,7 +9,7 @@ const Factory = () => {
     { label: '棚移動', path: '/factory/shelf-transfer', className: 'mockup-green' },
     { label: 'WO部品払出', path: '/factory/button-access', className: 'mockup-yellow' },
     { label: 'WO作業時間実績登録', path: '/factory/button-work-order-time', className: 'mockup-gray' },
-    { label: '作業オーダー完了', path: '/factory/work-order-completion', className: 'mockup-orange' },
+    { label: 'WO完了実績登録', path: '/factory/work-order-completion', className: 'mockup-orange' },
     { label: '出庫実績登録', path: '/factory/shipping-records', className: 'mockup-pink' },
   ] as const
 
