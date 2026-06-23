@@ -819,7 +819,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                     />
                     <input
                       className='wot-grid-value1'
-                      style={{ backgroundColor: '#e5e7eb' }}
+                      style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
                       value={workerName}
                       readOnly
                     />

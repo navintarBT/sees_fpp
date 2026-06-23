@@ -472,7 +472,7 @@ const SetReturnConfiguration = () => {
                   value={parentQty}
                   readOnly
                   className='set-small set-input-gray'
-                  style={{ backgroundColor: '#e5e7eb' }}
+                  style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
                 />
               </div>
 
@@ -492,7 +492,7 @@ const SetReturnConfiguration = () => {
                     }
                   }}
                   readOnly={true}
-                  style={{ backgroundColor: '#e5e7eb' }}
+                  style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
                 />
               </div>
             </div>

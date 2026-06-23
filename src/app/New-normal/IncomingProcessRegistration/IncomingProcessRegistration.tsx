@@ -40,18 +40,20 @@ const IncomingProcessRegistration = () => {
         // TODO: API call to JDE
         // This is mock data - replace with actual API
         console.log(`Fetching product info for: ${ticketNo}`)
-        
+
         // Mock response
         if (ticketNo) {
             setProductName('サンプル製品名')
             setProductCode('SP-001')
             setLotSerial('LOT2024001')
             setOrderQuantity(null)
+            setReceivingQuantity('180')
         } else {
             setProductName('')
             setProductCode('')
             setLotSerial('')
             setOrderQuantity(null)
+            setReceivingQuantity('')
         }
     }
 
@@ -132,13 +134,13 @@ const IncomingProcessRegistration = () => {
                 defectReason: defectReason || null,
             }
             console.log('Sending to JDE:', payload)
-            
+
             // Mock API call
             await new Promise(resolve => setTimeout(resolve, 500))
-            
+
             clearFormAndRows()
             setShowCompleteConfirm(false)
-            
+
         } catch (error) {
             setShowError({ message: 'サーバとの通信中にエラーが発生しました。再実行しても解消されない場合は管理者へ連絡してください。' })
         }
@@ -169,7 +171,7 @@ const IncomingProcessRegistration = () => {
                                     readOnly={true}
                                     placeholder=' '
                                     className='set-small set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
                                 />
                             </div>
 
@@ -180,7 +182,7 @@ const IncomingProcessRegistration = () => {
                                     readOnly={true}
                                     placeholder=' '
                                     className='set-small set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
                                 />
                             </div>
 
@@ -200,10 +202,9 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     value={receivingQuantity}
                                     onChange={(e) => handleReceivingQuantityChange(e.target.value)}
-                                    type="number"
-                                    placeholder=' '
+                                    readOnly={true}
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
                                 />
                             </div>
 
