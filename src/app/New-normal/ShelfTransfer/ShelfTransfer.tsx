@@ -12,22 +12,23 @@ type Row = {
   product_name: string
   dest_location: string
   lot_serial_no: string
+  warehouse: string
 }
 
 const initialRows: Row[] = [
-  {id: 1, source_location: 'WO-0001', item_no: '1000001', lot_serial_no: '001', transfer_qty: '10', product_name: 'ITE-IR11ZZ', dest_location: ''},
-  {id: 2, source_location: 'WO-0001', item_no: '1000002', lot_serial_no: '002', transfer_qty: '20', product_name: 'ITE-IR12ZZ', dest_location: ''},
-  {id: 3, source_location: 'WO-0002', item_no: '1000003', lot_serial_no: '002', transfer_qty: '30', product_name: 'ITE-IR12ZZ', dest_location: ''},
-  {id: 4, source_location: 'WO-0003', item_no: '1000004', lot_serial_no: '003', transfer_qty: '40', product_name: 'ITE-IR13ZZ', dest_location: ''},
-  {id: 5, source_location: 'WO-0004', item_no: '1000005', lot_serial_no: '004', transfer_qty: '50', product_name: 'ITE-IR14ZZ', dest_location: ''},
-  {id: 6, source_location: 'WO-0005', item_no: '1000006', lot_serial_no: '005', transfer_qty: '60', product_name: 'ITE-IR15ZZ', dest_location: ''},
-  {id: 7, source_location: 'WO-0006', item_no: '1000007', lot_serial_no: '006', transfer_qty: '70', product_name: 'ITE-IR16ZZ', dest_location: ''},
-  {id: 8, source_location: 'WO-0007', item_no: '1000008', lot_serial_no: '007', transfer_qty: '80', product_name: 'ITE-IR17ZZ', dest_location: ''},
-  {id: 9, source_location: 'WO-0008', item_no: '1000009', lot_serial_no: '008', transfer_qty: '90', product_name: 'ITE-IR18ZZ', dest_location: ''},
-  {id: 10, source_location: 'WO-0009', item_no: '1000010', lot_serial_no: '009', transfer_qty: '100', product_name: 'ITE-IR19ZZ', dest_location: ''},
-  {id: 11, source_location: 'WO-0010', item_no: '1000011', lot_serial_no: '010', transfer_qty: '110', product_name: 'ITE-IR20ZZ', dest_location: ''},
-  {id: 12, source_location: 'WO-0011', item_no: '1000012', lot_serial_no: '011', transfer_qty: '120', product_name: 'ITE-IR21ZZ', dest_location: ''},
-  {id: 13, source_location: 'WO-0012', item_no: '1000012', lot_serial_no: '012', transfer_qty: '130', product_name: 'ITE-IR22ZZ', dest_location: ''},
+  {id: 1, source_location: 'WO-0001', item_no: '1000001', lot_serial_no: '001', transfer_qty: '10', product_name: 'ITE-IR11ZZ', warehouse: '千葉工場：F0200', dest_location: ''},
+  {id: 2, source_location: 'WO-0001', item_no: '1000002', lot_serial_no: '002', transfer_qty: '20', product_name: 'ITE-IR12ZZ', warehouse: '千葉工場：F0201', dest_location: ''},
+  {id: 3, source_location: 'WO-0002', item_no: '1000003', lot_serial_no: '002', transfer_qty: '30', product_name: 'ITE-IR12ZZ', warehouse: '千葉工場：F0203', dest_location: ''},
+  {id: 4, source_location: 'WO-0003', item_no: '1000004', lot_serial_no: '003', transfer_qty: '40', product_name: 'ITE-IR13ZZ', warehouse: '千葉工場：F0204', dest_location: ''},
+  {id: 5, source_location: 'WO-0004', item_no: '1000005', lot_serial_no: '004', transfer_qty: '50', product_name: 'ITE-IR14ZZ', warehouse: '千葉工場：F0205', dest_location: ''},
+  {id: 6, source_location: 'WO-0005', item_no: '1000006', lot_serial_no: '005', transfer_qty: '60', product_name: 'ITE-IR15ZZ', warehouse: '千葉工場：F0206', dest_location: ''},
+  {id: 7, source_location: 'WO-0006', item_no: '1000007', lot_serial_no: '006', transfer_qty: '70', product_name: 'ITE-IR16ZZ', warehouse: '千葉工場：F0207', dest_location: ''},
+  {id: 8, source_location: 'WO-0007', item_no: '1000008', lot_serial_no: '007', transfer_qty: '80', product_name: 'ITE-IR17ZZ', warehouse: '千葉工場：F0208', dest_location: ''},
+  {id: 9, source_location: 'WO-0008', item_no: '1000009', lot_serial_no: '008', transfer_qty: '90', product_name: 'ITE-IR18ZZ', warehouse: '千葉工場：F0209', dest_location: ''},
+  {id: 10, source_location: 'WO-0009', item_no: '1000010', lot_serial_no: '009', transfer_qty: '100', product_name: 'ITE-IR19ZZ', warehouse: '千葉工場：F0200', dest_location: ''},
+  {id: 11, source_location: 'WO-0010', item_no: '1000011', lot_serial_no: '010', transfer_qty: '110', product_name: 'ITE-IR20ZZ', warehouse: '千葉工場：F0201', dest_location: ''},
+  {id: 12, source_location: 'WO-0011', item_no: '1000012', lot_serial_no: '011', transfer_qty: '120', product_name: 'ITE-IR21ZZ', warehouse: '千葉工場：F0203', dest_location: ''},
+  {id: 13, source_location: 'WO-0012', item_no: '1000012', lot_serial_no: '012', transfer_qty: '130', product_name: 'ITE-IR22ZZ', warehouse: '千葉工場：F0204', dest_location: ''},
 ]
 
 // 画面モード： source = 移動元登録, dest = 移動先登録
@@ -129,6 +130,18 @@ const ShelfTransfer = () => {
       transfer_qty: '',
     })
 
+  // 行選択で表示される項目だけを空にする（保管場所などの選択は保持）
+  const clearRowFields = () =>
+    setForm((prev) => ({
+      ...prev,
+      internalLabel: '',
+      shipmentQty: '',
+      lot_serial_no: '',
+      transfer_qty: '',
+      dest_location: '',
+      parentWarehouse: '',
+    }))
+
   const resetTableScroll = () => {
     const el = tableScrollRef.current
     if (!el) return
@@ -159,6 +172,7 @@ const ShelfTransfer = () => {
       lot_serial_no: selectedRow.lot_serial_no,
       transfer_qty: selectedRow.transfer_qty,
       dest_location: selectedRow.dest_location,
+      parentWarehouse: selectedRow.warehouse,
     }))
   }
 
@@ -196,8 +210,9 @@ const ShelfTransfer = () => {
   const confirmSourceComplete = () => {
     setShowSourceCompleteConfirm(false)
     setMode('dest')
-    // 移動先登録は先頭行から開始
+    // 移動先登録は先頭行から開始（行未選択なので入力欄はクリア）
     setActiveRowId(null)
+    clearRowFields()
     resetTableScroll()
   }
 
@@ -258,6 +273,7 @@ const ShelfTransfer = () => {
     if (mode === 'dest') {
       setMode('source')
       setActiveRowId(null)
+      clearRowFields()
       resetTableScroll()
       return
     }
@@ -322,6 +338,16 @@ const ShelfTransfer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAnyModalOpen, mode, rows, activeRowId, form.parentStorage])
 
+  // グレー表示（入力不可）の共通スタイル。disabled 要素のブラウザ既定の薄表示を
+  // 打ち消し、入力・セレクト・ボタンの文字色を完全に揃える。
+  const grayFieldStyle: React.CSSProperties = {
+    textAlign: 'center',
+    background: '#d9d9d9',
+    color: '#666',
+    WebkitTextFillColor: '#666',
+    opacity: 1,
+  }
+
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'arrow',
@@ -362,14 +388,21 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
-                  style={{textAlign: 'center'}}
+                  style={mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                  disabled={mode === 'dest'}
                 >
                   <option value=''></option>
-                  <option value='葉工場：F0200'>千葉工場：F0200</option>
-                  <option value='葉工場：F0201'>千葉工場：F0201</option>
-                  <option value='葉工場：F0202'>千葉工場：F0202</option>
+                  <option value='千葉工場：F0200'>千葉工場：F0200</option>
+                  <option value='千葉工場：F0201'>千葉工場：F0201</option>
+                  <option value='千葉工場：F0203'>千葉工場：F0203</option>
+                  <option value='千葉工場：F0204'>千葉工場：F0204</option>
+                  <option value='千葉工場：F0205'>千葉工場：F0205</option>
+                  <option value='千葉工場：F0206'>千葉工場：F0206</option>
+                  <option value='千葉工場：F0207'>千葉工場：F0207</option>
+                  <option value='千葉工場：F0208'>千葉工場：F0208</option>
+                  <option value='千葉工場：F0209'>千葉工場：F0209</option>
                 </select>
               </div>
 
@@ -393,6 +426,7 @@ const ShelfTransfer = () => {
                   className='set-search-btn set-success'
                   onClick={handleSearchsource_location}
                   disabled={mode === 'source'}
+                  style={mode === 'source' ? grayFieldStyle : undefined}
                 >
                   一括
                 </button>
@@ -401,27 +435,30 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>品名</label>
                 <input
-                  style={{textAlign: 'center'}}
+                  readOnly
+                  style={grayFieldStyle}
                   value={form.shipmentQty}
-                  onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
                 />
               </div>
               <div className='set-row'>
                 <label>ロットシリアル</label>
                 <input
-                  style={{textAlign: 'center'}}
+                  readOnly
+                  style={grayFieldStyle}
                   value={form.lot_serial_no}
-                  onChange={(e) => setForm({...form, lot_serial_no: e.target.value})}
                 />
               </div>
               <div className='set-row set-row-wo'>
                 <label>移動数量</label>
                 <input
-                  style={{textAlign: 'center'}}
+                  readOnly={mode === 'dest'}
+                  style={mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
                   value={form.transfer_qty}
                   onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                 />
-                <button className='set-search-btn set-primary'>EA</button>
+                <button className='set-search-btn set-primary' style={grayFieldStyle} disabled>
+                  EA
+                </button>
               </div>
             </div>
 
@@ -445,20 +482,21 @@ const ShelfTransfer = () => {
                   移動元登録完了
                 </button>
               ) : (
-                <button
-                  className='set-btn set-primary'
-                  onClick={handleRegister}
-                  style={{fontSize: '35px'}}
-                >
-                  登録
+           
+                   <button className='set-btn set-warning' onClick={handleComplete}>
+                  完了
                 </button>
               )}
 
               {mode === 'source' ? (
                 <div style={{width: '100%'}}></div>
               ) : (
-                <button className='set-btn set-warning' onClick={handleComplete}>
-                  完了
+                  <button
+                  className='set-btn set-primary'
+                  onClick={handleRegister}
+                  style={{fontSize: '35px'}}
+                >
+                  登録
                 </button>
               )}
 
