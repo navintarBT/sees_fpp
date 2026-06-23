@@ -346,6 +346,8 @@ const ShelfTransfer = () => {
     color: '#666',
     WebkitTextFillColor: '#666',
     opacity: 1,
+    pointerEvents: 'none',
+    cursor: 'not-allowed',
   }
 
   const tableColumns: Array<TFTableColumn<Row>> = [
