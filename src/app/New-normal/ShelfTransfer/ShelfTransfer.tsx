@@ -473,7 +473,7 @@ const ShelfTransfer = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>入力をキャンセルしますか？</div>
+                <div className='set-modal-body'>入力データを破棄しますか？</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmDiscard}>
                     はい
