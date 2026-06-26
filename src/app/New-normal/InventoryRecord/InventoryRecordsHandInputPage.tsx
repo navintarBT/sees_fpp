@@ -123,7 +123,7 @@ const InventoryRecordsHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/factory')
+                        navigate('/factory/inventory-records')
                       }}
                     >
                       YES

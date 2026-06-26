@@ -16,9 +16,53 @@ type Row = {
   productName: string
 }
 
+const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: string; qty: string; rows: Row[]}> = {
+  '3019': {
+    parentWarehouse: '羽田製品倉庫：W0040',
+    moveStorage: 'F0200',
+    qty: '1',
+    rows: [
+      {
+        id: 1,
+        error: '',
+        item: '1197101',
+        lot: '',
+        lot2: '*',
+        inspection: '3',
+        instruct: '3',
+        Load: 1,
+        productName: 'サンプル品名',
+      },
+            {
+        id: 2,
+        error: '',
+        item: '1197102',
+        lot: '',
+        lot2: '*',
+        inspection: '3',
+        instruct: '2',
+        Load: 1,
+        productName: 'サンプル品名',
+      },
+      {
+        id: 3,
+        error: '',
+        item: '1197103',
+        lot: '',
+        lot2: '*',
+        inspection: '5',
+        instruct: '4',
+        Load: 1,
+        productName: 'サンプル品名',
+      },
+    ],
+  },
+}
+
 const InventoryRecordsPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
+  const [isLoaded, setIsLoaded] = useState(false)
   const [form, setForm] = useState({
     parentWarehouse: '',
     parentItemNo: '',
@@ -54,6 +98,32 @@ const InventoryRecordsPage = () => {
   }
 
 
+  useEffect(() => {
+    const saved = sessionStorage.getItem('inventory-records-state')
+    if (saved) {
+      const {form: f, rows: r, isLoaded: l, activeRowId: a} = JSON.parse(saved)
+      setForm(f)
+      setRows(r)
+      setIsLoaded(l)
+      setActiveRowId(a)
+      sessionStorage.removeItem('inventory-records-state')
+    }
+  }, [])
+
+  const handleSearch = () => {
+    const data = MOCK_INVENTORY[form.parentItemNo]
+    if (data) {
+      const {rows: mockRows, ...formData} = data
+      setForm((prev) => ({...prev, ...formData, moveWarehouse: '', janCode: ''}))
+      setRows(mockRows)
+      setIsLoaded(true)
+    } else {
+      setForm((prev) => ({...prev, parentWarehouse: '', moveStorage: '', qty: '', moveWarehouse: '', janCode: ''}))
+      setRows([])
+      setIsLoaded(false)
+    }
+  }
+
   const clearRows = () => setRows([])
   const clearForm = () =>
     setForm({
@@ -82,12 +152,20 @@ const InventoryRecordsPage = () => {
   const clearFormAndRows = () => {
     clearForm()
     clearRows()
+    setIsLoaded(false)
     resetTableScroll()
+    sessionStorage.removeItem('inventory-records-state')
+  }
+
+  const saveStateToSession = () => {
+    sessionStorage.setItem(
+      'inventory-records-state',
+      JSON.stringify({form, rows, isLoaded, activeRowId}),
+    )
   }
 
   const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
-    setShowRowClickConfirm(true)
+    setActiveRowId((prev) => (prev === rowId ? null : rowId))
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -114,6 +192,15 @@ const InventoryRecordsPage = () => {
       if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
         event.preventDefault()
         handleReleaseClick({forceHandInput: true})
+        return
+      }
+
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        if (activeRowId !== null) {
+          closeAllModals()
+          setShowRowClickConfirm(true)
+        }
         return
       }
 
@@ -188,7 +275,14 @@ const InventoryRecordsPage = () => {
                 <label>出荷/発注No.</label>
                 <input
                   value={form.parentItemNo}
-                  onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                  onChange={(e) => {
+                    setForm({...form, parentItemNo: e.target.value, parentWarehouse: '', moveStorage: '', qty: '', moveWarehouse: '', janCode: ''})
+                    setIsLoaded(false)
+                    setRows([])
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSearch()
+                  }}
                 />
               </div>
               <div className='set-row'>
@@ -196,9 +290,10 @@ const InventoryRecordsPage = () => {
                 <select
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                  disabled
+                  disabled={!isLoaded}
                 >
                   <option value=''></option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                   <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
                   <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
                   <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
@@ -217,10 +312,10 @@ const InventoryRecordsPage = () => {
                 <select
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                  disabled
+                  disabled={!isLoaded}
                 >
                   <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>検査中</option>
+                  <option value='検査中'>検査中</option>
                 </select>
               </div>
               <div className='set-row'>
@@ -229,7 +324,7 @@ const InventoryRecordsPage = () => {
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
-                  disabled
+                  disabled={!isLoaded}
                 />
               </div>
               <div className='set-row'>
@@ -237,7 +332,7 @@ const InventoryRecordsPage = () => {
                 <input
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
-                  disabled
+                  disabled={!isLoaded}
                 />
               </div>
               <div className='set-row'>
@@ -341,6 +436,7 @@ const InventoryRecordsPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
+                        saveStateToSession()
                         navigate('/factory/inventory-hand-input')
                       }}
                     >
@@ -404,6 +500,7 @@ const InventoryRecordsPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowRowClickConfirm(false)
+                        saveStateToSession()
                         navigate('/factory/inventory-detail')
                       }}
                     >

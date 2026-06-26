@@ -19,9 +19,62 @@ type Row = {
   moveStorage2?: string
 }
 
+const SESSION_KEY = 'shippingRecordPageState'
+
+const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string; qty: string; janCode: string; rows: Row[]}> = {
+  '3019': {
+    moveWarehouse: '千葉倉庫（WMS）：W002',
+    moveStorage: 'A-01-01',
+    qty: '10',
+    janCode: '1',
+    rows: [
+      {
+        id: 1,
+        error: '',
+        item: '1197101',
+        lot: '',
+        lot2: '*',
+        status: '3',
+        build: 2,
+        release: 10,
+        move: '',
+        moveStorage: 'A-01-01',
+        name: 'サンプル品名',
+      },
+            {
+        id: 2,
+        error: '',
+        item: '1197102',
+        lot: '',
+        lot2: '*',
+        status: '5',
+        build: 7,
+        release: 10,
+        move: '',
+        moveStorage: 'A-01-01',
+        name: 'サンプル品名',
+      },
+                  {
+        id: 3,
+        error: '',
+        item: '1197103',
+        lot: '',
+        lot2: '*',
+        status: '6',
+        build: 3,
+        release: 10,
+        move: '',
+        moveStorage: 'A-01-01',
+        name: 'サンプル品名',
+      },
+    ],
+  },
+}
+
 const ShippingRecordPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
+  const [isLoaded, setIsLoaded] = useState(false)
   const [form, setForm] = useState({
     parentWarehouse: '',
     parentItemNo: '',
@@ -38,6 +91,21 @@ const ShippingRecordPage = () => {
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(SESSION_KEY)
+    if (saved) {
+      try {
+        const state = JSON.parse(saved)
+        setForm(state.form)
+        setRows(state.rows)
+        setIsLoaded(state.isLoaded)
+        setActiveRowId(state.activeRowId)
+      } catch {}
+      sessionStorage.removeItem(SESSION_KEY)
+    }
+  }, [])
+
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
@@ -55,6 +123,20 @@ const ShippingRecordPage = () => {
     setShowBackConfirm(false)
   }
 
+
+  const handleSearch = () => {
+    const data = MOCK_SHIPPING[form.parentItemNo]
+    if (data) {
+      const {rows: mockRows, ...formData} = data
+      setForm((prev) => ({...prev, ...formData}))
+      setRows(mockRows)
+      setIsLoaded(true)
+    } else {
+      setForm((prev) => ({...prev, moveWarehouse: '', moveStorage: '', qty: '', janCode: ''}))
+      setRows([])
+      setIsLoaded(false)
+    }
+  }
 
   const clearRows = () => setRows([])
   const clearForm = () =>
@@ -83,11 +165,13 @@ const ShippingRecordPage = () => {
   const clearFormAndRows = () => {
     clearForm()
     clearRows()
+    setIsLoaded(false)
+    sessionStorage.removeItem(SESSION_KEY)
     resetTableScroll()
   }
 
   const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
+    setActiveRowId((prev) => (prev === rowId ? null : rowId))
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -202,7 +286,14 @@ const ShippingRecordPage = () => {
                 <input
                   style={{textAlign: 'center'}}
                   value={form.parentItemNo}
-                  onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                  onChange={(e) => {
+                    setForm({...form, parentItemNo: e.target.value, moveWarehouse: '', moveStorage: '', qty: '', janCode: ''})
+                    setIsLoaded(false)
+                    setRows([])
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSearch()
+                  }}
                 />
               </div>
               <div className='set-row'>
@@ -211,7 +302,7 @@ const ShippingRecordPage = () => {
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                   style={{textAlign: 'center'}}
-                  disabled
+                  disabled={!isLoaded}
                 >
                   <option value=''></option>
                   <option value='千葉倉庫（WMS）：W002'>千葉工場：F0200</option>
@@ -225,7 +316,7 @@ const ShippingRecordPage = () => {
                   style={{textAlign: 'center'}}
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
-                  disabled
+                  disabled={!isLoaded}
                 />
               </div>
 
@@ -236,7 +327,7 @@ const ShippingRecordPage = () => {
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
-                  disabled
+                  disabled={!isLoaded}
                 />
               </div>
 
@@ -246,7 +337,7 @@ const ShippingRecordPage = () => {
                   style={{textAlign: 'center'}}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
-                  disabled
+                  disabled={!isLoaded}
                 />
               </div>
               <div className='set-row'>
@@ -351,6 +442,7 @@ const ShippingRecordPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
+                        sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId}))
                         navigate('/factory/shipping-hand-input')
                       }}
                     >
@@ -413,6 +505,7 @@ const ShippingRecordPage = () => {
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId}))
                         setShowRowClickConfirm(false)
                         navigate('/factory/shipping-detail')
                       }}
