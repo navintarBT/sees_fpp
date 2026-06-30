@@ -25,8 +25,7 @@ const InventoryRecordsHandInputPage = () => {
               <div className='hand-row'>
                 <label>倉庫</label>
                 <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)} style={{textAlign: 'center'}}>
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                  <option value=''>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
                   <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                 </select>

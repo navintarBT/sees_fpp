@@ -23,10 +23,10 @@ const SESSION_KEY = 'shippingRecordPageState'
 
 const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string; qty: string; janCode: string; rows: Row[]}> = {
   '3019': {
-    moveWarehouse: '千葉倉庫（WMS）：W002',
-    moveStorage: 'A-01-01',
-    qty: '10',
-    janCode: '1',
+    moveWarehouse: '千葉工場：F0200',
+    moveStorage: 'F0200',
+    qty: '1',
+    janCode: '',
     rows: [
       {
         id: 1,
