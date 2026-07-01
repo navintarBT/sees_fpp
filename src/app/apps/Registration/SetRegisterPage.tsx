@@ -1,4 +1,4 @@
-﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
+import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
@@ -175,6 +175,8 @@ const initialForm = {
   janCode: '',
 }
 
+const SESSION_KEY = 'setRegisterPageState'
+
 const SetRegisterPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
@@ -347,16 +349,26 @@ const SetRegisterPage = () => {
     clearRows()
     setActiveRowId(null)
     resetTableScroll()
+    sessionStorage.removeItem(SESSION_KEY)
   }
 
-  const handleCancelClick = () => {
-    closeAllModals()
-    clearFormAndRows()
-    setTimeout(() => {
-      parentJanCodeInputRef.current?.focus()
-      parentJanCodeInputRef.current?.select()
-    }, 0)
+  const saveStateToSession = () => {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, activeRowId, isParentConfirmed}))
   }
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(SESSION_KEY)
+    if (saved) {
+      try {
+        const s = JSON.parse(saved)
+        setForm(s.form)
+        setRows(s.rows)
+        setActiveRowId(s.activeRowId)
+        setIsParentConfirmed(s.isParentConfirmed)
+      } catch {}
+      sessionStorage.removeItem(SESSION_KEY)
+    }
+  }, [])
 
   useEffect(() => {
     parentJanCodeInputRef.current?.focus()
@@ -652,7 +664,7 @@ const SetRegisterPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? (<>{'\u9078\u629e\u54c1\u76ee\u306e0\u3092'}<br />{'\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f'}</>) : activeRow?.status === '\u69cb\u6210\u4e2d' ? (<>{'\u9078\u629e\u54c1\u76ee\u30921\u500b\u3001'}<br />{'\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f'}</>) : (<>{'\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002'}<br />{'\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</>)}</div>
+                  <div className='set-modal-body'>{activeRow?.status === '\u89e3\u9664' ? '\u9078\u629e\u54c1\u76ee\u306e0\u3092\n\u53d6\u308a\u6d88\u3057\u307e\u3059\u304b\uff1f' : activeRow?.status === '\u69cb\u6210\u4e2d' ? '\u9078\u629e\u54c1\u76ee\u30921\u500b\u3001\n\u30bb\u30c3\u30c8\u89e3\u9664\u3057\u307e\u3059\u304b\uff1f' : '\u30bb\u30c3\u30c8\u8ffd\u52a0\u54c1\u3067\u3059\u3002\n\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -703,7 +715,7 @@ const SetRegisterPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002\n\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -752,11 +764,12 @@ const SetRegisterPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002\n\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        saveStateToSession()
                         setShowBackConfirm(false)
                         navigate('/factory')
                       }}
@@ -765,13 +778,17 @@ const SetRegisterPage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
+                      onClick={() => {
+                        setShowBackConfirm(false)
+                        clearFormAndRows()
+                        navigate('/factory')
+                      }}
                     >
                       NO
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={handleCancelClick}
+                      onClick={() => setShowBackConfirm(false)}
                     >
                       取消
                     </button>

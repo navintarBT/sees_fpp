@@ -1,4 +1,4 @@
-﻿import {useState} from 'react'
+import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
@@ -25,8 +25,7 @@ const InventoryRecordsHandInputPage = () => {
               <div className='hand-row'>
                 <label>倉庫</label>
                 <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)} style={{textAlign: 'center'}}>
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                  <option value=''>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
                   <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                 </select>
@@ -94,7 +93,7 @@ const InventoryRecordsHandInputPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u5165\u529b\u5185\u5bb9\u3067\u8aad\u8fbc\u3092'}<br />{'\u5b8c\u4e86\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>{'\u5165\u529b\u5185\u5bb9\u3067\u8aad\u8fbc\u3092\n\u5b8c\u4e86\u3057\u307e\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -117,7 +116,7 @@ const InventoryRecordsHandInputPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u624b\u5165\u529b\u30c0\u30a4\u30a2\u30ed\u30b0\u3092'}<br />{'\u9589\u3058\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>{'\u624b\u5165\u529b\u30c0\u30a4\u30a2\u30ed\u30b0\u3092\n\u9589\u3058\u307e\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'

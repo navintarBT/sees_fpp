@@ -11,49 +11,66 @@ type Row = {
   lot: string
   lot2: string
   inspection: string
+  rowNo: string
   instruct: string
-  Load: number
+  Load: string
   productName: string
 }
 
+const EMPTY_ROW: Row = {
+  id: 1,
+  error: '',
+  item: '',
+  lot: '',
+  lot2: '',
+  inspection: '',
+  rowNo: '',
+  instruct: '',
+  Load: '' ,
+  productName: '',
+}
+
 const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: string; qty: string; rows: Row[]}> = {
-  '3019': {
-    parentWarehouse: '羽田製品倉庫：W0040',
-    moveStorage: 'F0200',
+  '12345678': {
+    parentWarehouse: 'A倉庫',
+    moveStorage: 'JDE基本保管場所',
     qty: '1',
     rows: [
       {
         id: 1,
         error: '',
-        item: '1197101',
-        lot: '',
-        lot2: '*',
-        inspection: '3',
+        item: '1001',
+        lot: 'Lot001',
+        lot2: '',
+        inspection: '',
+        rowNo: '',
         instruct: '3',
-        Load: 1,
-        productName: 'サンプル品名',
+        Load: '0',
+        productName: '品名001',
       },
-            {
+      {
         id: 2,
         error: '',
-        item: '1197102',
-        lot: '',
+        item: '1002',
+        lot: 'Lot002',
         lot2: '*',
-        inspection: '3',
+        inspection: '',
+        rowNo: '',
         instruct: '2',
-        Load: 1,
-        productName: 'サンプル品名',
+        Load: '2',
+        productName: '品名002',
       },
       {
         id: 3,
-        error: '',
-        item: '1197103',
-        lot: '',
+        error: 'E',
+        item: '1003',
+        lot: 'Lot003',
         lot2: '*',
-        inspection: '5',
-        instruct: '4',
-        Load: 1,
-        productName: 'サンプル品名',
+        inspection: '',
+        rowNo: '',
+        instruct: '15',
+        Load: '15',
+        productName: '品名003',
       },
     ],
   },
@@ -61,14 +78,14 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
 
 const InventoryRecordsPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([])
+  const [rows, setRows] = useState<Row[]>([EMPTY_ROW])
   const [isLoaded, setIsLoaded] = useState(false)
   const [form, setForm] = useState({
-    parentWarehouse: '',
+    parentWarehouse: 'A倉庫',
     parentItemNo: '',
     moveWarehouse: '',
     moveStorage: '',
-    qty: '',
+    qty: '1',
     janCode: '',
     source: '',
   })
@@ -77,6 +94,8 @@ const InventoryRecordsPage = () => {
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const parentItemNoRef = useRef<HTMLInputElement | null>(null)
+  const janCodeRef = useRef<HTMLInputElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
@@ -110,6 +129,14 @@ const InventoryRecordsPage = () => {
     }
   }, [])
 
+  useEffect(() => {
+    parentItemNoRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    if (isLoaded) janCodeRef.current?.focus()
+  }, [isLoaded])
+
   const handleSearch = () => {
     const data = MOCK_INVENTORY[form.parentItemNo]
     if (data) {
@@ -118,20 +145,20 @@ const InventoryRecordsPage = () => {
       setRows(mockRows)
       setIsLoaded(true)
     } else {
-      setForm((prev) => ({...prev, parentWarehouse: '', moveStorage: '', qty: '', moveWarehouse: '', janCode: ''}))
+      setForm((prev) => ({...prev, parentWarehouse: 'A倉庫', moveStorage: '', qty: '1', moveWarehouse: '', janCode: ''}))
       setRows([])
       setIsLoaded(false)
     }
   }
 
-  const clearRows = () => setRows([])
+  const clearRows = () => setRows([EMPTY_ROW])
   const clearForm = () =>
     setForm({
-      parentWarehouse: '',
+      parentWarehouse: 'A倉庫',
       parentItemNo: '',
       moveWarehouse: '',
       moveStorage: '',
-      qty: '',
+      qty: '1',
       janCode: '',
       source: '',
     })
@@ -262,6 +289,7 @@ const InventoryRecordsPage = () => {
     {key: 'Load', headClassName: 'col-Load', cellClassName: 'col-Load', header: '読込', render: (row) => row.Load},
     {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
     {key: 'inspection', headClassName: 'col-inspection', cellClassName: 'col-inspection', header: '検査', render: (row) => row.inspection},
+    {key: 'rowNo', headClassName: 'col-rowNo', cellClassName: 'col-rowNo', header: '行番号', render: (row) => row.rowNo},
   ]
 
   return (
@@ -272,13 +300,15 @@ const InventoryRecordsPage = () => {
           <div className='set-body'>
             <div className='set-form inventory-records-form'>
               <div className='set-row'>
-                <label>出荷/発注No.</label>
+                <label>出荷No.／発注No.</label>
                 <input
+                  ref={parentItemNoRef}
                   value={form.parentItemNo}
+                  disabled={isLoaded}
                   onChange={(e) => {
-                    setForm({...form, parentItemNo: e.target.value, parentWarehouse: '', moveStorage: '', qty: '', moveWarehouse: '', janCode: ''})
+                    setForm({...form, parentItemNo: e.target.value, parentWarehouse: 'A倉庫', moveStorage: '', qty: '1', moveWarehouse: '', janCode: ''})
                     setIsLoaded(false)
-                    setRows([])
+                    setRows([EMPTY_ROW])
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handleSearch()
@@ -292,11 +322,10 @@ const InventoryRecordsPage = () => {
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                   disabled={!isLoaded}
                 >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                  <option value='A倉庫'>A倉庫</option>
+                  <option value='B倉庫'>B倉庫</option>
+                  <option value='C事業所'>C事業所</option>
+                  <option value='D事業所'>D事業所</option>
                 </select>
               </div>
               <div className='set-row'>
@@ -304,7 +333,7 @@ const InventoryRecordsPage = () => {
                 <input
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
-                  disabled
+                  disabled={!isLoaded}
                 />
               </div>
               <div className='set-row'>
@@ -312,7 +341,7 @@ const InventoryRecordsPage = () => {
                 <select
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                  disabled={!isLoaded}
+                  disabled
                 >
                   <option value=''></option>
                   <option value='検査中'>検査中</option>
@@ -330,6 +359,7 @@ const InventoryRecordsPage = () => {
               <div className='set-row'>
                 <label>JANコード ／品目コード</label>
                 <input
+                  ref={janCodeRef}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
                   disabled={!isLoaded}
@@ -387,7 +417,7 @@ const InventoryRecordsPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002\n\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -459,21 +489,23 @@ const InventoryRecordsPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>メニューに戻ります。<br /> 読込データを破棄しますか？</div>
+                  <div className='set-modal-body'>{'メニューに戻ります。\n読込データを破棄しますか？'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        saveStateToSession()
                         setShowBackConfirm(false)
                         navigate('/factory/factory')
                       }}
                     >
                       YES
                     </button>
-                     <button
-                      className='set-modal-btn set-modal-yes'
+                    <button
+                      className='set-modal-btn set-modal-no'
                       onClick={() => {
                         setShowBackConfirm(false)
+                        clearFormAndRows()
                         navigate('/factory/factory')
                       }}
                     >

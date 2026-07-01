@@ -1,4 +1,4 @@
-﻿import {useEffect, useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
@@ -39,6 +39,8 @@ const inputStyle: React.CSSProperties = {
   textAlign: 'center',
 }
 
+const SESSION_KEY = 'woPartsIssuanceHandInputState'
+
 const WOPartsIssuanceHandInputPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([])
@@ -55,6 +57,21 @@ const WOPartsIssuanceHandInputPage = () => {
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([])
   const [pendingFocusRowId, setPendingFocusRowId] = useState<number | null>(null)
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(SESSION_KEY)
+    if (saved) {
+      try {
+        const s = JSON.parse(saved)
+        setRows(s.rows)
+        setParentItem(s.parentItem)
+        setParentSerial(s.parentSerial)
+        setMoveStorage(s.moveStorage)
+        setSelectedRowIds(s.selectedRowIds)
+      } catch {}
+      sessionStorage.removeItem(SESSION_KEY)
+    }
+  }, [])
 
   useEffect(() => {
     itemInputRef.current?.focus()
@@ -150,9 +167,17 @@ const WOPartsIssuanceHandInputPage = () => {
     setMoveStorage('')
     setSelectedRowIds([])
     setPendingFocusRowId(null)
+    sessionStorage.removeItem(SESSION_KEY)
     requestAnimationFrame(() => {
       itemInputRef.current?.focus()
     })
+  }
+
+  const saveStateToSession = () => {
+    sessionStorage.setItem(
+      SESSION_KEY,
+      JSON.stringify({rows, parentItem, parentSerial, moveStorage, selectedRowIds}),
+    )
   }
 
   const tableColumns: Array<TFTableColumn<Row>> = [
@@ -378,11 +403,12 @@ const WOPartsIssuanceHandInputPage = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>{'確認'}</div>
-                <div className='set-modal-body'>メニューに戻ります。<br /> 読込データを破棄しますか？</div>
+                <div className='set-modal-body'>{'メニューに戻ります。\n読込データを破棄しますか？'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
+                      saveStateToSession()
                       setShowBackConfirm(false)
                       navigate('/factory/factory')
                     }}
@@ -393,6 +419,7 @@ const WOPartsIssuanceHandInputPage = () => {
                     className='set-modal-btn set-modal-no'
                     onClick={() => {
                       setShowBackConfirm(false)
+                      resetPage()
                       navigate('/factory/factory')
                     }}
                   >

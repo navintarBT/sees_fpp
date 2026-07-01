@@ -1,4 +1,4 @@
-﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
+import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
@@ -229,6 +229,8 @@ const initialRows: Row[] = [
   },
 ]
 
+const SESSION_KEY = 'woPartsIssuanceState'
+
 const WOPartsIssuance = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -286,10 +288,36 @@ const WOPartsIssuance = () => {
     setIsIssueDetailLocked(true)
     setActiveRowId(null)
     resetTableScroll()
+    sessionStorage.removeItem(SESSION_KEY)
     requestAnimationFrame(() => {
       woNumberInputRef.current?.focus()
     })
   }
+
+  const saveStateToSession = () => {
+    sessionStorage.setItem(
+      SESSION_KEY,
+      JSON.stringify({form, rows, activeRowId, isInternalLabelLocked, isIssueDetailLocked, detailHistory}),
+    )
+  }
+
+  useEffect(() => {
+    if (restoredState) return
+    const saved = sessionStorage.getItem(SESSION_KEY)
+    if (saved) {
+      try {
+        const s = JSON.parse(saved)
+        setForm(s.form)
+        setRows(s.rows)
+        setActiveRowId(s.activeRowId)
+        setIsInternalLabelLocked(s.isInternalLabelLocked)
+        setIsIssueDetailLocked(s.isIssueDetailLocked)
+        setDetailHistory(s.detailHistory)
+      } catch {}
+      sessionStorage.removeItem(SESSION_KEY)
+    }
+  }, [])
+
   const clearForm = () =>
     setForm({
       parentWarehouse: '',
@@ -839,11 +867,12 @@ const WOPartsIssuance = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>メニューに戻ります。<br /> 読込データを破棄しますか？</div>
+                  <div className='set-modal-body'>{'メニューに戻ります。\n読込データを破棄しますか？'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        saveStateToSession()
                         setShowBackConfirm(false)
                         navigate('/factory/factory')
                       }}
@@ -853,7 +882,7 @@ const WOPartsIssuance = () => {
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => {
-                        setShowBackConfirm(false)
+                        resetToInitialDisplay()
                         navigate('/factory/factory')
                       }}
                     >
