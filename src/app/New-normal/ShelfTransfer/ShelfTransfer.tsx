@@ -513,16 +513,20 @@ const ShelfTransfer = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>入力データを破棄しますか？</div>
+                <div className='set-modal-body'
+                style={{ whiteSpace: "pre-line" }}
+                >
+                   {"読込データを破棄します。\n 宜しいですか？"}
+                  </div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmDiscard}>
-                    はい
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowDiscardConfirm(false)}
                   >
-                    いいえ
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -617,20 +621,43 @@ const ShelfTransfer = () => {
 
           {/* ③ 戻る Step1：棚移動登録を中止するか確認 */}
           {showBackConfirm && (
-            <div className='set-modal-backdrop' role='presentation'>
-              <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>棚移動登録を中止しますか？</div>
-                <div className='set-modal-actions'>
-                  <button className='set-modal-btn set-modal-yes' onClick={handleBackConfirmYes}>
-                    はい
+            <div className="set-modal-backdrop" role="presentation">
+              <div className="set-modal" role="dialog" aria-modal="true">
+                <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
+                <div className="set-modal-body"
+                style={{ whiteSpace: "pre-line" }}
+                >
+                  {
+                    "メニューに戻ります。\n 読込データを破棄しますか？"
+                  }
+                </div>
+                <div className="set-modal-actions">
+                  <button
+                    className="set-modal-btn set-modal-yes"
+                    onClick={() => {
+                      setShowBackConfirm(false);
+                      navigate("/factory/factory");
+                    }}
+                  >
+                  YES
                   </button>
                   <button
-                    className='set-modal-btn set-modal-no'
-                    onClick={() => setShowBackConfirm(false)}
+                    className="set-modal-btn set-modal-no"
+                    onClick={() =>{ setShowBackConfirm(false);
+                    navigate("/factory/factory");
+                    }}
                   >
-                    いいえ
-                  </button>
+                    NO
+                  </button>   
+                   <button
+  className="set-modal-btn set-m"
+  onClick={() => {
+    setShowBackConfirm(false);
+    
+  }}
+>
+  取消
+</button>
                 </div>
               </div>
             </div>
