@@ -622,13 +622,13 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={executeClear}
                   >
-                    YES
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    NO
+                    Cancel
                   </button>
                 </div>
               </div>

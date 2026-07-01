@@ -7,7 +7,9 @@ const IncomingProcessRegistration = () => {
     const [showClearConfirm, setShowClearConfirm] = useState(false)
     const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
     const [showBackConfirm, setShowBackConfirm] = useState(false)
+    const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
     const [showError, setShowError] = useState<{ message: string } | null>(null)
+    const [lotSerialError, setLotSerialError] = useState(false)
     const barcodeInputRef = useRef<HTMLInputElement | null>(null)
 
     const [productTicketNo, setProductTicketNo] = useState('')
@@ -21,7 +23,7 @@ const IncomingProcessRegistration = () => {
     const [defectReason, setDefectReason] = useState('')
 
     const clearFormAndRows = () => {
-        setProductTicketNo('')
+        setProductTicketNo('MB10147843001')
         setProductName('')
         setProductCode('')
         setLotSerial('')
@@ -30,6 +32,7 @@ const IncomingProcessRegistration = () => {
         setGoodQuantity('')
         setDefectQuantity('')
         setDefectReason('')
+        setLotSerialError(false)
 
         setTimeout(() => {
             barcodeInputRef.current?.focus()
@@ -43,9 +46,9 @@ const IncomingProcessRegistration = () => {
 
         // Mock response
         if (ticketNo) {
-            setProductName('サンプル製品名')
-            setProductCode('SP-001')
-            setLotSerial('LOT2024001')
+            setProductName('ブレーキシリンダー（硬）')
+            setProductCode('001R566B11')
+            setLotSerial('2026012001')
             setOrderQuantity(null)
             setReceivingQuantity('180')
         } else {
@@ -59,12 +62,14 @@ const IncomingProcessRegistration = () => {
 
     const handleBarcodeScan = (value: string) => {
         setProductTicketNo(value)
-        fetchProductInfo(value)
     }
 
-    const toggleHandInput = () => {
-        barcodeInputRef.current?.focus()
+    const handleBarcodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            fetchProductInfo(productTicketNo)
+        }
     }
+
 
     const parseNumber = (value: string) => {
         return Math.max(0, parseInt(value) || 0)
@@ -117,6 +122,11 @@ const IncomingProcessRegistration = () => {
             return
         }
 
+        if (!lotSerial) {
+            setLotSerialError(true)
+            return
+        }
+
         setShowCompleteConfirm(true)
     }
 
@@ -154,55 +164,57 @@ const IncomingProcessRegistration = () => {
                     <div className='set-body'>
                         <div className='set-form'>
                             <div className='set-row'>
-                                <label>現品票№</label>
+                                <label>現品票No.</label>
                                 <input
                                     ref={barcodeInputRef}
                                     value={productTicketNo}
                                     onChange={(e) => handleBarcodeScan(e.target.value)}
+                                    onKeyDown={handleBarcodeKeyDown}
                                     className='set-small set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
                             </div>
 
                             <div className='set-row'>
-                                <label>品　　 名</label>
+                                <label>品　　 名<span className='red-border-span-incom'>*</span></label>
                                 <input
                                     value={productName}
                                     readOnly={true}
-                                    placeholder=' '
+                                    required
                                     className='set-small set-input-gray'
                                     style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
                                 />
                             </div>
 
                             <div className='set-row'>
-                                <label>品　　 番</label>
+                                <label>品　　 番 <span className='red-border-span-incom'>*</span></label>
                                 <input
                                     value={productCode}
                                     readOnly={true}
-                                    placeholder=' '
+                                    required
                                     className='set-small set-input-gray'
                                     style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
                                 />
                             </div>
 
                             <div className='set-row'>
-                                <label>ロット/ｼﾘｱﾙ</label>
+                                <label className='spax-label-incoming'>ロット／シリアル <span className='red-border-span-incom'>*</span></label>
                                 <input
                                     value={lotSerial}
-                                    onChange={(e) => setLotSerial(e.target.value)}
-                                    placeholder=' '
+                                    onChange={(e) => { setLotSerial(e.target.value); setLotSerialError(false) }}
+                                    required
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: 'center', ...(lotSerialError ? { border: '2px solid red' } : {}) }}
                                 />
                             </div>
 
                             <div className='set-row'>
-                                <label>入荷数量</label>
+                                <label>入荷数量 <span className='red-border-span-incom'>*</span></label>
                                 <input
                                     value={receivingQuantity}
                                     onChange={(e) => handleReceivingQuantityChange(e.target.value)}
                                     readOnly={true}
+                                    required
                                     className='set-input-gray'
                                     style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
                                 />
@@ -214,7 +226,6 @@ const IncomingProcessRegistration = () => {
                                     value={goodQuantity}
                                     onChange={(e) => handleGoodQuantityChange(e.target.value)}
                                     type="number"
-                                    placeholder=' '
                                     className='set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
@@ -226,7 +237,6 @@ const IncomingProcessRegistration = () => {
                                     value={defectQuantity}
                                     onChange={(e) => handleDefectQuantityChange(e.target.value)}
                                     type="number"
-                                    placeholder=' '
                                     className='set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
@@ -265,7 +275,7 @@ const IncomingProcessRegistration = () => {
                             </button>
                             <button
                                 className='set-btn set-primary'
-                                onClick={toggleHandInput}
+                                onClick={() => setShowHandInputConfirm(true)}
                             >
                                 手入力
                             </button>
@@ -283,7 +293,7 @@ const IncomingProcessRegistration = () => {
                             <div className='set-modal' role='dialog' aria-modal='true'>
                                 <div className='set-modal-header'>確認</div>
                                 <div className='set-modal-body'>
-                                    入力データを破棄します。<br />
+                                    読込データを破棄します。<br />
                                     宜しいですか？
                                 </div>
                                 <div className='set-modal-actions'>
@@ -294,13 +304,13 @@ const IncomingProcessRegistration = () => {
                                             clearFormAndRows()
                                         }}
                                     >
-                                        はい
+                                        OK
                                     </button>
                                     <button
                                         className='set-modal-btn set-modal-no'
                                         onClick={() => setShowClearConfirm(false)}
                                     >
-                                        いいえ
+                                        Cancel
                                     </button>
                                 </div>
                             </div>
@@ -339,7 +349,7 @@ const IncomingProcessRegistration = () => {
                                 <div className='set-modal-header'>確認</div>
                                 <div className='set-modal-body'>
                                     メニューに戻ります。<br />
-                                    入力データを破棄しますか？
+                                    読込データを破棄しますか？
                                 </div>
                                 <div className='set-modal-actions'>
                                     <button
@@ -349,11 +359,51 @@ const IncomingProcessRegistration = () => {
                                             navigate('/factory/factory')
                                         }}
                                     >
+                                        YES
+                                    </button>
+                                    <button
+                                        className='set-modal-btn set-modal-no'
+                                        onClick={() => {
+                                            setShowBackConfirm(false)
+                                            navigate('/factory/factory')
+                                        }}
+                                    >
+                                        No
+                                    </button>
+                                    <button
+                                        className='set-modal-btn set-modal-no'
+                                        onClick={() => {
+                                            setShowBackConfirm(false)
+                                            setTimeout(() => barcodeInputRef.current?.focus(), 100)
+                                        }}
+                                    >
+                                        取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showHandInputConfirm && (
+                        <div className='set-modal-backdrop' role='presentation'>
+                            <div className='set-modal' role='dialog' aria-modal='true'>
+                                <div className='set-modal-header'>確認</div>
+                                <div className='set-modal-body'>
+                                    品目情報を手入力しますか？
+                                </div>
+                                <div className='set-modal-actions'>
+                                    <button
+                                        className='set-modal-btn set-modal-yes'
+                                        onClick={() => {
+                                            setShowHandInputConfirm(false)
+                                            navigate('/factory/incoming-process-registration-hand-input')
+                                        }}
+                                    >
                                         はい
                                     </button>
                                     <button
                                         className='set-modal-btn set-modal-no'
-                                        onClick={() => setShowBackConfirm(false)}
+                                        onClick={() => setShowHandInputConfirm(false)}
                                     >
                                         いいえ
                                     </button>

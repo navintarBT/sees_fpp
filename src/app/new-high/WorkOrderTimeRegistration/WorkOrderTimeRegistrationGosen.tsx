@@ -1103,7 +1103,7 @@ const WorkOrderTimeRegistrationGosen = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>メニューに戻ります。<br />読み込みデータを破棄しますか？</div>
+                <div className='set-modal-body'>メニューに戻ります。<br />読込データを破棄しますか？</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={() => { clearAllData(); setShowBackConfirm(false); navigate('/factory/factory'); }}>YES</button>
                   <button className='set-modal-btn set-modal-no' onClick={() => { setShowBackConfirm(false); navigate('/factory/factory'); }}>NO</button>

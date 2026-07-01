@@ -1093,7 +1093,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                 <div className='set-modal-body'>
                   メニューに戻ります。
                   <br />
-                  読み込みデータを破棄しますか？
+                  読込データを破棄しますか？
                 </div>
                 <div className='set-modal-actions'>
                   <button
