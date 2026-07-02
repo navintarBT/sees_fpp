@@ -368,10 +368,7 @@ const WorkOrderCompletion = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>
-                    {selectedWoNumber}<br />
-                    選択したWO番号で読込を完了しますか？
-                  </div>
+                  <div className='set-modal-body'>{`${selectedWoNumber}\n選択したWO番号で読込を完了しますか？`}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -440,7 +437,7 @@ const WorkOrderCompletion = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>メニューに戻ります。<br />読み込みデータを破棄しますか？</div>
+                  <div className='set-modal-body'>{'メニューに戻ります。\n読み込みデータを破棄しますか？'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'

@@ -601,11 +601,7 @@ const DeliverySlipRegistration = () => {
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">確認</div>
-                <div className="set-modal-body">
-                 選択行を削除しますか？
-                  <br />
-
-                </div>
+                <div className="set-modal-body">選択行を削除しますか？</div>
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
@@ -670,11 +666,7 @@ const DeliverySlipRegistration = () => {
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">確認</div>
-                <div className="set-modal-body">
-                  読込データを破棄します。
-                  <br />
-                  宜しいですか？
-                </div>
+                <div className="set-modal-body">{"読込データを破棄します。\n 宜しいですか？"}</div>
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
@@ -700,11 +692,7 @@ const DeliverySlipRegistration = () => {
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">確認</div>
-                <div className="set-modal-body">
-                  配送伝票登録を
-                  <br />
-                  完了しますか？
-                </div>
+                <div className="set-modal-body">{"配送伝票登録を\n完了しますか？"}</div>
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
@@ -763,13 +751,15 @@ const DeliverySlipRegistration = () => {
           {showBackConfirm && (
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
-                <div className="set-modal-header">確認</div>
-                <div className="set-modal-body">
-                  メニューに戻ります。
-                  <br />
-                  読込データを破棄しますか？
+                <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
+                <div className="set-modal-body"
+                
+                >
+                  {
+                    "メニューに戻ります。\n 読込データを破棄しますか？"
+                  }
                 </div>
-                <div className="set-modal-actions set-modal-actions-inline">
+                <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
@@ -777,14 +767,25 @@ const DeliverySlipRegistration = () => {
                       navigate("/factory");
                     }}
                   >
-                    OK
+                  YES
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() => setShowBackConfirm(false)}
+                    onClick={() =>{ setShowBackConfirm(false);
+                    navigate("/factory");
+                    }}
                   >
-                    Cancel
-                  </button>
+                    NO
+                  </button>   
+                   <button
+  className="set-modal-btn set-m"
+  onClick={() => {
+    setShowBackConfirm(false);
+    
+  }}
+>
+  取消
+</button>
                 </div>
               </div>
             </div>

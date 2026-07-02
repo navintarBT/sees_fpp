@@ -1,4 +1,4 @@
-﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
+import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
@@ -151,6 +151,7 @@ const initialRows: Row[] = [
   },
 ]
 
+const SESSION_KEY = 'bundlePageState'
 
 const BundlePage = () => {
   const navigate = useNavigate()
@@ -183,6 +184,19 @@ const BundlePage = () => {
     showClearConfirm ||
     showCompleteConfirm ||
     showBackConfirm
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(SESSION_KEY)
+    if (saved) {
+      try {
+        const s = JSON.parse(saved)
+        setForm(s.form)
+        setRows(s.rows)
+        setActiveRowId(s.activeRowId)
+      } catch {}
+      sessionStorage.removeItem(SESSION_KEY)
+    }
+  }, [])
 
   const closeAllModals = () => {
     setShowHandInputConfirm(false)
@@ -222,6 +236,11 @@ const BundlePage = () => {
     clearForm()
     clearRows()
     resetTableScroll()
+    sessionStorage.removeItem(SESSION_KEY)
+  }
+
+  const saveStateToSession = () => {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, activeRowId}))
   }
 
   const handleBackCancelClick = () => {
@@ -629,7 +648,7 @@ const BundlePage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002\n\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -655,7 +674,7 @@ const BundlePage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>備品振分登録<br />を完了しますか？</div>
+                  <div className='set-modal-body'>{'備品振分登録\nを完了しますか？'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -678,11 +697,12 @@ const BundlePage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002'}<br />{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>{'\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002\n\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        saveStateToSession()
                         setShowBackConfirm(false)
                         navigate('/factory')
                       }}
@@ -691,7 +711,11 @@ const BundlePage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
+                      onClick={() => {
+                        setShowBackConfirm(false)
+                        clearFormAndRows()
+                        navigate('/factory')
+                      }}
                     >
                       NO
                     </button>

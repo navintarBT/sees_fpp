@@ -432,10 +432,7 @@ const WorkOrderCompletion = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>
-                    {selectedWoNumber}<br />
-                    選択したWO番号で読込を完了しますか？
-                  </div>
+                  <div className='set-modal-body'>{`${selectedWoNumber}\n選択したWO番号で読込を完了しますか？`}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -484,10 +481,7 @@ const WorkOrderCompletion = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>
-                    WO完了数とWO仕損数の合計が<br />
-                    WO計画数を超えています。
-                  </div>
+                  <div className='set-modal-body'>{'WO完了数とWO仕損数の合計が\nWO計画数を超えています。'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -504,11 +498,7 @@ const WorkOrderCompletion = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>
-                    WO完了数とWO仕損数の合計が<br />
-                    WO計画数に足りません。<br />
-                    登録しますか？
-                  </div>
+                  <div className='set-modal-body'>{'WO完了数とWO仕損数の合計が\nWO計画数に足りません。\n登録しますか？'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -549,32 +539,48 @@ const WorkOrderCompletion = () => {
                 </div>
               </div>
             )}
-
-            {showBackConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>メニューに戻ります。<br />よろしいですか？		</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowBackConfirm(false)
-                        navigate('/factory/factory')
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
-                    >
-                      いいえ
-                    </button>
-                  </div>
+          {showBackConfirm && (
+            <div className="set-modal-backdrop" role="presentation">
+              <div className="set-modal" role="dialog" aria-modal="true">
+                <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
+                <div className="set-modal-body"
+                
+                >
+                  {
+                    "メニューに戻ります。\n 読込データを破棄しますか？"
+                  }
+                </div>
+                <div className="set-modal-actions">
+                  <button
+                    className="set-modal-btn set-modal-yes"
+                    onClick={() => {
+                      setShowBackConfirm(false);
+                      navigate("/factory/factory");
+                    }}
+                  >
+                  YES
+                  </button>
+                  <button
+                    className="set-modal-btn set-modal-no"
+                    onClick={() =>{ setShowBackConfirm(false);
+                    navigate("/factory/factory");
+                    }}
+                  >
+                    NO
+                  </button>   
+                   <button
+  className="set-modal-btn set-m"
+  onClick={() => {
+    setShowBackConfirm(false);
+    
+  }}
+>
+  取消
+</button>
                 </div>
               </div>
-            )}
+            </div>
+          )}
           </div>
         </div>
       </div>

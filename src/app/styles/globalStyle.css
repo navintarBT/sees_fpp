@@ -46,6 +46,21 @@
   color: black;
 }
 
+.set-row input[type="number"]::-webkit-inner-spin-button,
+.set-row input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.set-row input[type="number"] {
+  appearance: textfield;
+}
+
+.red-border-span-incom {
+  color: red;
+  font-size: 30px;
+}
+
 .set-row input,
 .set-row select {
   height: 78px;
@@ -449,6 +464,7 @@
   text-align: center;
   background: white;
   border-bottom: 0;
+  white-space: pre-wrap;
 }
 
 .set-modal-actions {
@@ -1121,6 +1137,10 @@
 }
 
 /* ########################## + - kongchan ################################# */
+.set-row-incomingapge {
+  grid-template-columns: 294px 1fr;
+}
+
 .pg-sign-group {
   display: flex;
   gap: 20px;
@@ -1235,7 +1255,7 @@
   margin-left: -8px;
 }
 
-.wot-grid-value-chiba{
+.wot-grid-value-chiba {
   width: 79%;
   margin-left: -40px;
 }
@@ -1815,7 +1835,7 @@ input[type='time'].wot-grid-value2 {
 
 
 /* ####################################table WOPartsIssuanceDetail########################################### */
-.woPartsIssuanceDetail-table .col-arrow-head  {
+.woPartsIssuanceDetail-table .col-arrow-head {
   min-width: 45px;
 }
 
@@ -1881,7 +1901,7 @@ input[type='time'].wot-grid-value2 {
 }
 
 .inventory-table .col-lot2 {
-  min-width: 120px;
+  min-width: 50px;
   justify-content: center;
 }
 
@@ -1901,7 +1921,7 @@ input[type='time'].wot-grid-value2 {
 }
 
 .inventory-table .col-instruct {
-  min-width: 150px;
+  min-width: 120px;
 }
 
 .inventory-table .col-Load {
@@ -1909,11 +1929,15 @@ input[type='time'].wot-grid-value2 {
 }
 
 .inventory-table .col-productName {
-  min-width: 135px;
+  min-width: 120px;
 }
 
 .inventory-table .col-inspection {
-  min-width: 160px;
+  min-width: 120px;
+}
+
+.inventory-table .col-rowNo {
+  min-width: 115px;
 }
 
 .inventory-records-form .set-row {
@@ -2064,12 +2088,12 @@ input[type='time'].wot-grid-value2 {
 
 /* min-width  col-arrow-head-shelftransfer */
 
-.col-arrow-head-shelftransfer{
+.col-arrow-head-shelftransfer {
   min-width: 42px;
 }
-.col-lot-shelf{
+
+.col-lot-shelf {
   min-width: 210px;
 }
 
 /* min-width  col-arrow-head-shelftransfer */
-

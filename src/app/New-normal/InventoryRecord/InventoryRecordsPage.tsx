@@ -11,72 +11,176 @@ type Row = {
   lot: string
   lot2: string
   inspection: string
+  rowNo: string
   instruct: string
-  Load: number
+  Load: string
   productName: string
 }
 
-const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: string; qty: string; rows: Row[]}> = {
-  '3019': {
-    parentWarehouse: '羽田製品倉庫：W0040',
-    moveStorage: 'F0200',
+const EMPTY_ROW: Row = {
+  id: 1,
+  error: '',
+  item: '',
+  lot: '',
+  lot2: '',
+  inspection: '',
+  rowNo: '',
+  instruct: '',
+  Load: '' ,
+  productName: '',
+}
+
+const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: string; qty: string; janCode: string; janCodeDisabled?: boolean; rows: Row[]}> = {
+  '12345678': {
+    parentWarehouse: 'A倉庫',
+    moveStorage: 'JDE基本保管場所',
     qty: '1',
+    janCode: '',
     rows: [
       {
         id: 1,
         error: '',
-        item: '1197101',
-        lot: '',
-        lot2: '*',
-        inspection: '3',
+        item: '1001',
+        lot: 'Lot001',
+        lot2: '',
+        inspection: '',
+        rowNo: '',
         instruct: '3',
-        Load: 1,
-        productName: 'サンプル品名',
+        Load: '',
+        productName: '品名001',
       },
-            {
+      {
         id: 2,
         error: '',
-        item: '1197102',
-        lot: '',
+        item: '1002',
+        lot: 'Lot002',
         lot2: '*',
-        inspection: '3',
+        inspection: '',
+        rowNo: '',
         instruct: '2',
-        Load: 1,
-        productName: 'サンプル品名',
+        Load: '2',
+        productName: '品名002',
       },
       {
         id: 3,
-        error: '',
-        item: '1197103',
-        lot: '',
+        error: 'E',
+        item: '1003',
+        lot: 'Lot003',
         lot2: '*',
-        inspection: '5',
-        instruct: '4',
-        Load: 1,
-        productName: 'サンプル品名',
+        inspection: '',
+        rowNo: '',
+        instruct: '15',
+        Load: '15',
+        productName: '品名003',
+      },
+    ],
+  },
+  'OT-12345678': {
+    parentWarehouse: 'C事業所',
+    moveStorage: '工場基本保管場所',
+    qty: '1',
+    janCode: '',
+    rows: [
+      {
+        id: 1,
+        error: '',
+        item: '1001',
+        lot: 'Lot001',
+        lot2: '',
+        inspection: '',
+        rowNo: '',
+        instruct: '3',
+        Load: '0',
+        productName: '品名001',
+      },
+      {
+        id: 2,
+        error: '',
+        item: '1002',
+        lot: 'Lot002',
+        lot2: '*',
+        inspection: '',
+        rowNo: '',
+        instruct: '2',
+        Load: '2',
+        productName: '品名002',
+      },
+      {
+        id: 3,
+        error: 'E',
+        item: '1003',
+        lot: 'Lot003',
+        lot2: '*',
+        inspection: '○',
+        rowNo: '',
+        instruct: '15',
+        Load: '15',
+        productName: '品名003',
+      },
+    ],
+  },
+  'MB-12345678123456': {
+    parentWarehouse: 'D事業所',
+    moveStorage: '工場基本保管場所',
+    qty: '3',
+    janCode: '1005',
+    janCodeDisabled: true,
+    rows: [
+      {
+        id: 1,
+        error: '',
+        item: '1005',
+        lot: '',
+        lot2: '',
+        inspection: '',
+        rowNo: '123456',
+        instruct: '3',
+        Load: '3',
+        productName: '品名005',
       },
     ],
   },
 }
 
+const MOCK_JAN_CODE: Record<string, number> = {
+  '987654321': 1,
+}
+
+const MOCK_JAN_INSPECTION: Record<string, number> = {
+  '987654321': 3,
+}
+
+const MOCK_ITEM_NAMES: Record<string, string> = {
+  '1001': '品名001',
+  '1002': '品名002',
+  '1003': '品名003',
+  '1004': '品名004',
+  '1005': '品名005',
+}
+
 const InventoryRecordsPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([])
+  const [rows, setRows] = useState<Row[]>([EMPTY_ROW])
   const [isLoaded, setIsLoaded] = useState(false)
   const [form, setForm] = useState({
-    parentWarehouse: '',
+    parentWarehouse: 'A倉庫',
     parentItemNo: '',
     moveWarehouse: '',
     moveStorage: '',
-    qty: '',
+    qty: '1',
     janCode: '',
     source: '',
   })
+  const [janCodeDisabled, setJanCodeDisabled] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showNoOrderConfirm, setShowNoOrderConfirm] = useState(false)
+  const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
   const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const parentItemNoRef = useRef<HTMLInputElement | null>(null)
+  const janCodeRef = useRef<HTMLInputElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
@@ -86,6 +190,8 @@ const InventoryRecordsPage = () => {
     showHandInputConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
+    showNoOrderConfirm ||
+    showCompleteRegistered ||
     showRowClickConfirm ||
     showBackConfirm
 
@@ -100,38 +206,68 @@ const InventoryRecordsPage = () => {
 
   useEffect(() => {
     const saved = sessionStorage.getItem('inventory-records-state')
+    const handResult = sessionStorage.getItem('inventory-hand-input-result')
     if (saved) {
       const {form: f, rows: r, isLoaded: l, activeRowId: a} = JSON.parse(saved)
       setForm(f)
-      setRows(r)
       setIsLoaded(l)
       setActiveRowId(a)
+      if (handResult) {
+        sessionStorage.removeItem('inventory-hand-input-result')
+        const {itemNo, lot, qty} = JSON.parse(handResult)
+        const nextId = Math.max(...(r as Row[]).map((row) => row.id), 0) + 1
+        const newRow: Row = {
+          id: nextId,
+          error: '',
+          item: itemNo,
+          lot: lot,
+          lot2: '',
+          inspection: '',
+          rowNo: '',
+          instruct: qty,
+          Load: qty,
+          productName: MOCK_ITEM_NAMES[itemNo] ?? '',
+        }
+        setRows([...(r as Row[]), newRow])
+      } else {
+        setRows(r)
+      }
       sessionStorage.removeItem('inventory-records-state')
     }
   }, [])
 
+  useEffect(() => {
+    parentItemNoRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    if (isLoaded) janCodeRef.current?.focus()
+  }, [isLoaded])
+
   const handleSearch = () => {
     const data = MOCK_INVENTORY[form.parentItemNo]
     if (data) {
-      const {rows: mockRows, ...formData} = data
-      setForm((prev) => ({...prev, ...formData, moveWarehouse: '', janCode: ''}))
+      const {rows: mockRows, janCodeDisabled: jcd, ...formData} = data
+      setForm((prev) => ({...prev, ...formData, moveWarehouse: ''}))
+      setJanCodeDisabled(jcd ?? false)
       setRows(mockRows)
       setIsLoaded(true)
     } else {
-      setForm((prev) => ({...prev, parentWarehouse: '', moveStorage: '', qty: '', moveWarehouse: '', janCode: ''}))
+      setForm((prev) => ({...prev, parentWarehouse: 'A倉庫', moveStorage: '', qty: '1', moveWarehouse: '', janCode: ''}))
+      setJanCodeDisabled(false)
       setRows([])
       setIsLoaded(false)
     }
   }
 
-  const clearRows = () => setRows([])
+  const clearRows = () => setRows([EMPTY_ROW])
   const clearForm = () =>
     setForm({
-      parentWarehouse: '',
+      parentWarehouse: 'A倉庫',
       parentItemNo: '',
       moveWarehouse: '',
       moveStorage: '',
-      qty: '',
+      qty: '1',
       janCode: '',
       source: '',
     })
@@ -153,6 +289,7 @@ const InventoryRecordsPage = () => {
     clearForm()
     clearRows()
     setIsLoaded(false)
+    setJanCodeDisabled(false)
     resetTableScroll()
     sessionStorage.removeItem('inventory-records-state')
   }
@@ -164,14 +301,37 @@ const InventoryRecordsPage = () => {
     )
   }
 
+  const handleJanCodeScan = () => {
+    const janCode = form.janCode.trim()
+    const loadRowId = MOCK_JAN_CODE[janCode]
+    const inspectionRowId = MOCK_JAN_INSPECTION[janCode]
+    setRows((prev) =>
+      prev.map((row) => {
+        let updated = row
+        if (loadRowId != null && row.id === loadRowId) updated = {...updated, Load: form.qty}
+        if (inspectionRowId != null && row.id === inspectionRowId) updated = {...updated, inspection: '○'}
+        return updated
+      }),
+    )
+    setForm((prev) => ({...prev, janCode: ''}))
+    janCodeRef.current?.focus()
+  }
+
   const handleRowClick = (rowId: number) => {
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
+    if (activeRowId !== rowId) {
+      setShowRowClickConfirm(true)
+    }
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
     if (isAnyModalOpen) return
     if (options?.forceHandInput) {
       closeAllModals()
+      if (!form.parentItemNo) {
+        setShowNoOrderConfirm(true)
+        return
+      }
       setShowHandInputConfirm(true)
       return
     }
@@ -192,15 +352,6 @@ const InventoryRecordsPage = () => {
       if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
         event.preventDefault()
         handleReleaseClick({forceHandInput: true})
-        return
-      }
-
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        if (activeRowId !== null) {
-          closeAllModals()
-          setShowRowClickConfirm(true)
-        }
         return
       }
 
@@ -262,6 +413,7 @@ const InventoryRecordsPage = () => {
     {key: 'Load', headClassName: 'col-Load', cellClassName: 'col-Load', header: '読込', render: (row) => row.Load},
     {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
     {key: 'inspection', headClassName: 'col-inspection', cellClassName: 'col-inspection', header: '検査', render: (row) => row.inspection},
+    {key: 'rowNo', headClassName: 'col-rowNo', cellClassName: 'col-rowNo', header: '行番号', render: (row) => row.rowNo},
   ]
 
   return (
@@ -272,13 +424,16 @@ const InventoryRecordsPage = () => {
           <div className='set-body'>
             <div className='set-form inventory-records-form'>
               <div className='set-row'>
-                <label>出荷/発注No.</label>
+                <label>出荷No.／発注No.</label>
                 <input
+                  ref={parentItemNoRef}
                   value={form.parentItemNo}
+                  disabled={isLoaded}
                   onChange={(e) => {
-                    setForm({...form, parentItemNo: e.target.value, parentWarehouse: '', moveStorage: '', qty: '', moveWarehouse: '', janCode: ''})
+                    setForm({...form, parentItemNo: e.target.value, parentWarehouse: 'A倉庫', moveStorage: '', qty: '1', moveWarehouse: '', janCode: ''})
                     setIsLoaded(false)
-                    setRows([])
+                    setJanCodeDisabled(false)
+                    setRows([EMPTY_ROW])
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handleSearch()
@@ -292,11 +447,10 @@ const InventoryRecordsPage = () => {
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                   disabled={!isLoaded}
                 >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                  <option value='A倉庫'>A倉庫</option>
+                  <option value='B倉庫'>B倉庫</option>
+                  <option value='C事業所'>C事業所</option>
+                  <option value='D事業所'>D事業所</option>
                 </select>
               </div>
               <div className='set-row'>
@@ -304,7 +458,7 @@ const InventoryRecordsPage = () => {
                 <input
                   value={form.moveStorage}
                   onChange={(e) => setForm({...form, moveStorage: e.target.value})}
-                  disabled
+                  disabled={!isLoaded}
                 />
               </div>
               <div className='set-row'>
@@ -312,7 +466,7 @@ const InventoryRecordsPage = () => {
                 <select
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                  disabled={!isLoaded}
+                  disabled
                 >
                   <option value=''></option>
                   <option value='検査中'>検査中</option>
@@ -325,14 +479,27 @@ const InventoryRecordsPage = () => {
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
                   disabled={!isLoaded}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      janCodeRef.current?.focus()
+                    }
+                  }}
                 />
               </div>
               <div className='set-row'>
                 <label>JANコード ／品目コード</label>
                 <input
+                  ref={janCodeRef}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
-                  disabled={!isLoaded}
+                  disabled={!isLoaded || janCodeDisabled}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      handleJanCodeScan()
+                    }
+                  }}
                 />
               </div>
               <div className='set-row'>
@@ -364,13 +531,25 @@ const InventoryRecordsPage = () => {
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={() => {
+                  if (!isLoaded) {
+                    setShowNoOrderConfirm(true)
+                  } else {
+                    setShowCompleteConfirm(true)
+                  }
+                }}
               >
                 完了
               </button>     
               <button
                 className='set-btn set-primary '
-                onClick={() => setShowHandInputConfirm(true)}
+                onClick={() => {
+                  if (!form.parentItemNo) {
+                    setShowNoOrderConfirm(true)
+                    return
+                  }
+                  setShowHandInputConfirm(true)
+                }}
               >
                 手入力
               </button>
@@ -387,7 +566,7 @@ const InventoryRecordsPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002'}<br />{'\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
+                  <div className='set-modal-body'>{'\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002\n\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -409,17 +588,57 @@ const InventoryRecordsPage = () => {
               </div>
             )}
 
+            {showNoOrderConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>オーダーNo.を入力して下さい。</div>
+                  <div className='set-modal-actions'>
+                    <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoOrderConfirm(false)}>
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {showCompleteConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>入庫実績登録を完了しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
+                      onClick={() => {
+                        setShowCompleteConfirm(false)
+                        setShowCompleteRegistered(true)
+                      }}
                     >
-                      {'\u004f\u004b'}
+                      はい
+                    </button>
+                    <button className='set-modal-btn set-modal-no' onClick={() => setShowCompleteConfirm(false)}>
+                      いいえ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showCompleteRegistered && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>入庫実績を登録しました。</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowCompleteRegistered(false)
+                        clearFormAndRows()
+                      }}
+                    >
+                      OK
                     </button>
                   </div>
                 </div>
@@ -437,7 +656,7 @@ const InventoryRecordsPage = () => {
                       onClick={() => {
                         setShowHandInputConfirm(false)
                         saveStateToSession()
-                        navigate('/factory/inventory-hand-input')
+                        navigate('/factory/inventory-hand-input', {state: {orderNo: form.parentItemNo}})
                       }}
                     >
                       はい
@@ -459,21 +678,23 @@ const InventoryRecordsPage = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>メニューに戻ります。<br /> 読込データを破棄しますか？</div>
+                  <div className='set-modal-body'>{'メニューに戻ります。\n読込データを破棄しますか？'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
+                        saveStateToSession()
                         setShowBackConfirm(false)
                         navigate('/factory/factory')
                       }}
                     >
                       YES
                     </button>
-                     <button
-                      className='set-modal-btn set-modal-yes'
+                    <button
+                      className='set-modal-btn set-modal-no'
                       onClick={() => {
                         setShowBackConfirm(false)
+                        clearFormAndRows()
                         navigate('/factory/factory')
                       }}
                     >
@@ -501,18 +722,20 @@ const InventoryRecordsPage = () => {
                       onClick={() => {
                         setShowRowClickConfirm(false)
                         saveStateToSession()
-                        navigate('/factory/inventory-detail')
+                        navigate('/factory/inventory-detail', {state: {activeRowId, orderNo: form.parentItemNo}})
                       }}
                     >
-                      はい
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => {
                         setShowRowClickConfirm(false)
+                        setActiveRowId(null)
+                        janCodeRef.current?.focus()
                       }}
                     >
-                      いいえ
+                      NO
                     </button>
                   </div>
                 </div>

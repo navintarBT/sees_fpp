@@ -32,6 +32,7 @@ import { ShippingRecordHandInputPage } from '../app/New-normal/ShippingRecord/Sh
 import { ShippingRecordDetail } from '../app/New-normal/ShippingRecord/ShippingRecordDetail'
 import { ShelfTransfer } from '../app/New-normal/ShelfTransfer/ShelfTransfer'
 import { IncomingProcessRegistration } from '../app/New-normal/IncomingProcessRegistration/IncomingProcessRegistration'
+import { IncomingProcessRegistrationHandInputPage } from '../app/New-normal/IncomingProcessRegistration/IncomingProcessRegistrationHandInputPage'
 import { ButtonWorkOrderTime } from '../app/new-high/WorkOrderTimeRegistration/ButtonWorkOrderTime'
 import { WorkOrderCompletion_Choose_WO } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion_Choose_WO'
 import { WorkOrderTimeRegistrationChoose } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeChooseGosen'
@@ -74,6 +75,7 @@ const MainPage = () => {
         <Route path='shipping-detail' element={<ShippingRecordDetail />} />
         <Route path='shelf-transfer' element={<ShelfTransfer />} />
         <Route path='incoming-process-registration' element={<IncomingProcessRegistration />} />
+        <Route path='incoming-process-registration-hand-input' element={<IncomingProcessRegistrationHandInputPage />} />
         <Route path='work-order-completion-select-wo' element={<WorkOrderCompletion_Choose_WO />} />
         <Route path='work-order-time-registration-choose' element={<WorkOrderTimeRegistrationChoose />} />
       </Route>

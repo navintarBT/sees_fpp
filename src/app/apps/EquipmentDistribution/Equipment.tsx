@@ -436,7 +436,7 @@ const Equipment = () => {
     <div className="mockup-page">
       <div className="mockup-stage mockup-stage-dark">
         <div className="mockup-frame">
-          <div className="set-header">備品振分登録</div>
+          <div className="set-header">備品振分登録.</div>
           <div className="set-body">
             <div className="set-form">
               <div className="set-row">
@@ -663,11 +663,9 @@ const Equipment = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
                 <div className="set-modal-body">
-                  {
-                    "\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002"
+                     {
+                    "読込データを破棄します。\n 宜しいですか？"
                   }
-                  <br />
-                  {"\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f"}
                 </div>
                 <div className="set-modal-actions">
                   <button
@@ -677,7 +675,7 @@ const Equipment = () => {
                       clearFormAndRows();
                     }}
                   >
-                 YES
+                 OK
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
@@ -685,7 +683,7 @@ const Equipment = () => {
                       focusJanCodeInput();
                     }}
                   >
-                NO
+                Cancel
                   </button>
                 </div>
               </div>
@@ -696,11 +694,7 @@ const Equipment = () => {
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
-                <div className="set-modal-body">
-                  備品振分登録
-                  <br />
-                  を完了しますか？
-                </div>
+                <div className="set-modal-body">{"備品振分登録\nを完了しますか？"}</div>
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
@@ -753,13 +747,11 @@ const Equipment = () => {
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
-                <div className="set-modal-body">
+                <div className="set-modal-body"
+                
+                >
                   {
-                    "\u30e1\u30cb\u30e5\u30fc\u306b\u623b\u308a\u307e\u3059\u3002"
-                  }
-                  <br />
-                  {
-                    "\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f"
+                    "メニューに戻ります。\n 読込データを破棄しますか？"
                   }
                 </div>
                 <div className="set-modal-actions">
@@ -774,7 +766,9 @@ const Equipment = () => {
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() => setShowBackConfirm(false)}
+                    onClick={() =>{ setShowBackConfirm(false);
+                    navigate("/factory");
+                    }}
                   >
                     NO
                   </button>   
