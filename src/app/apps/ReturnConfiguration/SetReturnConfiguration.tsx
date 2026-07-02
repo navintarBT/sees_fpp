@@ -472,7 +472,7 @@ const SetReturnConfiguration = () => {
                   value={parentQty}
                   readOnly
                   className='set-small set-input-gray'
-                  style={{ backgroundColor: '#e5e7eb' }}
+                  style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
                 />
               </div>
 
@@ -492,7 +492,7 @@ const SetReturnConfiguration = () => {
                     }
                   }}
                   readOnly={true}
-                  style={{ backgroundColor: '#e5e7eb' }}
+                  style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
                 />
               </div>
             </div>
@@ -622,13 +622,13 @@ const SetReturnConfiguration = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={executeClear}
                   >
-                    YES
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    NO
+                    Cancel
                   </button>
                 </div>
               </div>

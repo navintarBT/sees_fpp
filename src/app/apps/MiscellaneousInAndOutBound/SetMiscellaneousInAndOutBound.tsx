@@ -456,13 +456,13 @@ const SetMiscellaneousInAndOutBound = () => {
                       clearFormAndRows()
                     }}
                   >
-                    YES
+                    OK
                   </button>
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => setShowClearConfirm(false)}
                   >
-                    NO
+                    Cancel
                   </button>
                 </div>
               </div>

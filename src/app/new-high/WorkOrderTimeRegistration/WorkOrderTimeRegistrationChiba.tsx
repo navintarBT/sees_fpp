@@ -717,7 +717,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                       className='wot-grid-value1'
                       readOnly
                       value={workerName}
-                      style={{ backgroundColor: '#e5e7eb' }}
+                      style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
                     />
                   </div>
 
@@ -811,7 +811,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                       className='wot-grid-value1'
                       readOnly
                       value={workplaceName}
-                      style={{ backgroundColor: '#e5e7eb' }}
+                      style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
                     />
                   </div>
                 </div>
@@ -1093,7 +1093,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                 <div className='set-modal-body'>
                   メニューに戻ります。
                   <br />
-                  読み込みデータを破棄しますか？
+                  読込データを破棄しますか？
                 </div>
                 <div className='set-modal-actions'>
                   <button

@@ -35,7 +35,7 @@
 
 .set-row {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 296px 1fr;
   align-items: center;
   gap: 24px;
 }
@@ -44,6 +44,21 @@
   font-size: 34px;
   font-weight: 400;
   color: black;
+}
+
+.set-row input[type="number"]::-webkit-inner-spin-button,
+.set-row input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.set-row input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.red-border-span-incom{
+  color: red;
+  font-size: 30px;
 }
 
 .set-row input,
@@ -1235,7 +1250,7 @@
   margin-left: -8px;
 }
 
-.wot-grid-value-chiba{
+.wot-grid-value-chiba {
   width: 79%;
   margin-left: -40px;
 }
@@ -1815,7 +1830,7 @@ input[type='time'].wot-grid-value2 {
 
 
 /* ####################################table WOPartsIssuanceDetail########################################### */
-.woPartsIssuanceDetail-table .col-arrow-head  {
+.woPartsIssuanceDetail-table .col-arrow-head {
   min-width: 45px;
 }
 
@@ -2067,12 +2082,12 @@ input[type='time'].wot-grid-value2 {
 
 /* min-width  col-arrow-head-shelftransfer */
 
-.col-arrow-head-shelftransfer{
+.col-arrow-head-shelftransfer {
   min-width: 42px;
 }
-.col-lot-shelf{
+
+.col-lot-shelf {
   min-width: 210px;
 }
 
 /* min-width  col-arrow-head-shelftransfer */
-
