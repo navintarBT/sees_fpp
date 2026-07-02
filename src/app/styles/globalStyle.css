@@ -464,6 +464,7 @@
   text-align: center;
   background: white;
   border-bottom: 0;
+  white-space: pre-wrap;
 }
 
 .set-modal-actions {
