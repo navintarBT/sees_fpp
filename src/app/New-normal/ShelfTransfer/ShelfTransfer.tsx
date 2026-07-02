@@ -514,7 +514,7 @@ const ShelfTransfer = () => {
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'
-                style={{ whiteSpace: "pre-line" }}
+                
                 >
                    {"読込データを破棄します。\n 宜しいですか？"}
                   </div>
@@ -617,7 +617,7 @@ const ShelfTransfer = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
                 <div className="set-modal-body"
-                style={{ whiteSpace: "pre-line" }}
+                
                 >
                   {
                     "メニューに戻ります。\n 読込データを破棄しますか？"
