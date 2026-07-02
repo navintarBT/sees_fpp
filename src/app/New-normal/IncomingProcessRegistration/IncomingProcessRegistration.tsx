@@ -9,7 +9,6 @@ const IncomingProcessRegistration = () => {
     const [showBackConfirm, setShowBackConfirm] = useState(false)
     const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
     const [showError, setShowError] = useState<{ message: string } | null>(null)
-    const [lotSerialError, setLotSerialError] = useState(false)
     const barcodeInputRef = useRef<HTMLInputElement | null>(null)
 
     const [productTicketNo, setProductTicketNo] = useState('')
@@ -32,7 +31,6 @@ const IncomingProcessRegistration = () => {
         setGoodQuantity('')
         setDefectQuantity('')
         setDefectReason('')
-        setLotSerialError(false)
 
         setTimeout(() => {
             barcodeInputRef.current?.focus()
@@ -45,7 +43,7 @@ const IncomingProcessRegistration = () => {
         console.log(`Fetching product info for: ${ticketNo}`)
 
         // Mock response
-        if (ticketNo) {
+        if (ticketNo === 'MB10147843001') {
             setProductName('ブレーキシリンダー（硬）')
             setProductCode('001R566B11')
             setLotSerial('2026012001')
@@ -123,7 +121,7 @@ const IncomingProcessRegistration = () => {
         }
 
         if (!lotSerial) {
-            setLotSerialError(true)
+            setShowError({ message: 'ロット／シリアルが未入力です。' })
             return
         }
 
@@ -163,7 +161,7 @@ const IncomingProcessRegistration = () => {
                     <div className='set-header'>入荷工程登録</div>
                     <div className='set-body'>
                         <div className='set-form'>
-                            <div className='set-row'>
+                            <div className='set-row set-row-incomingapge'>
                                 <label>現品票No.</label>
                                 <input
                                     ref={barcodeInputRef}
@@ -175,8 +173,8 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row'>
-                                <label>品　　 名<span className='red-border-span-incom'>*</span></label>
+                            <div className='set-row set-row-incomingapge'>
+                                <label>品　　 名</label>
                                 <input
                                     value={productName}
                                     readOnly={true}
@@ -186,8 +184,8 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row'>
-                                <label>品　　 番 <span className='red-border-span-incom'>*</span></label>
+                            <div className='set-row set-row-incomingapge'>
+                                <label>品　　 番 </label>
                                 <input
                                     value={productCode}
                                     readOnly={true}
@@ -197,19 +195,19 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row'>
-                                <label className='spax-label-incoming'>ロット／シリアル <span className='red-border-span-incom'>*</span></label>
+                            <div className='set-row set-row-incomingapge'>
+                                <label className='spax-label-incoming'>ロット／シリアル </label>
                                 <input
                                     value={lotSerial}
-                                    onChange={(e) => { setLotSerial(e.target.value); setLotSerialError(false) }}
+                                    onChange={(e) => setLotSerial(e.target.value)}
                                     required
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center', ...(lotSerialError ? { border: '2px solid red' } : {}) }}
+                                    style={{ textAlign: 'center' }}
                                 />
                             </div>
 
-                            <div className='set-row'>
-                                <label>入荷数量 <span className='red-border-span-incom'>*</span></label>
+                            <div className='set-row set-row-incomingapge'>
+                                <label>入荷数量 </label>
                                 <input
                                     value={receivingQuantity}
                                     onChange={(e) => handleReceivingQuantityChange(e.target.value)}
@@ -220,7 +218,7 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row'>
+                            <div className='set-row set-row-incomingapge'>
                                 <label>良品数量</label>
                                 <input
                                     value={goodQuantity}
@@ -231,7 +229,7 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row'>
+                            <div className='set-row set-row-incomingapge'>
                                 <label>不良数量</label>
                                 <input
                                     value={defectQuantity}
@@ -242,7 +240,7 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row'>
+                            <div className='set-row set-row-incomingapge'>
                                 <label>不良理由</label>
                                 <select
                                     value={defectReason}

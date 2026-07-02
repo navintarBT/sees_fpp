@@ -8,6 +8,8 @@ const IncomingProcessRegistrationHandInputPage = () => {
     const [showError, setShowError] = useState<{ message: string } | null>(null)
     const [showReadConfirm, setShowReadConfirm] = useState(false)
 
+    const [productName, setProductName] = useState('')
+    const [productCode, setProductCode] = useState('')
     const [lotSerial, setLotSerial] = useState('')
     const [receivingQuantity, setReceivingQuantity] = useState<string>('')
     const [goodQuantity, setGoodQuantity] = useState<string>('')
@@ -42,6 +44,30 @@ const IncomingProcessRegistrationHandInputPage = () => {
         setDefectQuantity(Math.max(receiving - good, 0).toString())
     }
 
+    const handleComplete = () => {
+        if (!productName) {
+            setShowError({ message: '品名が未入力です。' })
+            return
+        }
+
+        if (!productCode) {
+            setShowError({ message: '品番が未入力です。' })
+            return
+        }
+
+        if (!lotSerial) {
+            setShowError({ message: 'ロット／シリアルが未入力です。' })
+            return
+        }
+
+        if (!receivingQuantity) {
+            setShowError({ message: '入荷数量が未入力です。' })
+            return
+        }
+
+        setShowReadConfirm(true)
+    }
+
     return (
         <div className='mockup-page'>
             <div className='mockup-stage mockup-stage-dark'>
@@ -49,48 +75,48 @@ const IncomingProcessRegistrationHandInputPage = () => {
                     <div className='set-header'>入荷工程登録</div>
                     <div className='set-body'>
                         <div className='set-form'>
-                            <div className='set-row'>
-                                <label>品　　 名<span className='red-border-span-incom'>*</span></label>
+                            <div className='set-row set-row-incomingapge'>
+                                <label>品　　 名</label>
                                 <input
-                                    required
+                                    value={productName}
+                                    onChange={(e) => setProductName(e.target.value)}
                                     className='set-small set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
                             </div>
 
-                            <div className='set-row'>
-                                <label>品　　 番<span className='red-border-span-incom'>*</span></label>
+                            <div className='set-row set-row-incomingapge'>
+                                <label>品　　 番</label>
                                 <input
-                                    required
+                                    value={productCode}
+                                    onChange={(e) => setProductCode(e.target.value)}
                                     className='set-small set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
                             </div>
 
-                            <div className='set-row'>
-                                <label className='spax-label-incoming'>ロット／シリアル<span className='red-border-span-incom'>*</span></label>
+                            <div className='set-row set-row-incomingapge'>
+                                <label className='spax-label-incoming'>ロット／シリアル</label>
                                 <input
                                     value={lotSerial}
                                     onChange={(e) => setLotSerial(e.target.value)}
-                                    required
                                     className='set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
                             </div>
 
-                            <div className='set-row'>
-                                <label>入荷数量<span className='red-border-span-incom'>*</span></label>
+                            <div className='set-row set-row-incomingapge'>
+                                <label>入荷数量</label>
                                 <input
                                     value={receivingQuantity}
                                     onChange={(e) => handleReceivingQuantityChange(e.target.value)}
                                     type="number"
-                                    required
                                     className='set-input-gray'
                                     style={{ textAlign: 'center' }}
                                 />
                             </div>
 
-                            <div className='set-row'>
+                            <div className='set-row set-row-incomingapge'>
                                 <label>良品数量</label>
                                 <input
                                     value={goodQuantity}
@@ -101,7 +127,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                 />
                             </div>
 
-                            <div className='set-row'>
+                            <div className='set-row set-row-incomingapge'>
                                 <label>不良数量</label>
                                 <input
                                     type="number"
@@ -110,7 +136,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                 />
                             </div>
 
-                            <div className='set-row'>
+                            <div className='set-row set-row-incomingapge'>
                                 <label>不良理由</label>
                                 <select
                                     value={defectReason}
@@ -137,7 +163,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                             </button>
                             <button
                                 className='set-btn set-primary'
-                                onClick={() => setShowReadConfirm(true)}
+                                onClick={handleComplete}
                             >
                                 完了
                             </button>
@@ -190,7 +216,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                         className='set-modal-btn set-modal-yes'
                                         onClick={() => {
                                             setShowReadConfirm(true)
-                                            navigate('/factory/factory')
+                                            navigate('/factory/incoming-process-registration')
                                         }}
                                     >
                                         YES
