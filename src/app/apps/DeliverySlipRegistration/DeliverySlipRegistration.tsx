@@ -666,7 +666,7 @@ const DeliverySlipRegistration = () => {
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">確認</div>
-                <div className="set-modal-body">{"読込データを破棄します。\n宜しいですか？"}</div>
+                <div className="set-modal-body">{"読込データを破棄します。\n 宜しいですか？"}</div>
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
@@ -753,7 +753,7 @@ const DeliverySlipRegistration = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
                 <div className="set-modal-body"
-                style={{ whiteSpace: "pre-line" }}
+                
                 >
                   {
                     "メニューに戻ります。\n 読込データを破棄しますか？"

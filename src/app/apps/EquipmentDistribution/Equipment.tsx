@@ -663,7 +663,9 @@ const Equipment = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
                 <div className="set-modal-body">
-                  {"\u8aad\u8fbc\u30c7\u30fc\u30bf\u3092\u7834\u68c4\u3057\u307e\u3059\u3002\n\u5b9c\u3057\u3044\u3067\u3059\u304b\uff1f"}
+                     {
+                    "読込データを破棄します。\n 宜しいですか？"
+                  }
                 </div>
                 <div className="set-modal-actions">
                   <button
@@ -746,7 +748,7 @@ const Equipment = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
                 <div className="set-modal-body"
-                style={{ whiteSpace: "pre-line" }}
+                
                 >
                   {
                     "メニューに戻ります。\n 読込データを破棄しますか？"
