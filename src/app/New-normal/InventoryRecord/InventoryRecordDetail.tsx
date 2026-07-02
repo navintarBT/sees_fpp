@@ -1,393 +1,152 @@
-import {useEffect, useRef, useState, type ReactNode} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useEffect, useRef, useState} from 'react'
+import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 import {FaPlay} from 'react-icons/fa'
 
-
 type Row = {
   id: number
   error: string
-  item: string
   lot: string
-  status: string
-  build: number
   release: number
   move: string
   moveStorage: string
-  name: string
-  moveStorage2?: string
+  status: string
+}
+
+const EXISTING_ROWS: Row[] = [
+  {id: 1, error: '', lot: 'L01', release: 1, move: 'W1', moveStorage: 'S1', status: ''},
+  {id: 2, error: '', lot: 'L02', release: 0, move: 'W2', moveStorage: 'S2', status: ''},
+  {id: 3, error: '', lot: 'L03', release: 2, move: 'W3', moveStorage: 'S3', status: ''},
+  {id: 4, error: '', lot: 'L04', release: 1, move: 'W1', moveStorage: 'S4', status: ''},
+  {id: 5, error: 'E', lot: 'L05', release: 0, move: 'W2', moveStorage: 'S5', status: ''},
+  {id: 6, error: '', lot: 'L06', release: 3, move: 'W3', moveStorage: 'S6', status: ''},
+  {id: 7, error: 'E', lot: 'L07', release: 0, move: 'W1', moveStorage: 'S7', status: ''},
+  {id: 8, error: '', lot: 'L08', release: 1, move: 'W2', moveStorage: 'S8', status: ''},
+  {id: 9, error: '', lot: 'L09', release: 2, move: 'W3', moveStorage: 'S9', status: ''},
+  {id: 10, error: 'E', lot: 'L10', release: 2, move: 'W1', moveStorage: 'S10', status: ''},
+]
+
+const MOCK_DETAIL: Record<number, {productName: string; itemNo: string; rows: Row[]}> = {
+  1: {
+    productName: '品名001',
+    itemNo: '1001',
+    rows: [
+      {id: 1, error: '', lot: 'Lot001', release: 3, move: 'A倉庫', moveStorage: 'JDE基本保管場所', status: ''},
+    ],
+  },
+  2: {
+    productName: '品名002',
+    itemNo: '1002',
+    rows: [
+      {id: 1, error: '', lot: 'Lot002', release: 1, move: 'A倉庫', moveStorage: 'JDE基本保管場所', status: ''},
+      {id: 2, error: '', lot: 'Lot004', release: 1, move: 'A倉庫', moveStorage: 'JDE基本保管場所', status: ''},
+    ],
+  },
+  3: {
+    productName: '品名003',
+    itemNo: '1003',
+    rows: EXISTING_ROWS,
+  },
+}
+
+const MOCK_DETAIL_OT: Record<number, {productName: string; itemNo: string; rows: Row[]}> = {
+  1: {
+    productName: '品名001',
+    itemNo: '1001',
+    rows: [
+      {id: 1, error: '', lot: 'Lot001', release: 3, move: 'C事業所', moveStorage: '工場基本保管場所', status: ''},
+    ],
+  },
+  2: {
+    productName: '品名002',
+    itemNo: '1002',
+    rows: [
+      {id: 1, error: '', lot: 'Lot002', release: 1, move: 'C事業所', moveStorage: '工場基本保管場所', status: ''},
+      {id: 2, error: '', lot: 'Lot004', release: 1, move: 'C事業所', moveStorage: '工場基本保管場所', status: ''},
+    ],
+  },
+  3: {
+    productName: '品名003',
+    itemNo: '1003',
+    rows: EXISTING_ROWS,
+  },
+}
+
+const MOCK_DETAIL_MB: Record<number, {productName: string; itemNo: string; rows: Row[]}> = {
+  1: {
+    productName: '品名005',
+    itemNo: '1005',
+    rows: [
+      {id: 1, error: '', lot: '', release: 3, move: 'D事業所', moveStorage: '工場基本保管場所', status: ''},
+    ],
+  },
 }
 
 const InventoryRecordDetail = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([
-    {
-      id: 1,
-      error: '',
-      item: 'A01', // 品目No.
-      lot: 'L01', // ロットシリアル
-      status: '追加', // 状態
-      build: 2, // 構成数
-      release: 1, // 解除数
-      move: 'W1', // 移動倉
-      moveStorage: 'S1', // 移動保管場所
-      name: '部品A', // 品名
-      moveStorage2: '棚A', // 移動保管場所 (ตัวอย่างใหม่)
-    },
-    {
-      id: 2,
-      error: '',
-      item: 'B02',
-      lot: 'L02',
-      status: '解除',
-      build: 1,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S2',
-      name: '部品B',
-      moveStorage2: '棚B',
-    },
-    {
-      id: 3,
-      error: '',
-      item: 'C03',
-      lot: 'L03',
-      status: 'OV対応要',
-      build: 3,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S3',
-      name: '部品C',
-      moveStorage2: '棚C',
-    },
-    {
-      id: 4,
-      error: '',
-      item: 'D04',
-      lot: 'L04',
-      status: '構成中',
-      build: 4,
-      release: 1,
-      move: 'W1',
-      moveStorage: 'S4',
-      name: '部品D',
-      moveStorage2: '棚D',
-    },
-    {
-      id: 5,
-      error: 'E',
-      item: 'E05',
-      lot: 'L05',
-      status: '構成中',
-      build: 2,
-      release: 0,
-      move: 'W2',
-      moveStorage: 'S5',
-      name: '部品E',
-      moveStorage2: '棚E',
-    },
-    {
-      id: 6,
-      error: '',
-      item: 'F06',
-      lot: 'L06',
-      status: '構成中',
-      build: 5,
-      release: 3,
-      move: 'W3',
-      moveStorage: 'S6',
-      name: '部品F',
-      moveStorage2: '棚F',
-    },
-    {
-      id: 7,
-      error: 'E',
-      item: 'G07',
-      lot: 'L07',
-      status: '構成中',
-      build: 1,
-      release: 0,
-      move: 'W1',
-      moveStorage: 'S7',
-      name: '部品G',
-      moveStorage2: '棚G',
-    },
-    {
-      id: 8,
-      error: '',
-      item: 'H08',
-      lot: 'L08',
-      status: '構成中',
-      build: 3,
-      release: 1,
-      move: 'W2',
-      moveStorage: 'S8',
-      name: '部品H',
-      moveStorage2: '棚H',
-    },
-    {
-      id: 9,
-      error: '',
-      item: 'I09',
-      lot: 'L09',
-      status: '構成中',
-      build: 2,
-      release: 2,
-      move: 'W3',
-      moveStorage: 'S9',
-      name: '部品I',
-      moveStorage2: '棚I',
-    },
-    {
-      id: 10,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-    {
-      id: 11,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-    {
-      id: 12,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-    {
-      id: 13,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-        {
-      id: 14,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-        {
-      id: 15,
-      error: 'E',
-      item: 'J10',
-      lot: 'L10',
-      status: '構成中',
-      build: 6,
-      release: 2,
-      move: 'W1',
-      moveStorage: 'S10',
-      name: '部品J',
-      moveStorage2: '棚J',
-    },
-  ])
-  const [form, setForm] = useState({
-    parentWarehouse: '羽田製品倉庫：W0040',
-    parentItemNo: '0193090',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
-    moveStorage: '',
-    qty: '1',
-    janCode: '',
-  })
-  const [parentItem, setParentItem] = useState('1197101')
-  const [parentSerial, setParentSerial] = useState('ITEM0001')
-  const [moveStorage, setMoveStorage] = useState('10')
-  const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
+  const location = useLocation()
+  const state = location.state as {activeRowId?: number; orderNo?: string} | null
+  const selectedRowId: number = state?.activeRowId ?? 1
+  const orderNo: string = state?.orderNo ?? ''
+  const detailMap =
+    orderNo === 'OT-12345678' ? MOCK_DETAIL_OT :
+    orderNo === 'MB-12345678123456' ? MOCK_DETAIL_MB :
+    MOCK_DETAIL
+  const detailData = detailMap[selectedRowId] ?? detailMap[1]
+
+  const [rows, setRows] = useState<Row[]>(detailData.rows)
+  const [parentSerial] = useState(detailData.productName)
+  const [parentItem] = useState(detailData.itemNo)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false)
-  const [showClearConfirm, setShowClearConfirm] = useState(false)
-  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
-  const [showDetailConfirm, setShowDetailConfirm] = useState(false)
-  const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const tableScrollRef = useRef<HTMLDivElement | null>(null)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
   const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
-  const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
-  const isAnyModalOpen =
-    showHandInputConfirm ||
-    showDeleteConfirm ||
-    showNoSelectionConfirm ||
-    showClearConfirm ||
-    showCompleteConfirm ||
-    showDetailConfirm ||
-    showBackConfirm
-
-  const closeAllModals = () => {
-    setShowHandInputConfirm(false)
-    setShowDeleteConfirm(false)
-    setShowNoSelectionConfirm(false)
-    setShowClearConfirm(false)
-    setShowCompleteConfirm(false)
-    setShowDetailConfirm(false)
-    setShowBackConfirm(false)
-  }
-
-  const clearRows = () => {
-    setRows([])
-    setCheckedRowIds([])
-  }
+  const isAnyModalOpen = showDeleteConfirm || showNoSelectionConfirm || showBackConfirm
 
   const deleteCheckedRows = () => {
     setRows((prev) => prev.filter((row) => !checkedRowIds.includes(row.id)))
     setCheckedRowIds([])
-  }
-  const clearForm = () =>
-    setForm({
-      parentWarehouse: '',
-      parentItemNo: '',
-      moveWarehouse: '',
-      moveStorage: '',
-      qty: '',
-      janCode: '',
-    })
-
-  const resetTableScroll = () => {
-    const el = tableScrollRef.current
-    if (!el) return
-    requestAnimationFrame(() => {
-      el.scrollTop = 0
-      el.scrollLeft = 0
-      requestAnimationFrame(() => {
-        el.scrollTop = 0
-        el.scrollLeft = 0
-      })
-    })
-  }
-
-  const clearFormAndRows = () => {
-    clearForm()
-    clearRows()
-    resetTableScroll()
+    setShowDeleteConfirm(false)
   }
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId(rowId)
-    setCheckedRowIds((prev) => (prev.includes(rowId) ? prev.filter((id) => id !== rowId) : [...prev, rowId]))
+    setCheckedRowIds((prev) =>
+      prev.includes(rowId) ? prev.filter((id) => id !== rowId) : [...prev, rowId],
+    )
   }
 
   const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
 
   const toggleAllChecked = (checked: boolean) => {
-    if (checked) {
-      setCheckedRowIds(rows.map((row) => row.id))
-      return
-    }
-    setCheckedRowIds([])
+    setCheckedRowIds(checked ? rows.map((row) => row.id) : [])
   }
 
   const toggleRowChecked = (rowId: number, checked: boolean) => {
     setCheckedRowIds((prev) => {
-      if (checked) {
-        return prev.includes(rowId) ? prev : [...prev, rowId]
-      }
+      if (checked) return prev.includes(rowId) ? prev : [...prev, rowId]
       return prev.filter((id) => id !== rowId)
     })
   }
 
-  const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
-    if (isAnyModalOpen) return
-    if (options?.forceHandInput) {
-      closeAllModals()
-      setShowHandInputConfirm(true)
-      return
-    }
-    if (!activeRow) {
-      closeAllModals()
-      setShowNoSelectionConfirm(true)
-      return
-    }
-  }
-
-
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (isAnyModalOpen) {
-        return
-      }
-      if (event.key === 'F1') {
-        pressedKeysRef.current.f1 = true
-      }
-      if (event.key === 'F8') {
-        pressedKeysRef.current.f8 = true
-      }
-      if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
-        event.preventDefault()
-        handleReleaseClick({forceHandInput: true})
-        return
-      }
-
-      if (event.key === 'F1') {
-        event.preventDefault()
-        closeAllModals()
-        setShowClearConfirm(true)
-        return
-      }
-
-      if (event.key === 'F2') {
-        event.preventDefault()
-        closeAllModals()
-        setShowCompleteConfirm(true)
-        return
-      }
-
-      if (event.key === 'F3') {
-        event.preventDefault()
-        handleReleaseClick({forceRelease: true})
-        return
-      }
-
+      if (isAnyModalOpen) return
+      if (event.key === 'F1') pressedKeysRef.current.f1 = true
+      if (event.key === 'F8') pressedKeysRef.current.f8 = true
       if (event.key === 'F4') {
         event.preventDefault()
-        closeAllModals()
         setShowBackConfirm(true)
       }
     }
     const onKeyUp = (event: KeyboardEvent) => {
-      if (event.key === 'F1') {
-        pressedKeysRef.current.f1 = false
-      }
-      if (event.key === 'F8') {
-        pressedKeysRef.current.f8 = false
-      }
+      if (event.key === 'F1') pressedKeysRef.current.f1 = false
+      if (event.key === 'F8') pressedKeysRef.current.f8 = false
     }
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
@@ -395,7 +154,7 @@ const InventoryRecordDetail = () => {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
     }
-  }, [activeRow, isAnyModalOpen])
+  }, [isAnyModalOpen])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
@@ -405,7 +164,6 @@ const InventoryRecordDetail = () => {
       header: '',
       render: (row) => (checkedRowIds.includes(row.id) ? <FaPlay className='col-row-arrow' /> : null),
     },
-
     {
       key: 'check',
       headClassName: 'col-check',
@@ -432,14 +190,11 @@ const InventoryRecordDetail = () => {
       ),
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
-    {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: '　ロットシリアル', render: (row) => row.lot},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: 'エラー', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: 'ロットシリアル', render: (row) => row.build},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
     {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.release},
     {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '倉庫', render: (row) => row.move},
-    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '保管場所', render: (row) => row.move},
-    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: 'ロット状況CD', render: (row) => row.move},
+    {key: 'moveStorage', headClassName: 'col-move', cellClassName: 'col-move', header: '保管場所', render: (row) => row.moveStorage},
+    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: 'ロット状況コード', render: (row) => row.status},
   ]
 
   return (
@@ -448,24 +203,16 @@ const InventoryRecordDetail = () => {
         <div className='mockup-frame'>
           <div className='set-header'>入庫実績登録読込データ参照</div>
           <div className='set-body'>
-                <div className='set-form'>
-                  <div className='set-row'>
-                    <label>品名</label>
-                    <input
-                      value={parentSerial}
-                       style={{textAlign: 'center'}}
-                      readOnly
-                    />
-                  </div>
-                    <div className='set-row'>
-                    <label>品目No.</label>
-                    <input
-                      value={parentItem}
-                      style={{textAlign: 'center'}}
-                      readOnly
-                    />
-                  </div>
-                </div>
+            <div className='set-form'>
+              <div className='set-row'>
+                <label>品名</label>
+                <input value={parentSerial} style={{textAlign: 'center'}} readOnly />
+              </div>
+              <div className='set-row'>
+                <label>品目No.</label>
+                <input value={parentItem} style={{textAlign: 'center'}} readOnly />
+              </div>
+            </div>
 
             <TableSection
               columns={tableColumns}
@@ -479,91 +226,83 @@ const InventoryRecordDetail = () => {
             />
 
             <ActionFooter columns={4}>
-              <button
-                className='set-btn set-danger'
-                onClick={() => setShowDeleteConfirm(true)}
-              >
+              <button className='set-btn set-danger' onClick={() => {
+                if (checkedRowIds.length === 0) {
+                  setShowNoSelectionConfirm(true)
+                } else {
+                  setShowDeleteConfirm(true)
+                }
+              }}>
                 削除
-              </button>  
-               <button
-                className='set-btn set-primary'
-                onClick={() => setShowCompleteConfirm(true)}
-                style={{ visibility: 'hidden' }}
-              >
-                削除
-              </button> 
-              <button
-                className='set-btn set-primary set-success'
-                onClick={() => handleReleaseClick({forceHandInput: true})}
-                style={{ visibility: 'hidden' }}
-              >
-                出庫票印刷
               </button>
+              <button className='set-btn set-primary' style={{visibility: 'hidden'}}>
 
-              <button
-                className='set-btn set-warning'
-                onClick={() => setShowBackConfirm(true)}
-              >
+              </button>
+              <button className='set-btn set-primary' style={{visibility: 'hidden'}}>
+
+              </button>
+              <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>
                 戻る
-
               </button>
             </ActionFooter>
-       </div>
-
-            {showDeleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>選択行を削除しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowDeleteConfirm(false)
-                        deleteCheckedRows()
-                      }}
-                    >
-                      OK
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowDeleteConfirm(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showBackConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>投入明細確認を閉じますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowBackConfirm(false)
-                        navigate('/factory/inventory-records')
-                      }}
-                    >
-                      YES
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowBackConfirm(false)}
-                    >
-                      NO
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
+
+          {showDeleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>選択した行を削除しますか？</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={deleteCheckedRows}>
+                    YES
+                  </button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowDeleteConfirm(false)}>
+                    NO
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showNoSelectionConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>選択行がありません。</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoSelectionConfirm(false)}>
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showBackConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>{'確認'}</div>
+                <div className='set-modal-body'>読込データ参照画面を閉じますか？</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowBackConfirm(false)
+                      navigate('/factory/inventory-records')
+                    }}
+                  >
+                    YES
+                  </button>
+                  <button className='set-modal-btn set-modal-no' onClick={() => setShowBackConfirm(false)}>
+                    NO
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+    </div>
   )
 }
 

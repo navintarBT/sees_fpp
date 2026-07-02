@@ -1881,7 +1881,7 @@ input[type='time'].wot-grid-value2 {
 }
 
 .inventory-table .col-lot2 {
-  min-width: 120px;
+  min-width: 50px;
   justify-content: center;
 }
 
@@ -1901,7 +1901,7 @@ input[type='time'].wot-grid-value2 {
 }
 
 .inventory-table .col-instruct {
-  min-width: 150px;
+  min-width: 120px;
 }
 
 .inventory-table .col-Load {
@@ -1909,11 +1909,14 @@ input[type='time'].wot-grid-value2 {
 }
 
 .inventory-table .col-productName {
-  min-width: 135px;
+  min-width: 120px;
 }
 
 .inventory-table .col-inspection {
-  min-width: 160px;
+  min-width: 120px;
+}
+.inventory-table .col-rowNo {
+  min-width: 115px;
 }
 
 .inventory-records-form .set-row {

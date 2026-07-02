@@ -30,11 +30,56 @@ const EMPTY_ROW: Row = {
   productName: '',
 }
 
-const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: string; qty: string; rows: Row[]}> = {
+const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: string; qty: string; janCode: string; janCodeDisabled?: boolean; rows: Row[]}> = {
   '12345678': {
     parentWarehouse: 'A倉庫',
     moveStorage: 'JDE基本保管場所',
     qty: '1',
+    janCode: '',
+    rows: [
+      {
+        id: 1,
+        error: '',
+        item: '1001',
+        lot: 'Lot001',
+        lot2: '',
+        inspection: '',
+        rowNo: '',
+        instruct: '3',
+        Load: '',
+        productName: '品名001',
+      },
+      {
+        id: 2,
+        error: '',
+        item: '1002',
+        lot: 'Lot002',
+        lot2: '*',
+        inspection: '',
+        rowNo: '',
+        instruct: '2',
+        Load: '2',
+        productName: '品名002',
+      },
+      {
+        id: 3,
+        error: 'E',
+        item: '1003',
+        lot: 'Lot003',
+        lot2: '*',
+        inspection: '',
+        rowNo: '',
+        instruct: '15',
+        Load: '15',
+        productName: '品名003',
+      },
+    ],
+  },
+  'OT-12345678': {
+    parentWarehouse: 'C事業所',
+    moveStorage: '工場基本保管場所',
+    qty: '1',
+    janCode: '',
     rows: [
       {
         id: 1,
@@ -66,7 +111,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         item: '1003',
         lot: 'Lot003',
         lot2: '*',
-        inspection: '',
+        inspection: '○',
         rowNo: '',
         instruct: '15',
         Load: '15',
@@ -74,6 +119,43 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
       },
     ],
   },
+  'MB-12345678123456': {
+    parentWarehouse: 'D事業所',
+    moveStorage: '工場基本保管場所',
+    qty: '3',
+    janCode: '1005',
+    janCodeDisabled: true,
+    rows: [
+      {
+        id: 1,
+        error: '',
+        item: '1005',
+        lot: '',
+        lot2: '',
+        inspection: '',
+        rowNo: '123456',
+        instruct: '3',
+        Load: '3',
+        productName: '品名005',
+      },
+    ],
+  },
+}
+
+const MOCK_JAN_CODE: Record<string, number> = {
+  '987654321': 1,
+}
+
+const MOCK_JAN_INSPECTION: Record<string, number> = {
+  '987654321': 3,
+}
+
+const MOCK_ITEM_NAMES: Record<string, string> = {
+  '1001': '品名001',
+  '1002': '品名002',
+  '1003': '品名003',
+  '1004': '品名004',
+  '1005': '品名005',
 }
 
 const InventoryRecordsPage = () => {
@@ -89,9 +171,12 @@ const InventoryRecordsPage = () => {
     janCode: '',
     source: '',
   })
+  const [janCodeDisabled, setJanCodeDisabled] = useState(false)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showNoOrderConfirm, setShowNoOrderConfirm] = useState(false)
+  const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
   const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const parentItemNoRef = useRef<HTMLInputElement | null>(null)
@@ -105,6 +190,8 @@ const InventoryRecordsPage = () => {
     showHandInputConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
+    showNoOrderConfirm ||
+    showCompleteRegistered ||
     showRowClickConfirm ||
     showBackConfirm
 
@@ -119,12 +206,32 @@ const InventoryRecordsPage = () => {
 
   useEffect(() => {
     const saved = sessionStorage.getItem('inventory-records-state')
+    const handResult = sessionStorage.getItem('inventory-hand-input-result')
     if (saved) {
       const {form: f, rows: r, isLoaded: l, activeRowId: a} = JSON.parse(saved)
       setForm(f)
-      setRows(r)
       setIsLoaded(l)
       setActiveRowId(a)
+      if (handResult) {
+        sessionStorage.removeItem('inventory-hand-input-result')
+        const {itemNo, lot, qty} = JSON.parse(handResult)
+        const nextId = Math.max(...(r as Row[]).map((row) => row.id), 0) + 1
+        const newRow: Row = {
+          id: nextId,
+          error: '',
+          item: itemNo,
+          lot: lot,
+          lot2: '',
+          inspection: '',
+          rowNo: '',
+          instruct: qty,
+          Load: qty,
+          productName: MOCK_ITEM_NAMES[itemNo] ?? '',
+        }
+        setRows([...(r as Row[]), newRow])
+      } else {
+        setRows(r)
+      }
       sessionStorage.removeItem('inventory-records-state')
     }
   }, [])
@@ -140,12 +247,14 @@ const InventoryRecordsPage = () => {
   const handleSearch = () => {
     const data = MOCK_INVENTORY[form.parentItemNo]
     if (data) {
-      const {rows: mockRows, ...formData} = data
-      setForm((prev) => ({...prev, ...formData, moveWarehouse: '', janCode: ''}))
+      const {rows: mockRows, janCodeDisabled: jcd, ...formData} = data
+      setForm((prev) => ({...prev, ...formData, moveWarehouse: ''}))
+      setJanCodeDisabled(jcd ?? false)
       setRows(mockRows)
       setIsLoaded(true)
     } else {
       setForm((prev) => ({...prev, parentWarehouse: 'A倉庫', moveStorage: '', qty: '1', moveWarehouse: '', janCode: ''}))
+      setJanCodeDisabled(false)
       setRows([])
       setIsLoaded(false)
     }
@@ -180,6 +289,7 @@ const InventoryRecordsPage = () => {
     clearForm()
     clearRows()
     setIsLoaded(false)
+    setJanCodeDisabled(false)
     resetTableScroll()
     sessionStorage.removeItem('inventory-records-state')
   }
@@ -191,14 +301,37 @@ const InventoryRecordsPage = () => {
     )
   }
 
+  const handleJanCodeScan = () => {
+    const janCode = form.janCode.trim()
+    const loadRowId = MOCK_JAN_CODE[janCode]
+    const inspectionRowId = MOCK_JAN_INSPECTION[janCode]
+    setRows((prev) =>
+      prev.map((row) => {
+        let updated = row
+        if (loadRowId != null && row.id === loadRowId) updated = {...updated, Load: form.qty}
+        if (inspectionRowId != null && row.id === inspectionRowId) updated = {...updated, inspection: '○'}
+        return updated
+      }),
+    )
+    setForm((prev) => ({...prev, janCode: ''}))
+    janCodeRef.current?.focus()
+  }
+
   const handleRowClick = (rowId: number) => {
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
+    if (activeRowId !== rowId) {
+      setShowRowClickConfirm(true)
+    }
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
     if (isAnyModalOpen) return
     if (options?.forceHandInput) {
       closeAllModals()
+      if (!form.parentItemNo) {
+        setShowNoOrderConfirm(true)
+        return
+      }
       setShowHandInputConfirm(true)
       return
     }
@@ -219,15 +352,6 @@ const InventoryRecordsPage = () => {
       if (pressedKeysRef.current.f1 && pressedKeysRef.current.f8) {
         event.preventDefault()
         handleReleaseClick({forceHandInput: true})
-        return
-      }
-
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        if (activeRowId !== null) {
-          closeAllModals()
-          setShowRowClickConfirm(true)
-        }
         return
       }
 
@@ -308,6 +432,7 @@ const InventoryRecordsPage = () => {
                   onChange={(e) => {
                     setForm({...form, parentItemNo: e.target.value, parentWarehouse: 'A倉庫', moveStorage: '', qty: '1', moveWarehouse: '', janCode: ''})
                     setIsLoaded(false)
+                    setJanCodeDisabled(false)
                     setRows([EMPTY_ROW])
                   }}
                   onKeyDown={(e) => {
@@ -354,6 +479,12 @@ const InventoryRecordsPage = () => {
                   onChange={(e) => setForm({...form, qty: e.target.value})}
                   className='set-small'
                   disabled={!isLoaded}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      janCodeRef.current?.focus()
+                    }
+                  }}
                 />
               </div>
               <div className='set-row'>
@@ -362,7 +493,13 @@ const InventoryRecordsPage = () => {
                   ref={janCodeRef}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
-                  disabled={!isLoaded}
+                  disabled={!isLoaded || janCodeDisabled}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      handleJanCodeScan()
+                    }
+                  }}
                 />
               </div>
               <div className='set-row'>
@@ -394,13 +531,25 @@ const InventoryRecordsPage = () => {
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={() => {
+                  if (!isLoaded) {
+                    setShowNoOrderConfirm(true)
+                  } else {
+                    setShowCompleteConfirm(true)
+                  }
+                }}
               >
                 完了
               </button>     
               <button
                 className='set-btn set-primary '
-                onClick={() => setShowHandInputConfirm(true)}
+                onClick={() => {
+                  if (!form.parentItemNo) {
+                    setShowNoOrderConfirm(true)
+                    return
+                  }
+                  setShowHandInputConfirm(true)
+                }}
               >
                 手入力
               </button>
@@ -439,17 +588,57 @@ const InventoryRecordsPage = () => {
               </div>
             )}
 
+            {showNoOrderConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>オーダーNo.を入力して下さい。</div>
+                  <div className='set-modal-actions'>
+                    <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoOrderConfirm(false)}>
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {showCompleteConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>入庫実績登録を完了しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowCompleteConfirm(false)}
+                      onClick={() => {
+                        setShowCompleteConfirm(false)
+                        setShowCompleteRegistered(true)
+                      }}
                     >
-                      {'\u004f\u004b'}
+                      はい
+                    </button>
+                    <button className='set-modal-btn set-modal-no' onClick={() => setShowCompleteConfirm(false)}>
+                      いいえ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showCompleteRegistered && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>入庫実績を登録しました。</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowCompleteRegistered(false)
+                        clearFormAndRows()
+                      }}
+                    >
+                      OK
                     </button>
                   </div>
                 </div>
@@ -467,7 +656,7 @@ const InventoryRecordsPage = () => {
                       onClick={() => {
                         setShowHandInputConfirm(false)
                         saveStateToSession()
-                        navigate('/factory/inventory-hand-input')
+                        navigate('/factory/inventory-hand-input', {state: {orderNo: form.parentItemNo}})
                       }}
                     >
                       はい
@@ -533,18 +722,20 @@ const InventoryRecordsPage = () => {
                       onClick={() => {
                         setShowRowClickConfirm(false)
                         saveStateToSession()
-                        navigate('/factory/inventory-detail')
+                        navigate('/factory/inventory-detail', {state: {activeRowId, orderNo: form.parentItemNo}})
                       }}
                     >
-                      はい
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => {
                         setShowRowClickConfirm(false)
+                        setActiveRowId(null)
+                        janCodeRef.current?.focus()
                       }}
                     >
-                      いいえ
+                      NO
                     </button>
                   </div>
                 </div>
