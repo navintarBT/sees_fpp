@@ -616,7 +616,7 @@ const SetReturnConfiguration = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>読込データを破棄します。<br />宜しいですか？</div>
+                <div className='set-modal-body'>{'読込データを破棄します。\n宜しいですか？'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -700,10 +700,7 @@ const SetReturnConfiguration = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>警告</div>
-                <div className='set-modal-body'>
-                  戻りのない構成品は全て"調査中"として登録されます。<br />
-                  完了しますか？
-                </div>
+                <div className='set-modal-body'>{'戻りのない構成品は全て"調査中"として登録されます。\n完了しますか？'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -755,7 +752,7 @@ const SetReturnConfiguration = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>メニューに戻ります。<br />読込データを破棄しますか？</div>
+                <div className='set-modal-body'>{'メニューに戻ります。\n読込データを破棄しますか？'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'

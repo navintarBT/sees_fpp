@@ -1030,9 +1030,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>
-                  作業実績を登録します。<br />WOは維持しますか？
-                </div>
+                <div className='set-modal-body'>{'作業実績を登録します。\nWOは維持しますか？'}</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmRegisterMaintain}>
                     YES
@@ -1090,11 +1088,7 @@ const WorkOrderTimeRegistrationChiba = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>
-                  メニューに戻ります。
-                  <br />
-                  読込データを破棄しますか？
-                </div>
+                <div className='set-modal-body'>{'メニューに戻ります。\n読込データを破棄しますか？'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'

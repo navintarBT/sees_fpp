@@ -538,9 +538,7 @@ const ShelfTransfer = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>
-                  移動元の登録を完了し、<br />移動先の登録に進みますか？
-                </div>
+                <div className='set-modal-body'>{'移動元の登録を完了し、\n移動先の登録に進みますか？'}</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmSourceComplete}>
                     はい
@@ -561,9 +559,7 @@ const ShelfTransfer = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>エラー</div>
-                <div className='set-modal-body'>
-                  移動数量に誤りがあります。<br />データを確認してください。
-                </div>
+                <div className='set-modal-body'>{'移動数量に誤りがあります。\nデータを確認してください。'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -581,9 +577,7 @@ const ShelfTransfer = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>エラー</div>
-                <div className='set-modal-body'>
-                  移動先が未設定の項目があります。<br />すべての移動先を登録してください。
-                </div>
+                <div className='set-modal-body'>{'移動先が未設定の項目があります。\nすべての移動先を登録してください。'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -601,9 +595,7 @@ const ShelfTransfer = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>
-                  作業結果を JDE に送信します。<br />よろしいですか？
-                </div>
+                <div className='set-modal-body'>{'作業結果を JDE に送信します。\nよろしいですか？'}</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmComplete}>
                     はい

@@ -447,7 +447,7 @@ const SetMiscellaneousInAndOutBound = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>読込データを破棄します。<br />宜しいですか？</div>
+                <div className='set-modal-body'>{'読込データを破棄します。\n宜しいですか？'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -577,7 +577,7 @@ const SetMiscellaneousInAndOutBound = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>メニューに戻ります。<br />読込データを破棄しますか？</div>
+                <div className='set-modal-body'>{'メニューに戻ります。\n読込データを破棄しますか？'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
@@ -655,10 +655,7 @@ const SetMiscellaneousInAndOutBound = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>エラー</div>
-                <div className='set-modal-body'>
-                  ネットワークに接続出来ません。<br />
-                  電波の届く場所で再度実行して下さい。
-                </div>
+                <div className='set-modal-body'>{'ネットワークに接続出来ません。\n電波の届く場所で再度実行して下さい。'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
