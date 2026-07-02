@@ -35,7 +35,7 @@
 
 .set-row {
   display: grid;
-  grid-template-columns: 296px 1fr;
+  grid-template-columns: 240px 1fr;
   align-items: center;
   gap: 24px;
 }
