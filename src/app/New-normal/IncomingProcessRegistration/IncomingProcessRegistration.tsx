@@ -23,7 +23,7 @@ const IncomingProcessRegistration = () => {
     const [defectReason, setDefectReason] = useState('')
 
     const clearFormAndRows = () => {
-        setProductTicketNo('MB10147843001')
+        setProductTicketNo('')
         setProductName('')
         setProductCode('')
         setLotSerial('')
@@ -321,9 +321,9 @@ const IncomingProcessRegistration = () => {
                         <div className='set-modal-backdrop' role='presentation'>
                             <div className='set-modal' role='dialog' aria-modal='true'>
                                 <div className='set-modal-header'>確認</div>
-                                <div className='set-modal-body'>
-                                    入荷データを送信します。<br />
-                                    宜しいですか？
+                                <div className='set-modal-body' style={{ whiteSpace: 'pre-line' }}>
+                                    {'入荷データを送信します。\n 宜しいですか？'}
+
                                 </div>
                                 <div className='set-modal-actions'>
                                     <button
@@ -347,9 +347,8 @@ const IncomingProcessRegistration = () => {
                         <div className='set-modal-backdrop' role='presentation'>
                             <div className='set-modal' role='dialog' aria-modal='true'>
                                 <div className='set-modal-header'>確認</div>
-                                <div className='set-modal-body'>
-                                    メニューに戻ります。<br />
-                                    読込データを破棄しますか？
+                                <div className='set-modal-body' style={{ whiteSpace: 'pre-line' }}>
+                                    {'メニューに戻ります。\n 読込データを破棄しますか？'}
                                 </div>
                                 <div className='set-modal-actions'>
                                     <button
