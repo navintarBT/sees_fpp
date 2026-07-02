@@ -56,7 +56,7 @@
   appearance: textfield;
 }
 
-.red-border-span-incom{
+.red-border-span-incom {
   color: red;
   font-size: 30px;
 }
@@ -1137,6 +1137,10 @@
 }
 
 /* ########################## + - kongchan ################################# */
+.set-row-incomingapge {
+  grid-template-columns: 294px 1fr;
+}
+
 .pg-sign-group {
   display: flex;
   gap: 20px;
@@ -1931,6 +1935,7 @@ input[type='time'].wot-grid-value2 {
 .inventory-table .col-inspection {
   min-width: 120px;
 }
+
 .inventory-table .col-rowNo {
   min-width: 115px;
 }
