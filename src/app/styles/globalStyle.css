@@ -53,7 +53,7 @@
 }
 
 .set-row input[type="number"] {
-  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .red-border-span-incom{
