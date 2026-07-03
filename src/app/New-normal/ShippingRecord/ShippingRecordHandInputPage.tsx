@@ -31,7 +31,7 @@ const ShippingRecordHandInputPage = () => {
               </div>
               <div className='hand-row'>
                 <label>保管場所</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled}  style={{ backgroundColor: '#e5e7eb', textAlign: 'center' }} />
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} readOnly={!isEnabled}  style={{ backgroundColor: '#d9d9d9', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>数量</label>
@@ -39,7 +39,7 @@ const ShippingRecordHandInputPage = () => {
               </div>
               <div className='hand-row '>
                 <label>品目No</label>
-                <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#e5e7eb', textAlign: 'center' }} />
+                <input value={moveStorage} onChange={(e) =>setMoveStorage (e.target.value)} readOnly={!isEnabled} style={{ backgroundColor: '#d9d9d9', textAlign: 'center' }} />
               </div>
               <div className='hand-row'>
                 <label>ロットシリアル</label>

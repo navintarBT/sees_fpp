@@ -223,7 +223,7 @@ const IncomingProcessRegistration = () => {
                                     readOnly={true}
                                     required
                                     className='set-small set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
@@ -234,7 +234,7 @@ const IncomingProcessRegistration = () => {
                                     readOnly={true}
                                     required
                                     className='set-small set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
@@ -257,7 +257,7 @@ const IncomingProcessRegistration = () => {
                                     readOnly={true}
                                     required
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
