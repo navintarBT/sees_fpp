@@ -61,22 +61,53 @@ const SHIPPING_INFO_MAP: Record<
 const WORK_TABLE_REGISTRATION = new Set<string>();
 let nextRowId = 1000;
 
+const DEFAULT_FORM = {
+  parentWarehouse: "羽田製品倉庫：W0040",
+  parentItemNo: "",
+  deliverySlipNo: "",
+  moveWarehouse: "千葉倉庫（WMS）：W002",
+  moveStorage: "",
+  qty: "1",
+  janCode: "",
+};
+
+// เก็บ snapshot ของหน้าจอไว้ตอนกด NO เพื่อกลับมาแล้วข้อมูลยังอยู่เหมือนเดิม
+const BACK_STATE_KEY = "DeliverySlipRegistration:backState";
+
+type PersistedState = {
+  form: typeof DEFAULT_FORM;
+  rows: Row[];
+  checkedRowIds: number[];
+  activeRowId: number | null;
+};
+
+const loadPersistedState = (): PersistedState | null => {
+  try {
+    const raw = sessionStorage.getItem(BACK_STATE_KEY);
+    return raw ? (JSON.parse(raw) as PersistedState) : null;
+  } catch {
+    return null;
+  }
+};
+
+const clearPersistedState = () => {
+  try {
+    sessionStorage.removeItem(BACK_STATE_KEY);
+  } catch {
+    /* ignore */
+  }
+};
+
 const DeliverySlipRegistration = () => {
   const navigate = useNavigate();
 
-  // ── ① เริ่มต้น rows ว่าง ────────────────────────────────────────────────
-  const [rows, setRows] = useState<Row[]>([]);
+  // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
+  const [persistedState] = useState(loadPersistedState);
 
-  const [form, setForm] = useState({
-    parentWarehouse: "羽田製品倉庫：W0040",
-    // ② เริ่มต้น parentItemNo ว่าง
-    parentItemNo: "",
-    deliverySlipNo: "",
-    moveWarehouse: "千葉倉庫（WMS）：W002",
-    moveStorage: "",
-    qty: "1",
-    janCode: "",
-  });
+  // ── ① เริ่มต้น rows ว่าง ────────────────────────────────────────────────
+  const [rows, setRows] = useState<Row[]>(persistedState?.rows ?? []);
+
+  const [form, setForm] = useState(persistedState?.form ?? { ...DEFAULT_FORM });
 
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -98,8 +129,12 @@ const DeliverySlipRegistration = () => {
   );
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
   const isEnabled = !!form.parentItemNo.trim();
-  const [activeRowId, setActiveRowId] = useState<number | null>(null);
-  const [checkedRowIds, setCheckedRowIds] = useState<number[]>([]);
+  const [activeRowId, setActiveRowId] = useState<number | null>(
+    persistedState?.activeRowId ?? null,
+  );
+  const [checkedRowIds, setCheckedRowIds] = useState<number[]>(
+    persistedState?.checkedRowIds ?? [],
+  );
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null;
   const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({
     f1: false,
@@ -148,6 +183,18 @@ const DeliverySlipRegistration = () => {
       qty: "",
       janCode: "",
     });
+
+  // บันทึก snapshot ปัจจุบันไว้ก่อนกลับเมนู (ใช้ตอนกด NO)
+  const saveStateForBack = () => {
+    try {
+      sessionStorage.setItem(
+        BACK_STATE_KEY,
+        JSON.stringify({ form, rows, checkedRowIds, activeRowId }),
+      );
+    } catch {
+      /* ignore */
+    }
+  };
 
   const resetTableScroll = () => {
     const el = tableScrollRef.current;
@@ -369,6 +416,12 @@ const DeliverySlipRegistration = () => {
       return;
     }
   };
+
+  // เก็บ snapshot ต่อเนื่องทุกครั้งที่ข้อมูลเปลี่ยน เพื่อให้รีเฟรช/กลับมาแล้วข้อมูลยังอยู่
+  useEffect(() => {
+    saveStateForBack();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form, rows, checkedRowIds, activeRowId]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -764,6 +817,8 @@ const DeliverySlipRegistration = () => {
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
                       setShowBackConfirm(false);
+                      // YES = ทิ้งข้อมูล: ล้าง snapshot แล้วกลับเมนู
+                      clearPersistedState();
                       navigate("/factory");
                     }}
                   >
@@ -771,12 +826,15 @@ const DeliverySlipRegistration = () => {
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() =>{ setShowBackConfirm(false);
-                    navigate("/factory");
+                    onClick={() => {
+                      setShowBackConfirm(false);
+                      // NO = เก็บข้อมูลไว้: บันทึก snapshot แล้วกลับเมนู กลับมาข้อมูลยังอยู่
+                      saveStateForBack();
+                      navigate("/factory");
                     }}
                   >
                     NO
-                  </button>   
+                  </button>
                    <button
   className="set-modal-btn set-m"
   onClick={() => {
