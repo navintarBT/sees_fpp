@@ -470,7 +470,7 @@ const SetReturnConfiguration = () => {
                   onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
                   readOnly={!isParentJanCodeEditable}
                   className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
-                  style={!isParentJanCodeEditable ? { backgroundColor: '#e5e7eb' } : {}}
+                  style={!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}}
                 />
               </div>
 
@@ -510,7 +510,7 @@ const SetReturnConfiguration = () => {
                   value={parentQty}
                   readOnly
                   className='set-small set-input-gray'
-                  style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
+                  style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
                 />
               </div>
 
@@ -530,7 +530,7 @@ const SetReturnConfiguration = () => {
                     }
                   }}
                   readOnly={true}
-                  style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
+                  style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
                 />
               </div>
             </div>

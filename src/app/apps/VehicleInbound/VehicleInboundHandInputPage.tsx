@@ -38,7 +38,7 @@ const VehicleInboundHandInputPage = () => {
                 <select
                   value={parentWarehouse}
                   disabled
-                  style={{ background: '#e5e7eb', color: '#111827' }}
+                  style={{ background: '#d9d9d9', color: '#666' }}
                   onChange={(e) => setParentWarehouse(e.target.value)}
                 >
                   <option value=''></option>

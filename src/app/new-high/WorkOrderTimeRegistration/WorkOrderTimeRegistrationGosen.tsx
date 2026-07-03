@@ -630,7 +630,7 @@ const WorkOrderTimeRegistrationGosen = () => {
           className='table-cell-input'
           value={row.woNo}
           readOnly={row.isLocked === true}
-          style={row.isLocked ? { backgroundColor: '#e5e7eb' } : {}}
+          style={row.isLocked ? { backgroundColor: '#d9d9d9' } : {}}
           onChange={(e) => {
             if (!row.isLocked) {
               setRows((prevRows) => {
@@ -819,7 +819,7 @@ const WorkOrderTimeRegistrationGosen = () => {
                     />
                     <input
                       className='wot-grid-value1'
-                      style={{ backgroundColor: '#e5e7eb', outline: 'none' }}
+                      style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
                       value={workerName}
                       readOnly
                     />
