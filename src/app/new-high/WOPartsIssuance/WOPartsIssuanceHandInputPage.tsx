@@ -408,8 +408,8 @@ const WOPartsIssuanceHandInputPage = () => {
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
-                      saveStateToSession()
                       setShowBackConfirm(false)
+                      resetPage()
                       navigate('/factory/factory')
                     }}
                   >
@@ -418,8 +418,8 @@ const WOPartsIssuanceHandInputPage = () => {
                   <button
                     className='set-modal-btn set-modal-no'
                     onClick={() => {
+                      saveStateToSession()
                       setShowBackConfirm(false)
-                      resetPage()
                       navigate('/factory/factory')
                     }}
                   >

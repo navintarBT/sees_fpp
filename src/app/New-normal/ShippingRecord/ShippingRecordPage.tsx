@@ -474,8 +474,8 @@ const ShippingRecordPage = () => {
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
-                        saveStateToSession()
                         setShowBackConfirm(false)
+                        clearFormAndRows()
                         navigate('/factory/factory')
                       }}
                     >
@@ -484,8 +484,8 @@ const ShippingRecordPage = () => {
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => {
+                        saveStateToSession()
                         setShowBackConfirm(false)
-                        clearFormAndRows()
                         navigate('/factory/factory')
                       }}
                     >
