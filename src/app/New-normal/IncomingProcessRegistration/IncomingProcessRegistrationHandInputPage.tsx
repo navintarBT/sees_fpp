@@ -245,7 +245,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                         className='set-modal-btn set-modal-yes'
                                         onClick={() => setShowError(null)}
                                     >
-                                        閉じる
+                                        OK
                                     </button>
                                 </div>
                             </div>

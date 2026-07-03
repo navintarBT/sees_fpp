@@ -6,6 +6,7 @@ const IncomingProcessRegistration = () => {
     const navigate = useNavigate()
     const [showClearConfirm, setShowClearConfirm] = useState(false)
     const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+    const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
     const [showBackConfirm, setShowBackConfirm] = useState(false)
     const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
     const [showError, setShowError] = useState<{ message: string } | null>(null)
@@ -49,6 +50,7 @@ const IncomingProcessRegistration = () => {
             setLotSerial('2026012001')
             setOrderQuantity(null)
             setReceivingQuantity('180')
+            setGoodQuantity('180')
         } else {
             setProductName('')
             setProductCode('')
@@ -146,8 +148,8 @@ const IncomingProcessRegistration = () => {
             // Mock API call
             await new Promise(resolve => setTimeout(resolve, 500))
 
-            clearFormAndRows()
             setShowCompleteConfirm(false)
+            setShowCompleteRegistered(true)
 
         } catch (error) {
             setShowError({ message: 'サーバとの通信中にエラーが発生しました。再実行しても解消されない場合は管理者へ連絡してください。' })
@@ -317,8 +319,7 @@ const IncomingProcessRegistration = () => {
                             <div className='set-modal' role='dialog' aria-modal='true'>
                                 <div className='set-modal-header'>確認</div>
                                 <div className='set-modal-body' style={{ whiteSpace: 'pre-line' }}>
-                                    {'入荷データを送信します。\n 宜しいですか？'}
-
+                                    入荷工程登録を完了しますか？
                                 </div>
                                 <div className='set-modal-actions'>
                                     <button
@@ -332,6 +333,26 @@ const IncomingProcessRegistration = () => {
                                         onClick={() => setShowCompleteConfirm(false)}
                                     >
                                         いいえ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showCompleteRegistered && (
+                        <div className='set-modal-backdrop' role='presentation'>
+                            <div className='set-modal' role='dialog' aria-modal='true'>
+                                <div className='set-modal-header'>確認</div>
+                                <div className='set-modal-body'>入荷工程登録を完了しました。</div>
+                                <div className='set-modal-actions'>
+                                    <button
+                                        className='set-modal-btn set-modal-yes'
+                                        onClick={() => {
+                                            setShowCompleteRegistered(false)
+                                            clearFormAndRows()
+                                        }}
+                                    >
+                                        OK
                                     </button>
                                 </div>
                             </div>
@@ -416,7 +437,7 @@ const IncomingProcessRegistration = () => {
                                         className='set-modal-btn set-modal-yes'
                                         onClick={() => setShowError(null)}
                                     >
-                                        閉じる
+                                        OK
                                     </button>
                                 </div>
                             </div>
