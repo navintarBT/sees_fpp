@@ -1,6 +1,29 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+
+const STORAGE_KEY = 'incomingProcessRegistrationForm'
+
+type StoredForm = {
+    productTicketNo: string
+    productName: string
+    productCode: string
+    lotSerial: string
+    orderQuantity: number | null
+    receivingQuantity: string
+    goodQuantity: string
+    defectQuantity: string
+    defectReason: string
+}
+
+const loadStoredForm = (): StoredForm | null => {
+    try {
+        const raw = sessionStorage.getItem(STORAGE_KEY)
+        return raw ? JSON.parse(raw) as StoredForm : null
+    } catch {
+        return null
+    }
+}
 
 const IncomingProcessRegistration = () => {
     const navigate = useNavigate()
@@ -12,15 +35,32 @@ const IncomingProcessRegistration = () => {
     const [showError, setShowError] = useState<{ message: string } | null>(null)
     const barcodeInputRef = useRef<HTMLInputElement | null>(null)
 
-    const [productTicketNo, setProductTicketNo] = useState('')
-    const [productName, setProductName] = useState('')
-    const [productCode, setProductCode] = useState('')
-    const [lotSerial, setLotSerial] = useState('')
-    const [orderQuantity, setOrderQuantity] = useState<number | null>(null)
-    const [receivingQuantity, setReceivingQuantity] = useState<string>('')
-    const [goodQuantity, setGoodQuantity] = useState<string>('')
-    const [defectQuantity, setDefectQuantity] = useState<string>('')
-    const [defectReason, setDefectReason] = useState('')
+    const storedForm = loadStoredForm()
+
+    const [productTicketNo, setProductTicketNo] = useState(storedForm?.productTicketNo ?? '')
+    const [productName, setProductName] = useState(storedForm?.productName ?? '')
+    const [productCode, setProductCode] = useState(storedForm?.productCode ?? '')
+    const [lotSerial, setLotSerial] = useState(storedForm?.lotSerial ?? '')
+    const [orderQuantity, setOrderQuantity] = useState<number | null>(storedForm?.orderQuantity ?? null)
+    const [receivingQuantity, setReceivingQuantity] = useState<string>(storedForm?.receivingQuantity ?? '')
+    const [goodQuantity, setGoodQuantity] = useState<string>(storedForm?.goodQuantity ?? '')
+    const [defectQuantity, setDefectQuantity] = useState<string>(storedForm?.defectQuantity ?? '')
+    const [defectReason, setDefectReason] = useState(storedForm?.defectReason ?? '')
+
+    useEffect(() => {
+        const data: StoredForm = {
+            productTicketNo,
+            productName,
+            productCode,
+            lotSerial,
+            orderQuantity,
+            receivingQuantity,
+            goodQuantity,
+            defectQuantity,
+            defectReason,
+        }
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+    }, [productTicketNo, productName, productCode, lotSerial, orderQuantity, receivingQuantity, goodQuantity, defectQuantity, defectReason])
 
     const clearFormAndRows = () => {
         setProductTicketNo('')
@@ -32,6 +72,7 @@ const IncomingProcessRegistration = () => {
         setGoodQuantity('')
         setDefectQuantity('')
         setDefectReason('')
+        sessionStorage.removeItem(STORAGE_KEY)
 
         setTimeout(() => {
             barcodeInputRef.current?.focus()
@@ -371,6 +412,7 @@ const IncomingProcessRegistration = () => {
                                         className='set-modal-btn set-modal-yes'
                                         onClick={() => {
                                             setShowBackConfirm(false)
+                                            clearFormAndRows()
                                             navigate('/factory/factory')
                                         }}
                                     >
