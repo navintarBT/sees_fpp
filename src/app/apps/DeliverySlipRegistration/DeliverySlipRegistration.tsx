@@ -301,7 +301,7 @@ const DeliverySlipRegistration = () => {
 
     try {
       await delay(200);
-      setCompleteMessage("登録完了");
+      setCompleteMessage("配送伝票Noを登録しました。");
       setShowCompleteConfirm(true);
       WORK_TABLE_REGISTRATION.clear();
       clearFormAndRows();
@@ -718,7 +718,7 @@ const DeliverySlipRegistration = () => {
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">完了</div>
-                <div className="set-modal-body">{completeMessage || "登録完了"}</div>
+                <div className="set-modal-body">{completeMessage || "配送伝票Noを登録しました。"}</div>
                 <div className="set-modal-actions">
                   <button
                     className="set-modal-btn set-modal-yes"
