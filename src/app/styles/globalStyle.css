@@ -74,7 +74,9 @@
 }
 
 .set-row input:disabled,
-.set-row select:disabled {
+.set-row select:disabled,
+.set-row input.set-input-gray,
+.set-row select.set-input-gray {
   background: #d9d9d9;
   color: #666;
 }

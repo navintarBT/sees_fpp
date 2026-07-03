@@ -26,9 +26,46 @@ type Row = {
   productName: string;
 };
 
+const DEFAULT_FORM = {
+  parentWarehouse: "",
+  parentItemNo: "",
+  moveWarehouse: "",
+  moveStorage: "",
+  qty: "1",
+  janCode: "",
+};
+
+// เก็บ snapshot ของหน้าจอไว้ตอนกด NO เพื่อกลับมาแล้วข้อมูลยังอยู่เหมือนเดิม
+const BACK_STATE_KEY = "Equipment:backState";
+
+type PersistedState = {
+  form: typeof DEFAULT_FORM;
+  rows: Row[];
+  activeRowId: number | null;
+};
+
+const loadPersistedState = (): PersistedState | null => {
+  try {
+    const raw = sessionStorage.getItem(BACK_STATE_KEY);
+    return raw ? (JSON.parse(raw) as PersistedState) : null;
+  } catch {
+    return null;
+  }
+};
+
+const clearPersistedState = () => {
+  try {
+    sessionStorage.removeItem(BACK_STATE_KEY);
+  } catch {
+    /* ignore */
+  }
+};
 
 const Equipment = () => {
   const navigate = useNavigate();
+
+  // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
+  const [persistedState] = useState(loadPersistedState);
   const mockRowsRef = useRef<Row[]>([
     {
       id: 1,
@@ -163,15 +200,8 @@ const Equipment = () => {
       productName: "品目12",
     },
   ]);
-  const [rows, setRows] = useState<Row[]>([]);
-  const [form, setForm] = useState({
-    parentWarehouse: "",
-    parentItemNo: "",
-    moveWarehouse: "",
-    moveStorage: "",
-    qty: "1",
-    janCode: "",
-  });
+  const [rows, setRows] = useState<Row[]>(persistedState?.rows ?? []);
+  const [form, setForm] = useState(persistedState?.form ?? { ...DEFAULT_FORM });
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showNoSelectionConfirm, setShowNoSelectionConfirm] = useState(false);
@@ -183,7 +213,9 @@ const Equipment = () => {
   const janCodeErrorOkButtonRef = useRef<HTMLButtonElement | null>(null);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const [quantityRange, setQuantityRange] = useState<"from" | "to">("from");
-  const [activeRowId, setActiveRowId] = useState<number | null>(null);
+  const [activeRowId, setActiveRowId] = useState<number | null>(
+    persistedState?.activeRowId ?? null,
+  );
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null;
   const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({
     f1: false,
@@ -249,6 +281,19 @@ const Equipment = () => {
       janCodeErrorOkButtonRef.current?.focus();
     });
   }, [showJanCodeErrorConfirm]);
+
+  // sync ข้อมูลบนจอลง sessionStorage ทุกครั้งที่เปลี่ยน
+  // เพื่อให้ refresh (F5) หรือกด NO กลับเมนู แล้วข้อมูลยังอยู่เหมือนเดิม
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        BACK_STATE_KEY,
+        JSON.stringify({ form, rows, activeRowId }),
+      );
+    } catch {
+      /* ignore */
+    }
+  }, [form, rows, activeRowId]);
 
   const clearForm = () =>
     setForm({
@@ -759,6 +804,8 @@ const Equipment = () => {
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
                       setShowBackConfirm(false);
+                      // YES = ทิ้งข้อมูล: ล้าง snapshot แล้วกลับเมนู
+                      clearPersistedState();
                       navigate("/factory");
                     }}
                   >
@@ -766,12 +813,14 @@ const Equipment = () => {
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() =>{ setShowBackConfirm(false);
-                    navigate("/factory");
+                    onClick={() => {
+                      setShowBackConfirm(false);
+                      // NO = เก็บข้อมูลไว้ (sync ไว้แล้ว) กลับเมนู กลับมาข้อมูลยังอยู่
+                      navigate("/factory");
                     }}
                   >
                     NO
-                  </button>   
+                  </button>
                    <button
   className="set-modal-btn set-m"
   onClick={() => {

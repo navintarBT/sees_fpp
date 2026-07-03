@@ -15,15 +15,12 @@ const InventoryRecordsHandInputPage = () => {
   const isMB = orderNo === 'MB-12345678123456'
 
   const defaultWarehouse = WAREHOUSE_BY_ORDER[orderNo] ?? 'A倉庫'
-  const defaultMoveStorage = isMB ? '工場基本保管場所' : (orderNo ? 'JDE基本保管場所' : '')
-  const defaultItemNo = orderNo ? '1004' : ''
-  const defaultLot = isMB ? '' : (orderNo ? 'Lot004' : '')
 
   const [warehouse, setWarehouse] = useState(defaultWarehouse)
-  const [moveStorage, setMoveStorage] = useState(defaultMoveStorage)
+  const [moveStorage, setMoveStorage] = useState('')
   const [qty, setQty] = useState('1')
-  const [itemNo, setItemNo] = useState(defaultItemNo)
-  const [lot, setLot] = useState(defaultLot)
+  const [itemNo, setItemNo] = useState('')
+  const [lot, setLot] = useState('')
   const [serial, setSerial] = useState('')
   const [expiry, setExpiry] = useState('')
 
@@ -82,7 +79,8 @@ const InventoryRecordsHandInputPage = () => {
             <div className='hand-row'>
               <label>ロット状況</label>
               <select disabled style={{textAlign: 'center'}}>
-                <option>検査中</option>
+                <option value=''></option>
+                <option value='検査中'>検査中</option>
               </select>
             </div>
             <div className='hand-row'>

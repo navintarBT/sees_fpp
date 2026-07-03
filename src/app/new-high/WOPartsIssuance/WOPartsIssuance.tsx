@@ -872,8 +872,7 @@ const WOPartsIssuance = () => {
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
-                        saveStateToSession()
-                        setShowBackConfirm(false)
+                        resetToInitialDisplay()
                         navigate('/factory/factory')
                       }}
                     >
@@ -882,7 +881,8 @@ const WOPartsIssuance = () => {
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => {
-                        resetToInitialDisplay()
+                        saveStateToSession()
+                        setShowBackConfirm(false)
                         navigate('/factory/factory')
                       }}
                     >

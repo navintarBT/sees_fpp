@@ -34,26 +34,59 @@ const initialRows: Row[] = [
 // 画面モード： source = 移動元登録, dest = 移動先登録
 type ScreenMode = 'source' | 'dest'
 
+const DEFAULT_FORM = {
+  parentWarehouse: '',
+  parentStorage: '',
+  parentItemNo: '0193090',
+  moveWarehouse: '千葉倉庫（WMS）：W002',
+  source_location: '',
+  internalLabel: '',
+  shipmentQty: '',
+  lot_serial_no: '',
+  office: '',
+  transfer_qty: '',
+  janCode: '',
+  dest_location: '',
+}
+
+// เก็บ snapshot ของหน้าจอเพื่อให้กด NO / รีเฟรชแล้วข้อมูลยังอยู่เหมือนเดิม
+const BACK_STATE_KEY = 'ShelfTransfer:backState'
+
+type PersistedState = {
+  form: typeof DEFAULT_FORM
+  rows: Row[]
+  mode: ScreenMode
+  activeRowId: number | null
+}
+
+const loadPersistedState = (): PersistedState | null => {
+  try {
+    const raw = sessionStorage.getItem(BACK_STATE_KEY)
+    return raw ? (JSON.parse(raw) as PersistedState) : null
+  } catch {
+    return null
+  }
+}
+
+const clearPersistedState = () => {
+  try {
+    sessionStorage.removeItem(BACK_STATE_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
 const ShelfTransfer = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([])
-  const [form, setForm] = useState({
-    parentWarehouse: '',
-    parentStorage: '',
-    parentItemNo: '0193090',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
-    source_location: '',
-    internalLabel: '',
-    shipmentQty: '',
-    lot_serial_no: '',
-    office: '',
-    transfer_qty: '',
-    janCode: '',
-    dest_location: '',
-  })
+
+  // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
+  const [persistedState] = useState(loadPersistedState)
+
+  const [rows, setRows] = useState<Row[]>(persistedState?.rows ?? [])
+  const [form, setForm] = useState(persistedState?.form ?? {...DEFAULT_FORM})
 
   // 画面モード（移動元 / 移動先）
-  const [mode, setMode] = useState<ScreenMode>('source')
+  const [mode, setMode] = useState<ScreenMode>(persistedState?.mode ?? 'source')
 
   // 確認・警告モーダルの表示状態
   const [showDiscardConfirm, setShowDiscardConfirm] = useState(false)
@@ -67,7 +100,9 @@ const ShelfTransfer = () => {
 
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const itemNoInputRef = useRef<HTMLInputElement | null>(null)
-  const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [activeRowId, setActiveRowId] = useState<number | null>(
+    persistedState?.activeRowId ?? null,
+  )
   const sourceRowsRef = useRef<Row[]>(initialRows)
 
   const isAnyModalOpen =
@@ -84,6 +119,18 @@ const ShelfTransfer = () => {
     itemNoInputRef.current?.focus()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // เก็บ snapshot ต่อเนื่องทุกครั้งที่ข้อมูลเปลี่ยน เพื่อให้รีเฟรช/กลับมาแล้วข้อมูลยังอยู่
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        BACK_STATE_KEY,
+        JSON.stringify({form, rows, mode, activeRowId}),
+      )
+    } catch {
+      /* ignore */
+    }
+  }, [form, rows, mode, activeRowId])
 
   // テーブルを初期状態（空）に戻し、品目No. 入力へフォーカスを戻す
   const loadSourceRows = () => {
@@ -301,6 +348,7 @@ const ShelfTransfer = () => {
     loadSourceRows()
     setMode('source')
     setActiveRowId(null)
+    clearPersistedState()
     navigate('/factory/factory')
   }
 
@@ -628,6 +676,8 @@ const ShelfTransfer = () => {
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
                       setShowBackConfirm(false);
+                      // YES = ทิ้งข้อมูล: ล้าง snapshot แล้วกลับเมนู
+                      clearPersistedState();
                       navigate("/factory/factory");
                     }}
                   >
@@ -635,12 +685,14 @@ const ShelfTransfer = () => {
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() =>{ setShowBackConfirm(false);
-                    navigate("/factory/factory");
+                    onClick={() => {
+                      setShowBackConfirm(false);
+                      // NO = เก็บข้อมูลไว้ (snapshot ถูกบันทึกต่อเนื่องอยู่แล้ว) กลับมาข้อมูลยังอยู่
+                      navigate("/factory/factory");
                     }}
                   >
                     NO
-                  </button>   
+                  </button>
                    <button
   className="set-modal-btn set-m"
   onClick={() => {

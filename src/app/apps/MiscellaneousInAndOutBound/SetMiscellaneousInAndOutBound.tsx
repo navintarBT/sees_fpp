@@ -29,11 +29,38 @@ const allRowsData: Row[] = [
   { id: 10, error: '', item: 'J10', lot: 'L10', status: 'W0029', build: 'W0023', release: 1, move: '品目10', moveStorage: 'S10', name: '部品J', moveStorage2: '棚J' },
 ]
 
+const STORAGE_KEY = 'setMiscellaneousInAndOutBoundForm'
+
+type StoredForm = {
+  quantity: string
+  rows: Row[]
+  form: {
+    parentItemNo: string
+    moveWarehouse: string
+    moveStorage: string
+    qty: string
+    janCode: string
+  }
+  activeRowId: number | null
+}
+
+const loadStoredForm = (): StoredForm | null => {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) as StoredForm : null
+  } catch {
+    return null
+  }
+}
+
 const SetMiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
-  const [quantity, setQuantity] = useState('1')
-  const [rows, setRows] = useState<Row[]>([])
-  const [form, setForm] = useState({
+
+  const storedForm = loadStoredForm()
+
+  const [quantity, setQuantity] = useState(storedForm?.quantity ?? '1')
+  const [rows, setRows] = useState<Row[]>(storedForm?.rows ?? [])
+  const [form, setForm] = useState(storedForm?.form ?? {
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
     moveStorage: '',
@@ -55,7 +82,7 @@ const SetMiscellaneousInAndOutBound = () => {
   const [showInvalidLotSerial, setShowInvalidLotSerial] = useState(false)
   const [showNetworkError, setShowNetworkError] = useState(false)
 
-  const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [activeRowId, setActiveRowId] = useState<number | null>(storedForm?.activeRowId ?? null)
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({ f1: false, f8: false })
   const backBtnRef = useRef<HTMLButtonElement>(null)
@@ -116,8 +143,16 @@ const SetMiscellaneousInAndOutBound = () => {
   const clearFormAndRows = () => {
     clearForm()
     clearRows()
+    setActiveRowId(null)
+    sessionStorage.removeItem(STORAGE_KEY)
     resetTableScroll()
   }
+
+  // Persist form state to sessionStorage so it survives navigating back into the page
+  useEffect(() => {
+    const data: StoredForm = { quantity, rows, form, activeRowId }
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  }, [quantity, rows, form, activeRowId])
 
   // ３－１．完了ボタン処理
   const handleCompleteClick = () => {
@@ -583,6 +618,7 @@ const SetMiscellaneousInAndOutBound = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
+                      clearFormAndRows()
                       navigate('/factory')
                     }}
                   >

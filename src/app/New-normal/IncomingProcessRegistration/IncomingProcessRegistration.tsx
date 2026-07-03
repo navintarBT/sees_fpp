@@ -1,25 +1,66 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+
+const STORAGE_KEY = 'incomingProcessRegistrationForm'
+
+type StoredForm = {
+    productTicketNo: string
+    productName: string
+    productCode: string
+    lotSerial: string
+    orderQuantity: number | null
+    receivingQuantity: string
+    goodQuantity: string
+    defectQuantity: string
+    defectReason: string
+}
+
+const loadStoredForm = (): StoredForm | null => {
+    try {
+        const raw = sessionStorage.getItem(STORAGE_KEY)
+        return raw ? JSON.parse(raw) as StoredForm : null
+    } catch {
+        return null
+    }
+}
 
 const IncomingProcessRegistration = () => {
     const navigate = useNavigate()
     const [showClearConfirm, setShowClearConfirm] = useState(false)
     const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+    const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
     const [showBackConfirm, setShowBackConfirm] = useState(false)
     const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
     const [showError, setShowError] = useState<{ message: string } | null>(null)
     const barcodeInputRef = useRef<HTMLInputElement | null>(null)
 
-    const [productTicketNo, setProductTicketNo] = useState('')
-    const [productName, setProductName] = useState('')
-    const [productCode, setProductCode] = useState('')
-    const [lotSerial, setLotSerial] = useState('')
-    const [orderQuantity, setOrderQuantity] = useState<number | null>(null)
-    const [receivingQuantity, setReceivingQuantity] = useState<string>('')
-    const [goodQuantity, setGoodQuantity] = useState<string>('')
-    const [defectQuantity, setDefectQuantity] = useState<string>('')
-    const [defectReason, setDefectReason] = useState('')
+    const storedForm = loadStoredForm()
+
+    const [productTicketNo, setProductTicketNo] = useState(storedForm?.productTicketNo ?? '')
+    const [productName, setProductName] = useState(storedForm?.productName ?? '')
+    const [productCode, setProductCode] = useState(storedForm?.productCode ?? '')
+    const [lotSerial, setLotSerial] = useState(storedForm?.lotSerial ?? '')
+    const [orderQuantity, setOrderQuantity] = useState<number | null>(storedForm?.orderQuantity ?? null)
+    const [receivingQuantity, setReceivingQuantity] = useState<string>(storedForm?.receivingQuantity ?? '')
+    const [goodQuantity, setGoodQuantity] = useState<string>(storedForm?.goodQuantity ?? '')
+    const [defectQuantity, setDefectQuantity] = useState<string>(storedForm?.defectQuantity ?? '')
+    const [defectReason, setDefectReason] = useState(storedForm?.defectReason ?? '')
+
+    useEffect(() => {
+        const data: StoredForm = {
+            productTicketNo,
+            productName,
+            productCode,
+            lotSerial,
+            orderQuantity,
+            receivingQuantity,
+            goodQuantity,
+            defectQuantity,
+            defectReason,
+        }
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+    }, [productTicketNo, productName, productCode, lotSerial, orderQuantity, receivingQuantity, goodQuantity, defectQuantity, defectReason])
 
     const clearFormAndRows = () => {
         setProductTicketNo('')
@@ -31,6 +72,7 @@ const IncomingProcessRegistration = () => {
         setGoodQuantity('')
         setDefectQuantity('')
         setDefectReason('')
+        sessionStorage.removeItem(STORAGE_KEY)
 
         setTimeout(() => {
             barcodeInputRef.current?.focus()
@@ -49,6 +91,7 @@ const IncomingProcessRegistration = () => {
             setLotSerial('2026012001')
             setOrderQuantity(null)
             setReceivingQuantity('180')
+            setGoodQuantity('180')
         } else {
             setProductName('')
             setProductCode('')
@@ -146,8 +189,8 @@ const IncomingProcessRegistration = () => {
             // Mock API call
             await new Promise(resolve => setTimeout(resolve, 500))
 
-            clearFormAndRows()
             setShowCompleteConfirm(false)
+            setShowCompleteRegistered(true)
 
         } catch (error) {
             setShowError({ message: 'サーバとの通信中にエラーが発生しました。再実行しても解消されない場合は管理者へ連絡してください。' })
@@ -317,8 +360,7 @@ const IncomingProcessRegistration = () => {
                             <div className='set-modal' role='dialog' aria-modal='true'>
                                 <div className='set-modal-header'>確認</div>
                                 <div className='set-modal-body' style={{ whiteSpace: 'pre-line' }}>
-                                    {'入荷データを送信します。\n 宜しいですか？'}
-
+                                    入荷工程登録を完了しますか？
                                 </div>
                                 <div className='set-modal-actions'>
                                     <button
@@ -338,6 +380,26 @@ const IncomingProcessRegistration = () => {
                         </div>
                     )}
 
+                    {showCompleteRegistered && (
+                        <div className='set-modal-backdrop' role='presentation'>
+                            <div className='set-modal' role='dialog' aria-modal='true'>
+                                <div className='set-modal-header'>確認</div>
+                                <div className='set-modal-body'>入荷工程登録を完了しました。</div>
+                                <div className='set-modal-actions'>
+                                    <button
+                                        className='set-modal-btn set-modal-yes'
+                                        onClick={() => {
+                                            setShowCompleteRegistered(false)
+                                            clearFormAndRows()
+                                        }}
+                                    >
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {showBackConfirm && (
                         <div className='set-modal-backdrop' role='presentation'>
                             <div className='set-modal' role='dialog' aria-modal='true'>
@@ -350,6 +412,7 @@ const IncomingProcessRegistration = () => {
                                         className='set-modal-btn set-modal-yes'
                                         onClick={() => {
                                             setShowBackConfirm(false)
+                                            clearFormAndRows()
                                             navigate('/factory/factory')
                                         }}
                                     >
@@ -416,7 +479,7 @@ const IncomingProcessRegistration = () => {
                                         className='set-modal-btn set-modal-yes'
                                         onClick={() => setShowError(null)}
                                     >
-                                        閉じる
+                                        OK
                                     </button>
                                 </div>
                             </div>
