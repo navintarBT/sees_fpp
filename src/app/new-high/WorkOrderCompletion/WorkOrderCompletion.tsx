@@ -589,10 +589,10 @@ const WorkOrderCompletion = () => {
               <div className="set-modal" role="dialog" aria-modal="true">
                 <div className="set-modal-header">{"\u78ba\u8a8d"}</div>
                 <div className="set-modal-body"
-                
+
                 >
                   {
-                    "メニューに戻ります。\n 読込データを破棄しますか？"
+                    "メニューに戻ります。\n よろしいですか？"
                   }
                 </div>
                 <div className="set-modal-actions">
@@ -600,32 +600,20 @@ const WorkOrderCompletion = () => {
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
                       setShowBackConfirm(false);
-                      // YES = ทิ้งข้อมูล: ล้าง snapshot แล้วกลับเมนู
+                      // はい = ล้างข้อมูลในฟอร์ม + snapshot แล้วกลับเมนู
+                      resetInitialDisplay();
                       clearPersistedState();
                       navigate("/factory/factory");
                     }}
                   >
-                  YES
+                    はい
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() => {
-                      setShowBackConfirm(false);
-                      // NO = เก็บข้อมูลไว้ (snapshot ถูกบันทึกต่อเนื่องอยู่แล้ว) กลับมาข้อมูลยังอยู่
-                      navigate("/factory/factory");
-                    }}
+                    onClick={() => setShowBackConfirm(false)}
                   >
-                    NO
+                    いいえ
                   </button>
-                   <button
-  className="set-modal-btn set-m"
-  onClick={() => {
-    setShowBackConfirm(false);
-    
-  }}
->
-  取消
-</button>
                 </div>
               </div>
             </div>

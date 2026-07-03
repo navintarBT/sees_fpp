@@ -48,6 +48,10 @@ const IncomingProcessRegistration = () => {
     const [defectReason, setDefectReason] = useState(storedForm?.defectReason ?? '')
 
     useEffect(() => {
+        barcodeInputRef.current?.focus()
+    }, [])
+
+    useEffect(() => {
         const data: StoredForm = {
             productTicketNo,
             productName,
@@ -135,9 +139,6 @@ const IncomingProcessRegistration = () => {
 
     const handleGoodQuantityChange = (value: string) => {
         setGoodQuantity(value)
-        const receiving = parseNumber(receivingQuantity)
-        const good = parseNumber(value)
-        setDefectQuantity(Math.max(receiving - good, 0).toString())
     }
 
     const handleDefectQuantityChange = (value: string) => {
@@ -145,6 +146,10 @@ const IncomingProcessRegistration = () => {
         const receiving = parseNumber(receivingQuantity)
         const defect = parseNumber(value)
         setGoodQuantity(Math.max(receiving - defect, 0).toString())
+
+        if (defect > 0 && !defectReason) {
+            setShowError({ message: '不良理由が選択されていません。' })
+        }
     }
 
     const handleComplete = () => {
@@ -165,6 +170,11 @@ const IncomingProcessRegistration = () => {
 
         if (!lotSerial) {
             setShowError({ message: 'ロット／シリアルが未入力です。' })
+            return
+        }
+
+        if (parseInt(defectQuantity) > 0 && !defectReason) {
+            setShowError({ message: '不良理由が選択されていません。' })
             return
         }
 
