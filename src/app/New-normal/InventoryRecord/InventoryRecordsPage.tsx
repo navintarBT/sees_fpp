@@ -46,7 +46,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         inspection: '',
         rowNo: '',
         instruct: '3',
-        Load: '',
+        Load: '0',
         productName: '品名001',
       },
       {
@@ -67,7 +67,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         item: '1003',
         lot: 'Lot003',
         lot2: '*',
-        inspection: '',
+        inspection: '〇',
         rowNo: '',
         instruct: '15',
         Load: '15',
@@ -208,10 +208,10 @@ const InventoryRecordsPage = () => {
     const saved = sessionStorage.getItem('inventory-records-state')
     const handResult = sessionStorage.getItem('inventory-hand-input-result')
     if (saved) {
-      const {form: f, rows: r, isLoaded: l, activeRowId: a} = JSON.parse(saved)
+      const {form: f, rows: r, isLoaded: l} = JSON.parse(saved)
       setForm(f)
       setIsLoaded(l)
-      setActiveRowId(a)
+      setActiveRowId(null)
       if (handResult) {
         sessionStorage.removeItem('inventory-hand-input-result')
         const {itemNo, lot, qty} = JSON.parse(handResult)
@@ -313,7 +313,6 @@ const InventoryRecordsPage = () => {
         return updated
       }),
     )
-    setForm((prev) => ({...prev, janCode: ''}))
     janCodeRef.current?.focus()
   }
 

@@ -104,34 +104,17 @@ const InventoryRecordDetail = () => {
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
-  const [checkedRowIds, setCheckedRowIds] = useState<number[]>([])
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen = showDeleteConfirm || showNoSelectionConfirm || showBackConfirm
 
-  const deleteCheckedRows = () => {
-    setRows((prev) => prev.filter((row) => !checkedRowIds.includes(row.id)))
-    setCheckedRowIds([])
+  const deleteActiveRow = () => {
+    setRows((prev) => prev.filter((row) => row.id !== activeRowId))
+    setActiveRowId(null)
     setShowDeleteConfirm(false)
   }
 
   const handleRowClick = (rowId: number) => {
-    setActiveRowId(rowId)
-    setCheckedRowIds((prev) =>
-      prev.includes(rowId) ? prev.filter((id) => id !== rowId) : [...prev, rowId],
-    )
-  }
-
-  const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
-
-  const toggleAllChecked = (checked: boolean) => {
-    setCheckedRowIds(checked ? rows.map((row) => row.id) : [])
-  }
-
-  const toggleRowChecked = (rowId: number, checked: boolean) => {
-    setCheckedRowIds((prev) => {
-      if (checked) return prev.includes(rowId) ? prev : [...prev, rowId]
-      return prev.filter((id) => id !== rowId)
-    })
+    setActiveRowId((prev) => (prev === rowId ? null : rowId))
   }
 
   useEffect(() => {
@@ -162,32 +145,7 @@ const InventoryRecordDetail = () => {
       headClassName: 'col-arrow-head',
       cellClassName: 'col-arrow',
       header: '',
-      render: (row) => (checkedRowIds.includes(row.id) ? <FaPlay className='col-row-arrow' /> : null),
-    },
-    {
-      key: 'check',
-      headClassName: 'col-check',
-      cellClassName: 'col-check',
-      header: (
-        <input
-          type='checkbox'
-          className='tf-tableCheckbox'
-          checked={isAllChecked}
-          onChange={(e) => toggleAllChecked(e.target.checked)}
-          onClick={(e) => e.stopPropagation()}
-          aria-label='Select all rows'
-        />
-      ),
-      render: (row) => (
-        <input
-          type='checkbox'
-          className='tf-tableCheckbox'
-          checked={checkedRowIds.includes(row.id)}
-          onChange={(e) => toggleRowChecked(row.id, e.target.checked)}
-          onClick={(e) => e.stopPropagation()}
-          aria-label={`Select row ${row.id}`}
-        />
-      ),
+      render: (row) => (activeRowId === row.id ? <FaPlay className='col-row-arrow' /> : null),
     },
     {key: 'error', headClassName: 'col-error', cellClassName: 'col-error', header: '', render: (row) => row.error},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
@@ -206,11 +164,11 @@ const InventoryRecordDetail = () => {
             <div className='set-form'>
               <div className='set-row'>
                 <label>品名</label>
-                <input value={parentSerial} style={{textAlign: 'center'}} readOnly />
+                <input value={parentSerial} className='set-input-gray' style={{textAlign: 'center'}} readOnly />
               </div>
               <div className='set-row'>
                 <label>品目No.</label>
-                <input value={parentItem} style={{textAlign: 'center'}} readOnly />
+                <input value={parentItem} className='set-input-gray' style={{textAlign: 'center'}} readOnly />
               </div>
             </div>
 
@@ -221,13 +179,12 @@ const InventoryRecordDetail = () => {
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
-              isRowActive={(rowKey) => checkedRowIds.includes(Number(rowKey))}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
             />
 
             <ActionFooter columns={4}>
               <button className='set-btn set-danger' onClick={() => {
-                if (checkedRowIds.length === 0) {
+                if (activeRowId === null) {
                   setShowNoSelectionConfirm(true)
                 } else {
                   setShowDeleteConfirm(true)
@@ -253,7 +210,7 @@ const InventoryRecordDetail = () => {
                 <div className='set-modal-header'>確認</div>
                 <div className='set-modal-body'>選択した行を削除しますか？</div>
                 <div className='set-modal-actions'>
-                  <button className='set-modal-btn set-modal-yes' onClick={deleteCheckedRows}>
+                  <button className='set-modal-btn set-modal-yes' onClick={deleteActiveRow}>
                     YES
                   </button>
                   <button className='set-modal-btn set-modal-no' onClick={() => setShowDeleteConfirm(false)}>
