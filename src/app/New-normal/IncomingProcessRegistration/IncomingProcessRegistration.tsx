@@ -149,7 +149,7 @@ const IncomingProcessRegistration = () => {
 
     const handleComplete = () => {
         if (!productTicketNo) {
-            setShowError({ message: '現品票№が未入力です。' })
+            setShowError({ message: '現品票No.が未入力です。' })
             return
         }
 
@@ -204,7 +204,7 @@ const IncomingProcessRegistration = () => {
                     <div className='set-header'>入荷工程登録</div>
                     <div className='set-body'>
                         <div className='set-form'>
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>現品票No.</label>
                                 <input
                                     ref={barcodeInputRef}
@@ -216,29 +216,29 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>品　　 名</label>
                                 <input
                                     value={productName}
                                     readOnly={true}
                                     required
                                     className='set-small set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>品　　 番 </label>
                                 <input
                                     value={productCode}
                                     readOnly={true}
                                     required
                                     className='set-small set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label className='spax-label-incoming'>ロット／シリアル </label>
                                 <input
                                     value={lotSerial}
@@ -249,7 +249,7 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>入荷数量 </label>
                                 <input
                                     value={receivingQuantity}
@@ -257,11 +257,11 @@ const IncomingProcessRegistration = () => {
                                     readOnly={true}
                                     required
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#e5e7eb', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>良品数量</label>
                                 <input
                                     value={goodQuantity}
@@ -272,7 +272,7 @@ const IncomingProcessRegistration = () => {
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>不良数量</label>
                                 <input
                                     value={defectQuantity}
@@ -472,7 +472,7 @@ const IncomingProcessRegistration = () => {
                     {showError && (
                         <div className='set-modal-backdrop' role='presentation'>
                             <div className='set-modal' role='dialog' aria-modal='true'>
-                                <div className='set-modal-header'>エラー</div>
+                                <div className='set-modal-header'>確認</div>
                                 <div className='set-modal-body'>{showError.message}</div>
                                 <div className='set-modal-actions'>
                                     <button
