@@ -23,20 +23,43 @@ type TableColumn = {
   render: (row: Row) => ReactNode
 }
 
+const STORAGE_KEY = 'setReturnConfigurationForm'
+
+type StoredForm = {
+  loadedData: Row[]
+  hasLoadedData: boolean
+  parentJanCode: string
+  parentStatus: string
+  parentQty: number
+  janCode: string
+  activeRowId: number | null
+}
+
+const loadStoredForm = (): StoredForm | null => {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) as StoredForm : null
+  } catch {
+    return null
+  }
+}
+
 const SetReturnConfiguration = () => {
   const navigate = useNavigate()
 
+  const storedForm = loadStoredForm()
+
   // State for loaded data (読込データ from server)
-  const [loadedData, setLoadedData] = useState<Row[]>([])
-  const [hasLoadedData, setHasLoadedData] = useState(false)
+  const [loadedData, setLoadedData] = useState<Row[]>(storedForm?.loadedData ?? [])
+  const [hasLoadedData, setHasLoadedData] = useState(storedForm?.hasLoadedData ?? false)
 
   // Form state
-  const [parentJanCode, setParentJanCode] = useState('')
-  const [parentStatus, setParentStatus] = useState('')
-  const [parentQty, setParentQty] = useState(1)
-  const [janCode, setJanCode] = useState('')
+  const [parentJanCode, setParentJanCode] = useState(storedForm?.parentJanCode ?? '')
+  const [parentStatus, setParentStatus] = useState(storedForm?.parentStatus ?? '')
+  const [parentQty, setParentQty] = useState(storedForm?.parentQty ?? 1)
+  const [janCode, setJanCode] = useState(storedForm?.janCode ?? '')
 
-  const [activeRowId, setActiveRowId] = useState<number | null>(null)
+  const [activeRowId, setActiveRowId] = useState<number | null>(storedForm?.activeRowId ?? null)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const parentJanCodeInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -86,6 +109,20 @@ const SetReturnConfiguration = () => {
     setShowStatusChangeConfirm(false)
   }
 
+  // Persist form state to sessionStorage so it survives navigating back into the page
+  useEffect(() => {
+    const data: StoredForm = {
+      loadedData,
+      hasLoadedData,
+      parentJanCode,
+      parentStatus,
+      parentQty,
+      janCode,
+      activeRowId,
+    }
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  }, [loadedData, hasLoadedData, parentJanCode, parentStatus, parentQty, janCode, activeRowId])
+
   // Clear all data and reset to initial state
   const clearAllData = () => {
     setLoadedData([])
@@ -95,6 +132,7 @@ const SetReturnConfiguration = () => {
     setParentQty(1)
     setJanCode('')
     setActiveRowId(null)
+    sessionStorage.removeItem(STORAGE_KEY)
     resetTableScroll()
   }
 
