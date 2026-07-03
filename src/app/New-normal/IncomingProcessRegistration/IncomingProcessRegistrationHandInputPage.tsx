@@ -75,7 +75,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                     <div className='set-header'>入荷工程登録</div>
                     <div className='set-body'>
                         <div className='set-form'>
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>品　　 名</label>
                                 <input
                                     value={productName}
@@ -85,7 +85,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>品　　 番</label>
                                 <input
                                     value={productCode}
@@ -95,7 +95,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label className='spax-label-incoming'>ロット／シリアル</label>
                                 <input
                                     value={lotSerial}
@@ -105,7 +105,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>入荷数量</label>
                                 <input
                                     value={receivingQuantity}
@@ -116,7 +116,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className=' set-row-incomingapge'>
                                 <label>良品数量</label>
                                 <input
                                     value={goodQuantity}
@@ -127,7 +127,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                 />
                             </div>
 
-                            <div className='set-row set-row-incomingapge'>
+                            <div className='set-row-incomingapge'>
                                 <label>不良数量</label>
                                 <input
                                     type="number"
@@ -238,7 +238,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                     {showError && (
                         <div className='set-modal-backdrop' role='presentation'>
                             <div className='set-modal' role='dialog' aria-modal='true'>
-                                <div className='set-modal-header'>エラー</div>
+                                <div className='set-modal-header'>確認</div>
                                 <div className='set-modal-body'>{showError.message}</div>
                                 <div className='set-modal-actions'>
                                     <button
