@@ -33,6 +33,37 @@ const parseDateValue = (value: string) => {
   return year && month && day ? new Date(year, month - 1, day) : new Date()
 }
 
+// เก็บ snapshot ของหน้าจอเพื่อให้กด NO / รีเฟรชแล้วข้อมูลยังอยู่เหมือนเดิม
+const BACK_STATE_KEY = 'WorkOrderCompletion:backState'
+
+type WoData = { planned: number; completed: number; defective: number }
+
+type PersistedState = {
+  woDatePickerValue: string
+  woNumber: string
+  woData: WoData | null
+  plannedCount: string
+  completedCount: string
+  defectiveCount: string
+}
+
+const loadPersistedState = (): PersistedState | null => {
+  try {
+    const raw = sessionStorage.getItem(BACK_STATE_KEY)
+    return raw ? (JSON.parse(raw) as PersistedState) : null
+  } catch {
+    return null
+  }
+}
+
+const clearPersistedState = () => {
+  try {
+    sessionStorage.removeItem(BACK_STATE_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
 const getCalendarDays = (monthDate: Date) => {
   const year = monthDate.getFullYear()
   const month = monthDate.getMonth()
@@ -54,14 +85,16 @@ const WorkOrderCompletion = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const todayValue = toDateValue(new Date())
-  const [woDatePickerValue, setWoDatePickerValue] = useState(todayValue)
+  // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
+  const [persistedState] = useState(loadPersistedState)
+  const [woDatePickerValue, setWoDatePickerValue] = useState(persistedState?.woDatePickerValue ?? todayValue)
   const [showWoCalendar, setShowWoCalendar] = useState(false)
-  const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(todayValue))
-  const [woNumber, setWoNumber] = useState('')
-  const [woData, setWoData] = useState<{ planned: number; completed: number; defective: number } | null>(null)
-  const [plannedCount, setPlannedCount] = useState('')
-  const [completedCount, setCompletedCount] = useState('')
-  const [defectiveCount, setDefectiveCount] = useState('')
+  const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(persistedState?.woDatePickerValue ?? todayValue))
+  const [woNumber, setWoNumber] = useState(persistedState?.woNumber ?? '')
+  const [woData, setWoData] = useState<WoData | null>(persistedState?.woData ?? null)
+  const [plannedCount, setPlannedCount] = useState(persistedState?.plannedCount ?? '')
+  const [completedCount, setCompletedCount] = useState(persistedState?.completedCount ?? '')
+  const [defectiveCount, setDefectiveCount] = useState(persistedState?.defectiveCount ?? '')
   const [showWoSelect, setShowWoSelect] = useState(false)
   const [selectedWoNumber, setSelectedWoNumber] = useState('')
   const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
@@ -104,6 +137,18 @@ const WorkOrderCompletion = () => {
     setWoNumber(selectedWoNumber)
     applyWoData(selectedWoNumber)
   }, [location.state])
+
+  // เก็บ snapshot ต่อเนื่องทุกครั้งที่ข้อมูลเปลี่ยน เพื่อให้รีเฟรช/กลับมาแล้วข้อมูลยังอยู่
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        BACK_STATE_KEY,
+        JSON.stringify({ woDatePickerValue, woNumber, woData, plannedCount, completedCount, defectiveCount }),
+      )
+    } catch {
+      /* ignore */
+    }
+  }, [woDatePickerValue, woNumber, woData, plannedCount, completedCount, defectiveCount])
 
   const openWoDatePicker = () => {
     setWoCalendarMonth(parseDateValue(woDatePickerValue || todayValue))
@@ -555,6 +600,8 @@ const WorkOrderCompletion = () => {
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
                       setShowBackConfirm(false);
+                      // YES = ทิ้งข้อมูล: ล้าง snapshot แล้วกลับเมนู
+                      clearPersistedState();
                       navigate("/factory/factory");
                     }}
                   >
@@ -562,12 +609,14 @@ const WorkOrderCompletion = () => {
                   </button>
                   <button
                     className="set-modal-btn set-modal-no"
-                    onClick={() =>{ setShowBackConfirm(false);
-                    navigate("/factory/factory");
+                    onClick={() => {
+                      setShowBackConfirm(false);
+                      // NO = เก็บข้อมูลไว้ (snapshot ถูกบันทึกต่อเนื่องอยู่แล้ว) กลับมาข้อมูลยังอยู่
+                      navigate("/factory/factory");
                     }}
                   >
                     NO
-                  </button>   
+                  </button>
                    <button
   className="set-modal-btn set-m"
   onClick={() => {
