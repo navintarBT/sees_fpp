@@ -208,9 +208,10 @@ const InventoryRecordsPage = () => {
     const saved = sessionStorage.getItem('inventory-records-state')
     const handResult = sessionStorage.getItem('inventory-hand-input-result')
     if (saved) {
-      const {form: f, rows: r, isLoaded: l} = JSON.parse(saved)
+      const {form: f, rows: r, isLoaded: l, janCodeDisabled: jcd} = JSON.parse(saved)
       setForm(f)
       setIsLoaded(l)
+      setJanCodeDisabled(jcd ?? false)
       setActiveRowId(null)
       if (handResult) {
         sessionStorage.removeItem('inventory-hand-input-result')
@@ -297,7 +298,7 @@ const InventoryRecordsPage = () => {
   const saveStateToSession = () => {
     sessionStorage.setItem(
       'inventory-records-state',
-      JSON.stringify({form, rows, isLoaded, activeRowId}),
+      JSON.stringify({form, rows, isLoaded, activeRowId, janCodeDisabled}),
     )
   }
 
@@ -682,8 +683,8 @@ const InventoryRecordsPage = () => {
                     <button
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
-                        saveStateToSession()
                         setShowBackConfirm(false)
+                        clearFormAndRows()
                         navigate('/factory/factory')
                       }}
                     >
@@ -692,8 +693,8 @@ const InventoryRecordsPage = () => {
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => {
+                        saveStateToSession()
                         setShowBackConfirm(false)
-                        clearFormAndRows()
                         navigate('/factory/factory')
                       }}
                     >
