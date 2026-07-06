@@ -1983,6 +1983,10 @@ input[type='time'].wot-grid-value2 {
   grid-template-columns: 400px 1fr;
 }
 
+.inventory-records-form .set-row.set-row-wo {
+  grid-template-columns: 400px minmax(0, 1fr) auto;
+}
+
 .inventory-records-form .set-row label {
   white-space: nowrap;
   text-align: left;

@@ -178,6 +178,8 @@ const InventoryRecordsPage = () => {
   const [showNoOrderConfirm, setShowNoOrderConfirm] = useState(false)
   const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
   const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
+  const [showQtyEmptyConfirm, setShowQtyEmptyConfirm] = useState(false)
+  const [showNoRowSelectedConfirm, setShowNoRowSelectedConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const parentItemNoRef = useRef<HTMLInputElement | null>(null)
   const janCodeRef = useRef<HTMLInputElement | null>(null)
@@ -193,6 +195,8 @@ const InventoryRecordsPage = () => {
     showNoOrderConfirm ||
     showCompleteRegistered ||
     showRowClickConfirm ||
+    showQtyEmptyConfirm ||
+    showNoRowSelectedConfirm ||
     showBackConfirm
 
   const closeAllModals = () => {
@@ -200,6 +204,8 @@ const InventoryRecordsPage = () => {
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
     setShowRowClickConfirm(false)
+    setShowQtyEmptyConfirm(false)
+    setShowNoRowSelectedConfirm(false)
     setShowBackConfirm(false)
   }
 
@@ -319,9 +325,23 @@ const InventoryRecordsPage = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
-    if (activeRowId !== rowId) {
-      setShowRowClickConfirm(true)
+  }
+
+  const handleReflect = () => {
+    if (!form.qty.trim()) {
+      setShowQtyEmptyConfirm(true)
+      return
     }
+    if (activeRowId === null) {
+      setShowNoRowSelectedConfirm(true)
+      return
+    }
+    setRows((prev) => prev.map((row) => (row.id === activeRowId ? {...row, Load: form.qty} : row)))
+  }
+
+  const handleRowLongPress = (rowId: number) => {
+    if (activeRowId !== rowId) return
+    setShowRowClickConfirm(true)
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -472,7 +492,7 @@ const InventoryRecordsPage = () => {
                   <option value='検査中'>検査中</option>
                 </select>
               </div>
-              <div className='set-row'>
+              <div className='set-row set-row-wo'>
                 <label>数量</label>
                 <input
                   value={form.qty}
@@ -486,6 +506,14 @@ const InventoryRecordsPage = () => {
                     }
                   }}
                 />
+                <button
+                  className='set-search-btn set-success'
+                  disabled={!isLoaded}
+                  onClick={handleReflect}
+                  style={!isLoaded ? {background: '#d9d9d9', color: '#666'} : undefined}
+                >
+                  反映
+                </button>
               </div>
               <div className='set-row'>
                 <label>JANコード ／品目コード</label>
@@ -520,6 +548,7 @@ const InventoryRecordsPage = () => {
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
+              onRowLongPress={(rowKey) => handleRowLongPress(Number(rowKey))}
             />
 
             <ActionFooter columns={4}>
@@ -595,6 +624,34 @@ const InventoryRecordsPage = () => {
                   <div className='set-modal-body'>オーダーNo.を入力して下さい。</div>
                   <div className='set-modal-actions'>
                     <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoOrderConfirm(false)}>
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showQtyEmptyConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>数量を入力してください。</div>
+                  <div className='set-modal-actions'>
+                    <button className='set-modal-btn set-modal-yes' onClick={() => setShowQtyEmptyConfirm(false)}>
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showNoRowSelectedConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>選択行がありません。</div>
+                  <div className='set-modal-actions'>
+                    <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoRowSelectedConfirm(false)}>
                       OK
                     </button>
                   </div>
