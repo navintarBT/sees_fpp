@@ -40,6 +40,14 @@
   gap: 24px;
 }
 
+.set-row-shipping-record {
+  grid-template-columns: 420px 1fr;
+}
+
+.set-row-shipping-record label {
+  white-space: nowrap;
+}
+
 .set-row label {
   font-size: 34px;
   font-weight: 400;
@@ -638,6 +646,10 @@
   text-align: right;
   justify-self: end;
   padding-right: 8px;
+}
+
+.hand-row-inventory-printing {
+  grid-template-columns: 300px 1fr;
 }
 
 .hand-row input,
@@ -1878,25 +1890,21 @@ input[type='time'].wot-grid-value2 {
   min-width: 45px;
 }
 
-.woPartsIssuanceDetail-table .col-Interior {
-  min-width: 250px;
+.woPartsIssuanceDetail-table .col-num {
+  min-width: 200px;
 }
 
 .woPartsIssuanceDetail-table .col-lot {
-  min-width: 250px;
+  min-width: 350px;
 }
 
-.woPartsIssuanceDetail-table .col-numOfShipments {
-  min-width: 250px;
+.woPartsIssuanceDetail-table .col-move {
+  min-width: 200px;
 }
 
 
-.woPartsIssuanceDetail-table .col-office {
-  min-width: 250px;
-}
-
-.woPartsIssuanceDetail-table .col-check {
-  min-width: 55px;
+.woPartsIssuanceDetail-table .col-moveStorage {
+  min-width: 235px;
 }
 
 /* ####################################table WOPartsIssuanceDetail########################################### */
