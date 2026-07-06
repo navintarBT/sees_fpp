@@ -11,19 +11,85 @@ type Row = {
   lot: string
   lot2: string
   status: string
-  build: number
-  release: number
+  build: string
+  release: string
   move: string
   moveStorage: string
   name: string
   moveStorage2?: string
 }
 
+const EMPTY_ROW: Row = {
+  id: 1,
+  error: '',
+  item: '',
+  lot: '',
+  lot2: '',
+  status: '',
+  build: '',
+  release: '',
+  move: '',
+  moveStorage: '',
+  name: '',
+}
+
 const SESSION_KEY = 'shippingRecordPageState'
+const HAND_INPUT_RESULT_KEY = 'shipping-hand-input-result'
+
+const MOCK_JAN_CODE: Record<string, number> = {
+  '1234567890123': 1,
+}
 
 const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string; qty: string; janCode: string; rows: Row[]}> = {
+  '10000001': {
+    moveWarehouse: 'A倉庫',
+    moveStorage: 'JDE基本保管場所',
+    qty: '1',
+    janCode: '',
+    rows: [
+      {
+        id: 1,
+        error: '',
+        item: '1001',
+        lot: '001',
+        lot2: '',
+        status: 'JDE基本保管場所',
+        build: '1',
+        release: '0',
+        move: '',
+        moveStorage: '',
+        name: '品名1',
+      },
+      {
+        id: 2,
+        error: '',
+        item: '1002',
+        lot: '002',
+        lot2: '*',
+        status: 'JDE基本保管場所',
+        build: '2',
+        release: '2',
+        move: '',
+        moveStorage: '保管場所B',
+        name: '品名2',
+      },
+      {
+        id: 3,
+        error: 'E',
+        item: '1003',
+        lot: '003',
+        lot2: '',
+        status: 'JDE基本保管場所',
+        build: '3',
+        release: '3',
+        move: '',
+        moveStorage: '保管場所C',
+        name: '品名3',
+      },
+    ],
+  },
   '3019': {
-    moveWarehouse: '千葉工場：F0200',
+    moveWarehouse: 'A倉庫',
     moveStorage: 'F0200',
     qty: '1',
     janCode: '',
@@ -35,8 +101,8 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot: '',
         lot2: '*',
         status: '3',
-        build: 2,
-        release: 10,
+        build: '2',
+        release: '10',
         move: '',
         moveStorage: 'A-01-01',
         name: 'サンプル品名',
@@ -48,8 +114,8 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot: '',
         lot2: '*',
         status: '5',
-        build: 7,
-        release: 10,
+        build: '7',
+        release: '10',
         move: '',
         moveStorage: 'A-01-01',
         name: 'サンプル品名',
@@ -61,8 +127,8 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot: '',
         lot2: '*',
         status: '6',
-        build: 3,
-        release: 10,
+        build: '3',
+        release: '10',
         move: '',
         moveStorage: 'A-01-01',
         name: 'サンプル品名',
@@ -73,34 +139,64 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
 
 const ShippingRecordPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([])
+  const [rows, setRows] = useState<Row[]>([EMPTY_ROW])
   const [isLoaded, setIsLoaded] = useState(false)
   const [form, setForm] = useState({
     parentWarehouse: '',
     parentItemNo: '',
-    moveWarehouse: '',
+    moveWarehouse: 'A倉庫',
     moveStorage: '',
-    qty: '',
+    qty: '1',
     janCode: '',
   })
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
+  const [showNoOrderConfirm, setShowNoOrderConfirm] = useState(false)
   const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
+  const parentItemNoRef = useRef<HTMLInputElement | null>(null)
+  const janCodeRef = useRef<HTMLInputElement | null>(null)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const [activeRowId, setActiveRowId] = useState<number | null>(null)
 
   useEffect(() => {
+    parentItemNoRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    if (isLoaded) janCodeRef.current?.focus()
+  }, [isLoaded])
+
+  useEffect(() => {
     const saved = sessionStorage.getItem(SESSION_KEY)
+    const handResult = sessionStorage.getItem(HAND_INPUT_RESULT_KEY)
     if (saved) {
       try {
         const state = JSON.parse(saved)
         setForm(state.form)
-        setRows(state.rows)
         setIsLoaded(state.isLoaded)
         setActiveRowId(state.activeRowId)
+        if (handResult) {
+          sessionStorage.removeItem(HAND_INPUT_RESULT_KEY)
+          const {itemNo, lotSerial, qty, storage} = JSON.parse(handResult)
+          const rowsFromState = state.rows as Row[]
+          const nextId = Math.max(...rowsFromState.map((row) => row.id), 0) + 1
+          const newRow: Row = {
+            ...EMPTY_ROW,
+            id: nextId,
+            item: itemNo,
+            lot: lotSerial,
+            build: qty,
+            release: qty,
+            moveStorage: storage,
+          }
+          setRows([...rowsFromState, newRow])
+        } else {
+          setRows(state.rows)
+        }
       } catch {}
       sessionStorage.removeItem(SESSION_KEY)
     }
@@ -112,6 +208,8 @@ const ShippingRecordPage = () => {
     showHandInputConfirm ||
     showClearConfirm ||
     showCompleteConfirm ||
+    showCompleteRegistered ||
+    showNoOrderConfirm ||
     showRowClickConfirm ||
     showBackConfirm
 
@@ -119,6 +217,8 @@ const ShippingRecordPage = () => {
     setShowHandInputConfirm(false)
     setShowClearConfirm(false)
     setShowCompleteConfirm(false)
+    setShowCompleteRegistered(false)
+    setShowNoOrderConfirm(false)
     setShowRowClickConfirm(false)
     setShowBackConfirm(false)
   }
@@ -131,21 +231,34 @@ const ShippingRecordPage = () => {
       setForm((prev) => ({...prev, ...formData}))
       setRows(mockRows)
       setIsLoaded(true)
+      setActiveRowId(mockRows[0]?.id ?? null)
     } else {
-      setForm((prev) => ({...prev, moveWarehouse: '', moveStorage: '', qty: '', janCode: ''}))
-      setRows([])
+      setForm((prev) => ({...prev, moveWarehouse: 'A倉庫', moveStorage: '', qty: '1', janCode: ''}))
+      setRows([EMPTY_ROW])
       setIsLoaded(false)
+      setActiveRowId(null)
     }
   }
 
-  const clearRows = () => setRows([])
+  const handleJanCodeScan = () => {
+    const janCode = form.janCode.trim()
+    const rowId = MOCK_JAN_CODE[janCode]
+    if (rowId != null) {
+      setRows((prev) =>
+        prev.map((row) => (row.id === rowId ? {...row, release: form.qty, moveStorage: form.moveStorage} : row)),
+      )
+    }
+    janCodeRef.current?.focus()
+  }
+
+  const clearRows = () => setRows([EMPTY_ROW])
   const clearForm = () =>
     setForm({
       parentWarehouse: '',
       parentItemNo: '',
-      moveWarehouse: '',
+      moveWarehouse: 'A倉庫',
       moveStorage: '',
-      qty: '',
+      qty: '1',
       janCode: '',
     })
 
@@ -176,6 +289,11 @@ const ShippingRecordPage = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
+  }
+
+  const handleRowLongPress = (rowId: number) => {
+    if (activeRowId !== rowId) return
+    setShowRowClickConfirm(true)
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -235,12 +353,6 @@ const ShippingRecordPage = () => {
         setShowBackConfirm(true)
         return
       }
-
-      if (event.key === 'Enter' && activeRow) {
-        event.preventDefault()
-        closeAllModals()
-        setShowRowClickConfirm(true)
-      }
     }
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === 'F1') {
@@ -270,9 +382,9 @@ const ShippingRecordPage = () => {
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
     {key: 'lot2', headClassName: 'col-lot2', cellClassName: 'col-lot2', header: '', render: (row) => row.lot2},
-    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '基本保管場所|', render: (row) => row.status},
+    {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '基本保管場所', render: (row) => row.status},
     {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '指示', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '数量', render: (row) => row.release},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.release},
     {key: 'name', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.name},
     {key: 'moveStorage', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.moveStorage},
 
@@ -285,36 +397,41 @@ const ShippingRecordPage = () => {
           <div className='set-header'>出庫実績登録</div>
           <div className='set-body'>
             <div className='set-form'>
-                <div className='set-row'>
+                <div className='set-row set-row-shipping-record'>
                 <label>出荷指示No.</label>
                 <input
+                  ref={parentItemNoRef}
                   style={{textAlign: 'center'}}
                   value={form.parentItemNo}
+                  disabled={isLoaded}
                   onChange={(e) => {
-                    setForm({...form, parentItemNo: e.target.value, moveWarehouse: '', moveStorage: '', qty: '', janCode: ''})
+                    setForm({...form, parentItemNo: e.target.value, moveWarehouse: 'A倉庫', moveStorage: '', qty: '1', janCode: ''})
                     setIsLoaded(false)
-                    setRows([])
+                    setRows([EMPTY_ROW])
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleSearch()
+                    if (e.key === 'Enter') {
+                      e.stopPropagation()
+                      handleSearch()
+                    }
                   }}
                 />
               </div>
-              <div className='set-row'>
-                <label>倉庫/工場</label>
+              <div className='set-row set-row-shipping-record'>
+                <label>倉庫／工場</label>
                 <select
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                   style={{textAlign: 'center'}}
                   disabled={!isLoaded}
                 >
-                  <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>千葉工場：F0200</option>
-                  <option value='千葉倉庫（WMS）：W003'>千葉工場：F0201</option>
-                  <option value='千葉倉庫（WMS）：W004'>千葉工場：F0202</option>
+                  <option value='A倉庫'>A倉庫</option>
+                  <option value='B倉庫'>B倉庫</option>
+                  <option value='C工場'>C工場</option>
+                  <option value='D工場'>D工場</option>
                 </select>
               </div>
-              <div className='set-row'>
+              <div className='set-row set-row-shipping-record'>
                 <label>保管場所</label>
                 <input
                   style={{textAlign: 'center'}}
@@ -324,7 +441,7 @@ const ShippingRecordPage = () => {
                 />
               </div>
 
-              <div className='set-row'>
+              <div className='set-row set-row-shipping-record'>
                 <label>数量</label>
                 <input
                   style={{textAlign: 'center'}}
@@ -335,16 +452,23 @@ const ShippingRecordPage = () => {
                 />
               </div>
 
-              <div className='set-row'>
-                <label>品目No</label>
+              <div className='set-row set-row-shipping-record'>
+                <label>JANコード/品目コード</label>
                 <input
+                  ref={janCodeRef}
                   style={{textAlign: 'center'}}
                   value={form.janCode}
                   onChange={(e) => setForm({...form, janCode: e.target.value})}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.stopPropagation()
+                      handleJanCodeScan()
+                    }
+                  }}
                   disabled={!isLoaded}
                 />
               </div>
-              <div className='set-row'>
+              <div className='set-row set-row-shipping-record'>
                 <label>移動先</label>
                 <input
                   style={{textAlign: 'center'}}
@@ -363,6 +487,7 @@ const ShippingRecordPage = () => {
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
+              onRowLongPress={(rowKey) => handleRowLongPress(Number(rowKey))}
             />
 
             <ActionFooter columns={4}>
@@ -374,13 +499,25 @@ const ShippingRecordPage = () => {
               </button>
               <button
                 className='set-btn set-warning'
-                onClick={() => setShowCompleteConfirm(true)}
+                onClick={() => {
+                  if (!form.parentItemNo.trim()) {
+                    setShowNoOrderConfirm(true)
+                    return
+                  }
+                  setShowCompleteConfirm(true)
+                }}
               >
                 完了
-              </button>     
+              </button>
               <button
                 className='set-btn set-primary'
-                onClick={() => setShowHandInputConfirm(true)}
+                onClick={() => {
+                  if (!form.parentItemNo.trim()) {
+                    setShowNoOrderConfirm(true)
+                    return
+                  }
+                  setShowHandInputConfirm(true)
+                }}
               >
                 手入力
               </button>
@@ -422,14 +559,63 @@ const ShippingRecordPage = () => {
             {showCompleteConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>{'\u78ba\u8a8d'}</div>
-                  <div className='set-modal-body'>{'\u30bb\u30c3\u30c8\u69cb\u6210\u3092\u767b\u9332\u3057\u307e\u3057\u305f\u3002'}</div>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>出庫実績登録を完了しますか？</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowCompleteConfirm(false)
+                        setShowCompleteRegistered(true)
+                      }}
+                    >
+                      はい
+                    </button>
+                    <button
+                      className='set-modal-btn set-modal-no'
                       onClick={() => setShowCompleteConfirm(false)}
                     >
-                      {'\u004f\u004b'}
+                      いいえ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showCompleteRegistered && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>出庫実績登録を完了しました。</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowCompleteRegistered(false)
+                        clearFormAndRows()
+                      }}
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showNoOrderConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>出荷Noを入力してください。</div>
+                  <div className='set-modal-actions'>
+                    <button
+                      className='set-modal-btn set-modal-yes'
+                      onClick={() => {
+                        setShowNoOrderConfirm(false)
+                        parentItemNoRef.current?.focus()
+                      }}
+                    >
+                      OK
                     </button>
                   </div>
                 </div>
@@ -447,7 +633,9 @@ const ShippingRecordPage = () => {
                       onClick={() => {
                         setShowHandInputConfirm(false)
                         sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId}))
-                        navigate('/factory/shipping-hand-input')
+                        navigate('/factory/shipping-hand-input', {
+                          state: {moveWarehouse: form.moveWarehouse, moveStorage: form.moveStorage},
+                        })
                       }}
                     >
                       はい
@@ -513,10 +701,19 @@ const ShippingRecordPage = () => {
                       onClick={() => {
                         sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId}))
                         setShowRowClickConfirm(false)
-                        navigate('/factory/shipping-detail')
+                        navigate('/factory/shipping-detail', {
+                          state: {
+                            name: activeRow?.name ?? '',
+                            item: activeRow?.item ?? '',
+                            lot: activeRow?.lot ?? '',
+                            release: activeRow?.release ?? '',
+                            moveStorage: activeRow?.moveStorage ?? '',
+                            moveWarehouse: form.moveWarehouse,
+                          },
+                        })
                       }}
                     >
-                      はい
+                    YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
@@ -524,7 +721,7 @@ const ShippingRecordPage = () => {
                         setShowRowClickConfirm(false)
                       }}
                     >
-                      いいえ
+                      NO
                     </button>
                   </div>
                 </div>

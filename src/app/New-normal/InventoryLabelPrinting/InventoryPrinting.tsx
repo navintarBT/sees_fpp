@@ -26,6 +26,7 @@ const InventoryPrinting = () => {
 
   const [showItemNoConfirm, setShowItemNoConfirm] = useState(false)
   const [showLotSerialConfirm, setShowLotSerialConfirm] = useState(false)
+  const [showQtyMissingConfirm, setShowQtyMissingConfirm] = useState(false)
   const [showExpiryConfirm, setShowExpiryConfirm] = useState(false)
   const [showDiscardConfirm, setShowDiscardConfirm] = useState(false)
   const [showExecuteConfirm, setShowExecuteConfirm] = useState(false)
@@ -70,6 +71,10 @@ const InventoryPrinting = () => {
       setShowLotSerialConfirm(true)
       return
     }
+    if (!qty.trim()) {
+      setShowQtyMissingConfirm(true)
+      return
+    }
     if (expiry.trim() && !/^\d{4}$/.test(expiry.trim())) {
       setShowExpiryConfirm(true)
       return
@@ -83,7 +88,7 @@ const InventoryPrinting = () => {
         <div className='mockup-frame'>
           <div className='set-header'>庫内バーコードラベル印刷</div>
           <div className='hand-body'>
-            <div className='hand-row'>
+            <div className='hand-row hand-row-inventory-printing'>
               <label>庫内ラベル</label>
               <input
                 ref={moveStorageRef}
@@ -95,7 +100,7 @@ const InventoryPrinting = () => {
                 style={{textAlign: 'center', ...(isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
               />
             </div>
-            <div className='hand-row'>
+            <div className='hand-row hand-row-inventory-printing'>
               <label>品　　 番 </label>
               <input
                 value={itemNo}
@@ -105,8 +110,8 @@ const InventoryPrinting = () => {
                 style={{textAlign: 'center', ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
               />
             </div>
-            <div className='hand-row'>
-              <label>ロット/シリアル</label>
+            <div className='hand-row hand-row-inventory-printing'>
+              <label>ロット／シリアル</label>
               <input
                 value={lot}
                 onChange={(e) => setLot(e.target.value)}
@@ -115,7 +120,7 @@ const InventoryPrinting = () => {
                 style={{textAlign: 'center', ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
               />
             </div>
-            <div className='hand-row'>
+            <div className='hand-row hand-row-inventory-printing'>
               <label>印刷枚数</label>
               <input
                 value={qty}
@@ -153,6 +158,20 @@ const InventoryPrinting = () => {
                   <div className='set-modal-body'>ロットシリアルを入力して下さい。</div>
                   <div className='set-modal-actions'>
                     <button className='set-modal-btn set-modal-yes' onClick={() => setShowLotSerialConfirm(false)}>
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showQtyMissingConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>印刷枚数が入力されていません。</div>
+                  <div className='set-modal-actions'>
+                    <button className='set-modal-btn set-modal-yes' onClick={() => setShowQtyMissingConfirm(false)}>
                       OK
                     </button>
                   </div>
