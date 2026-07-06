@@ -127,7 +127,7 @@ const InventoryPrinting = () => {
             </div>
             <ActionFooter columns={4}>
               <button className='set-btn set-danger' onClick={() => setShowDiscardConfirm(true)}>破棄</button>
-              <button className='set-btn set-primary' onClick={handleRead}>実行</button>
+              <button className='set-btn set-warning' onClick={handleRead}>実行</button>
               <button className='set-btn set-success' style={{visibility: 'hidden'}}>解除</button>
               <button className='set-btn set-success' onClick={() => setShowBackConfirm(true)}>戻る</button>
             </ActionFooter>
