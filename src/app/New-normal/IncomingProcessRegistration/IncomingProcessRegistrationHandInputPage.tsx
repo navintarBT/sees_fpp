@@ -39,9 +39,13 @@ const IncomingProcessRegistrationHandInputPage = () => {
 
     const handleGoodQuantityChange = (value: string) => {
         setGoodQuantity(value)
+    }
+
+    const handleDefectQuantityChange = (value: string) => {
+        setDefectQuantity(value)
         const receiving = parseNumber(receivingQuantity)
-        const good = parseNumber(value)
-        setDefectQuantity(Math.max(receiving - good, 0).toString())
+        const defect = parseNumber(value)
+        setGoodQuantity(Math.max(receiving - defect, 0).toString())
     }
 
     const handleComplete = () => {
@@ -62,6 +66,11 @@ const IncomingProcessRegistrationHandInputPage = () => {
 
         if (!receivingQuantity) {
             setShowError({ message: '入荷数量が未入力です。' })
+            return
+        }
+
+        if (parseInt(defectQuantity) > 0 && !defectReason) {
+            setShowError({ message: '不良理由が選択されていません。' })
             return
         }
 
@@ -130,6 +139,8 @@ const IncomingProcessRegistrationHandInputPage = () => {
                             <div className='set-row-incomingapge'>
                                 <label>不良数量</label>
                                 <input
+                                    value={defectQuantity}
+                                    onChange={(e) => handleDefectQuantityChange(e.target.value)}
                                     type="number"
                                     className='set-input-gray'
                                     style={{ textAlign: 'center' }}

@@ -84,10 +84,6 @@ const IncomingProcessRegistration = () => {
     }
 
     const fetchProductInfo = async (ticketNo: string) => {
-        // TODO: API call to JDE
-        // This is mock data - replace with actual API
-        console.log(`Fetching product info for: ${ticketNo}`)
-
         // Mock response
         if (ticketNo === 'MB10147843001') {
             setProductName('ブレーキシリンダー（硬）')
@@ -146,10 +142,6 @@ const IncomingProcessRegistration = () => {
         const receiving = parseNumber(receivingQuantity)
         const defect = parseNumber(value)
         setGoodQuantity(Math.max(receiving - defect, 0).toString())
-
-        if (defect > 0 && !defectReason) {
-            setShowError({ message: '不良理由が選択されていません。' })
-        }
     }
 
     const handleComplete = () => {
@@ -194,8 +186,6 @@ const IncomingProcessRegistration = () => {
                 defectQuantity: parseInt(defectQuantity) || 0,
                 defectReason: defectReason || null,
             }
-            console.log('Sending to JDE:', payload)
-
             // Mock API call
             await new Promise(resolve => setTimeout(resolve, 500))
 
