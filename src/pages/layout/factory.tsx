@@ -11,6 +11,7 @@ const Factory = () => {
     { label: 'WO作業時間実績登録', path: '/factory/button-work-order-time', className: 'mockup-gray' },
     { label: 'WO完了実績登録', path: '/factory/work-order-completion', className: 'mockup-orange' },
     { label: '出庫実績登録', path: '/factory/shipping-records', className: 'mockup-pink' },
+    { label: '庫内バーコードラベル印刷', path: '/factory/inventory-label-printing', className: 'mockup-pink' },
   ] as const
 
   return (

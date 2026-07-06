@@ -36,6 +36,7 @@ import { IncomingProcessRegistrationHandInputPage } from '../app/New-normal/Inco
 import { ButtonWorkOrderTime } from '../app/new-high/WorkOrderTimeRegistration/ButtonWorkOrderTime'
 import { WorkOrderCompletion_Choose_WO } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion_Choose_WO'
 import { WorkOrderTimeRegistrationChoose } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeChooseGosen'
+import { InventoryPrinting } from '../app/New-normal/InventoryLabelPrinting/InventoryPrinting'
 
 const MainPage = () => {
   return (
@@ -78,6 +79,7 @@ const MainPage = () => {
         <Route path='incoming-process-registration-hand-input' element={<IncomingProcessRegistrationHandInputPage />} />
         <Route path='work-order-completion-select-wo' element={<WorkOrderCompletion_Choose_WO />} />
         <Route path='work-order-time-registration-choose' element={<WorkOrderTimeRegistrationChoose />} />
+        <Route path='inventory-label-printing' element={<InventoryPrinting />} />
       </Route>
     </Routes>
   )
