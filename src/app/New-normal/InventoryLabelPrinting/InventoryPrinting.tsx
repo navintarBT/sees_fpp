@@ -96,7 +96,7 @@ const InventoryPrinting = () => {
               />
             </div>
             <div className='hand-row'>
-              <label>品番</label>
+              <label>品　　 番 </label>
               <input
                 value={itemNo}
                 onChange={(e) => setItemNo(e.target.value)}
