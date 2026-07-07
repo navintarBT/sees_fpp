@@ -120,6 +120,13 @@ const measureColumnWidths = (rows: Row[]): React.CSSProperties | undefined => {
   return { gridTemplateColumns: colWidths.join(' ') }
 }
 
+const createEmptyRow = (id: number = 1): Row => ({
+  id,
+  woNo: '',
+  itemNo: '',
+  itemName: '',
+})
+
 const DEFAULT_ROWS: Row[] = [
   { id: 1, woNo: 'WO-001', itemNo: 'PRD-001', itemName: '製品A' },
   { id: 2, woNo: 'WO-002', itemNo: 'PRD-002', itemName: '製品B' },
@@ -465,11 +472,14 @@ const WorkOrderTimeRegistrationChiba = () => {
           const matchedRows = DEFAULT_ROWS.filter((row) => parsedSelection.includes(row.woNo))
           setRows(matchedRows)
           saveRowsToStorage(matchedRows)
+          return
         }
       } catch {
         // ignore invalid stored selection
       }
     }
+
+    setRows([createEmptyRow(1)])
   }, [isDataCleared, location.state])
 
   const confirmDeleteSelected = () => {
