@@ -340,7 +340,7 @@ const InventoryRecordsPage = () => {
   }
 
   const handleRowLongPress = (rowId: number) => {
-    if (activeRowId !== rowId) return
+    setActiveRowId(rowId)
     setShowRowClickConfirm(true)
   }
 

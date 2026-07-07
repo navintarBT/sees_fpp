@@ -231,11 +231,22 @@ const initialRows: Row[] = [
 
 const SESSION_KEY = 'woPartsIssuanceState'
 
+const EMPTY_ROW: Row = {
+  id: 1,
+  woNumber: '',
+  partNumber: '',
+  reqNumber: '',
+  lot: '',
+  numOfShipments: '',
+  office: '',
+  storage: '',
+}
+
 const WOPartsIssuance = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const restoredState = (location.state as WOPartsIssuanceReturnState | null) ?? null
-  const [rows, setRows] = useState<Row[]>(restoredState?.rows ?? [])
+  const [rows, setRows] = useState<Row[]>(restoredState?.rows?.length ? restoredState.rows : [EMPTY_ROW])
   const [form, setForm] = useState<FormState>(restoredState?.form ?? initialForm)
   const [showDetailConfirm, setShowDetailConfirm] = useState(false)
   const [showNoSelectionAlert, setShowNoSelectionAlert] = useState(false)
@@ -279,10 +290,10 @@ const WOPartsIssuance = () => {
   }
 
 
-  const clearRows = () => setRows([])
+  const clearRows = () => setRows([EMPTY_ROW])
   const resetToInitialDisplay = () => {
     closeAllModals()
-    setRows([])
+    setRows([EMPTY_ROW])
     setForm(initialForm)
     setIsInternalLabelLocked(true)
     setIsIssueDetailLocked(true)
@@ -308,7 +319,7 @@ const WOPartsIssuance = () => {
       try {
         const s = JSON.parse(saved)
         setForm(s.form)
-        setRows(s.rows)
+        setRows(s.rows?.length ? s.rows : [EMPTY_ROW])
         setActiveRowId(s.activeRowId)
         setIsInternalLabelLocked(s.isInternalLabelLocked)
         setIsIssueDetailLocked(s.isIssueDetailLocked)

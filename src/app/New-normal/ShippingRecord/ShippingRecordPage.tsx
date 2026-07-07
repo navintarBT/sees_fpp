@@ -292,7 +292,7 @@ const ShippingRecordPage = () => {
   }
 
   const handleRowLongPress = (rowId: number) => {
-    if (activeRowId !== rowId) return
+    setActiveRowId(rowId)
     setShowRowClickConfirm(true)
   }
 
@@ -453,7 +453,7 @@ const ShippingRecordPage = () => {
               </div>
 
               <div className='set-row set-row-shipping-record'>
-                <label>JANコード/品目コード</label>
+                <label>JANコード／品目コード</label>
                 <input
                   ref={janCodeRef}
                   style={{textAlign: 'center'}}
