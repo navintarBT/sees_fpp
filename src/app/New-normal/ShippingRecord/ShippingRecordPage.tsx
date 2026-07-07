@@ -231,7 +231,6 @@ const ShippingRecordPage = () => {
       setForm((prev) => ({...prev, ...formData}))
       setRows(mockRows)
       setIsLoaded(true)
-      setActiveRowId(mockRows[0]?.id ?? null)
     } else {
       setForm((prev) => ({...prev, moveWarehouse: 'A倉庫', moveStorage: '', qty: '1', janCode: ''}))
       setRows([EMPTY_ROW])
