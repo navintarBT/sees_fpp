@@ -892,7 +892,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                   />
                   <button
                     type='button'
-                    className='hand-date-btn'
+                    className='hand-date-btn2'
                     aria-label='Choose time'
                     onClick={() => setShowStartTimePicker(!showStartTimePicker)}
                   >
