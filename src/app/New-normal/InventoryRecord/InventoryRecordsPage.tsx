@@ -325,6 +325,9 @@ const InventoryRecordsPage = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
+    if (activeRowId !== rowId) {
+      setShowRowClickConfirm(true)
+    }
   }
 
   const handleReflect = () => {
@@ -337,11 +340,6 @@ const InventoryRecordsPage = () => {
       return
     }
     setRows((prev) => prev.map((row) => (row.id === activeRowId ? {...row, Load: form.qty} : row)))
-  }
-
-  const handleRowLongPress = (rowId: number) => {
-    setActiveRowId(rowId)
-    setShowRowClickConfirm(true)
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -548,7 +546,6 @@ const InventoryRecordsPage = () => {
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
-              onRowLongPress={(rowKey) => handleRowLongPress(Number(rowKey))}
             />
 
             <ActionFooter columns={4}>

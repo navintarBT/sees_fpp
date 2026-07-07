@@ -1,4 +1,4 @@
-import {useRef, type CSSProperties, type ReactNode, type Ref} from 'react'
+import {type CSSProperties, type ReactNode, type Ref} from 'react'
 
 export type TableColumn<Row> = {
   key: string
@@ -15,8 +15,6 @@ type TableSectionProps<Row> = {
   activeRowKey?: string | number | null
   isRowActive?: (rowKey: string | number, row: Row) => boolean
   onRowActivate?: (rowKey: string | number, row: Row) => void
-  onRowLongPress?: (rowKey: string | number, row: Row) => void
-  longPressDelay?: number
   tools?: ReactNode
   empty?: ReactNode
   className?: string
@@ -33,8 +31,6 @@ function TableSection<Row>({
   activeRowKey = null,
   isRowActive,
   onRowActivate,
-  onRowLongPress,
-  longPressDelay = 500,
   tools,
   empty,
   className,
@@ -43,31 +39,6 @@ function TableSection<Row>({
   scrollRef,
   rowTabIndex = 0,
 }: TableSectionProps<Row>) {
-  const pressTimerRef = useRef<number | null>(null)
-  const isLongPressRef = useRef(false)
-
-  const handlePointerDown = (rowKey: string | number, row: Row) => {
-    isLongPressRef.current = false
-    pressTimerRef.current = window.setTimeout(() => {
-      isLongPressRef.current = true
-      onRowLongPress?.(rowKey, row)
-    }, longPressDelay)
-  }
-
-  const cancelPress = () => {
-    if (pressTimerRef.current !== null) {
-      clearTimeout(pressTimerRef.current)
-      pressTimerRef.current = null
-    }
-  }
-
-  const handlePointerUp = (rowKey: string | number, row: Row) => {
-    const wasLongPress = isLongPressRef.current
-    cancelPress()
-    if (!wasLongPress) {
-      onRowActivate?.(rowKey, row)
-    }
-  }
   const style: CSSProperties = {
     ['--tf-table-cols' as any]: columns.length,
     ...gridStyle,
@@ -114,11 +85,7 @@ function TableSection<Row>({
                           className={col.cellClassName ? `tf-tableCell ${col.cellClassName}` : 'tf-tableCell'}
                           role={onRowActivate && colIndex === 0 ? 'button' : undefined}
                           tabIndex={onRowActivate && colIndex === 0 ? rowTabIndex : undefined}
-                          onClick={onRowActivate && !onRowLongPress ? () => onRowActivate(rowKey, row) : undefined}
-                          onPointerDown={onRowLongPress ? () => handlePointerDown(rowKey, row) : undefined}
-                          onPointerUp={onRowLongPress ? () => handlePointerUp(rowKey, row) : undefined}
-                          onPointerLeave={onRowLongPress ? cancelPress : undefined}
-                          onPointerCancel={onRowLongPress ? cancelPress : undefined}
+                          onClick={onRowActivate ? () => onRowActivate(rowKey, row) : undefined}
                           onKeyDown={
                             onRowActivate && colIndex === 0
                               ? (e) => {
