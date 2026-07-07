@@ -41,9 +41,17 @@ const inputStyle: React.CSSProperties = {
 
 const SESSION_KEY = 'woPartsIssuanceHandInputState'
 
+const EMPTY_ROW: Row = {
+  id: 1,
+  office: '',
+  storage: '',
+  numOfShipments: '',
+  Interior: '',
+}
+
 const WOPartsIssuanceHandInputPage = () => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<Row[]>([])
+  const [rows, setRows] = useState<Row[]>([EMPTY_ROW])
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
@@ -63,7 +71,7 @@ const WOPartsIssuanceHandInputPage = () => {
     if (saved) {
       try {
         const s = JSON.parse(saved)
-        setRows(s.rows)
+        setRows(s.rows?.length ? s.rows : [EMPTY_ROW])
         setParentItem(s.parentItem)
         setParentSerial(s.parentSerial)
         setMoveStorage(s.moveStorage)
@@ -161,7 +169,7 @@ const WOPartsIssuanceHandInputPage = () => {
   }
 
   const resetPage = () => {
-    setRows([])
+    setRows([EMPTY_ROW])
     setParentItem('')
     setParentSerial('')
     setMoveStorage('')
