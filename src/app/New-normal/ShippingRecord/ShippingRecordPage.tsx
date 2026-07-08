@@ -231,7 +231,6 @@ const ShippingRecordPage = () => {
       setForm((prev) => ({...prev, ...formData}))
       setRows(mockRows)
       setIsLoaded(true)
-      setActiveRowId(mockRows[0]?.id ?? null)
     } else {
       setForm((prev) => ({...prev, moveWarehouse: 'A倉庫', moveStorage: '', qty: '1', janCode: ''}))
       setRows([EMPTY_ROW])
@@ -289,11 +288,9 @@ const ShippingRecordPage = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
-  }
-
-  const handleRowLongPress = (rowId: number) => {
-    setActiveRowId(rowId)
-    setShowRowClickConfirm(true)
+    if (activeRowId !== rowId) {
+      setShowRowClickConfirm(true)
+    }
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -487,7 +484,6 @@ const ShippingRecordPage = () => {
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
-              onRowLongPress={(rowKey) => handleRowLongPress(Number(rowKey))}
             />
 
             <ActionFooter columns={4}>

@@ -119,7 +119,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
       },
     ],
   },
-  'MB-12345678123456': {
+  '12345678MB123456': {
     parentWarehouse: 'D事業所',
     moveStorage: '工場基本保管場所',
     qty: '3',
@@ -179,7 +179,6 @@ const InventoryRecordsPage = () => {
   const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
   const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
   const [showQtyEmptyConfirm, setShowQtyEmptyConfirm] = useState(false)
-  const [showNoRowSelectedConfirm, setShowNoRowSelectedConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const parentItemNoRef = useRef<HTMLInputElement | null>(null)
   const janCodeRef = useRef<HTMLInputElement | null>(null)
@@ -196,7 +195,6 @@ const InventoryRecordsPage = () => {
     showCompleteRegistered ||
     showRowClickConfirm ||
     showQtyEmptyConfirm ||
-    showNoRowSelectedConfirm ||
     showBackConfirm
 
   const closeAllModals = () => {
@@ -205,7 +203,6 @@ const InventoryRecordsPage = () => {
     setShowCompleteConfirm(false)
     setShowRowClickConfirm(false)
     setShowQtyEmptyConfirm(false)
-    setShowNoRowSelectedConfirm(false)
     setShowBackConfirm(false)
   }
 
@@ -325,6 +322,9 @@ const InventoryRecordsPage = () => {
 
   const handleRowClick = (rowId: number) => {
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
+    if (activeRowId !== rowId) {
+      setShowRowClickConfirm(true)
+    }
   }
 
   const handleReflect = () => {
@@ -332,16 +332,7 @@ const InventoryRecordsPage = () => {
       setShowQtyEmptyConfirm(true)
       return
     }
-    if (activeRowId === null) {
-      setShowNoRowSelectedConfirm(true)
-      return
-    }
-    setRows((prev) => prev.map((row) => (row.id === activeRowId ? {...row, Load: form.qty} : row)))
-  }
-
-  const handleRowLongPress = (rowId: number) => {
-    setActiveRowId(rowId)
-    setShowRowClickConfirm(true)
+    setRows((prev) => prev.map((row, index) => (index === 0 ? {...row, Load: form.qty} : row)))
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -548,7 +539,6 @@ const InventoryRecordsPage = () => {
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
               onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
-              onRowLongPress={(rowKey) => handleRowLongPress(Number(rowKey))}
             />
 
             <ActionFooter columns={4}>
@@ -638,20 +628,6 @@ const InventoryRecordsPage = () => {
                   <div className='set-modal-body'>数量を入力してください。</div>
                   <div className='set-modal-actions'>
                     <button className='set-modal-btn set-modal-yes' onClick={() => setShowQtyEmptyConfirm(false)}>
-                      OK
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showNoRowSelectedConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>選択行がありません。</div>
-                  <div className='set-modal-actions'>
-                    <button className='set-modal-btn set-modal-yes' onClick={() => setShowNoRowSelectedConfirm(false)}>
                       OK
                     </button>
                   </div>
