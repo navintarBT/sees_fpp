@@ -93,8 +93,9 @@ const ShelfTransfer = () => {
   // 登録完了：品目No. 未入力エラー／移動元 完了メッセージ
   const [showItemNoRequired, setShowItemNoRequired] = useState(false)
   const [showSourceCompleteDone, setShowSourceCompleteDone] = useState(false)
-  // 移動先：登録（選択行なし）エラー／完了確認・完了メッセージ
+  // 移動先：登録（選択行なし）エラー／先保管場所 未設定エラー／完了確認・完了メッセージ
   const [showNoRowSelected, setShowNoRowSelected] = useState(false)
+  const [showIncompleteWarning, setShowIncompleteWarning] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [showCompleteDone, setShowCompleteDone] = useState(false)
   // 戻る：2段階確認（Step1=中止確認 / Step2=データ保持確認）
@@ -112,6 +113,7 @@ const ShelfTransfer = () => {
     showItemNoRequired ||
     showSourceCompleteDone ||
     showNoRowSelected ||
+    showIncompleteWarning ||
     showCompleteConfirm ||
     showCompleteDone ||
     showBackConfirm ||
@@ -329,11 +331,16 @@ const ShelfTransfer = () => {
     })
   }
 
-  // ⑤ 完了：品目No. 未入力ならエラー、入力済みなら完了確認へ
+  // ⑤ 完了：品目No. 未入力／先保管場所 未設定をチェックし、問題なければ完了確認へ
   const handleComplete = () => {
     if (isAnyModalOpen) return
     if (!form.internalLabel.trim()) {
       setShowItemNoRequired(true)
+      return
+    }
+    // 先保管場所（移動先）が未設定の行が残っていないか確認
+    if (rows.some((row) => !row.dest_location)) {
+      setShowIncompleteWarning(true)
       return
     }
     setShowCompleteConfirm(true)
@@ -708,6 +715,24 @@ const ShelfTransfer = () => {
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => setShowNoRowSelected(false)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ⑤ 完了：先保管場所 未設定の警告 */}
+          {showIncompleteWarning && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>{'移動先が未設定の項目があります。\nすべての移動先を登録してください。'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => setShowIncompleteWarning(false)}
                   >
                     OK
                   </button>
