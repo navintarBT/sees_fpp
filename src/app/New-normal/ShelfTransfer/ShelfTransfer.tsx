@@ -15,21 +15,20 @@ type Row = {
   warehouse: string
 }
 
-const initialRows: Row[] = [
-  {id: 1, source_location: 'WO-0001', item_no: '1000001', lot_serial_no: '001', transfer_qty: '10', product_name: 'ITE-IR11ZZ', warehouse: '千葉工場：F0200', dest_location: ''},
-  {id: 2, source_location: 'WO-0001', item_no: '1000002', lot_serial_no: '002', transfer_qty: '20', product_name: 'ITE-IR12ZZ', warehouse: '千葉工場：F0201', dest_location: ''},
-  {id: 3, source_location: 'WO-0002', item_no: '1000003', lot_serial_no: '002', transfer_qty: '30', product_name: 'ITE-IR12ZZ', warehouse: '千葉工場：F0203', dest_location: ''},
-  {id: 4, source_location: 'WO-0003', item_no: '1000004', lot_serial_no: '003', transfer_qty: '40', product_name: 'ITE-IR13ZZ', warehouse: '千葉工場：F0204', dest_location: ''},
-  {id: 5, source_location: 'WO-0004', item_no: '1000005', lot_serial_no: '004', transfer_qty: '50', product_name: 'ITE-IR14ZZ', warehouse: '千葉工場：F0205', dest_location: ''},
-  {id: 6, source_location: 'WO-0005', item_no: '1000006', lot_serial_no: '005', transfer_qty: '60', product_name: 'ITE-IR15ZZ', warehouse: '千葉工場：F0206', dest_location: ''},
-  {id: 7, source_location: 'WO-0006', item_no: '1000007', lot_serial_no: '006', transfer_qty: '70', product_name: 'ITE-IR16ZZ', warehouse: '千葉工場：F0207', dest_location: ''},
-  {id: 8, source_location: 'WO-0007', item_no: '1000008', lot_serial_no: '007', transfer_qty: '80', product_name: 'ITE-IR17ZZ', warehouse: '千葉工場：F0208', dest_location: ''},
-  {id: 9, source_location: 'WO-0008', item_no: '1000009', lot_serial_no: '008', transfer_qty: '90', product_name: 'ITE-IR18ZZ', warehouse: '千葉工場：F0209', dest_location: ''},
-  {id: 10, source_location: 'WO-0009', item_no: '1000010', lot_serial_no: '009', transfer_qty: '100', product_name: 'ITE-IR19ZZ', warehouse: '千葉工場：F0200', dest_location: ''},
-  {id: 11, source_location: 'WO-0010', item_no: '1000011', lot_serial_no: '010', transfer_qty: '110', product_name: 'ITE-IR20ZZ', warehouse: '千葉工場：F0201', dest_location: ''},
-  {id: 12, source_location: 'WO-0011', item_no: '1000012', lot_serial_no: '011', transfer_qty: '120', product_name: 'ITE-IR21ZZ', warehouse: '千葉工場：F0203', dest_location: ''},
-  {id: 13, source_location: 'WO-0012', item_no: '1000012', lot_serial_no: '012', transfer_qty: '130', product_name: 'ITE-IR22ZZ', warehouse: '千葉工場：F0204', dest_location: ''},
-]
+// 品目マスタ：品目No. をキーに、庫内ラベル読取（品目No. 入力 → Enter）で展開する値
+type ItemMaster = {
+  warehouse: string // 倉庫
+  storage: string // 保管場所（＝明細の元保管場所）
+  product_name: string // 品名
+  lot_serial_no: string // ロットシリアル
+  transfer_qty: string // 移動数量
+}
+
+const ITEM_MASTER: Record<string, ItemMaster> = {
+  '1197101': {warehouse: '千葉工場：F0200', storage: 'W0001', product_name: 'ITE-IRIZZ', lot_serial_no: '001', transfer_qty: '2'},
+  '1197104': {warehouse: '千葉工場：F0200', storage: 'W0001', product_name: 'ITE-IRIY0', lot_serial_no: '001', transfer_qty: '4'},
+  '1197103': {warehouse: '千葉工場：F0200', storage: 'W0001', product_name: 'ITE-IRIY1', lot_serial_no: '001', transfer_qty: '1'},
+}
 
 // 画面モード： source = 移動元登録, dest = 移動先登録
 type ScreenMode = 'source' | 'dest'
@@ -91,9 +90,13 @@ const ShelfTransfer = () => {
   // 確認・警告モーダルの表示状態
   const [showDiscardConfirm, setShowDiscardConfirm] = useState(false)
   const [showSourceCompleteConfirm, setShowSourceCompleteConfirm] = useState(false)
-  const [showSourceErrorWarning, setShowSourceErrorWarning] = useState(false)
-  const [showIncompleteWarning, setShowIncompleteWarning] = useState(false)
+  // 登録完了：品目No. 未入力エラー／移動元 完了メッセージ
+  const [showItemNoRequired, setShowItemNoRequired] = useState(false)
+  const [showSourceCompleteDone, setShowSourceCompleteDone] = useState(false)
+  // 移動先：登録（選択行なし）エラー／完了確認・完了メッセージ
+  const [showNoRowSelected, setShowNoRowSelected] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showCompleteDone, setShowCompleteDone] = useState(false)
   // 戻る：2段階確認（Step1=中止確認 / Step2=データ保持確認）
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [showBackKeepConfirm, setShowBackKeepConfirm] = useState(false)
@@ -103,14 +106,14 @@ const ShelfTransfer = () => {
   const [activeRowId, setActiveRowId] = useState<number | null>(
     persistedState?.activeRowId ?? null,
   )
-  const sourceRowsRef = useRef<Row[]>(initialRows)
-
   const isAnyModalOpen =
     showDiscardConfirm ||
     showSourceCompleteConfirm ||
-    showSourceErrorWarning ||
-    showIncompleteWarning ||
+    showItemNoRequired ||
+    showSourceCompleteDone ||
+    showNoRowSelected ||
     showCompleteConfirm ||
+    showCompleteDone ||
     showBackConfirm ||
     showBackKeepConfirm
 
@@ -138,27 +141,54 @@ const ShelfTransfer = () => {
     requestAnimationFrame(() => itemNoInputRef.current?.focus())
   }
 
-  // 品目No. を入力して Enter：該当する移動元データをテーブルに追加する
+  // 品目No. を入力して Enter（庫内ラベル読取）：移動元・移動先の両方で使用。
+  // 品目マスタから該当データを展開し、明細に１行追加しつつ入力欄へ反映する。
   const handleItemNoEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
     event.preventDefault()
-    if (mode !== 'source') return
 
     const itemNo = form.internalLabel.trim()
     if (!itemNo) return
 
-    const matches = sourceRowsRef.current.filter((row) => row.item_no === itemNo)
-    if (matches.length === 0) return
+    const master = ITEM_MASTER[itemNo]
+    if (!master) return // マスタに存在しない品目No. は無視
 
-    setRows((prev) => {
-      const existingIds = new Set(prev.map((row) => row.id))
-      const added = matches
-        .filter((row) => !existingIds.has(row.id))
-        .map((row) => ({...row, dest_location: ''}))
-      return [...prev, ...added]
+    // 明細部に１行追加（先保管場所は移動先登録で設定するため空）
+    const nextId = rows.reduce((max, row) => Math.max(max, row.id), 0) + 1
+    const newRow: Row = {
+      id: nextId,
+      source_location: master.storage,
+      item_no: itemNo,
+      lot_serial_no: master.lot_serial_no,
+      transfer_qty: master.transfer_qty,
+      product_name: master.product_name,
+      warehouse: master.warehouse,
+      dest_location: '',
+    }
+    setRows((prev) => [...prev, newRow])
+
+    // 入力欄へ反映（品目No. は表示したまま入力待ち：次のラベル読取で上書き）
+    // 移動先：保管場所はブランク（入力待ち）とし、追加行を選択状態にする。
+    // 移動元：保管場所はマスタの値を表示（編集不可）。
+    setForm((prev) => ({
+      ...prev,
+      internalLabel: itemNo,
+      parentWarehouse: master.warehouse,
+      parentStorage: mode === 'dest' ? '' : master.storage,
+      shipmentQty: master.product_name,
+      lot_serial_no: master.lot_serial_no,
+      transfer_qty: master.transfer_qty,
+    }))
+    if (mode === 'dest') setActiveRowId(nextId)
+
+    // 次のラベル読取に備え、品目No. を全選択してフォーカスを保持
+    requestAnimationFrame(() => {
+      const el = itemNoInputRef.current
+      if (el) {
+        el.focus()
+        el.select()
+      }
     })
-    // 次の入力に備えて品目No. をクリア
-    setForm((prev) => ({...prev, internalLabel: ''}))
   }
 
   const clearForm = () =>
@@ -202,10 +232,11 @@ const ShelfTransfer = () => {
     })
   }
 
-  // 一括：選択中の保管場所をすべての行の移動先に適用する
+  // 一括：選択中の保管場所をすべての行の先保管場所に適用し、選択状態を解除する
   const handleSearchsource_location = () => {
     const selectedLocation = form.parentStorage
     setRows((prevRows) => prevRows.map((row) => ({...row, dest_location: selectedLocation})))
+    setActiveRowId(null)
   }
 
   const handleRowActivate = (rowKey: string | number) => {
@@ -231,6 +262,8 @@ const ShelfTransfer = () => {
 
   const confirmDiscard = () => {
     // テーブルのデータ・フォーム入力をすべて破棄する
+    // ※ 画面モード（移動元／移動先）は変更しない。
+    //   破棄後は「現在のモードのまま」初期表示に戻す。
     setRows([])
     clearForm()
     setActiveRowId(null)
@@ -239,72 +272,83 @@ const ShelfTransfer = () => {
     requestAnimationFrame(() => itemNoInputRef.current?.focus())
   }
 
-  // ② 移動元登録完了：エラーが無ければ移動先登録モードへ遷移
+  // ② 移動元登録完了
+  // 品目No. 未入力ならエラー、入力済みなら完了確認へ
   const handleSourceComplete = () => {
     if (isAnyModalOpen) return
-    // 数量などのデータにエラーが無いか確認
-    const hasError = rows.length === 0 || rows.some((row) => {
-      const qty = Number(row.transfer_qty)
-      return !row.transfer_qty || Number.isNaN(qty) || qty <= 0
-    })
-    if (hasError) {
-      setShowSourceErrorWarning(true)
+    if (!form.internalLabel.trim()) {
+      setShowItemNoRequired(true)
       return
     }
     setShowSourceCompleteConfirm(true)
   }
 
+  // 「はい」：完了メッセージを表示（この時点ではまだ画面遷移しない）
   const confirmSourceComplete = () => {
     setShowSourceCompleteConfirm(false)
-    setMode('dest')
-    // 移動先登録は先頭行から開始（行未選択なので入力欄はクリア）
-    setActiveRowId(null)
-    clearRowFields()
-    resetTableScroll()
+    setShowSourceCompleteDone(true)
   }
 
-  // ④ 登録：選択中の行に移動先（保管場所）を確定し、次の行へ進む
+  // 完了メッセージ「OK」：移動先登録モードへ遷移
+  // 移動先は庫内ラベル読取で明細を作り直すため、明細・入力欄を初期化する。
+  const finishSourceComplete = () => {
+    setShowSourceCompleteDone(false)
+    setMode('dest')
+    setActiveRowId(null)
+    setRows([])
+    clearForm()
+    resetTableScroll()
+    requestAnimationFrame(() => itemNoInputRef.current?.focus())
+  }
+
+  // ④ 登録：選択中の行の先保管場所に保管場所を確定し、品目No. の入力待ちに戻す
   const handleRegister = () => {
     if (isAnyModalOpen) return
-    // 行が未選択なら先頭行を選択
+    // 行が未選択なら「選択行がありません。」を表示
     if (activeRowId === null) {
-      if (rows.length > 0) handleRowActivate(rows[0].id)
+      setShowNoRowSelected(true)
       return
     }
 
     const destLocation = form.parentStorage
-    const currentIndex = rows.findIndex((row) => row.id === activeRowId)
 
-    // 選択中の行に移動先を保存
+    // 選択中の行に先保管場所を保存
     setRows((prevRows) =>
       prevRows.map((row) =>
         row.id === activeRowId ? {...row, dest_location: destLocation} : row
       )
     )
 
-    // 次の行へ進む
-    const nextRow = rows[currentIndex + 1]
-    if (nextRow) {
-      handleRowActivate(nextRow.id)
-    }
+    // 次のラベル読取に備え、品目No. の入力待ちにする
+    requestAnimationFrame(() => {
+      const el = itemNoInputRef.current
+      if (el) {
+        el.focus()
+        el.select()
+      }
+    })
   }
 
-  // ⑤ 完了：全データを検証し、問題なければ JDE へ送信して移動元登録に戻る
+  // ⑤ 完了：品目No. 未入力ならエラー、入力済みなら完了確認へ
   const handleComplete = () => {
     if (isAnyModalOpen) return
-    // 移動先が未設定の行が無いか確認
-    const hasUnregistered = rows.length === 0 || rows.some((row) => !row.dest_location)
-    if (hasUnregistered) {
-      setShowIncompleteWarning(true)
+    if (!form.internalLabel.trim()) {
+      setShowItemNoRequired(true)
       return
     }
     setShowCompleteConfirm(true)
   }
 
+  // 「はい」：完了メッセージを表示（この時点ではまだ画面遷移しない）
   const confirmComplete = () => {
-    // ここで JDE への送信処理を行う（モックアップでは省略）
     setShowCompleteConfirm(false)
-    // 移動元登録（開始画面）に戻り、新しい作業を開始
+    setShowCompleteDone(true)
+  }
+
+  // 完了メッセージ「OK」：JDE へ送信し、移動元登録（開始画面）に戻る
+  const finishComplete = () => {
+    // ここで JDE への送信処理を行う（モックアップでは省略）
+    setShowCompleteDone(false)
     setMode('source')
     setActiveRowId(null)
     clearForm()
@@ -398,6 +442,23 @@ const ShelfTransfer = () => {
     cursor: 'not-allowed',
   }
 
+  // 画面初期表示：データ未読込（明細が空）の状態。
+  // このとき 倉庫／保管場所／移動数量／一括ボタン はブランク＆編集不可にする。
+  const isInitialDisplay = rows.length === 0
+
+  // 明細部：初期表示では空行を１行だけ表示させておく
+  const EMPTY_ROW: Row = {
+    id: 0,
+    source_location: '',
+    item_no: '',
+    transfer_qty: '',
+    product_name: '',
+    dest_location: '',
+    lot_serial_no: '',
+    warehouse: '',
+  }
+  const displayRows = isInitialDisplay ? [EMPTY_ROW] : rows
+
   const tableColumns: Array<TFTableColumn<Row>> = [
     {
       key: 'arrow',
@@ -438,10 +499,10 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
-                  style={mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
+                  style={grayFieldStyle}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                  disabled={mode === 'dest'}
+                  disabled
                 >
                   <option value=''></option>
                   <option value='千葉工場：F0200'>千葉工場：F0200</option>
@@ -459,11 +520,13 @@ const ShelfTransfer = () => {
               <div className='set-row set-row-wo'>
                 <label>保管場所</label>
                 <select
-                  style={{textAlign: 'center'}}
+                  style={isInitialDisplay || mode === 'source' ? grayFieldStyle : {textAlign: 'center'}}
                   value={form.parentStorage}
                   onChange={(e) => setForm({...form, parentStorage: e.target.value})}
+                  disabled={isInitialDisplay || mode === 'source'}
                 >
                   <option value=''></option>
+                  <option value='W0001'>W0001</option>
                   <option value='W0040'>W0040</option>
                   <option value='W0041'>W0041</option>
                   <option value='W0042'>W0042</option>
@@ -475,8 +538,8 @@ const ShelfTransfer = () => {
                 <button
                   className='set-search-btn set-success'
                   onClick={handleSearchsource_location}
-                  disabled={mode === 'source'}
-                  style={mode === 'source' ? grayFieldStyle : undefined}
+                  disabled={isInitialDisplay || mode === 'source'}
+                  style={isInitialDisplay || mode === 'source' ? grayFieldStyle : undefined}
                 >
                   一括
                 </button>
@@ -501,8 +564,8 @@ const ShelfTransfer = () => {
               <div className='set-row set-row-wo'>
                 <label>移動数量</label>
                 <input
-                  readOnly={mode === 'dest'}
-                  style={mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
+                  readOnly
+                  style={grayFieldStyle}
                   value={form.transfer_qty}
                   onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                 />
@@ -514,7 +577,7 @@ const ShelfTransfer = () => {
 
             <TableSection
               columns={tableColumns}
-              rows={rows}
+              rows={displayRows}
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
@@ -586,7 +649,7 @@ const ShelfTransfer = () => {
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>{'移動元の登録を完了し、\n移動先の登録に進みますか？'}</div>
+                <div className='set-modal-body'>{'移動元の登録を完了しますか？'}</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmSourceComplete}>
                     はい
@@ -602,16 +665,16 @@ const ShelfTransfer = () => {
             </div>
           )}
 
-          {/* ② 移動元データのエラー警告 */}
-          {showSourceErrorWarning && (
+          {/* ② 移動元登録完了：品目No. 未入力エラー */}
+          {showItemNoRequired && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>エラー</div>
-                <div className='set-modal-body'>{'移動数量に誤りがあります。\nデータを確認してください。'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>{'品目No.が入力されていません。'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => setShowSourceErrorWarning(false)}
+                    onClick={() => setShowItemNoRequired(false)}
                   >
                     OK
                   </button>
@@ -620,16 +683,31 @@ const ShelfTransfer = () => {
             </div>
           )}
 
-          {/* ⑤ 完了：移動先未設定の警告 */}
-          {showIncompleteWarning && (
+          {/* ② 移動元登録完了：完了メッセージ（OK で移動先登録へ） */}
+          {showSourceCompleteDone && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
-                <div className='set-modal-header'>エラー</div>
-                <div className='set-modal-body'>{'移動先が未設定の項目があります。\nすべての移動先を登録してください。'}</div>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>{'移動元の登録を完了しました。'}</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={finishSourceComplete}>
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ④ 登録：選択行なしエラー */}
+          {showNoRowSelected && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>{'選択行がありません。'}</div>
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => setShowIncompleteWarning(false)}
+                    onClick={() => setShowNoRowSelected(false)}
                   >
                     OK
                   </button>
@@ -638,12 +716,12 @@ const ShelfTransfer = () => {
             </div>
           )}
 
-          {/* ⑤ 完了の確認 */}
+          {/* ⑤ 移動先登録完了の確認 */}
           {showCompleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
-                <div className='set-modal-body'>{'作業結果を JDE に送信します。\nよろしいですか？'}</div>
+                <div className='set-modal-body'>{'移動先の登録を完了しますか？'}</div>
                 <div className='set-modal-actions'>
                   <button className='set-modal-btn set-modal-yes' onClick={confirmComplete}>
                     はい
@@ -653,6 +731,21 @@ const ShelfTransfer = () => {
                     onClick={() => setShowCompleteConfirm(false)}
                   >
                     いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ⑤ 移動先登録完了：完了メッセージ（OK で移動元登録へ） */}
+          {showCompleteDone && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>{'移動先の登録を完了しました。'}</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={finishComplete}>
+                    OK
                   </button>
                 </div>
               </div>
