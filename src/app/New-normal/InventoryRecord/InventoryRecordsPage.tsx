@@ -172,12 +172,8 @@ const InventoryRecordsPage = () => {
     source: '',
   })
   const [janCodeDisabled, setJanCodeDisabled] = useState(false)
-  const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
-  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [showNoOrderConfirm, setShowNoOrderConfirm] = useState(false)
-  const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
-  const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
   const [showQtyEmptyConfirm, setShowQtyEmptyConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const parentItemNoRef = useRef<HTMLInputElement | null>(null)
@@ -188,20 +184,13 @@ const InventoryRecordsPage = () => {
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
-    showHandInputConfirm ||
     showClearConfirm ||
-    showCompleteConfirm ||
     showNoOrderConfirm ||
-    showCompleteRegistered ||
-    showRowClickConfirm ||
     showQtyEmptyConfirm ||
     showBackConfirm
 
   const closeAllModals = () => {
-    setShowHandInputConfirm(false)
     setShowClearConfirm(false)
-    setShowCompleteConfirm(false)
-    setShowRowClickConfirm(false)
     setShowQtyEmptyConfirm(false)
     setShowBackConfirm(false)
   }
@@ -321,9 +310,11 @@ const InventoryRecordsPage = () => {
   }
 
   const handleRowClick = (rowId: number) => {
+    const isActivating = activeRowId !== rowId
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
-    if (activeRowId !== rowId) {
-      setShowRowClickConfirm(true)
+    if (isActivating) {
+      saveStateToSession()
+      navigate('/factory/inventory-detail', {state: {activeRowId: rowId, orderNo: form.parentItemNo}})
     }
   }
 
@@ -343,7 +334,8 @@ const InventoryRecordsPage = () => {
         setShowNoOrderConfirm(true)
         return
       }
-      setShowHandInputConfirm(true)
+      saveStateToSession()
+      navigate('/factory/inventory-hand-input', {state: {orderNo: form.parentItemNo}})
       return
     }
   }
@@ -376,7 +368,11 @@ const InventoryRecordsPage = () => {
       if (event.key === 'F2') {
         event.preventDefault()
         closeAllModals()
-        setShowCompleteConfirm(true)
+        if (!isLoaded) {
+          setShowNoOrderConfirm(true)
+        } else {
+          clearFormAndRows()
+        }
         return
       }
 
@@ -554,12 +550,12 @@ const InventoryRecordsPage = () => {
                   if (!isLoaded) {
                     setShowNoOrderConfirm(true)
                   } else {
-                    setShowCompleteConfirm(true)
+                    clearFormAndRows()
                   }
                 }}
               >
                 完了
-              </button>     
+              </button>
               <button
                 className='set-btn set-primary '
                 onClick={() => {
@@ -567,7 +563,8 @@ const InventoryRecordsPage = () => {
                     setShowNoOrderConfirm(true)
                     return
                   }
-                  setShowHandInputConfirm(true)
+                  saveStateToSession()
+                  navigate('/factory/inventory-hand-input', {state: {orderNo: form.parentItemNo}})
                 }}
               >
                 手入力
@@ -635,78 +632,6 @@ const InventoryRecordsPage = () => {
               </div>
             )}
 
-            {showCompleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>入庫実績登録を完了しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowCompleteConfirm(false)
-                        setShowCompleteRegistered(true)
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button className='set-modal-btn set-modal-no' onClick={() => setShowCompleteConfirm(false)}>
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showCompleteRegistered && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>入庫実績を登録しました。</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowCompleteRegistered(false)
-                        clearFormAndRows()
-                      }}
-                    >
-                      OK
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showHandInputConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                        saveStateToSession()
-                        navigate('/factory/inventory-hand-input', {state: {orderNo: form.parentItemNo}})
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
-                    >
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {showBackConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
@@ -744,36 +669,6 @@ const InventoryRecordsPage = () => {
               </div>
             )}
 
-            {showRowClickConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>選択行の読込内容を表示しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowRowClickConfirm(false)
-                        saveStateToSession()
-                        navigate('/factory/inventory-detail', {state: {activeRowId, orderNo: form.parentItemNo}})
-                      }}
-                    >
-                      YES
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowRowClickConfirm(false)
-                        setActiveRowId(null)
-                        janCodeRef.current?.focus()
-                      }}
-                    >
-                      NO
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
