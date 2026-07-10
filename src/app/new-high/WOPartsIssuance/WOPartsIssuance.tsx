@@ -52,6 +52,7 @@ type WOPartsIssuanceReturnState = {
   rows: Row[]
   form: FormState
   activeRowId: number | null
+  isWoNumberLocked: boolean
   isInternalLabelLocked: boolean
   isIssueDetailLocked: boolean
   detailHistory: Record<number, DetailEntry[]>
@@ -260,6 +261,7 @@ const WOPartsIssuance = () => {
   const woNumberInputRef = useRef<HTMLInputElement | null>(null)
   const internalLabelInputRef = useRef<HTMLInputElement | null>(null)
   const shipmentQtyInputRef = useRef<HTMLInputElement | null>(null)
+  const [isWoNumberLocked, setIsWoNumberLocked] = useState(restoredState?.isWoNumberLocked ?? false)
   const [isInternalLabelLocked, setIsInternalLabelLocked] = useState(restoredState?.isInternalLabelLocked ?? true)
   const [isIssueDetailLocked, setIsIssueDetailLocked] = useState(restoredState?.isIssueDetailLocked ?? true)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
@@ -295,6 +297,7 @@ const WOPartsIssuance = () => {
     closeAllModals()
     setRows([EMPTY_ROW])
     setForm(initialForm)
+    setIsWoNumberLocked(false)
     setIsInternalLabelLocked(true)
     setIsIssueDetailLocked(true)
     setActiveRowId(null)
@@ -308,7 +311,7 @@ const WOPartsIssuance = () => {
   const saveStateToSession = () => {
     sessionStorage.setItem(
       SESSION_KEY,
-      JSON.stringify({form, rows, activeRowId, isInternalLabelLocked, isIssueDetailLocked, detailHistory}),
+      JSON.stringify({form, rows, activeRowId, isWoNumberLocked, isInternalLabelLocked, isIssueDetailLocked, detailHistory}),
     )
   }
 
@@ -321,6 +324,7 @@ const WOPartsIssuance = () => {
         setForm(s.form)
         setRows(s.rows?.length ? s.rows : [EMPTY_ROW])
         setActiveRowId(s.activeRowId)
+        setIsWoNumberLocked(s.isWoNumberLocked)
         setIsInternalLabelLocked(s.isInternalLabelLocked)
         setIsIssueDetailLocked(s.isIssueDetailLocked)
         setDetailHistory(s.detailHistory)
@@ -374,6 +378,7 @@ const WOPartsIssuance = () => {
     }
 
     setRows(matchedRows)
+    setIsWoNumberLocked(true)
     setIsInternalLabelLocked(false)
     setActiveRowId(null)
     requestAnimationFrame(() => {
@@ -496,6 +501,7 @@ const WOPartsIssuance = () => {
     rows,
     form,
     activeRowId,
+    isWoNumberLocked,
     isInternalLabelLocked,
     isIssueDetailLocked,
     detailHistory,
@@ -620,12 +626,15 @@ const WOPartsIssuance = () => {
                   ref={woNumberInputRef}
                   style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
                   value={form.woNumber}
+                  disabled={isWoNumberLocked}
                   onChange={(e) => setForm({...form, woNumber: e.target.value})}
                   className='set-small'
                 />
                 <button
                 className='set-search-btn set-success'
                 onClick={handleSearchWoNumber}
+                disabled={isWoNumberLocked}
+                style={isWoNumberLocked ? {background: '#d9d9d9', color: '#666'} : undefined}
               >
                 WO部品リスト表示
               </button>

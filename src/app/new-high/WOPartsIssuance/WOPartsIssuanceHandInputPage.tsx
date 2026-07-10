@@ -53,6 +53,7 @@ const WOPartsIssuanceHandInputPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([EMPTY_ROW])
   const [parentItem, setParentItem] = useState('')
+  const [parentItemLocked, setParentItemLocked] = useState(false)
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
@@ -73,6 +74,7 @@ const WOPartsIssuanceHandInputPage = () => {
         const s = JSON.parse(saved)
         setRows(s.rows?.length ? s.rows : [EMPTY_ROW])
         setParentItem(s.parentItem)
+        setParentItemLocked(!!s.parentItemLocked)
         setParentSerial(s.parentSerial)
         setMoveStorage(s.moveStorage)
         setSelectedRowIds(s.selectedRowIds)
@@ -107,6 +109,7 @@ const WOPartsIssuanceHandInputPage = () => {
     }
 
     setParentItem(scannedItem)
+    setParentItemLocked(true)
     setParentSerial('WO-001')
     setMoveStorage('10')
     setRows([emptyRow])
@@ -171,6 +174,7 @@ const WOPartsIssuanceHandInputPage = () => {
   const resetPage = () => {
     setRows([EMPTY_ROW])
     setParentItem('')
+    setParentItemLocked(false)
     setParentSerial('')
     setMoveStorage('')
     setSelectedRowIds([])
@@ -184,7 +188,7 @@ const WOPartsIssuanceHandInputPage = () => {
   const saveStateToSession = () => {
     sessionStorage.setItem(
       SESSION_KEY,
-      JSON.stringify({rows, parentItem, parentSerial, moveStorage, selectedRowIds}),
+      JSON.stringify({rows, parentItem, parentItemLocked, parentSerial, moveStorage, selectedRowIds}),
     )
   }
 
@@ -285,6 +289,7 @@ const WOPartsIssuanceHandInputPage = () => {
                   ref={itemInputRef}
                   style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
                   value={parentItem}
+                  disabled={parentItemLocked}
                   onChange={(e) => setParentItem(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
