@@ -149,12 +149,8 @@ const ShippingRecordPage = () => {
     qty: '1',
     janCode: '',
   })
-  const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
-  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
-  const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
   const [showNoOrderConfirm, setShowNoOrderConfirm] = useState(false)
-  const [showRowClickConfirm, setShowRowClickConfirm] = useState(false)
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const parentItemNoRef = useRef<HTMLInputElement | null>(null)
   const janCodeRef = useRef<HTMLInputElement | null>(null)
@@ -205,21 +201,13 @@ const ShippingRecordPage = () => {
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{f1: boolean; f8: boolean}>({f1: false, f8: false})
   const isAnyModalOpen =
-    showHandInputConfirm ||
     showClearConfirm ||
-    showCompleteConfirm ||
-    showCompleteRegistered ||
     showNoOrderConfirm ||
-    showRowClickConfirm ||
     showBackConfirm
 
   const closeAllModals = () => {
-    setShowHandInputConfirm(false)
     setShowClearConfirm(false)
-    setShowCompleteConfirm(false)
-    setShowCompleteRegistered(false)
     setShowNoOrderConfirm(false)
-    setShowRowClickConfirm(false)
     setShowBackConfirm(false)
   }
 
@@ -287,9 +275,21 @@ const ShippingRecordPage = () => {
   }
 
   const handleRowClick = (rowId: number) => {
+    const isActivating = activeRowId !== rowId
+    const row = rows.find((r) => r.id === rowId) ?? null
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
-    if (activeRowId !== rowId) {
-      setShowRowClickConfirm(true)
+    if (isActivating) {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId: rowId}))
+      navigate('/factory/shipping-detail', {
+        state: {
+          name: row?.name ?? '',
+          item: row?.item ?? '',
+          lot: row?.lot ?? '',
+          release: row?.release ?? '',
+          moveStorage: row?.moveStorage ?? '',
+          moveWarehouse: form.moveWarehouse,
+        },
+      })
     }
   }
 
@@ -297,7 +297,14 @@ const ShippingRecordPage = () => {
     if (isAnyModalOpen) return
     if (options?.forceHandInput) {
       closeAllModals()
-      setShowHandInputConfirm(true)
+      if (!form.parentItemNo.trim()) {
+        setShowNoOrderConfirm(true)
+        return
+      }
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId}))
+      navigate('/factory/shipping-hand-input', {
+        state: {moveWarehouse: form.moveWarehouse, moveStorage: form.moveStorage},
+      })
       return
     }
     if (!activeRow) {
@@ -334,7 +341,11 @@ const ShippingRecordPage = () => {
       if (event.key === 'F2') {
         event.preventDefault()
         closeAllModals()
-        setShowCompleteConfirm(true)
+        if (!form.parentItemNo.trim()) {
+          setShowNoOrderConfirm(true)
+        } else {
+          clearFormAndRows()
+        }
         return
       }
 
@@ -500,7 +511,7 @@ const ShippingRecordPage = () => {
                     setShowNoOrderConfirm(true)
                     return
                   }
-                  setShowCompleteConfirm(true)
+                  clearFormAndRows()
                 }}
               >
                 完了
@@ -512,7 +523,10 @@ const ShippingRecordPage = () => {
                     setShowNoOrderConfirm(true)
                     return
                   }
-                  setShowHandInputConfirm(true)
+                  sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId}))
+                  navigate('/factory/shipping-hand-input', {
+                    state: {moveWarehouse: form.moveWarehouse, moveStorage: form.moveStorage},
+                  })
                 }}
               >
                 手入力
@@ -552,52 +566,6 @@ const ShippingRecordPage = () => {
               </div>
             )}
 
-            {showCompleteConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>出庫実績登録を完了しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowCompleteConfirm(false)
-                        setShowCompleteRegistered(true)
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => setShowCompleteConfirm(false)}
-                    >
-                      いいえ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showCompleteRegistered && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>出庫実績登録を完了しました。</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowCompleteRegistered(false)
-                        clearFormAndRows()
-                      }}
-                    >
-                      OK
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {showNoOrderConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
@@ -612,37 +580,6 @@ const ShippingRecordPage = () => {
                       }}
                     >
                       OK
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            {showHandInputConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>品目情報を手入力しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                        sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId}))
-                        navigate('/factory/shipping-hand-input', {
-                          state: {moveWarehouse: form.moveWarehouse, moveStorage: form.moveStorage},
-                        })
-                      }}
-                    >
-                      はい
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowHandInputConfirm(false)
-                      }}
-                    >
-                      いいえ
                     </button>
                   </div>
                 </div>
@@ -686,43 +623,6 @@ const ShippingRecordPage = () => {
               </div>
             )}
 
-            {showRowClickConfirm && (
-              <div className='set-modal-backdrop' role='presentation'>
-                <div className='set-modal' role='dialog' aria-modal='true'>
-                  <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>選択行の読込内容を表示しますか？</div>
-                  <div className='set-modal-actions'>
-                    <button
-                      className='set-modal-btn set-modal-yes'
-                      onClick={() => {
-                        sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId}))
-                        setShowRowClickConfirm(false)
-                        navigate('/factory/shipping-detail', {
-                          state: {
-                            name: activeRow?.name ?? '',
-                            item: activeRow?.item ?? '',
-                            lot: activeRow?.lot ?? '',
-                            release: activeRow?.release ?? '',
-                            moveStorage: activeRow?.moveStorage ?? '',
-                            moveWarehouse: form.moveWarehouse,
-                          },
-                        })
-                      }}
-                    >
-                    YES
-                    </button>
-                    <button
-                      className='set-modal-btn set-modal-no'
-                      onClick={() => {
-                        setShowRowClickConfirm(false)
-                      }}
-                    >
-                      NO
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

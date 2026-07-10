@@ -91,7 +91,7 @@ const InventoryRecordDetail = () => {
   const orderNo: string = state?.orderNo ?? ''
   const detailMap =
     orderNo === 'OT-12345678' ? MOCK_DETAIL_OT :
-    orderNo === 'MB-12345678123456' ? MOCK_DETAIL_MB :
+    orderNo === '12345678MB123456' ? MOCK_DETAIL_MB :
     MOCK_DETAIL
   const detailData = detailMap[selectedRowId] ?? detailMap[1]
 
