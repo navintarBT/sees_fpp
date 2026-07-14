@@ -212,7 +212,7 @@ const IncomingProcessRegistration = () => {
                                     onChange={(e) => handleBarcodeScan(e.target.value)}
                                     onKeyDown={handleBarcodeKeyDown}
                                     className='set-small set-input-gray'
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: 'center'}}
                                 />
                             </div>
 
@@ -243,9 +243,10 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     value={lotSerial}
                                     onChange={(e) => setLotSerial(e.target.value)}
+                                    readOnly={true}
                                     required
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
@@ -266,9 +267,10 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     value={goodQuantity}
                                     onChange={(e) => handleGoodQuantityChange(e.target.value)}
+                                    readOnly={true}
                                     type="number"
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
@@ -277,9 +279,10 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     value={defectQuantity}
                                     onChange={(e) => handleDefectQuantityChange(e.target.value)}
+                                    readOnly={true}
                                     type="number"
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
@@ -288,7 +291,9 @@ const IncomingProcessRegistration = () => {
                                 <select
                                     value={defectReason}
                                     onChange={(e) => setDefectReason(e.target.value)}
-                                    style={{ textAlign: 'center' }}
+                                    className='set-input-gray'
+                                    disabled={true}
+                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none'}}
                                 >
                                     <option value=''></option>
                                     <option value='キズ'>キズ</option>
@@ -317,6 +322,7 @@ const IncomingProcessRegistration = () => {
                             <button
                                 className='set-btn set-primary'
                                 onClick={() => setShowHandInputConfirm(true)}
+                                style={{ visibility: 'hidden' }}
                             >
                                 手入力
                             </button>
