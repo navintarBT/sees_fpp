@@ -14,6 +14,7 @@ type StoredForm = {
     goodQuantity: string
     defectQuantity: string
     defectReason: string
+    fieldsEnabled: boolean
 }
 
 const loadStoredForm = (): StoredForm | null => {
@@ -46,6 +47,7 @@ const IncomingProcessRegistration = () => {
     const [goodQuantity, setGoodQuantity] = useState<string>(storedForm?.goodQuantity ?? '')
     const [defectQuantity, setDefectQuantity] = useState<string>(storedForm?.defectQuantity ?? '')
     const [defectReason, setDefectReason] = useState(storedForm?.defectReason ?? '')
+    const [fieldsEnabled, setFieldsEnabled] = useState(storedForm?.fieldsEnabled ?? false)
 
     useEffect(() => {
         barcodeInputRef.current?.focus()
@@ -62,9 +64,10 @@ const IncomingProcessRegistration = () => {
             goodQuantity,
             defectQuantity,
             defectReason,
+            fieldsEnabled,
         }
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-    }, [productTicketNo, productName, productCode, lotSerial, orderQuantity, receivingQuantity, goodQuantity, defectQuantity, defectReason])
+    }, [productTicketNo, productName, productCode, lotSerial, orderQuantity, receivingQuantity, goodQuantity, defectQuantity, defectReason, fieldsEnabled])
 
     const clearFormAndRows = () => {
         setProductTicketNo('')
@@ -76,6 +79,7 @@ const IncomingProcessRegistration = () => {
         setGoodQuantity('')
         setDefectQuantity('')
         setDefectReason('')
+        setFieldsEnabled(false)
         sessionStorage.removeItem(STORAGE_KEY)
 
         setTimeout(() => {
@@ -108,6 +112,7 @@ const IncomingProcessRegistration = () => {
     const handleBarcodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             fetchProductInfo(productTicketNo)
+            setFieldsEnabled(true)
         }
     }
 
@@ -243,10 +248,10 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     value={lotSerial}
                                     onChange={(e) => setLotSerial(e.target.value)}
-                                    readOnly={true}
+                                    readOnly={!fieldsEnabled}
                                     required
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
@@ -267,10 +272,10 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     value={goodQuantity}
                                     onChange={(e) => handleGoodQuantityChange(e.target.value)}
-                                    readOnly={true}
+                                    readOnly={!fieldsEnabled}
                                     type="number"
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
@@ -279,10 +284,10 @@ const IncomingProcessRegistration = () => {
                                 <input
                                     value={defectQuantity}
                                     onChange={(e) => handleDefectQuantityChange(e.target.value)}
-                                    readOnly={true}
+                                    readOnly={!fieldsEnabled}
                                     type="number"
                                     className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none' }}
                                 />
                             </div>
 
@@ -291,9 +296,9 @@ const IncomingProcessRegistration = () => {
                                 <select
                                     value={defectReason}
                                     onChange={(e) => setDefectReason(e.target.value)}
-                                    className='set-input-gray'
-                                    disabled={true}
-                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none'}}
+                                    // className='set-input-gray'
+                                    disabled={!fieldsEnabled}
+                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                 >
                                     <option value=''></option>
                                     <option value='キズ'>キズ</option>
