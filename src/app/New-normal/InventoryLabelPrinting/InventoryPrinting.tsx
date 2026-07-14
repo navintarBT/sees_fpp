@@ -2,23 +2,15 @@
 import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
-const WAREHOUSE_BY_ORDER: Record<string, string> = {
-  '12345678': 'A倉庫',
-  'OT-12345678': 'C事業所',
-  'MB-12345678123456': 'D事業所',
-}
-
 const InventoryPrinting = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const orderNo = (location.state as {orderNo?: string} | null)?.orderNo ?? ''
   const isMB = orderNo === 'MB-12345678123456'
 
-  const defaultWarehouse = WAREHOUSE_BY_ORDER[orderNo] ?? 'A倉庫'
-
-  const [warehouse, setWarehouse] = useState(defaultWarehouse)
+  const [warehouse, setWarehouse] = useState('A倉庫')
   const [moveStorage, setMoveStorage] = useState('')
-  const [qty, setQty] = useState('')
+  const [qty, setQty] = useState('1')
   const [itemNo, setItemNo] = useState('')
   const [lot, setLot] = useState('')
   const [serial, setSerial] = useState('')
@@ -47,7 +39,7 @@ const InventoryPrinting = () => {
     const [parsedItemNo, ...rest] = trimmed.split(/\s+/)
     setItemNo(parsedItemNo)
     setLot(rest.join(' '))
-    setQty('')
+    setQty('1')
     setIsLabelLocked(true)
   }
 
@@ -57,7 +49,7 @@ const InventoryPrinting = () => {
     setLot('')
     setSerial('')
     setExpiry('')
-    setQty('')
+    setQty('1')
     setIsLabelLocked(false)
     moveStorageRef.current?.focus()
   }
