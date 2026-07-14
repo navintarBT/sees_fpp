@@ -183,13 +183,9 @@ const ShelfTransfer = () => {
     }))
     if (mode === 'dest') setActiveRowId(nextId)
 
-    // 次のラベル読取に備え、品目No. を全選択してフォーカスを保持
+    // 次のラベル読取に備え、品目No. にフォーカスだけ戻す（全選択はしない：単純に入力待ち）
     requestAnimationFrame(() => {
-      const el = itemNoInputRef.current
-      if (el) {
-        el.focus()
-        el.select()
-      }
+      itemNoInputRef.current?.focus()
     })
   }
 
@@ -244,6 +240,12 @@ const ShelfTransfer = () => {
   const handleRowActivate = (rowKey: string | number) => {
     const selectedRow = rows.find((row) => row.id === Number(rowKey))
     if (!selectedRow) return
+    // すでに選択中の行を再クリックしたら選択解除する
+    if (activeRowId === selectedRow.id) {
+      setActiveRowId(null)
+      clearRowFields()
+      return
+    }
     setActiveRowId(selectedRow.id)
     setForm((prev) => ({
       ...prev,
@@ -321,13 +323,9 @@ const ShelfTransfer = () => {
       )
     )
 
-    // 次のラベル読取に備え、品目No. の入力待ちにする
+    // 次のラベル読取に備え、品目No. にフォーカスだけ戻す（全選択はしない：単純に入力待ち）
     requestAnimationFrame(() => {
-      const el = itemNoInputRef.current
-      if (el) {
-        el.focus()
-        el.select()
-      }
+      itemNoInputRef.current?.focus()
     })
   }
 
@@ -506,10 +504,10 @@ const ShelfTransfer = () => {
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
-                  style={grayFieldStyle}
+                  style={isInitialDisplay || mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                  disabled
+                  disabled={isInitialDisplay || mode === 'dest'}
                 >
                   <option value=''></option>
                   <option value='千葉工場：F0200'>千葉工場：F0200</option>
@@ -527,10 +525,10 @@ const ShelfTransfer = () => {
               <div className='set-row set-row-wo'>
                 <label>保管場所</label>
                 <select
-                  style={isInitialDisplay || mode === 'source' ? grayFieldStyle : {textAlign: 'center'}}
+                  style={isInitialDisplay ? grayFieldStyle : {textAlign: 'center'}}
                   value={form.parentStorage}
                   onChange={(e) => setForm({...form, parentStorage: e.target.value})}
-                  disabled={isInitialDisplay || mode === 'source'}
+                  disabled={isInitialDisplay}
                 >
                   <option value=''></option>
                   <option value='W0001'>W0001</option>
@@ -571,8 +569,8 @@ const ShelfTransfer = () => {
               <div className='set-row set-row-wo'>
                 <label>移動数量</label>
                 <input
-                  readOnly
-                  style={grayFieldStyle}
+                  readOnly={isInitialDisplay || mode === 'dest'}
+                  style={isInitialDisplay || mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
                   value={form.transfer_qty}
                   onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                 />
