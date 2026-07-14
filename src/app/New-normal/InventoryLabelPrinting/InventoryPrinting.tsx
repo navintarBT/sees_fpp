@@ -97,9 +97,9 @@ const InventoryPrinting = () => {
               <input
                 value={itemNo}
                 onChange={(e) => setItemNo(e.target.value)}
-                disabled={!isLabelLocked}
-                className={!isLabelLocked ? 'set-input-gray' : ''}
-                style={{textAlign: 'center', ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
+                disabled
+                className='set-input-gray'
+                style={{textAlign: 'center', backgroundColor: '#d9d9d9'}}
               />
             </div>
             <div className='hand-row hand-row-inventory-printing'>
@@ -189,7 +189,7 @@ const InventoryPrinting = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>読込データを破棄します。宜しいですか？</div>
+                  <div className='set-modal-body'>{'読込データを破棄します。\n宜しいですか？'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
@@ -255,7 +255,7 @@ const InventoryPrinting = () => {
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
                   <div className='set-modal-header'>確認</div>
-                  <div className='set-modal-body'>メニューに戻ります。よろしいですか？</div>
+                  <div className='set-modal-body'>{'メニューに戻ります。\nよろしいですか？'}</div>
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
