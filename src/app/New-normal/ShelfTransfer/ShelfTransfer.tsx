@@ -241,9 +241,9 @@ const ShelfTransfer = () => {
     const selectedRow = rows.find((row) => row.id === Number(rowKey))
     if (!selectedRow) return
     // すでに選択中の行を再クリックしたら選択解除する
+    // ※ヘッダ部の表示データは残したまま、行の選択（矢印）だけを解除する
     if (activeRowId === selectedRow.id) {
       setActiveRowId(null)
-      clearRowFields()
       return
     }
     setActiveRowId(selectedRow.id)
