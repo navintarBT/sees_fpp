@@ -101,6 +101,8 @@ const ShelfTransfer = () => {
   // 戻る：2段階確認（Step1=中止確認 / Step2=データ保持確認）
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [showBackKeepConfirm, setShowBackKeepConfirm] = useState(false)
+  // 品目No. 重複エラー（すでに明細に存在する品目No. を再入力した場合）
+  const [showDuplicateItemNo, setShowDuplicateItemNo] = useState(false)
 
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const itemNoInputRef = useRef<HTMLInputElement | null>(null)
@@ -117,7 +119,8 @@ const ShelfTransfer = () => {
     showCompleteConfirm ||
     showCompleteDone ||
     showBackConfirm ||
-    showBackKeepConfirm
+    showBackKeepConfirm ||
+    showDuplicateItemNo
 
   // 初回表示：テーブルは空のまま、品目No. 入力にフォーカスする
   useEffect(() => {
@@ -154,6 +157,12 @@ const ShelfTransfer = () => {
 
     const master = ITEM_MASTER[itemNo]
     if (!master) return // マスタに存在しない品目No. は無視
+
+    // すでに明細に存在する品目No. は追加せず、編集中である旨を通知する
+    if (rows.some((row) => row.item_no === itemNo)) {
+      setShowDuplicateItemNo(true)
+      return
+    }
 
     // 明細部に１行追加（先保管場所は移動先登録で設定するため空）
     const nextId = rows.reduce((max, row) => Math.max(max, row.id), 0) + 1
@@ -680,6 +689,27 @@ const ShelfTransfer = () => {
                   <button
                     className='set-modal-btn set-modal-yes'
                     onClick={() => setShowItemNoRequired(false)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 品目No. 重複：すでに明細にある品目No. を再入力した場合 */}
+          {showDuplicateItemNo && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>{'入力した品目Noは編集中です。'}</div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={() => {
+                      setShowDuplicateItemNo(false)
+                      requestAnimationFrame(() => itemNoInputRef.current?.focus())
+                    }}
                   >
                     OK
                   </button>
