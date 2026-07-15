@@ -18,7 +18,7 @@ const MiscellaneousInAndOutBound = () => {
             <div className='hand-form'>
               <div className='hand-row'>
                 <label>倉庫</label>
-                <select autoFocus>
+                <select autoFocus style={{ appearance: 'auto' }}>
                   <option value=''></option>
                   <option value='倉庫A:W0040'>倉庫A:W0040</option>
                   <option value='倉庫B:W0041'>倉庫B:W0041</option>
@@ -32,7 +32,7 @@ const MiscellaneousInAndOutBound = () => {
               <div className='hand-row'>
                 <label >引当数</label>
                 <div className='pg-sign-group'>
-                  <select className='pg-sign-select' style={{ backgroundColor: 'transparent' }} >
+                  <select className='pg-sign-select' style={{ appearance: 'auto', backgroundColor: 'transparent' }} >
                     <option value='+'>+</option>
                     <option value='-'>-</option>
                   </select>
