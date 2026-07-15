@@ -18,6 +18,20 @@ type Row = {
   moveStorage2?: string
 }
 
+const createEmptyRow = (): Row => ({
+  id: -1,
+  error: '',
+  item: '',
+  lot: '',
+  status: '',
+  build: '',
+  release: '' as unknown as number,
+  move: '',
+  moveStorage: '',
+  name: '',
+  moveStorage2: '',
+})
+
 const allRowsData: Row[] = [
   { id: 1, error: '', item: 'A01', lot: 'L01', status: 'W0020', build: 'W0023', release: 1, move: '品目1', moveStorage: 'S1', name: '部品A', moveStorage2: '棚A' },
   { id: 2, error: '', item: 'B02', lot: 'L02', status: 'W0021', build: 'W0023', release: 3, move: '品目2', moveStorage: 'S2', name: '部品B', moveStorage2: '棚B' },
@@ -59,13 +73,20 @@ const SetMiscellaneousInAndOutBound = () => {
   const storedForm = loadStoredForm()
 
   const [quantity, setQuantity] = useState(storedForm?.quantity ?? '1')
-  const [rows, setRows] = useState<Row[]>(storedForm?.rows ?? [])
-  const [form, setForm] = useState(storedForm?.form ?? {
-    parentItemNo: '0193090',
-    moveWarehouse: '千葉倉庫（WMS）：W002',
-    moveStorage: '',
-    qty: '',
-    janCode: '',
+  const [rows, setRows] = useState<Row[]>(storedForm?.rows?.length ? storedForm.rows : [createEmptyRow()])
+  const [form, setForm] = useState(() => {
+    const initialForm = storedForm?.form ?? {
+      parentItemNo: '0193090',
+      moveWarehouse: '倉庫A：W0040',
+      moveStorage: '',
+      qty: '',
+      janCode: '',
+    }
+
+    return {
+      ...initialForm,
+      moveWarehouse: initialForm.moveWarehouse || '倉庫A：W0040',
+    }
   })
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -86,6 +107,7 @@ const SetMiscellaneousInAndOutBound = () => {
   const activeRow = rows.find((row) => row.id === activeRowId) ?? null
   const pressedKeysRef = useRef<{ f1: boolean; f8: boolean }>({ f1: false, f8: false })
   const backBtnRef = useRef<HTMLButtonElement>(null)
+  const warehouseRef = useRef<HTMLSelectElement>(null)
   const isAnyModalOpen =
     showHandInputConfirm ||
     showDeleteConfirm ||
@@ -215,6 +237,14 @@ const SetMiscellaneousInAndOutBound = () => {
     setShowDeleteConfirm(true)
   }
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      warehouseRef.current?.focus()
+    }, 0)
+
+    return () => window.clearTimeout(timer)
+  }, [])
+
   const janCodeRef = useRef<HTMLInputElement>(null)
 
   const handleJanCodeEnter = () => {
@@ -310,14 +340,14 @@ const SetMiscellaneousInAndOutBound = () => {
               <div className='set-row'>
                 <label>倉庫</label>
                 <select
-                  autoFocus
+                  ref={warehouseRef}
                   value={form.moveWarehouse}
                   onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
                 >
                   <option value=''></option>
-                  <option value='倉庫A:W0040'>倉庫A:W0040</option>
-                  <option value='倉庫B:W0041'>倉庫B:W0041</option>
-                  <option value='倉庫C:W0042'>倉庫C:W0042</option>
+                  <option value='倉庫A：W0040'>倉庫A：W0040</option>
+                  <option value='倉庫B：W0041'>倉庫B：W0041</option>
+                  <option value='倉庫C：W0042'>倉庫C：W0042</option>
                 </select>
               </div>
               <div className='set-row'>
