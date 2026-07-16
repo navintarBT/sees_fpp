@@ -35,7 +35,6 @@ const IncomingProcessRegistration = () => {
     const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
     const [showError, setShowError] = useState<{ message: string } | null>(null)
     const barcodeInputRef = useRef<HTMLInputElement | null>(null)
-    const runawayBtnRef = useRef<HTMLButtonElement | null>(null)
 
     const storedForm = loadStoredForm()
 
@@ -203,53 +202,6 @@ const IncomingProcessRegistration = () => {
         }
     }
 
-    const dodgeDistance = 120 // ระยะที่เมาส์เข้าใกล้แล้วปุ่มจะหนี
-
-    const moveButton = () => {
-        const btn = runawayBtnRef.current
-        if (!btn) return
-
-        btn.style.position = 'fixed'
-        const btnRect = btn.getBoundingClientRect()
-        const maxX = window.innerWidth - btnRect.width
-        const maxY = window.innerHeight - btnRect.height
-
-        const newX = Math.random() * maxX
-        const newY = Math.random() * maxY
-
-        btn.style.left = `${newX}px`
-        btn.style.top = `${newY}px`
-    }
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            const btn = runawayBtnRef.current
-            if (!btn) return
-
-            const btnRect = btn.getBoundingClientRect()
-            const btnCenterX = btnRect.left + btnRect.width / 2
-            const btnCenterY = btnRect.top + btnRect.height / 2
-            const distance = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY)
-
-            if (distance < dodgeDistance) {
-                moveButton()
-            }
-        }
-
-            const handleMouseEnter = () => {
-            moveButton()
-        }
-
-        document.addEventListener('mousemove', handleMouseMove)
-        const btn = runawayBtnRef.current
-        btn?.addEventListener('mouseenter', handleMouseEnter)
-
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove)
-            btn?.removeEventListener('mouseenter', handleMouseEnter)
-        }
-    }, [dodgeDistance])
-
     return (
         <div className='mockup-page'>
             <div className='mockup-stage mockup-stage-dark'>
@@ -265,7 +217,7 @@ const IncomingProcessRegistration = () => {
                                     onChange={(e) => handleBarcodeScan(e.target.value)}
                                     onKeyDown={handleBarcodeKeyDown}
                                     className='set-small set-input-gray'
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: 'center'}}
                                 />
                             </div>
 
@@ -346,7 +298,7 @@ const IncomingProcessRegistration = () => {
                                     onChange={(e) => setDefectReason(e.target.value)}
                                     // className='set-input-gray'
                                     disabled={!fieldsEnabled}
-                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none' }}
+                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                 >
                                     <option value=''></option>
                                     <option value='キズ'>キズ</option>
@@ -380,9 +332,6 @@ const IncomingProcessRegistration = () => {
                                 手入力
                             </button>
                             <button
-                                ref={runawayBtnRef}
-                                id="runaway-btn"
-                                style={{ width: '248px', height: '140px' }}
                                 className='set-btn set-success'
                                 onClick={() => setShowBackConfirm(true)}
                             >
