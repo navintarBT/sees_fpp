@@ -1,4 +1,10 @@
-﻿.set-header {
+﻿input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+.set-header {
   height: 140px;
   background: linear-gradient(90deg, #e3f0fa 0%, #b6d0e2 100%);
   color: #1a2a4a;
@@ -1816,7 +1822,6 @@ input[type='time'].wot-grid-value2 {
   z-index: 4;
   background: white;
   min-width: 45px;
-
 }
 
 .woPartsIssuance-table .tf-tableRow .col-arrow {
@@ -1886,6 +1891,7 @@ input[type='time'].wot-grid-value2 {
 
 
 /* ####################################table WOPartsIssuanceDetail########################################### */
+
 .woPartsIssuanceDetail-table .col-arrow-head {
   min-width: 45px;
 }
@@ -2092,6 +2098,7 @@ input[type='time'].wot-grid-value2 {
 }
 
 /* ####################################table delivery zang ########################################### */
+
 .col-item-delivery {
   min-width: 830px;
 }
@@ -2099,7 +2106,6 @@ input[type='time'].wot-grid-value2 {
 .col-item-delivery-wo {
   min-width: 1009px;
 }
-
 
 /* ####################################table equipment zang ########################################### */
 
@@ -2134,8 +2140,6 @@ input[type='time'].wot-grid-value2 {
 }
 
 /* min-width  choose wo */
-
-
 
 /* min-width  col-arrow-head-shelftransfer */
 
