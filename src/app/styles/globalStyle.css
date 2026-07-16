@@ -734,6 +734,54 @@ textarea:focus {
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.28);
 }
 
+.hand-calendar.hand-calendar-gosen {
+  right: -100px;
+  width: 570px;
+  min-width: 500px;
+  padding: 26px;
+}
+
+.hand-calendar.hand-calendar-gosen .hand-calendar-header {
+  grid-template-columns: 78px 1fr 78px;
+  gap: 14px;
+  margin-bottom: 20px;
+  font-size: 25px;
+}
+
+.hand-calendar.hand-calendar-gosen .hand-calendar-header button {
+  width: 70px;
+  height: 46px;
+  border-radius: 10px;
+  font-size: 30px;
+}
+
+.hand-calendar.hand-calendar-gosen .hand-calendar-weekdays {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.hand-calendar.hand-calendar-gosen .hand-calendar-day {
+  width: 70px;
+  height: 70px;
+  border-radius: 14px;
+  font-size: 22px;
+}
+
+.hand-calendar.hand-calendar-gosen .hand-calendar-day.hand-calendar-selected {
+  font-weight: 700;
+}
+
+.hand-calendar.hand-calendar-gosen .hand-calendar-footer {
+  margin-top: 16px;
+  padding-top: 14px;
+}
+
+.hand-calendar.hand-calendar-gosen .hand-calendar-footer button {
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
 .hand-calendar-header {
   display: grid;
   grid-template-columns: 50px 1fr 50px;
