@@ -367,6 +367,7 @@ const SetMiscellaneousInAndOutBound = () => {
                   </select>
                   <input
                     value={quantity}
+                    type='number'
                     onChange={(e) => setQuantity(e.target.value)}
                   />
                 </div>

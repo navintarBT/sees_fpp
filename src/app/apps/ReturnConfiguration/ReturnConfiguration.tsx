@@ -81,15 +81,15 @@ const ReturnConfiguration = () => {
               </div>
               <div className='hand-row'>
                 <label>品目No.</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
               <div className='hand-row'>
                 <label>ロット</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
               <div className='hand-row' >
                 <label >シリアル</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
             </div>
 
