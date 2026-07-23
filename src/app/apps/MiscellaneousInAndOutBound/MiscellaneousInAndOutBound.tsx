@@ -29,7 +29,7 @@ const MiscellaneousInAndOutBound = () => {
                 <label>保管場所</label>
                 <input />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row set-row'>
                 <label >引当数</label>
                 <div className='pg-sign-group'>
                   <select className='pg-sign-select' style={{ appearance: 'auto', backgroundColor: 'transparent' }} >
