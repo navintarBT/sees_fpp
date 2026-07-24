@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { FaRegCalendarAlt } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
 const WO_MOCKUP_DATA: Record<string, { planned: number; completed: number; defective: number }> = {
@@ -16,30 +15,12 @@ const WO_MOCKUP_DATA: Record<string, { planned: number; completed: number; defec
   'WO-010': { planned: 10, completed: 5, defective: 5 },
 }
 
-const formatWoDate = (value: string) => {
-  const [year, month, day] = value.split('-')
-  if (!year || !month || !day) return ''
-  return `${year.slice(-2)}/${month}/${day}`
-}
-
-const padDatePart = (value: number) => value.toString().padStart(2, '0')
-
-const toDateValue = (date: Date) => (
-  `${date.getFullYear()}-${padDatePart(date.getMonth() + 1)}-${padDatePart(date.getDate())}`
-)
-
-const parseDateValue = (value: string) => {
-  const [year, month, day] = value.split('-').map(Number)
-  return year && month && day ? new Date(year, month - 1, day) : new Date()
-}
-
 // เก็บ snapshot ของหน้าจอเพื่อให้กด NO / รีเฟรชแล้วข้อมูลยังอยู่เหมือนเดิม
 const BACK_STATE_KEY = 'WorkOrderCompletion:backState'
 
 type WoData = { planned: number; completed: number; defective: number }
 
 type PersistedState = {
-  woDatePickerValue: string
   woNumber: string
   woData: WoData | null
   plannedCount: string
@@ -64,32 +45,11 @@ const clearPersistedState = () => {
   }
 }
 
-const getCalendarDays = (monthDate: Date) => {
-  const year = monthDate.getFullYear()
-  const month = monthDate.getMonth()
-  const startDate = new Date(year, month, 1 - new Date(year, month, 1).getDay())
-
-  return Array.from({ length: 42 }, (_, index) => {
-    const date = new Date(startDate)
-    date.setDate(startDate.getDate() + index)
-
-    return {
-      date,
-      value: toDateValue(date),
-      inMonth: date.getMonth() === month,
-    }
-  })
-}
-
 const WorkOrderCompletion = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const todayValue = toDateValue(new Date())
   // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
   const [persistedState] = useState(loadPersistedState)
-  const [woDatePickerValue, setWoDatePickerValue] = useState(persistedState?.woDatePickerValue ?? todayValue)
-  const [showWoCalendar, setShowWoCalendar] = useState(false)
-  const [woCalendarMonth, setWoCalendarMonth] = useState(() => parseDateValue(persistedState?.woDatePickerValue ?? todayValue))
   const [woNumber, setWoNumber] = useState(persistedState?.woNumber ?? '')
   const [woData, setWoData] = useState<WoData | null>(persistedState?.woData ?? null)
   const [plannedCount, setPlannedCount] = useState(persistedState?.plannedCount ?? '')
@@ -143,38 +103,12 @@ const WorkOrderCompletion = () => {
     try {
       sessionStorage.setItem(
         BACK_STATE_KEY,
-        JSON.stringify({ woDatePickerValue, woNumber, woData, plannedCount, completedCount, defectiveCount }),
+        JSON.stringify({ woNumber, woData, plannedCount, completedCount, defectiveCount }),
       )
     } catch {
       /* ignore */
     }
-  }, [woDatePickerValue, woNumber, woData, plannedCount, completedCount, defectiveCount])
-
-  const openWoDatePicker = () => {
-    setWoCalendarMonth(parseDateValue(woDatePickerValue || todayValue))
-    setShowWoCalendar((current) => !current)
-  }
-
-  const changeWoCalendarMonth = (amount: number) => {
-    setWoCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() + amount, 1))
-  }
-
-  const selectWoDate = (value: string) => {
-    setWoDatePickerValue(value)
-    setWoCalendarMonth(parseDateValue(value))
-    setShowWoCalendar(false)
-  }
-
-  const selectToday = () => {
-    setWoDatePickerValue(todayValue)
-    setWoCalendarMonth(parseDateValue(todayValue))
-    setShowWoCalendar(false)
-  }
-
-  const clearDate = () => {
-    setWoDatePickerValue('')
-    setShowWoCalendar(false)
-  }
+  }, [woNumber, woData, plannedCount, completedCount, defectiveCount])
 
   const loadWoData = () => {
     const normalizedWoNumber = woNumber.trim()
@@ -233,18 +167,12 @@ const WorkOrderCompletion = () => {
   }
 
   const resetInitialDisplay = () => {
-    setWoDatePickerValue(todayValue)
-    setWoCalendarMonth(parseDateValue(todayValue))
-    setShowWoCalendar(false)
     setWoNumber('')
     clearWoData()
     setShowWoSelect(false)
     setSelectedWoNumber('')
     setShowWoLoadConfirm(false)
   }
-
-  const calendarDays = getCalendarDays(woCalendarMonth)
-  const calendarMonthLabel = woCalendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
 
   return (
     <div className='mockup-page'>
@@ -253,79 +181,6 @@ const WorkOrderCompletion = () => {
           <div className='set-header' style={{ textAlign: 'center' }}>WO完了実績登録</div>
           <div className='hand-body'>
             <div className='hand-form'>
-              <div className='hand-row'>
-                <label>WO完了日</label>
-                <div className='hand-date-field'>
-                  <input
-                    readOnly
-                    value={formatWoDate(woDatePickerValue)}
-                    onClick={openWoDatePicker}
-                    style={{ textAlign: 'center' }}
-                  />
-                  <button
-                    type='button'
-                    className='hand-date-btn'
-                    aria-label='Choose WO completion date'
-                    onClick={openWoDatePicker}
-                  >
-                    <FaRegCalendarAlt />
-                  </button>
-                  {showWoCalendar && (
-                    <div
-                      className='hand-calendar'
-                      role='dialog'
-                      aria-label='Choose WO completion date'
-                      style={{ left: '50%', transform: 'translateX(-50%)', width: '520px', padding: '24px' }}
-                    >
-                      <div className='hand-calendar-header' style={{ gridTemplateColumns: '60px 1fr 60px', marginBottom: '14px', fontSize: '32px' }}>
-                        <button type='button' style={{ width: '60px', height: '48px', fontSize: '43px' }} onClick={() => changeWoCalendarMonth(-1)}>{'<'}</button>
-                        <span>{calendarMonthLabel}</span>
-                        <button type='button' style={{ width: '60px', height: '48px', fontSize: '43px' }} onClick={() => changeWoCalendarMonth(1)}>{'>'}</button>
-                      </div>
-                      <div className='hand-calendar-weekdays' style={{ fontSize: '29px', marginBottom: '10px', gap: '8px' }}>
-                        {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
-                          <span key={day}>{day}</span>
-                        ))}
-                      </div>
-                      <div className='hand-calendar-days' style={{ gap: '8px' }}>
-                        {calendarDays.map(({ date, value, inMonth }) => (
-                          <button
-                            type='button'
-                            key={value}
-                            className={[
-                              'hand-calendar-day',
-                              inMonth ? '' : 'hand-calendar-muted',
-                              value === woDatePickerValue ? 'hand-calendar-selected' : '',
-                            ].filter(Boolean).join(' ')}
-                            style={{ width: '60px', height: '55px', fontSize: '30px' }}
-                            onClick={() => selectWoDate(value)}
-                          >
-                            {date.getDate()}
-                          </button>
-                        ))}
-                      </div>
-                      <div className='hand-calendar-footer'>
-                        <button
-                          type='button'
-                          className='hand-calendar-btn-today'
-                          style={{ padding: '10px 18px', fontSize: '29px' }}
-                          onClick={selectToday}
-                        >
-                          今日
-                        </button>
-                        <button
-                          type='button'
-                          className='hand-calendar-btn-clear'
-                          style={{ padding: '10px 18px', fontSize: '29px' }}
-                          onClick={clearDate}
-                        >
-                          クリア
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
               <div className='hand-row'>
                 <label>WO番号</label>
                 <div style={{ display: 'flex', gap: '15px', alignItems: 'center', justifyContent: 'center' }}>
@@ -342,18 +197,29 @@ const WorkOrderCompletion = () => {
                     }}
                     style={{ textAlign: 'center', width: '540px' }}
                   />
-                  <button type='button' className='set-btnnew_high set-primary' onClick={() => navigate("/factory/work-order-completion-select-wo")}>WO選択</button>
+                  <button type='button' className='set-btnnew_high set-primary' onClick={() => navigate("/factory/work-order-completion-select-wo")}>WO検索</button>
                 </div>
               </div>
               <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
                 <label>WO計画数</label>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
                   <input
-                    disabled={!woData}
+                    disabled
                     value={plannedCount}
-                    onChange={(e) => setPlannedCount(e.target.value)}
                     style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
                     aria-label='WO planned count'
+                  />
+                </div>
+
+              </div>
+              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
+                <label>WO完了済数</label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                  <input
+                    disabled
+                    value={woData ? String(toCountNumber(plannedCount) - toCountNumber(completedCount)) : ''}
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
+                    aria-label='WO completed remaining count'
                   />
                 </div>
 
