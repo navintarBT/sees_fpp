@@ -95,7 +95,7 @@ const WorkOrderCompletion_Choose_WO = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>WO選択</div>
+          <div className='set-header'>WO検索</div>
           <div className='set-body'>
             <div className='set-form'>
               {/* input fields removed */}
