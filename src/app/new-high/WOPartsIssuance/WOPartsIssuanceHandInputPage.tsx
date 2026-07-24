@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react'
-import {createPortal} from 'react-dom'
+// import {createPortal} from 'react-dom'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
@@ -44,90 +44,91 @@ const inputStyle: React.CSSProperties = {
   textAlign: 'center',
 }
 
-const ComboBoxCell = ({
-  value,
-  options,
-  style,
-  onChange,
-}: {
-  value: string
-  options: string[]
-  style: React.CSSProperties
-  onChange: (value: string) => void
-}) => {
-  const [open, setOpen] = useState(false)
-  const [rect, setRect] = useState<{top: number; left: number; width: number} | null>(null)
-  const inputRef = useRef<HTMLInputElement | null>(null)
-
-  const filtered = options.filter((option) =>
-    option.toLowerCase().includes(value.trim().toLowerCase()),
-  )
-
-  const openDropdown = () => {
-    const el = inputRef.current
-    if (el) {
-      const r = el.getBoundingClientRect()
-      setRect({top: r.bottom, left: r.left, width: r.width})
-    }
-    setOpen(true)
-  }
-
-  return (
-    <div style={{position: 'relative', width: '100%', height: '100%'}}>
-      <input
-        ref={inputRef}
-        style={style}
-        value={value}
-        onChange={(e) => {
-          onChange(e.target.value)
-          openDropdown()
-        }}
-        onFocus={openDropdown}
-        onBlur={() => setTimeout(() => setOpen(false), 150)}
-        onClick={(e) => {
-          e.stopPropagation()
-          openDropdown()
-        }}
-      />
-      {open && filtered.length > 0 && rect
-        ? createPortal(
-            <div
-              style={{
-                position: 'fixed',
-                top: rect.top,
-                left: rect.left,
-                width: 'max-content',
-                minWidth: rect.width,
-                maxWidth: 320,
-                maxHeight: 320,
-                overflowY: 'auto',
-                background: 'white',
-                border: '1px solid #94a3b8',
-                borderRadius: 6,
-                boxShadow: '0 6px 16px rgba(0, 0, 0, 0.2)',
-                zIndex: 1000,
-              }}
-            >
-              {filtered.map((option) => (
-                <div
-                  key={option}
-                  style={{padding: '10px 16px', cursor: 'pointer', fontSize: 28, textAlign: 'left'}}
-                  onMouseDown={(e) => {
-                    e.preventDefault()
-                    onChange(option)
-                    setOpen(false)
-                  }}
-                >
-                  {option}
-                </div>
-              ))}
-            </div>,
-            document.body,
-          )
-        : null}
-    </div>
-  )
-}
+// Dropdown combobox for storage/office cells — commented out, reverted to plain input for now.
+// const ComboBoxCell = ({
+//   value,
+//   options,
+//   style,
+//   onChange,
+// }: {
+//   value: string
+//   options: string[]
+//   style: React.CSSProperties
+//   onChange: (value: string) => void
+// }) => {
+//   const [open, setOpen] = useState(false)
+//   const [rect, setRect] = useState<{top: number; left: number; width: number} | null>(null)
+//   const inputRef = useRef<HTMLInputElement | null>(null)
+//
+//   const filtered = options.filter((option) =>
+//     option.toLowerCase().includes(value.trim().toLowerCase()),
+//   )
+//
+//   const openDropdown = () => {
+//     const el = inputRef.current
+//     if (el) {
+//       const r = el.getBoundingClientRect()
+//       setRect({top: r.bottom, left: r.left, width: r.width})
+//     }
+//     setOpen(true)
+//   }
+//
+//   return (
+//     <div style={{position: 'relative', width: '100%', height: '100%'}}>
+//       <input
+//         ref={inputRef}
+//         style={style}
+//         value={value}
+//         onChange={(e) => {
+//           onChange(e.target.value)
+//           openDropdown()
+//         }}
+//         onFocus={openDropdown}
+//         onBlur={() => setTimeout(() => setOpen(false), 150)}
+//         onClick={(e) => {
+//           e.stopPropagation()
+//           openDropdown()
+//         }}
+//       />
+//       {open && filtered.length > 0 && rect
+//         ? createPortal(
+//             <div
+//               style={{
+//                 position: 'fixed',
+//                 top: rect.top,
+//                 left: rect.left,
+//                 width: 'max-content',
+//                 minWidth: rect.width,
+//                 maxWidth: 320,
+//                 maxHeight: 320,
+//                 overflowY: 'auto',
+//                 background: 'white',
+//                 border: '1px solid #94a3b8',
+//                 borderRadius: 6,
+//                 boxShadow: '0 6px 16px rgba(0, 0, 0, 0.2)',
+//                 zIndex: 1000,
+//               }}
+//             >
+//               {filtered.map((option) => (
+//                 <div
+//                   key={option}
+//                   style={{padding: '10px 16px', cursor: 'pointer', fontSize: 28, textAlign: 'left'}}
+//                   onMouseDown={(e) => {
+//                     e.preventDefault()
+//                     onChange(option)
+//                     setOpen(false)
+//                   }}
+//                 >
+//                   {option}
+//                 </div>
+//               ))}
+//             </div>,
+//             document.body,
+//           )
+//         : null}
+//     </div>
+//   )
+// }
 
 const SESSION_KEY = 'woPartsIssuanceHandInputState'
 
@@ -342,11 +343,17 @@ const WOPartsIssuanceHandInputPage = () => {
       cellClassName: 'col-storage',
       header: '保管場所',
       render: (row) => (
-        <ComboBoxCell
+        // <ComboBoxCell
+        //   style={{...inputStyle, width: '240px'}}
+        //   value={row.storage}
+        //   options={STORAGE_OPTIONS}
+        //   onChange={(value) => updateRow(row.id, {storage: value})}
+        // />
+        <input
           style={{...inputStyle, width: '240px'}}
           value={row.storage}
-          options={STORAGE_OPTIONS}
-          onChange={(value) => updateRow(row.id, {storage: value})}
+          onChange={(e) => updateRow(row.id, {storage: e.target.value})}
+          onClick={(e) => e.stopPropagation()}
         />
       ),
     },
@@ -356,11 +363,17 @@ const WOPartsIssuanceHandInputPage = () => {
       cellClassName: 'col-office',
       header: '事業所',
       render: (row) => (
-        <ComboBoxCell
+        // <ComboBoxCell
+        //   style={{...inputStyle, width: '236px'}}
+        //   value={row.office}
+        //   options={OFFICE_OPTIONS}
+        //   onChange={(value) => updateRow(row.id, {office: value})}
+        // />
+        <input
           style={{...inputStyle, width: '236px'}}
           value={row.office}
-          options={OFFICE_OPTIONS}
-          onChange={(value) => updateRow(row.id, {office: value})}
+          onChange={(e) => updateRow(row.id, {office: e.target.value})}
+          onClick={(e) => e.stopPropagation()}
         />
       ),
     },

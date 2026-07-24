@@ -750,7 +750,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                         <FaRegCalendarAlt />
                       </button>
                       {showWoCalendar && (
-                        <div className='hand-calendar' role='dialog' aria-label='Choose date'>
+                        <div className='hand-calendar hand-calendar-gosen' role='dialog' aria-label='Choose date'>
                           <div className='hand-calendar-header'>
                             <button type='button' onClick={() => changeWoCalendarMonth(-1)}>
                               {'<'}

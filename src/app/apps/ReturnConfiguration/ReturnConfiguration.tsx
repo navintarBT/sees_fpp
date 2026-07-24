@@ -41,17 +41,19 @@ const ReturnConfiguration = () => {
           <div className='set-header'>セット戻り構成手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
-              <div className='hand-row'>
+              <div className='set-row'>
                 <label>品目No.(親)</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} autoFocus />
+                <input  autoFocus />
               </div>
-              <div className='hand-row'>
+              <div className='set-row'>
                 <label>シリアル(親)</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input  />
               </div>
-              <div className='hand-row'>
+              <div className='set-row'>
                 <label >数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                <input type='number' 
+                    onChange={(e) => setQuantity(e.target.value)}
+                />
               </div>
               <div className='rlr-row2'>
                 <label>状態</label>
@@ -79,17 +81,17 @@ const ReturnConfiguration = () => {
                   </label>
                 </div>
               </div>
-              <div className='hand-row'>
+              <div className='set-row'>
                 <label>品目No.</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
-              <div className='hand-row'>
+              <div className='set-row'>
                 <label>ロット</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
-              <div className='hand-row' >
+              <div className='set-row' >
                 <label >シリアル</label>
-                <input style={{ backgroundColor: '#fff' }} />
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
             </div>
 

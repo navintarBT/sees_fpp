@@ -15,14 +15,6 @@ type Row = {
   error?: string
 }
 
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
-}
-
 const STORAGE_KEY = 'setReturnConfigurationForm'
 
 type StoredForm = {
@@ -94,20 +86,6 @@ const SetReturnConfiguration = () => {
 
   // Check if parent JAN code is editable (has loaded data)
   const isParentJanCodeEditable = true
-
-  // Close all modals
-  const closeAllModals = () => {
-    setShowHandInputConfirm(false)
-    setShowDeleteConfirm(false)
-    setShowNoSelectionConfirm(false)
-    setShowClearConfirm(false)
-    setShowCompleteConfirm(false)
-    setShowBackConfirm(false)
-    setShowEmptyParentWarning(false)
-    setShowNormalConfirm(false)
-    setShowIncompleteConfirm(false)
-    setShowStatusChangeConfirm(false)
-  }
 
   // Persist form state to sessionStorage so it survives navigating back into the page
   useEffect(() => {
@@ -185,13 +163,6 @@ const SetReturnConfiguration = () => {
       setShowNoSelectionConfirm(true)
       return
     }
-
-    // ８－３．選択行の読込数が0の場合 check (Disabled for mockup to allow deleting rows)
-    // if (activeRow.returnQty === 0) {
-    //   setShowNoSelectionConfirm(true)
-    //   return
-    // }
-
     // ８－４．確認メッセージ表示
     setShowDeleteConfirm(true)
   }
@@ -227,10 +198,6 @@ const SetReturnConfiguration = () => {
   const handleBackClick = () => {
     if (isAnyModalOpen) return
     setShowBackConfirm(true)
-  }
-
-  const executeBack = () => {
-    navigate('/factory')
   }
 
   // Toggle status for selected row - based on document section 9
@@ -425,30 +392,6 @@ const SetReturnConfiguration = () => {
     )
     setJanCode('')
     setScanError(null)
-  }
-
-  // ฟังก์ชันคำนวณ Check Digit (ตามข้อ 6.補足説明)
-  const validateCheckDigit = (janCode: string): boolean => {
-    if (janCode.length < 13) return false
-
-    // ดึง 13 หลักแรก (ไม่รวม check digit หลักสุดท้าย)
-    const codeWithoutCheck = janCode.slice(0, 13)
-    const providedCheckDigit = parseInt(janCode.slice(13), 10)
-
-    let evenSum = 0
-    let oddSum = 0
-
-    for (let i = 0; i < codeWithoutCheck.length; i++) {
-      const digit = parseInt(codeWithoutCheck[i], 10)
-      if ((i + 1) % 2 === 0) {
-        evenSum += digit
-      } else {
-        oddSum += digit
-      }
-    }
-
-    const calculatedCheckDigit = (10 - ((evenSum * 3 + oddSum) % 10)) % 10
-    return calculatedCheckDigit === providedCheckDigit
   }
 
   return (
