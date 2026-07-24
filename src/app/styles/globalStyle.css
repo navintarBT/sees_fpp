@@ -122,6 +122,14 @@ textarea:focus {
   grid-template-columns: 240px minmax(0, 1fr) auto;
 }
 
+.wo-parts-row-wo {
+  grid-template-columns: 240px minmax(0, 1fr) 300px;
+}
+
+.wo-parts-row-wo .set-search-btn {
+  width: 100%;
+}
+
 .set-search-btn {
   height: 78px;
   min-width: 130px;

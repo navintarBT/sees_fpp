@@ -620,7 +620,7 @@ const WOPartsIssuance = () => {
           <div className='set-header'>WO部品出庫　WO別</div>
           <div className='set-body'>
             <div className='set-form'>
-              <div className='set-row set-row-wo'>
+              <div className='set-row set-row-wo wo-parts-row-wo'>
                 <label>WO番号</label>
                 <input
                   ref={woNumberInputRef}
@@ -639,7 +639,7 @@ const WOPartsIssuance = () => {
                 WO部品リスト表示
               </button>
               </div>
-              <div className='set-row'>
+              <div className='set-row set-row-wo wo-parts-row-wo'>
                 <label>庫内ラベル</label>
                 <input
                   ref={internalLabelInputRef}
@@ -648,7 +648,14 @@ const WOPartsIssuance = () => {
                   onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                   onKeyDown={handleInternalLabelEnter}
                   style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
+                  className='set-small'
                 />
+                <button
+                  className='set-search-btn set-success'
+                  onClick={handleDecide}
+                >
+                  決定
+                </button>
               </div>
               <div className='set-row'>
                 <label>出庫数</label>
@@ -698,6 +705,8 @@ const WOPartsIssuance = () => {
               <button
                 className='set-btn set-primary set-success'
                 onClick={handleDecide}
+                disabled
+                style={{visibility: 'hidden'}}
               >
                 決定
               </button>
