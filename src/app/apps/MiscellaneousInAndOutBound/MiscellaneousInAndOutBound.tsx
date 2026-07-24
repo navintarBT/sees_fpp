@@ -29,7 +29,7 @@ const MiscellaneousInAndOutBound = () => {
                 <label>保管場所</label>
                 <input />
               </div>
-              <div className='hand-row'>
+              <div className='hand-row set-row'>
                 <label >引当数</label>
                 <div className='pg-sign-group'>
                   <select className='pg-sign-select' style={{ appearance: 'auto', backgroundColor: 'transparent' }} >
@@ -37,6 +37,7 @@ const MiscellaneousInAndOutBound = () => {
                     <option value='-'>-</option>
                   </select>
                   <input value={quantity}
+                    type='number'
                     onChange={(e) => setQuantity(e.target.value)}
                   />
                 </div>
@@ -61,7 +62,6 @@ const MiscellaneousInAndOutBound = () => {
                   <input
                     type='text'
                     ref={dateRef}
-                    style={{ backgroundColor: 'transparent', cursor: 'pointer', width: '100%' }}
                   />
                 </div>
               </div>
@@ -111,7 +111,7 @@ const MiscellaneousInAndOutBound = () => {
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowReadConfirm(false)}
                     >
-                     NO
+                      NO
                     </button>
                   </div>
                 </div>
