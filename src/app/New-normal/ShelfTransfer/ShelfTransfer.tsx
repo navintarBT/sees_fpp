@@ -155,11 +155,30 @@ const ShelfTransfer = () => {
     const itemNo = form.internalLabel.trim()
     if (!itemNo) return
 
+    const existingRow = rows.find((row) => row.item_no === itemNo)
+
+    // 「移動先」：入力された品目No. と一致する明細行を選択状態にする
+    // （明細は移動元登録で作成済みのため、ここでは行の選択のみを行う）
+    if (mode === 'dest' && existingRow) {
+      setActiveRowId(existingRow.id)
+      setForm((prev) => ({
+        ...prev,
+        internalLabel: existingRow.item_no,
+        parentWarehouse: existingRow.warehouse,
+        parentStorage: '', // 先保管場所は入力待ち
+        shipmentQty: existingRow.product_name,
+        lot_serial_no: existingRow.lot_serial_no,
+        transfer_qty: existingRow.transfer_qty,
+      }))
+      requestAnimationFrame(() => itemNoInputRef.current?.focus())
+      return
+    }
+
     const master = ITEM_MASTER[itemNo]
     if (!master) return // マスタに存在しない品目No. は無視
 
     // すでに明細に存在する品目No. は追加せず、編集中である旨を通知する
-    if (rows.some((row) => row.item_no === itemNo)) {
+    if (existingRow) {
       setShowDuplicateItemNo(true)
       return
     }
@@ -239,6 +258,19 @@ const ShelfTransfer = () => {
     })
   }
 
+  // 「移動元」のみ：明細部の移動数を直接編集できるようにする
+  // 編集した行が入力欄に表示中（同じ品目No.）の場合は、移動数量の表示も合わせて更新する
+  const handleRowQtyChange = (rowId: number, value: string) => {
+    const qty = value.replace(/[^0-9]/g, '')
+    setRows((prevRows) =>
+      prevRows.map((row) => (row.id === rowId ? {...row, transfer_qty: qty} : row))
+    )
+    const editedRow = rows.find((row) => row.id === rowId)
+    if (editedRow && editedRow.item_no === form.internalLabel.trim()) {
+      setForm((prev) => ({...prev, transfer_qty: qty}))
+    }
+  }
+
   // 一括：選択中の保管場所をすべての行の先保管場所に適用し、選択状態を解除する
   const handleSearchsource_location = () => {
     const selectedLocation = form.parentStorage
@@ -286,10 +318,12 @@ const ShelfTransfer = () => {
   }
 
   // ② 移動元登録完了
-  // 品目No. 未入力ならエラー、入力済みなら完了確認へ
+  // 明細が１件もない（品目No. が一度も読取られていない）ならエラー、あれば完了確認へ
+  // ※ 入力欄の品目No. ではなく明細部で判定する。
+  //   「移動先」から「戻る」で復帰した直後は入力欄が空でも明細は残っているため。
   const handleSourceComplete = () => {
     if (isAnyModalOpen) return
-    if (!form.internalLabel.trim()) {
+    if (rows.length === 0) {
       setShowItemNoRequired(true)
       return
     }
@@ -303,12 +337,11 @@ const ShelfTransfer = () => {
   }
 
   // 完了メッセージ「OK」：移動先登録モードへ遷移
-  // 移動先は庫内ラベル読取で明細を作り直すため、明細・入力欄を初期化する。
+  // 明細部の表示はそのまま残し、入力欄（ヘッダ部）だけを初期化する。
   const finishSourceComplete = () => {
     setShowSourceCompleteDone(false)
     setMode('dest')
     setActiveRowId(null)
-    setRows([])
     clearForm()
     resetTableScroll()
     requestAnimationFrame(() => itemNoInputRef.current?.focus())
@@ -341,7 +374,7 @@ const ShelfTransfer = () => {
   // ⑤ 完了：品目No. 未入力／先保管場所 未設定をチェックし、問題なければ完了確認へ
   const handleComplete = () => {
     if (isAnyModalOpen) return
-    if (!form.internalLabel.trim()) {
+    if (rows.length === 0) {
       setShowItemNoRequired(true)
       return
     }
@@ -484,7 +517,28 @@ const ShelfTransfer = () => {
     {key: 'source_location', headClassName: 'col-woNumber', cellClassName: 'col-woNumber', header: '元保管場所', render: (row) => row.source_location},
     {key: 'item_no', headClassName: 'col-item_no', cellClassName: 'col-partNumber', header: '品目No', render: (row) => row.item_no},
     {key: 'lot_serial_no', headClassName: 'col-reqNumber', cellClassName: 'col-reqNumber', header: 'ロットシリアル', render: (row) => row.lot_serial_no},
-    {key: 'transfer_qty', headClassName: 'col-storage', cellClassName: 'col-storage', header: '移動数', render: (row) => row.transfer_qty},
+    {
+      key: 'transfer_qty',
+      headClassName: 'col-storage-shef',
+      cellClassName: 'col-storage-shef',
+      header: '移動数',
+      // 「移動元」の場合だけ、明細部の移動数を変更できるようにする
+      // --qty-len（入力文字数）を CSS へ渡し、文字がセル幅を超えた分だけ列を広げる
+      render: (row) =>
+        mode === 'source' && !isInitialDisplay ? (
+          <input
+            type='text'
+            inputMode='numeric'
+            className='table-cell-input-shef'
+            style={{['--qty-len' as any]: Math.max(row.transfer_qty.length, 1)}}
+            value={row.transfer_qty}
+            onChange={(e) => handleRowQtyChange(row.id, e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+          />
+        ) : (
+          row.transfer_qty
+        ),
+    },
     {key: 'product_name', headClassName: 'col-lot-shelf', cellClassName: 'col-lot-shelf', header: '品名', render: (row) => row.product_name},
     {key: 'dest_location', headClassName: 'col-dest_location', cellClassName: 'col-dest_location', header: '先保管場所', render: (row) => row.dest_location || ''},
   ]
