@@ -1,7 +1,6 @@
 import {useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
-
 const BundleHandInputPage = () => {
   const navigate = useNavigate()
   const [fromWarehouse, setFromWarehouse] = useState('')

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
@@ -20,18 +20,6 @@ const ReturnConfiguration = () => {
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [qty, setQty] = useState(1);
-
-  const itemNoRef = useRef<HTMLInputElement>(null);
-  const lotRef = useRef<HTMLInputElement>(null);
-  const serialRef = useRef<HTMLInputElement>(null);
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement>) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      nextRef.current?.focus();
-    }
-  };
-
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (

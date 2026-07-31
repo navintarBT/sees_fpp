@@ -235,40 +235,6 @@ const WOPartsIssuanceDetail = () => {
     return {...rs, rows: updatedMainRows, detailHistory: updatedDetailHistory}
   }
 
-  const clearRows = () => {
-    setRows([])
-    setCheckedRowIds([])
-  }
-
-  const clearForm = () =>
-    setForm({
-      parentWarehouse: '',
-      parentItemNo: '',
-      moveWarehouse: '',
-      moveStorage: '',
-      qty: '',
-      janCode: '',
-    })
-
-  const resetTableScroll = () => {
-    const el = tableScrollRef.current
-    if (!el) return
-    requestAnimationFrame(() => {
-      el.scrollTop = 0
-      el.scrollLeft = 0
-      requestAnimationFrame(() => {
-        el.scrollTop = 0
-        el.scrollLeft = 0
-      })
-    })
-  }
-
-  const clearFormAndRows = () => {
-    clearForm()
-    clearRows()
-    resetTableScroll()
-  }
-
   const handleRowClick = (rowId: number) => {
     setCheckedRowIds((prev) => {
       const isSelected = prev.includes(rowId)

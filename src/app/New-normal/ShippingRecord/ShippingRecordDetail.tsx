@@ -59,19 +59,6 @@ const ShippingRecordDetail = () => {
     setShowDeleteConfirm(false)
   }
 
-  const isAllChecked = rows.length > 0 && rows.every((row) => checkedRowIds.includes(row.id))
-
-  const toggleAllChecked = (checked: boolean) => {
-    setCheckedRowIds(checked ? rows.map((row) => row.id) : [])
-  }
-
-  const toggleRowChecked = (rowId: number, checked: boolean) => {
-    setCheckedRowIds((prev) => {
-      if (checked) return prev.includes(rowId) ? prev : [...prev, rowId]
-      return prev.filter((id) => id !== rowId)
-    })
-  }
-
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (isAnyModalOpen) return

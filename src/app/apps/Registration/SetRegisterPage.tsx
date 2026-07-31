@@ -10,20 +10,11 @@ type Row = {
   item: string
   lot: string
   status: string
-  build: number
-  release: number
-  move: string
+  NumOfConfig: number
+  NumOfCancel: number
+  moveWarehouse: string
   moveStorage: string
   name: string
-  moveStorage2?: string
-}
-
-type TableColumn = {
-  key: string
-  headClassName: string
-  cellClassName: string
-  header: ReactNode
-  render: (row: Row) => ReactNode
 }
 
 const initialRows: Row[] = [
@@ -33,12 +24,11 @@ const initialRows: Row[] = [
     item: 'A01',
     lot: 'L01',
     status: '追加',
-    build: 2,
-    release: 1,
-    move: 'W001',
+    NumOfConfig: 2,
+    NumOfCancel: 1,
+    moveWarehouse: 'W001',
     moveStorage: '',
     name: '品目1',
-    moveStorage2: '棚A',
   },
   {
     id: 2,
@@ -46,12 +36,11 @@ const initialRows: Row[] = [
     item: 'B02',
     lot: 'L02',
     status: '解除',
-    build: 1,
-    release: 0,
-    move: 'W002',
+    NumOfConfig: 1,
+    NumOfCancel: 0,
+    moveWarehouse: 'W002',
     moveStorage: '',
     name: '品目2',
-    moveStorage2: '棚B',
   },
   {
     id: 3,
@@ -59,12 +48,11 @@ const initialRows: Row[] = [
     item: 'C03',
     lot: 'L03',
     status: 'OV対応要',
-    build: 3,
-    release: 2,
-    move: 'W003',
+    NumOfConfig: 3,
+    NumOfCancel: 2,
+    moveWarehouse: 'W003',
     moveStorage: '',
     name: '品目3',
-    moveStorage2: '棚C',
   },
   {
     id: 4,
@@ -72,12 +60,11 @@ const initialRows: Row[] = [
     item: 'D04',
     lot: 'L04',
     status: '構成中',
-    build: 4,
-    release: 1,
-    move: 'W004',
+    NumOfConfig: 4,
+    NumOfCancel: 1,
+    moveWarehouse: 'W004',
     moveStorage: '',
     name: '品目4',
-    moveStorage2: '棚D',
   },
   {
     id: 5,
@@ -85,12 +72,11 @@ const initialRows: Row[] = [
     item: 'E05',
     lot: 'L05',
     status: '構成中',
-    build: 2,
-    release: 0,
-    move: 'W005',
+    NumOfConfig: 2,
+    NumOfCancel: 0,
+    moveWarehouse: 'W005',
     moveStorage: '',
     name: '品目5',
-    moveStorage2: '棚E',
   },
   {
     id: 6,
@@ -98,12 +84,11 @@ const initialRows: Row[] = [
     item: 'F06',
     lot: 'L06',
     status: '構成中',
-    build: 5,
-    release: 3,
-    move: 'W006',
+    NumOfConfig: 5,
+    NumOfCancel: 3,
+    moveWarehouse: 'W006',
     moveStorage: '',
     name: '品目6',
-    moveStorage2: '棚F',
   },
   {
     id: 7,
@@ -111,12 +96,11 @@ const initialRows: Row[] = [
     item: 'G07',
     lot: 'L07',
     status: '構成中',
-    build: 1,
-    release: 0,
-    move: 'W007',
+    NumOfConfig: 1,
+    NumOfCancel: 0,
+    moveWarehouse: 'W007',
     moveStorage: '',
     name: '品目7',
-    moveStorage2: '棚G',
   },
   {
     id: 8,
@@ -124,12 +108,11 @@ const initialRows: Row[] = [
     item: 'H08',
     lot: 'L08',
     status: '構成中',
-    build: 3,
-    release: 1,
-    move: 'W008',
+    NumOfConfig: 3,
+    NumOfCancel: 1,
+    moveWarehouse: 'W008',
     moveStorage: '',
     name: '品目8',
-    moveStorage2: '棚H',
   },
   {
     id: 9,
@@ -137,12 +120,11 @@ const initialRows: Row[] = [
     item: 'I09',
     lot: 'L09',
     status: '構成中',
-    build: 2,
-    release: 2,
-    move: 'W009',
+    NumOfConfig: 2,
+    NumOfCancel: 2,
+    moveWarehouse: 'W009',
     moveStorage: '',
     name: '品目9',
-    moveStorage2: '棚I',
   },
   {
     id: 10,
@@ -150,12 +132,11 @@ const initialRows: Row[] = [
     item: 'J10',
     lot: 'L10',
     status: '構成中',
-    build: 6,
-    release: 2,
-    move: 'W010',
+    NumOfConfig: 6,
+    NumOfCancel: 2,
+    moveWarehouse: 'W010',
     moveStorage: '',
     name: '品目10',
-    moveStorage2: '棚J',
   },
 ]
 
@@ -476,9 +457,9 @@ const SetRegisterPage = () => {
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
     {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '状態', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '構成数', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '解除数', render: (row) => row.release},
-    {key: 'move', headClassName: 'col-move', cellClassName: 'col-move', header: '移動倉庫', render: (row) => row.move},
+    {key: 'NumOfConfig', headClassName: 'col-NumOfConfig', cellClassName: 'col-NumOfConfig', header: '構成数', render: (row) => row.NumOfConfig},
+    {key: 'NumOfCancel', headClassName: 'col-NumOfCancel', cellClassName: 'col-NumOfCancel', header: '解除数', render: (row) => row.NumOfCancel},
+    {key: 'moveWarehouse', headClassName: 'col-move', cellClassName: 'col-move', header: '移動倉庫', render: (row) => row.moveWarehouse},
     {
       key: 'moveStorage',
       headClassName: 'col-move',

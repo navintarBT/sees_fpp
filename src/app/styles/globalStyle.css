@@ -24,7 +24,6 @@ textarea:focus {
 .set-body {
   height: calc(1920px - 140px);
   padding: 60px 70px 100px;
-  /* form(auto) + table(remaining) + footer(auto) */
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 20px;
@@ -1720,7 +1719,7 @@ input[type='time'].wot-grid-value2 {
   background: #d1d5db;
 }
 
-/* ####################################table set-return-configuration ########################################### */
+/* #################################### table set-return-configuration ########################################### */
 
 .set-return-configuration-table .col-arrow-head {
   position: sticky;
