@@ -292,7 +292,6 @@ const WOPartsIssuance = () => {
   }
 
 
-  const clearRows = () => setRows([EMPTY_ROW])
   const resetToInitialDisplay = () => {
     closeAllModals()
     setRows([EMPTY_ROW])
@@ -332,19 +331,6 @@ const WOPartsIssuance = () => {
       sessionStorage.removeItem(SESSION_KEY)
     }
   }, [])
-
-  const clearForm = () =>
-    setForm({
-      parentWarehouse: '',
-      parentItemNo: '',
-      moveWarehouse: '',
-      woNumber: '',
-      internalLabel: '',
-      shipmentQty: '',
-      storage: '',
-      office: '',
-      janCode: '',
-    })
 
   const resetTableScroll = () => {
     const el = tableScrollRef.current
@@ -597,7 +583,7 @@ const WOPartsIssuance = () => {
   }, [isAnyModalOpen])
 
   const tableColumns: Array<TFTableColumn<Row>> = [
-       {
+       { 
       key: 'arrow',
       headClassName: 'col-arrow-head',
       cellClassName: 'col-arrow',

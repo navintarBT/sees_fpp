@@ -131,7 +131,6 @@ const inputStyle: React.CSSProperties = {
 // }
 
 const SESSION_KEY = 'woPartsIssuanceHandInputState'
-
 const EMPTY_ROW: Row = {
   id: 1,
   office: '',
