@@ -2106,7 +2106,28 @@ input[type='time'].wot-grid-value2 {
 .ShelfTransfer-table .tf-tableRowActive .col-arrow {
   background: #d1d5db;
 }
+/* 「移動元」の移動数入力：幅は入力文字数（--qty-len）ぶんだけ確保する。
+   1ch ＝ 数字１文字分の幅なので、文字が実際にセルを埋めるまでは伸びない。
+   セルの方が広い場合は flex で埋める。 */
+.table-cell-input-shef {
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  outline: none;
+  width: calc(var(--qty-len, 1) * 1ch + 2px); /* +2px はキャレット分 */
+  min-width: 0;
+  flex: 1 1 auto;
+  padding: 0;
+  text-align: left;
+}
 
+/* 移動数：「移動先」の表示に合わせて 150px を最小幅とする。
+   グリッドは max-content のため、入力文字がこの幅を超えた分だけセルが伸びる。 */
+.col-storage-shef {
+  min-width: 150px;
+}
 /* ####################################table shipping ########################################### */
 
 .shipping-table .col-arrow-head {
