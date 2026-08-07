@@ -500,7 +500,7 @@ const BundlePage = () => {
                       checked={quantityRange === 'from'}
                       onChange={() => setQuantityRange('from')}
                     />
-                    From
+                    
                   </label>
                   <label className='set-radio'>
                     <input
@@ -637,7 +637,7 @@ const BundlePage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => setShowNoSelectionConfirm(false)}
                     >
-                      {'\u004f\u004b'}
+                      {'\u004f\u004b'} 
                     </button>
                   </div>
                 </div>
