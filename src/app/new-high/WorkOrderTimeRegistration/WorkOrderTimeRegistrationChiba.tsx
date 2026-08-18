@@ -709,29 +709,6 @@ const WorkOrderTimeRegistrationChiba = () => {
                 {/* Left side: Info Grid */}
                 <div className='wot-info-soll box-padding-innput'>
                   <div className='wot-info-grid wot-info-grid-2'>
-                    <label className='wot-grid-label '>人</label>
-                    <input
-                      className='wot-grid-value1'
-                      autoFocus
-                      ref={parentJanCodeInputRef}
-                      value={workerCode}
-                      onChange={(e) => setWorkerCode(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault()
-                          setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
-                        }
-                      }}
-                    />
-                    <input
-                      className='wot-grid-value1'
-                      readOnly
-                      value={workerName}
-                      style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
-                    />
-                  </div>
-
-                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label '>日付</label>
                     <div className='hand-date-field-register'>
                       <input
@@ -802,6 +779,29 @@ const WorkOrderTimeRegistrationChiba = () => {
                         </div>
                       )}
                     </div>
+                  </div>
+
+                  <div className='wot-info-grid wot-info-grid-2'>
+                    <label className='wot-grid-label '>人</label>
+                    <input
+                      className='wot-grid-value1'
+                      autoFocus
+                      ref={parentJanCodeInputRef}
+                      value={workerCode}
+                      onChange={(e) => setWorkerCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
+                        }
+                      }}
+                    />
+                    <input
+                      className='wot-grid-value1'
+                      readOnly
+                      value={workerName}
+                      style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
+                    />
                   </div>
 
                   <div className='wot-info-grid wot-info-grid-2'>
