@@ -403,6 +403,21 @@ const WorkOrderTimeRegistrationGosen = () => {
     setShowRegisterSuccessConfirm(false)
   }
 
+  // 「一括反映」: ヘッダー部の備考を明細部に表示されている全行（データ行のみ）の備考へ反映する
+  // 明細部にデータが表示されていない場合は何もしない（メッセージ表示は不要）
+  const applyRemarksToAllRows = () => {
+    setRows((prevRows) => {
+      const hasDataRow = prevRows.some((row) => row.woNo.trim() !== '')
+      if (!hasDataRow) return prevRows
+
+      const nextRows = prevRows.map((row) =>
+        row.woNo.trim() !== '' ? { ...row, remarks: defaultRemarks } : row
+      )
+      saveRowsToStorage(nextRows)
+      return nextRows
+    })
+  }
+
   const updateEditableField = (rowId: number, field: keyof Row, value: string) => {
     setRows((prevRows) => {
       const nextRows = prevRows.map((row) =>
@@ -803,29 +818,6 @@ const WorkOrderTimeRegistrationGosen = () => {
               <div className='wot-header-container '>
                 <div className='wot-info-soll box-padding-innput'>
                   <div className='wot-info-grid wot-info-grid-2'>
-                    <label className='wot-grid-label wot-bg-blue'>人</label>
-                    <input
-                      className='wot-grid-value1'
-                      autoFocus
-                      ref={parentJanCodeInputRef}
-                      value={workerCode}
-                      onChange={(e) => setWorkerCode(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault()
-                          setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
-                        }
-                      }}
-                    />
-                    <input
-                      className='wot-grid-value1'
-                      style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
-                      value={workerName}
-                      readOnly
-                    />
-                  </div>
-
-                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-blue'>日付</label>
                     <div className='hand-date-field-register'>
                       <input
@@ -893,6 +885,29 @@ const WorkOrderTimeRegistrationGosen = () => {
                   </div>
 
                   <div className='wot-info-grid wot-info-grid-2'>
+                    <label className='wot-grid-label wot-bg-blue'>人</label>
+                    <input
+                      className='wot-grid-value1'
+                      autoFocus
+                      ref={parentJanCodeInputRef}
+                      value={workerCode}
+                      onChange={(e) => setWorkerCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
+                        }
+                      }}
+                    />
+                    <input
+                      className='wot-grid-value1'
+                      style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
+                      value={workerName}
+                      readOnly
+                    />
+                  </div>
+
+                  <div className='wot-info-grid wot-info-grid-2'>
                     <label className='wot-grid-label wot-bg-red'>工程状況初期値</label>
                     <input
                       className='wot-grid-value1 wot-text-red'
@@ -915,6 +930,13 @@ const WorkOrderTimeRegistrationGosen = () => {
                       value={defaultRemarks}
                       onChange={(e) => setDefaultRemarks(e.target.value)}
                     />
+                    <button
+                      type='button'
+                      className='set-btnnew_high set-primary wot-bulk-apply-btn'
+                      onClick={applyRemarksToAllRows}
+                    >
+                      一括反映
+                    </button>
                   </div>
                 </div>
 
@@ -969,8 +991,10 @@ const WorkOrderTimeRegistrationGosen = () => {
 
                 <div className='wot-footer-item'>
                   <label className='wot-footer-label'>目標時間計</label>
+                  {/* 目標時間計は手入力をしないためグレー表示 */}
                   <input
                     className='wot-grid-value2'
+                    style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
                     value={totalTargetTimeDisplay.hours}
                     readOnly
                   />
@@ -980,6 +1004,7 @@ const WorkOrderTimeRegistrationGosen = () => {
 
                   <input
                     className='wot-grid-value2 wot-grid-value3'
+                    style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
                     value={totalTargetTimeDisplay.minutes}
                     readOnly
                   />

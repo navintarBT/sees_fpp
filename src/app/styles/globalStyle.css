@@ -1444,6 +1444,14 @@ input[type='time'].wot-grid-value2 {
   transform: translateY(-1px) !important;
 }
 
+/* 備考の「一括反映」ボタン（備考入力欄の右側セルに収める） */
+/* 入力欄と同じく行の上端に揃える（中央寄せだと入力欄より数px下がる） */
+.wot-bulk-apply-btn {
+  width: 100% !important;
+  height: 78px !important;
+  align-self: start;
+}
+
 .wot-radio-container {
   display: flex;
   flex-direction: column;
@@ -1620,7 +1628,7 @@ input[type='time'].wot-grid-value2 {
 .work-order-choose-table {
   min-width: 1056px;
   min-height: 1436px;
-  grid-template-columns: 45px minmax(max-content, 1fr) minmax(max-content, 1fr) minmax(max-content, 1fr);
+  grid-template-columns: 45px repeat(9, minmax(max-content, 1fr));
 }
 
 .work-order-choose-table .tf-tableCell {
@@ -2213,6 +2221,13 @@ input[type='time'].wot-grid-value2 {
 .col-item-choose-wo {
 
   min-width: 253px;
+}
+
+/* WO検索 明細部（WO作業時間実績登録／WO完了実績登録で共通） */
+.col-wo-search {
+  min-width: 200px;
+  padding: 0 10px;
+  justify-content: flex-start;
 }
 
 /* min-width  choose wo */

@@ -17,28 +17,47 @@ const getSessionStorageKey = (targetPath: string) => {
 // Row type with all required fields according to document
 type Row = {
     id: number
-    woNumber: string      // WoNo
+    seiban: string        // 製番
+    woNumber: string      // WO番号
+    orderType: string     // オーダータイプ
     itemNumber: string    // 品番
     itemName: string      // 品名
-    orderQuantity: number // オーダー数量
+    workplace: string     // 作業場
+    opOrder: string       // 作業順序
+    requestDate: string   // 要求日 (YYYY/MM/DD)
+    adjustDate: string    // 調整日 (YYYY/MM/DD)
+    orderQuantity: number // オーダー数量 (明細部には表示しないが登録画面へ引き継ぐ)
 }
+
+// 明細部の表示項目（WO完了実績登録のWO検索画面と統一）
+const DETAIL_COLUMNS: Array<{ key: keyof Row; header: string }> = [
+    { key: 'seiban', header: '製番' },
+    { key: 'woNumber', header: 'WO番号' },
+    { key: 'orderType', header: 'オーダータイプ' },
+    { key: 'itemNumber', header: '品番' },
+    { key: 'itemName', header: '品名' },
+    { key: 'workplace', header: '作業場' },
+    { key: 'opOrder', header: '作業順序' },
+    { key: 'requestDate', header: '要求日' },
+    { key: 'adjustDate', header: '調整日' },
+]
 
 // Gosen factory data (from document example)
 const GOSEN_ROWS: Row[] = [
-    { id: 1, woNumber: 'WO-001', itemNumber: 'PRD-001', itemName: '製品A', orderQuantity: 10 },
-    { id: 2, woNumber: 'WO-002', itemNumber: 'PRD-002', itemName: '製品B', orderQuantity: 10 },
-    { id: 3, woNumber: 'WO-003', itemNumber: 'PRD-003', itemName: '製品C', orderQuantity: 25 },
-    { id: 4, woNumber: 'WO-004', itemNumber: 'PRD-004', itemName: '製品D', orderQuantity: 25 },
-    { id: 5, woNumber: 'WO-005', itemNumber: 'PRD-005', itemName: '製品E', orderQuantity: 15 },
+    { id: 1, seiban: '製番001', woNumber: 'WO-001', orderType: '製造', itemNumber: 'PRD-001', itemName: '製品A', workplace: '作業場001', opOrder: '10', requestDate: '2026/06/01', adjustDate: '2026/06/03', orderQuantity: 10 },
+    { id: 2, seiban: '製番002', woNumber: 'WO-002', orderType: '外注', itemNumber: 'PRD-002', itemName: '製品B', workplace: '作業場002', opOrder: '20', requestDate: '2026/06/02', adjustDate: '2026/06/04', orderQuantity: 10 },
+    { id: 3, seiban: '製番003', woNumber: 'WO-003', orderType: '製造', itemNumber: 'PRD-003', itemName: '製品C', workplace: '作業場003', opOrder: '30', requestDate: '2026/06/03', adjustDate: '2026/06/05', orderQuantity: 25 },
+    { id: 4, seiban: '製番004', woNumber: 'WO-004', orderType: '外注', itemNumber: 'PRD-004', itemName: '製品D', workplace: '作業場001', opOrder: '10', requestDate: '2026/06/04', adjustDate: '2026/06/06', orderQuantity: 25 },
+    { id: 5, seiban: '製番005', woNumber: 'WO-005', orderType: '製造', itemNumber: 'PRD-005', itemName: '製品E', workplace: '作業場002', opOrder: '20', requestDate: '2026/06/05', adjustDate: '2026/06/07', orderQuantity: 15 },
 ]
 
 // Chiba factory data (according to document)
 const CHIBA_ROWS: Row[] = [
-    { id: 1, woNumber: 'WO-001', itemNumber: 'PRD-001', itemName: '製品A', orderQuantity: 10 },
-    { id: 2, woNumber: 'WO-002', itemNumber: 'PRD-002', itemName: '製品B', orderQuantity: 10 },
-    { id: 3, woNumber: 'WO-003', itemNumber: 'PRD-003', itemName: '製品C', orderQuantity: 10 },
-    { id: 4, woNumber: 'WO-004', itemNumber: 'PRD-004', itemName: '製品D', orderQuantity: 15 },
-    { id: 5, woNumber: 'WO-005', itemNumber: 'PRD-005', itemName: '製品E', orderQuantity: 15 },
+    { id: 1, seiban: '製番001', woNumber: 'WO-001', orderType: '製造', itemNumber: 'PRD-001', itemName: '製品A', workplace: '作業場001', opOrder: '10', requestDate: '2026/06/01', adjustDate: '2026/06/03', orderQuantity: 10 },
+    { id: 2, seiban: '製番002', woNumber: 'WO-002', orderType: '外注', itemNumber: 'PRD-002', itemName: '製品B', workplace: '作業場002', opOrder: '20', requestDate: '2026/06/02', adjustDate: '2026/06/04', orderQuantity: 10 },
+    { id: 3, seiban: '製番003', woNumber: 'WO-003', orderType: '製造', itemNumber: 'PRD-003', itemName: '製品C', workplace: '作業場003', opOrder: '30', requestDate: '2026/06/03', adjustDate: '2026/06/05', orderQuantity: 10 },
+    { id: 4, seiban: '製番004', woNumber: 'WO-004', orderType: '外注', itemNumber: 'PRD-004', itemName: '製品D', workplace: '作業場001', opOrder: '10', requestDate: '2026/06/04', adjustDate: '2026/06/06', orderQuantity: 15 },
+    { id: 5, seiban: '製番005', woNumber: 'WO-005', orderType: '製造', itemNumber: 'PRD-005', itemName: '製品E', workplace: '作業場002', opOrder: '20', requestDate: '2026/06/05', adjustDate: '2026/06/07', orderQuantity: 15 },
 ]
 
 // Helper to read current selection from sessionStorage (changed from localStorage)
@@ -113,7 +132,7 @@ const WorkOrderTimeRegistrationChoose = () => {
 
     const isSelectedWoNumber = (woNumber: string) => selectedWoNumbers.includes(woNumber)
 
-    // Table columns: arrow, WoNo, 品番, 品名
+    // Table columns: arrow + 製番/WO番号/オーダータイプ/品番/品名/作業場/作業順序/要求日/調整日
     const tableColumns: Array<TFTableColumn<Row>> = [
         {
             key: 'arrow',
@@ -124,27 +143,13 @@ const WorkOrderTimeRegistrationChoose = () => {
                 isSelectedWoNumber(row.woNumber) ? <FaPlay className='col-row-arrow' /> : null
             ),
         },
-        {
-            key: 'woNumber',
-            headClassName: 'col-wo-number',
-            cellClassName: 'col-wo-number',
-            header: 'WoNo',
-            render: (row) => row.woNumber,
-        },
-        {
-            key: 'itemNumber',
-            headClassName: 'col-item-number',
-            cellClassName: 'col-item-number',
-            header: '品番',
-            render: (row) => row.itemNumber,
-        },
-        {
-            key: 'itemName',
-            headClassName: 'col-item-name',
-            cellClassName: 'col-item-name',
-            header: '品名',
-            render: (row) => row.itemName,
-        },
+        ...DETAIL_COLUMNS.map(({ key, header }) => ({
+            key,
+            headClassName: 'col-wo-search',
+            cellClassName: 'col-wo-search',
+            header,
+            render: (row: Row) => row[key],
+        })),
     ]
 
     return (
