@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 const ButtonWorkOrderTime = () => {
     const navigate = useNavigate()
     const factoryButtons = [
-        { label: '五泉工場', path: '/factory/work-order-time-registration-gosen', className: 'mockup-red' },
-        { label: '千葉工場', path: '/factory/work-order-time-registration-chiba', className: 'mockup-blue' },
+        { label: '五泉工場', path: '/factory/work-order-time-registration/gosen', className: 'mockup-red' },
+        { label: '千葉工場', path: '/factory/work-order-time-registration/chiba', className: 'mockup-blue' },
     ] as const
 
     return (
