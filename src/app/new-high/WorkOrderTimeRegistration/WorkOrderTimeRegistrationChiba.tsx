@@ -854,7 +854,7 @@ const WorkOrderTimeRegistrationChiba = () => {
                           })
                         }
                       >
-                        WO選択
+                        WO検索
                       </button>
                     </div>
                   </div>

@@ -156,7 +156,7 @@ const WorkOrderTimeRegistrationChoose = () => {
         <div className='mockup-page'>
             <div className='mockup-stage mockup-stage-dark'>
                 <div className='mockup-frame'>
-                    <div className='set-header'>WO選択</div>
+                    <div className='set-header'>WO検索</div>
                     <div className='set-body'>
                         <TableSection
                             columns={tableColumns}
