@@ -1,0 +1,171 @@
+import { useState } from 'react'
+import { FaPlay } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+import {
+  TableSection,
+  type TableColumn as TFTableColumn,
+} from '../../components/TableSection/TableSection'
+
+const WO_MOCKUP_DATA: Record<string, { completed: number; defective: number }> = {
+  'WO-001': { completed: 9, defective: 1 },
+  'WO-002': { completed: 5, defective: 5 },
+  'WO-003': { completed: 8, defective: 2 },
+  'WO-004': { completed: 2, defective: 5 },
+  'WO-005': { completed: 6, defective: 4 },
+  'WO-006': { completed: 4, defective: 6 },
+  'WO-007': { completed: 9, defective: 1 },
+  'WO-008': { completed: 7, defective: 3 },
+  'WO-009': { completed: 4, defective: 6 },
+  'WO-010': { completed: 5, defective: 5 },
+}
+
+type Row = {
+  id: number
+  seiban: string        // 製番
+  woNumber: string      // WO番号
+  orderType: string     // オーダータイプ
+  itemNumber: string    // 品番
+  itemName: string      // 品名
+  workplace: string     // 作業場
+  opOrder: string       // 作業順序
+  requestDate: string   // 要求日 (YYYY/MM/DD)
+  adjustDate: string    // 調整日 (YYYY/MM/DD)
+}
+
+// 要求日・調整日は「YYYY/MM/DD」形式
+const formatDate = (year: number, month: number, day: number) =>
+  `${year}/${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}`
+
+// 明細部の表示項目（WO作業時間実績登録のWO検索画面と統一）
+const DETAIL_COLUMNS: Array<{ key: keyof Row; header: string }> = [
+  { key: 'seiban', header: '製番' },
+  { key: 'woNumber', header: 'WO番号' },
+  { key: 'orderType', header: 'オーダータイプ' },
+  { key: 'itemNumber', header: '品番' },
+  { key: 'itemName', header: '品名' },
+  { key: 'workplace', header: '作業場' },
+  { key: 'opOrder', header: '作業順序' },
+  { key: 'requestDate', header: '要求日' },
+  { key: 'adjustDate', header: '調整日' },
+]
+
+const WorkOrderCompletion_Choose_WO = () => {
+  const navigate = useNavigate()
+  const [selectedWoNumber, setSelectedWoNumber] = useState('')
+  const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
+  const rows: Row[] = Object.keys(WO_MOCKUP_DATA).map((woNumber, index) => {
+    const sequence = String(index + 1).padStart(3, '0')
+    return {
+      id: index + 1,
+      seiban: `製番${sequence}`,
+      woNumber,
+      orderType: index % 2 === 0 ? '製造' : '外注',
+      itemNumber: `品番${sequence}`,
+      itemName: `品名${sequence}`,
+      workplace: `作業場${String((index % 3) + 1).padStart(3, '0')}`,
+      opOrder: String(((index % 3) + 1) * 10),
+      requestDate: formatDate(2026, 6, index + 1),
+      adjustDate: formatDate(2026, 6, index + 3),
+    }
+  })
+  const activeRowId = rows.find((row) => row.woNumber === selectedWoNumber)?.id ?? null
+
+  const selectWoNumber = (woNumber: string) => {
+    setSelectedWoNumber(woNumber)
+  }
+
+  const completeWoSelection = () => {
+    navigate('/factory/work-order-completion', {
+      state: { selectedWoNumber },
+    })
+  }
+
+  const tableColumns: Array<TFTableColumn<Row>> = [
+    {
+      key: 'arrow',
+      headClassName: 'col-arrow-head',
+      cellClassName: 'col-arrow',
+      header: '',
+      render: (row) => (
+        row.woNumber === selectedWoNumber ? <FaPlay className='col-row-arrow' /> : null
+      ),
+    },
+    ...DETAIL_COLUMNS.map(({ key, header }) => ({
+      key,
+      headClassName: 'col-wo-search',
+      cellClassName: 'col-wo-search',
+      header,
+      render: (row: Row) => row[key],
+    })),
+  ]
+
+  return (
+    <div className='mockup-page'>
+      <div className='mockup-stage mockup-stage-dark'>
+        <div className='mockup-frame'>
+          <div className='set-header'>WO検索</div>
+          <div className='set-body'>
+            <div className='set-form'>
+              {/* input fields removed */}
+            </div>
+
+            <TableSection
+              columns={tableColumns}
+              rows={rows}
+              gridClassName='delivery-table'
+              getRowKey={(row) => row.id}
+              activeRowKey={activeRowId}
+              isRowActive={(_rowKey, row) => row.woNumber === selectedWoNumber}
+              onRowActivate={(_rowKey, row) => selectWoNumber(row.woNumber)}
+            />
+
+            <ActionFooter columns={5}>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
+              <button
+                className='set-btn set-primary'
+                disabled={!selectedWoNumber}
+                onClick={() => selectedWoNumber && setShowWoLoadConfirm(true)}
+              >
+                読込
+              </button>
+              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
+              <button className='set-btn set-warning' onClick={() => navigate('/factory/work-order-completion')}>
+                戻る
+              </button>
+            </ActionFooter>
+          </div>
+
+          {showWoLoadConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>
+                  {/* {selectedWoNumber}<br /> */}
+                  選択したWO番号を読込みますか？
+                </div>
+                <div className='set-modal-actions'>
+                  <button
+                    className='set-modal-btn set-modal-yes'
+                    onClick={completeWoSelection}
+                  >
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowWoLoadConfirm(false)}
+                  >
+                    いいえ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export { WorkOrderCompletion_Choose_WO }

@@ -1,20 +1,30 @@
 import {useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
-
-const SetRegisterHandInputPage = () => {
+const BundleHandInputPage = () => {
   const navigate = useNavigate()
-  const [parentWarehouse, setParentWarehouse] = useState('')
+  const [fromWarehouse, setFromWarehouse] = useState('')
+  const [toWarehouse, setToWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [quantityRange, setQuantityRange] = useState<'from' | 'to'>('from')
   const itemNoInputRef = useRef<HTMLInputElement | null>(null)
+  const isEnabled = fromWarehouse && toWarehouse && parentItem && parentSerial
 
-  const handleNoClick = (closeModal: () => void) => {
-    closeModal()
+  const handleBackNoClick = () => {
+    setShowBackConfirm(false)
+    setTimeout(() => {
+      itemNoInputRef.current?.focus()
+      itemNoInputRef.current?.select()
+    }, 0)
+  }
+
+  const handleReadNoClick = () => {
+    setShowReadConfirm(false)
     setTimeout(() => {
       itemNoInputRef.current?.focus()
       itemNoInputRef.current?.select()
@@ -25,12 +35,12 @@ const SetRegisterHandInputPage = () => {
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>セット構成手入力</div>
+          <div className='set-header'>販売セット手入力</div>
           <div className='hand-body'>
-            <div className='hand-form'>
+            <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled-a'}`}>
               <div className='hand-row'>
-                <label>倉庫（親）</label>
-                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                <label>FR倉庫</label>
+                <select value={fromWarehouse} onChange={(e) => setFromWarehouse(e.target.value)}>
                   <option value=''></option>
                   <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                   <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
@@ -38,65 +48,72 @@ const SetRegisterHandInputPage = () => {
                 </select>
               </div>
               <div className='hand-row'>
-                <label>品目No.(親)</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
-              </div>
-              <div className='hand-row'>
-                <label>シリアル(親)</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
-              </div>
-              <div className='hand-row'>
-                <label>移動倉庫</label>
-                <select>
+                <label>TO倉庫</label>
+                <select value={toWarehouse} onChange={(e) => setToWarehouse(e.target.value)}>
                   <option value=''></option>
-                  <option>千葉倉庫（WMS）：W002</option>
-                  <option>千葉倉庫（WMS）：W003</option>
-                  <option>千葉倉庫（WMS）：W004</option>
+                  <option value='羽田製品補充倉庫：W0040'>羽田製品補充倉庫：W0040</option>
+                  <option value='羽田製品補充倉庫：W0041'>羽田製品補充倉庫：W0041</option>
+                  <option value='羽田製品補充倉庫：W0042'>羽田製品補充倉庫：W0042</option>
                 </select>
               </div>
               <div className='hand-row'>
-                <label>移動保管場所</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                <label>保管場所</label>
+                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
-              <div className='hand-row '>
+              <div className='hand-row'>
                 <label>数量</label>
-                <input value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                <input value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
               </div>
               <div className='hand-row'>
-                <label>品目No.</label>
-                <input ref={itemNoInputRef} placeholder=' ' />
+                <label>品目No</label>
+                <input ref={itemNoInputRef} value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
-              <div className='hand-row'>
-                <label>ロット</label>
-                <input placeholder=' ' />
+              <div className='hand-row hand-row-always'>
+                <label>ロットシリアル</label>
+                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
               </div>
-              <div className='hand-row'>
-                <label>シリアル</label>
+              <div className='set-row'>
+              <div className='set-radio-group bundle-group'>
+                  <label className='set-radio'>
+                    <input
+                      type='radio'
+                      name='quantityRange'
+                      value='from'
+                      checked={quantityRange === 'from'}
+                      onChange={() => setQuantityRange('from')}
+                    />
+                    From
+                  </label>
+                  <label className='set-radio'>
+                    <input
+                      type='radio'
+                      name='quantityRange'
+                      value='to'
+                      checked={quantityRange === 'to'}
+                      onChange={() => setQuantityRange('to')}
+                    />
+                    To
+                  </label>
+                </div>
+                </div>
+              <div className='hand-row hand-row-always'>
+                <label>有効日付(yymm)</label>
                 <input placeholder=' ' />
               </div>
             </div>
-
-            <ActionFooter columns={5}>
+            <ActionFooter columns={4}>
               <button
                 className='set-btn set-danger'
-                style={{visibility: 'hidden'}}
+                style={{ visibility: 'hidden' }}
               >
                 {'\u7834\u68C4'}
               </button>
-              <button className='set-btn set-primary' onClick={() => setShowReadConfirm(true)}>
-                {'\u8AAD\u8FBC'}
-              </button>
+              <button className='set-btn set-primary' onClick={() => setShowReadConfirm(true)}>{'\u8AAD\u8FBC'}</button>
               <button
                 className='set-btn set-success'
-                style={{visibility: 'hidden'}}
+                style={{ visibility: 'hidden' }}
               >
                 {'\u89E3\u9664'}
-              </button>
-              <button
-                className='set-btn set-primary'
-                style={{visibility: 'hidden'}}
-              >
-                {'\u624b\u5165\u529b'}
               </button>
               <button
                 className='set-btn set-warning'
@@ -120,7 +137,7 @@ const SetRegisterHandInputPage = () => {
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => handleNoClick(() => setShowReadConfirm(false))}
+                      onClick={handleReadNoClick}
                     >
                       NO
                     </button>
@@ -139,14 +156,14 @@ const SetRegisterHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/set-register')
+                        navigate('/factory/bundle-page')
                       }}
                     >
                       YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
-                      onClick={() => handleNoClick(() => setShowBackConfirm(false))}
+                      onClick={handleBackNoClick}
                     >
                       NO
                     </button>
@@ -161,4 +178,4 @@ const SetRegisterHandInputPage = () => {
   )
 }
 
-export {SetRegisterHandInputPage}
+export {BundleHandInputPage}

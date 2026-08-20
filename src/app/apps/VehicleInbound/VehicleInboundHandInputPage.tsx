@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 
-const DispatchHandInputPage = () => {
+const VehicleInboundHandInputPage = () => {
   const navigate = useNavigate()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
@@ -11,14 +11,13 @@ const DispatchHandInputPage = () => {
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>出庫実績登録手入力</div>
+          <div className='set-header'>セット構成登録手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
               <div className='hand-row'>
@@ -34,17 +33,31 @@ const DispatchHandInputPage = () => {
                 <label>保管場所</label>
                 <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
               </div>
-              <div className='hand-row'>
-                <label>数量</label>
-                <input value={quantity}onChange={(e) => setQuantity(e.target.value)} />
+              <div className='hand-row hand-form-disabled'>
+                <label>ロット状況</label>
+                <select
+                  value={parentWarehouse}
+                  disabled
+                  style={{ background: '#d9d9d9', color: '#666' }}
+                  onChange={(e) => setParentWarehouse(e.target.value)}
+                >
+                  <option value=''></option>
+                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
+                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                </select>
               </div>
-              <div className='hand-row'>
+              <div className='hand-row hand-row-always'>
+                <label>数量</label>
+                <input value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
+              </div>
+              <div className='hand-row hand-row-always'>
                 <label>品目No.</label>
                 <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>ロット</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input value={parentSerial}onChange={(e) => setParentSerial(e.target.value)} />
               </div>
               <div className='hand-row hand-row-always'>
                 <label>シリアル</label>
@@ -111,7 +124,7 @@ const DispatchHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/dispatch')
+                        navigate('/factory/inbound')
                       }}
                     >
                       {'\u306f\u3044'}
@@ -133,4 +146,4 @@ const DispatchHandInputPage = () => {
   )
 }
 
-export {DispatchHandInputPage}
+export {VehicleInboundHandInputPage}

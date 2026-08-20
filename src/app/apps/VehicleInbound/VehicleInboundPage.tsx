@@ -10,8 +10,8 @@ type Row = {
   item: string
   lot: string
   instruct: string
-  Load: number
-  ProductName: number
+  components: number
+  unlock: number
 }
 
 type TableColumn = {
@@ -22,7 +22,7 @@ type TableColumn = {
   render: (row: Row) => ReactNode
 }
 
-const DispatchPage = () => {
+const VehicleInboundPage = () => {
   const navigate = useNavigate()
   const [rows, setRows] = useState<Row[]>([
     {
@@ -31,8 +31,8 @@ const DispatchPage = () => {
       item: 'A01', // 品目No.
       lot: 'L01', // ロットシリアル
       instruct: '追加', // 状態
-      Load: 2, // 構成数
-      ProductName: 1, // 解除数
+      components: 2, // 構成数
+      unlock: 1, // 解除数
     },
     {
       id: 2,
@@ -40,8 +40,8 @@ const DispatchPage = () => {
       item: 'B02',
       lot: 'L02',
       instruct: '解除',
-      Load: 1,
-      ProductName: 0,
+      components: 1,
+      unlock: 0,
     },
     {
       id: 3,
@@ -49,8 +49,8 @@ const DispatchPage = () => {
       item: 'C03',
       lot: 'L03',
       instruct: 'OV対応要',
-      Load: 3,
-      ProductName: 2,
+      components: 3,
+      unlock: 2,
     },
     {
       id: 4,
@@ -58,8 +58,8 @@ const DispatchPage = () => {
       item: 'D04',
       lot: 'L04',
       instruct: '構成中',
-      Load: 4,
-      ProductName: 1,
+      components: 4,
+      unlock: 1,
     },
     {
       id: 5,
@@ -67,8 +67,8 @@ const DispatchPage = () => {
       item: 'E05',
       lot: 'L05',
       instruct: '構成中',
-      Load: 2,
-      ProductName: 0,
+      components: 2,
+      unlock: 0,
     },
     {
       id: 6,
@@ -76,8 +76,8 @@ const DispatchPage = () => {
       item: 'F06',
       lot: 'L06',
       instruct: '構成中',
-      Load: 5,
-      ProductName: 3,
+      components: 5,
+      unlock: 3,
     },
     {
       id: 7,
@@ -85,8 +85,8 @@ const DispatchPage = () => {
       item: 'G07',
       lot: 'L07',
       instruct: '構成中',
-      Load: 1,
-      ProductName: 0,
+      components: 1,
+      unlock: 0,
     },
     {
       id: 8,
@@ -94,8 +94,8 @@ const DispatchPage = () => {
       item: 'H08',
       lot: 'L08',
       instruct: '構成中',
-      Load: 3,
-      ProductName: 1,
+      components: 3,
+      unlock: 1,
     },
     {
       id: 9,
@@ -103,8 +103,8 @@ const DispatchPage = () => {
       item: 'I09',
       lot: 'L09',
       instruct: '構成中',
-      Load: 2,
-      ProductName: 2,
+      components: 2,
+      unlock: 2,
     },
     {
       id: 10,
@@ -112,11 +112,12 @@ const DispatchPage = () => {
       item: 'J10',
       lot: 'L10',
       instruct: '構成中',
-      Load: 6,
-      ProductName: 2,
+      components: 6,
+      unlock: 2,
     },
   ])
   const [form, setForm] = useState({
+    number: '',
     parentWarehouse: '',
     parentItemNo: '0193090',
     moveWarehouse: '千葉倉庫（WMS）：W002',
@@ -156,6 +157,7 @@ const DispatchPage = () => {
   const clearRows = () => setRows([])
   const clearForm = () =>
     setForm({
+      number: '',
       parentWarehouse: '',
       parentItemNo: '',
       moveWarehouse: '',
@@ -195,7 +197,6 @@ const DispatchPage = () => {
       return
     }
   }
-
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -268,72 +269,83 @@ const DispatchPage = () => {
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
     {key: 'instruct', headClassName: 'col-instruct', cellClassName: 'col-instruct', header: '指示', render: (row) => row.instruct},
-    {key: 'Load', headClassName: 'col-Load', cellClassName: 'col-Load', header: '読込', render: (row) => row.Load},
-    {key: 'ProductName', headClassName: 'col-ProductName', cellClassName: 'col-ProductName', header: '品名', render: (row) => row.ProductName},
+    {key: 'components', headClassName: 'col-components', cellClassName: 'col-components', header: '構成数', render: (row) => row.components},
+    {key: 'unlock', headClassName: 'col-unlock', cellClassName: 'col-unlock', header: '解除数', render: (row) => row.unlock},
   ]
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>出庫実績登録</div>
+          <div className='set-header'>入庫実績登録</div>
           <div className='set-body'>
-            <div className='set-form'>
-                <div className='set-row'>
-                  <label>出荷No.</label>
-                  <input
-                    value={form.parentWarehouse}
-                    onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                  />
-                </div>
-                
-                <div className='set-row'>
-                  <label>倉庫</label>
-                  <select
-                    value={form.moveWarehouse}
-                    onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                  >
-                    <option value=''></option>
-                    <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                    <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                    <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
-                  </select>
-                </div>
+                <div className='set-form'>
                   <div className='set-row'>
-                  <label>保管場所</label>
-                  <input
-                    value={form.parentItemNo}
-                    onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
-                  />
+                    <label>出荷/発注No.</label>
+                    <input
+                      value={form.number}
+                      onChange={(e) => setForm({...form, number: e.target.value})}
+                    />
+                  </div>
+                  <div className='set-row'>
+                    <label>倉庫</label>
+                    <select
+                      value={form.parentWarehouse}
+                      onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                    >
+                      <option value=''></option>
+                      <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
+                      <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
+                      <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                    </select>
+                  </div>
+                    <div className='set-row'>
+                    <label>保管場所</label>
+                    <input
+                      value={form.parentItemNo}
+                      onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                    />
+                  </div>
+                  <div className='set-row'>
+                    <label>ロット状況</label>
+                    <select
+                      value={form.moveWarehouse}
+                      onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
+                    >
+                      <option value=''></option>
+                      <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
+                      <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
+                      <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                    </select>
+                  </div>
+                  <div className='set-row'>
+                    <label>数量</label>
+                    <input
+                      value={form.qty}
+                      onChange={(e) => setForm({...form, qty: e.target.value})}
+                      className='set-small'
+                    />
+                  </div>
+                  <div className='set-row'>
+                    <label>JANコード</label>
+                    <input
+                      value={form.janCode}
+                      onChange={(e) => setForm({...form, janCode: e.target.value})}
+                    />
+                  </div>
+                  <div className='set-row'>
+                    <label>移動元</label>
+                    <input
+                      value={form.moveStorage}
+                      onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                    />
+                  </div>
                 </div>
-                <div className='set-row'>
-                  <label>数量</label>
-                  <input
-                    value={form.qty}
-                    onChange={(e) => setForm({...form, qty: e.target.value})}
-                    className='set-small'
-                  />
-                </div>
-                <div className='set-row'>
-                  <label>JANコード</label>
-                   <input
-                    value={form.janCode}
-                    onChange={(e) => setForm({...form, janCode: e.target.value})}
-                  />
-                </div>
-                <div className='set-row'>
-                  <label>移動先</label>
-                  <input
-                    value={form.moveStorage}
-                    onChange={(e) => setForm({...form, moveStorage: e.target.value})}
-                  />
-                </div>
-              </div>
 
             <TableSection
               columns={tableColumns}
+              gridClassName='inbound-table'
               rows={rows}
-              gridClassName='dispatch-table'
               scrollRef={tableScrollRef}
               getRowKey={(row) => row.id}
               activeRowKey={activeRowId}
@@ -377,7 +389,7 @@ const DispatchPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/dispatch/hand-input')
+                        navigate('/factory/inbound/hand-input')
                       }}
                     >
                       はい
@@ -511,4 +523,4 @@ const DispatchPage = () => {
   )
 }
 
-export {DispatchPage}
+export {VehicleInboundPage}

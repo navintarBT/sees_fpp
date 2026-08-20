@@ -1,62 +1,89 @@
-import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 
-const DispatchHandInputPage = () => {
+const ReturnConfiguration = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
   const [moveStorage, setMoveStorage] = useState('')
+
+  useEffect(() => {
+    const state = location.state as { parentItemNo?: string } | null
+    if (state?.parentItemNo) {
+      setMoveStorage(state.parentItemNo)
+    }
+  }, [location.state])
   const [quantity, setQuantity] = useState('1')
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
-
+  const [qty, setQty] = useState(1);
   const isEnabled = parentWarehouse && parentItem && parentSerial
 
   return (
     <div className='mockup-page'>
       <div className='mockup-stage mockup-stage-dark'>
         <div className='mockup-frame'>
-          <div className='set-header'>出庫実績登録手入力</div>
+          <div className='set-header'>セット戻り構成手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
-              <div className='hand-row'>
-                <label>倉庫</label>
-                <select value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
-                </select>
+              <div className='set-row'>
+                <label>品目No.(親)</label>
+                <input  autoFocus />
               </div>
-              <div className='hand-row'>
-                <label>保管場所</label>
-                <input value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+              <div className='set-row'>
+                <label>シリアル(親)</label>
+                <input  />
               </div>
-              <div className='hand-row'>
-                <label>数量</label>
-                <input value={quantity}onChange={(e) => setQuantity(e.target.value)} />
+              <div className='set-row'>
+                <label >数量</label>
+                <input type='number' 
+                    onChange={(e) => setQuantity(e.target.value)}
+                />
               </div>
-              <div className='hand-row'>
+              <div className='rlr-row2'>
+                <label>状態</label>
+                <div className="rlr-qty-group badioBtnFun10">
+                  <label>
+                    <input
+                      type="radio"
+                      name="status"
+                      value="中"
+                      checked={qty === 1}
+                      onChange={() => setQty(1)}
+                      style={{ marginLeft: '25px' }}
+                    />
+                    正常
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="status"
+                      value="済"
+                      checked={qty === 2}
+                      onChange={() => setQty(2)}
+                    />
+                    調査中
+                  </label>
+                </div>
+              </div>
+              <div className='set-row'>
                 <label>品目No.</label>
-                <input value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
-              <div className='hand-row hand-row-always'>
+              <div className='set-row'>
                 <label>ロット</label>
-                <input value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
-              <div className='hand-row hand-row-always'>
-                <label>シリアル</label>
-                <input placeholder=' ' />
-              </div>
-              <div className='hand-row hand-row-always'>
-                <label>有効期限(yymm)</label>
-                <input placeholder=' ' />
+              <div className='set-row' >
+                <label >シリアル</label>
+                <input style={{ backgroundColor: '#fff', color: '#000' }} />
               </div>
             </div>
 
-            <ActionFooter columns={4}>
+            <ActionFooter columns={5}>
               <button
                 className='set-btn set-danger'
                 style={{ visibility: 'hidden' }}
@@ -69,6 +96,12 @@ const DispatchHandInputPage = () => {
                 style={{ visibility: 'hidden' }}
               >
                 {'\u89E3\u9664'}
+              </button>
+              <button
+                className='set-btn set-primary'
+                style={{ visibility: 'hidden' }}
+              >
+                {'\u624b\u5165\u529b'}
               </button>
               <button
                 className='set-btn set-warning'
@@ -86,15 +119,17 @@ const DispatchHandInputPage = () => {
                   <div className='set-modal-actions'>
                     <button
                       className='set-modal-btn set-modal-yes'
-                      onClick={() => setShowReadConfirm(false)}
+                      onClick={() => {
+                        setShowReadConfirm(false)
+                      }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowReadConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>
@@ -111,16 +146,16 @@ const DispatchHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/dispatch')
+                        navigate('/factory/set-return-configuration')
                       }}
                     >
-                      {'\u306f\u3044'}
+                      YES
                     </button>
                     <button
                       className='set-modal-btn set-modal-no'
                       onClick={() => setShowBackConfirm(false)}
                     >
-                      {'\u3044\u3044\u3048'}
+                      NO
                     </button>
                   </div>
                 </div>
@@ -129,8 +164,8 @@ const DispatchHandInputPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
-export {DispatchHandInputPage}
+export { ReturnConfiguration }
