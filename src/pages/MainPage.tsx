@@ -22,8 +22,7 @@ import { WOPartsIssuance } from '../app/new-high/WOPartsIssuance/WOPartsIssuance
 import { WOPartsIssuanceHandInputPage } from '../app/new-high/WOPartsIssuance/WOPartsIssuanceHandInputPage'
 import { WOPartsIssuanceDetail } from '../app/new-high/WOPartsIssuance/WOPartsIssuanceDetail'
 import { ButtonAccess } from '../app/new-high/WOPartsIssuance/ButtonAccess'
-import { WorkOrderTimeRegistrationGosen } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistrationGosen'
-import { WorkOrderTimeRegistrationChiba } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistrationChiba'
+import { WorkOrderTimeRegistration } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistration'
 import { InventoryRecordsPage } from '../app/New-normal/InventoryRecord/InventoryRecordsPage'
 import { InventoryRecordsHandInputPage } from '../app/New-normal/InventoryRecord/InventoryRecordsHandInputPage'
 import { InventoryRecordDetail } from '../app/New-normal/InventoryRecord/InventoryRecordDetail'
@@ -66,8 +65,7 @@ const MainPage = () => {
         <Route path='button-work-order-time' element={<ButtonWorkOrderTime />} />
         <Route path='wo-parts-issuance-detail' element={<WOPartsIssuanceDetail />} />
         <Route path='work-order-completion' element={<WorkOrderCompletion />} />
-        <Route path='work-order-time-registration-gosen' element={<WorkOrderTimeRegistrationGosen />} />
-        <Route path='work-order-time-registration-chiba' element={<WorkOrderTimeRegistrationChiba />} />
+        <Route path='work-order-time-registration/:factory' element={<WorkOrderTimeRegistration />} />
         <Route path='inventory-records' element={<InventoryRecordsPage />} />
         <Route path='inventory-hand-input' element={<InventoryRecordsHandInputPage />} />
         <Route path='inventory-detail' element={<InventoryRecordDetail />} />
