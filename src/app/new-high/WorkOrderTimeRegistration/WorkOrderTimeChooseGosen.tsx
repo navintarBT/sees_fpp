@@ -7,10 +7,10 @@ import {
     type TableColumn as TFTableColumn,
 } from '../../components/TableSection/TableSection'
 
-const DEFAULT_TARGET_PATH = '/factory/work-order-time-registration-gosen'
+const DEFAULT_TARGET_PATH = '/factory/work-order-time-registration/gosen'
 
 const getSessionStorageKey = (targetPath: string) => {
-    const suffix = targetPath === '/factory/work-order-time-registration-chiba' ? 'chiba' : 'gosen'
+    const suffix = targetPath === '/factory/work-order-time-registration/chiba' ? 'chiba' : 'gosen'
     return `workOrderTimeRegistrationSelectedWoNumbers_${suffix}`
 }
 
@@ -78,7 +78,7 @@ const WorkOrderTimeRegistrationChoose = () => {
     const location = useLocation()
     const locationState = location.state as { selectedWoNumbers?: string[]; targetPath?: string } | null
     const targetPath = locationState?.targetPath ?? DEFAULT_TARGET_PATH
-    const rows = targetPath === '/factory/work-order-time-registration-chiba' ? CHIBA_ROWS : GOSEN_ROWS
+    const rows = targetPath === '/factory/work-order-time-registration/chiba' ? CHIBA_ROWS : GOSEN_ROWS
 
     // Initialize directly from sessionStorage (changed from localStorage)
     const [selectedWoNumbers, setSelectedWoNumbers] = useState<string[]>(() =>
