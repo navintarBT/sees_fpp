@@ -1526,6 +1526,12 @@ input[type='time'].wot-grid-value2 {
   margin-top: -20px;
 }
 
+/* WO作業時間実績登録（共通）：目標時間計の行が下がりすぎるため行間のみ詰める */
+/* .wot-footer-row 自体は変更せず、共通画面だけに付与するクラスで上書きする */
+.wot-footer-row-common {
+  row-gap: 8px;
+}
+
 .wot-footer-label,
 .wot-footer-value {
   font-size: 28px;

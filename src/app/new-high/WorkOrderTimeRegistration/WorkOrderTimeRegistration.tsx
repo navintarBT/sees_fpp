@@ -9,10 +9,11 @@ import { FaPlay, FaRegCalendarAlt, FaRegClock } from 'react-icons/fa'
  * 工場による差異は FACTORY_CONFIG に集約し、画面内では isGosen / isChiba で制御する
  * ========================================================================== */
 
-type Factory = 'gosen' | 'chiba'
+// common = 設計書用のレイアウト確認画面（工場による表示制御を行わず全項目を表示する）
+type Factory = 'gosen' | 'chiba' | 'common'
 
 const isFactoryValue = (value: string | undefined): value is Factory =>
-  value === 'gosen' || value === 'chiba'
+  value === 'gosen' || value === 'chiba' || value === 'common'
 
 const getFactoryPath = (factory: Factory) => `/factory/work-order-time-registration/${factory}`
 
@@ -188,7 +189,8 @@ type FactoryConfig = {
   showWorkplace: boolean         // 作業場
   showWoSearchButton: boolean    // WO検索ボタン
   showStartStopButton: boolean   // 作業開始／作業終了ボタン
-  showTargetTimeTotal: boolean   // フッター部：true=目標時間計 / false=開始・終了時刻
+  footerLayout: 'gosen' | 'chiba' | 'common' // フッター部の構成
+  layoutOnly: boolean            // レイアウト確認のみ（データの読込・取得は行わない）
 }
 
 const FACTORY_CONFIG: Record<Factory, FactoryConfig> = {
@@ -202,7 +204,8 @@ const FACTORY_CONFIG: Record<Factory, FactoryConfig> = {
     showWorkplace: false,
     showWoSearchButton: false,
     showStartStopButton: false,
-    showTargetTimeTotal: true,
+    footerLayout: 'gosen',
+    layoutOnly: false,
   },
   chiba: {
     columnDefs: CHIBA_COLUMN_DEFS,
@@ -214,7 +217,22 @@ const FACTORY_CONFIG: Record<Factory, FactoryConfig> = {
     showWorkplace: true,
     showWoSearchButton: true,
     showStartStopButton: true,
-    showTargetTimeTotal: false,
+    footerLayout: 'chiba',
+    layoutOnly: false,
+  },
+  // 設計書用：全項目を表示するレイアウト確認画面（入力しても明細部にデータは表示しない）
+  common: {
+    columnDefs: GOSEN_COLUMN_DEFS,
+    gridClassName: 'delivery-table',
+    rowsStorageKey: 'workOrderTimeRegistrationCommonRows',
+    woStorageKey: 'workOrderTimeRegistrationSelectedWoNumbers_common',
+    labelClassName: 'wot-grid-label wot-bg-blue',
+    showProcessDefaults: true,
+    showWorkplace: true,
+    showWoSearchButton: true,
+    showStartStopButton: true,
+    footerLayout: 'common',
+    layoutOnly: true,
   },
 }
 
@@ -334,6 +352,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
   const config = FACTORY_CONFIG[factory]
   const isGosen = factory === 'gosen'
   const isChiba = factory === 'chiba'
+  const isCommon = factory === 'common'
 
   /* ------------------------------ state ------------------------------ */
 
@@ -505,6 +524,9 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
   const handleWoNoKeyDown = async (rowId: number, currentWoNo: string, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return
     e.preventDefault()
+
+    // レイアウト確認用の画面ではデータ取得を行わない
+    if (config.layoutOnly) return
 
     const woNoToFetch = currentWoNo.trim().toLowerCase()
     if (woNoToFetch === '') return
@@ -851,6 +873,25 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
 
   /* ------------------------------ effects ------------------------------ */
 
+  // 共通（レイアウト確認用）：明細部の枠だけ表示するため空行を1行用意する
+  useEffect(() => {
+    if (!isCommon) return
+    setRows([{
+      id: 1,
+      woNo: '',
+      itemNo: '',
+      itemName: '',
+      targetTime: '',
+      acceptedQty: '',
+      defectiveQty: '',
+      opOrder: '',
+      opDesc: '',
+      processStatus: '',
+      remarks: '',
+      isLocked: false,
+    }])
+  }, [isCommon])
+
   // 五泉工場：目標時間計を再計算
   useEffect(() => {
     if (!isGosen) return
@@ -1140,6 +1181,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
             }
           }}
           onBlur={() => {
+            if (config.layoutOnly) return
             const lastRow = rows[rows.length - 1]
             if (lastRow.woNo && lastRow.id === row.id && !lastRow.isLocked) {
               addNewRow()
@@ -1303,7 +1345,8 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
     },
   ]
 
-  const tableColumns = isGosen ? gosenTableColumns : chibaTableColumns
+  // 千葉工場のみ簡易表示。五泉工場・共通は全項目を表示する
+  const tableColumns = isChiba ? chibaTableColumns : gosenTableColumns
 
   /* ------------------------------ 登録時間種類 ------------------------------ */
 
@@ -1328,11 +1371,13 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
         <div className='wot-top-row'>
           <button
             className='set-btnnew_high set-primary'
-            onClick={() =>
+            // レイアウト確認用の画面では表示のみ（遷移しない）
+            onClick={() => {
+              if (config.layoutOnly) return
               navigate('/factory/work-order-time-registration-choose', {
                 state: { targetPath: getFactoryPath(factory) },
               })
-            }
+            }}
           >
             WO検索
           </button>
@@ -1442,7 +1487,31 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                     />
                   </div>
 
-                  {/* 五泉工場のみ：工程状況初期値／作業順序／備考 */}
+                  {/* 千葉工場：作業場 */}
+                  {config.showWorkplace && (
+                    <div className='wot-info-grid wot-info-grid-2'>
+                      <label className='wot-grid-label wot-bg-red'>作業場</label>
+                      <input
+                        className='wot-grid-value1 wot-text-red'
+                        value={workplaceCode}
+                        onChange={(e) => setWorkplaceCode(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            setWorkplaceName(getWorkplaceNameFromCode(e.currentTarget.value))
+                          }
+                        }}
+                      />
+                      <input
+                        className='wot-grid-value1'
+                        readOnly
+                        value={workplaceName}
+                        style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
+                      />
+                    </div>
+                  )}
+
+                  {/* 五泉工場：工程状況初期値／作業順序／備考 */}
                   {config.showProcessDefaults && (
                     <>
                       <div className='wot-info-grid wot-info-grid-2'>
@@ -1479,29 +1548,6 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                     </>
                   )}
 
-                  {/* 千葉工場のみ：作業場 */}
-                  {config.showWorkplace && (
-                    <div className='wot-info-grid wot-info-grid-2'>
-                      <label className='wot-grid-label wot-bg-red'>作業場</label>
-                      <input
-                        className='wot-grid-value1 wot-text-red'
-                        value={workplaceCode}
-                        onChange={(e) => setWorkplaceCode(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault()
-                            setWorkplaceName(getWorkplaceNameFromCode(e.currentTarget.value))
-                          }
-                        }}
-                      />
-                      <input
-                        className='wot-grid-value1'
-                        readOnly
-                        value={workplaceName}
-                        style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
-                      />
-                    </div>
-                  )}
                 </div>
 
                 {isGosen ? (
@@ -1528,114 +1574,121 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
 
             {/* フッター部 */}
             <div className='wot-footer-summary wot-radio-container'>
-              <div className='wot-footer-row'>
-                {config.showTargetTimeTotal ? (
-                  <>
-                    <div className='wot-footer-item'>
-                      <label className='wot-footer-label '>作業時間</label>
-                      <input className='wot-grid-value2 ' />
-                    </div>
-
-                    <div className='wot-footer-item'>
-                      <label className='wot-footer-label wot-bg-span2'>時間</label>
-                      <input className='wot-grid-value2 wot-grid-value3' />
-                      <label className='wot-footer-label wot-bg-span'>分</label>
-                    </div>
-
-                    <div className='wot-footer-item'>
-                      <label className='wot-footer-label'>目標時間計</label>
-                      {/* 目標時間計は手入力をしないためグレー表示 */}
-                      <input
-                        className='wot-grid-value2'
-                        style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
-                        value={totalTargetTimeDisplay.hours}
-                        readOnly
-                      />
-                    </div>
-                    <div className='wot-footer-item'>
-                      <label className='wot-footer-label wot-bg-span2'>時間</label>
-                      <input
-                        className='wot-grid-value2 wot-grid-value3'
-                        style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
-                        value={totalTargetTimeDisplay.minutes}
-                        readOnly
-                      />
-                      <label className='wot-footer-label wot-bg-span'>分</label>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className='wot-footer-item'>
-                      <label className='wot-footer-label '>開始</label>
-                      <input
-                        className='wot-grid-value2'
-                        type='text'
-                        maxLength={5}
+              {/* 開始・終了（千葉工場／共通） */}
+              {config.footerLayout !== 'gosen' && (
+                <div className='wot-footer-row'>
+                  <div className='wot-footer-item'>
+                    <label className='wot-footer-label '>開始</label>
+                    <input
+                      className='wot-grid-value2'
+                      type='text'
+                      maxLength={5}
+                      value={workStartTime}
+                      onChange={(e) => setWorkStartTime(e.target.value.replace(/[^0-9:]/g, ''))}
+                      onClick={() => setShowStartTimePicker(true)}
+                      placeholder='--:--'
+                    />
+                    <button
+                      type='button'
+                      className='hand-date-btn2'
+                      aria-label='Choose time'
+                      onClick={() => setShowStartTimePicker(!showStartTimePicker)}
+                    >
+                      <FaRegClock />
+                    </button>
+                    {showStartTimePicker && (
+                      <TimePickerDropdown
                         value={workStartTime}
-                        onChange={(e) => setWorkStartTime(e.target.value.replace(/[^0-9:]/g, ''))}
-                        onClick={() => setShowStartTimePicker(true)}
-                        placeholder='--:--'
+                        onChange={setWorkStartTime}
+                        onClose={() => setShowStartTimePicker(false)}
                       />
-                      <button
-                        type='button'
-                        className='hand-date-btn2'
-                        aria-label='Choose time'
-                        onClick={() => setShowStartTimePicker(!showStartTimePicker)}
-                      >
-                        <FaRegClock />
-                      </button>
-                      {showStartTimePicker && (
-                        <TimePickerDropdown
-                          value={workStartTime}
-                          onChange={setWorkStartTime}
-                          onClose={() => setShowStartTimePicker(false)}
-                        />
-                      )}
-                    </div>
+                    )}
+                  </div>
 
-                    <div className='wot-footer-item'>
-                      <label className='wot-footer-label wot-bg-span-chiba'>終了</label>
-                      <input
-                        className='wot-grid-value2 wot-grid-value-chiba'
-                        type='text'
-                        maxLength={5}
+                  <div className='wot-footer-item'>
+                    <label className='wot-footer-label wot-bg-span-chiba'>終了</label>
+                    <input
+                      className='wot-grid-value2 wot-grid-value-chiba'
+                      type='text'
+                      maxLength={5}
+                      value={workEndTime}
+                      onChange={(e) => setWorkEndTime(e.target.value.replace(/[^0-9:]/g, ''))}
+                      onClick={() => setShowEndTimePicker(true)}
+                      placeholder='--:--'
+                    />
+                    <label className='wot-footer-label wot-bg-span' style={{ visibility: 'hidden' }}>分</label>
+
+                    <button
+                      type='button'
+                      className='hand-date-btn'
+                      aria-label='Choose time'
+                      onClick={() => setShowEndTimePicker(!showEndTimePicker)}
+                    >
+                      <FaRegClock />
+                    </button>
+                    {showEndTimePicker && (
+                      <TimePickerDropdown
                         value={workEndTime}
-                        onChange={(e) => setWorkEndTime(e.target.value.replace(/[^0-9:]/g, ''))}
-                        onClick={() => setShowEndTimePicker(true)}
-                        placeholder='--:--'
+                        onChange={setWorkEndTime}
+                        onClose={() => setShowEndTimePicker(false)}
                       />
-                      <label className='wot-footer-label wot-bg-span' style={{ visibility: 'hidden' }}>分</label>
+                    )}
+                  </div>
 
-                      <button
-                        type='button'
-                        className='hand-date-btn'
-                        aria-label='Choose time'
-                        onClick={() => setShowEndTimePicker(!showEndTimePicker)}
-                      >
-                        <FaRegClock />
-                      </button>
-                      {showEndTimePicker && (
-                        <TimePickerDropdown
-                          value={workEndTime}
-                          onChange={setWorkEndTime}
-                          onClose={() => setShowEndTimePicker(false)}
-                        />
-                      )}
-                    </div>
+                  {/* 千葉工場は同じ行に作業時間を表示する */}
+                  {config.footerLayout === 'chiba' && (
+                    <>
+                      <div className='wot-footer-item'>
+                        <label className='wot-footer-label'>作業時間</label>
+                        <input className='wot-grid-value2' value={workDurationHours} readOnly />
+                      </div>
 
-                    <div className='wot-footer-item'>
-                      <label className='wot-footer-label'>作業時間</label>
-                      <input className='wot-grid-value2' value={workDurationHours} readOnly />
-                    </div>
+                      <div className='wot-footer-item'>
+                        <label className='wot-footer-label wot-bg-span-chiba'>時間</label>
+                        <input className='wot-grid-value2 wot-grid-value-chiba' value={workDurationMinutes} readOnly />
+                        <label className='wot-footer-label wot-bg-span'>分</label>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
 
-                    <div className='wot-footer-item'>
-                      <label className='wot-footer-label wot-bg-span-chiba'>時間</label>
-                      <input className='wot-grid-value2 wot-grid-value-chiba' value={workDurationMinutes} readOnly />
-                      <label className='wot-footer-label wot-bg-span'>分</label>
-                    </div>
-                  </>
-                )}
-              </div>
+              {/* 作業時間・目標時間計（五泉工場／共通） */}
+              {config.footerLayout !== 'chiba' && (
+                <div className={config.footerLayout === 'common' ? 'wot-footer-row wot-footer-row-common' : 'wot-footer-row'}>
+                  <div className='wot-footer-item'>
+                    <label className='wot-footer-label '>作業時間</label>
+                    <input className='wot-grid-value2 ' />
+                  </div>
+
+                  <div className='wot-footer-item'>
+                    <label className='wot-footer-label wot-bg-span2'>時間</label>
+                    <input className='wot-grid-value2 wot-grid-value3' />
+                    <label className='wot-footer-label wot-bg-span'>分</label>
+                  </div>
+
+                  <div className='wot-footer-item'>
+                    <label className='wot-footer-label'>目標時間計</label>
+                    {/* 目標時間計は手入力をしないためグレー表示 */}
+                    <input
+                      className='wot-grid-value2'
+                      style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
+                      value={totalTargetTimeDisplay.hours}
+                      readOnly
+                    />
+                  </div>
+                  <div className='wot-footer-item'>
+                    <label className='wot-footer-label wot-bg-span2'>時間</label>
+                    <input
+                      className='wot-grid-value2 wot-grid-value3'
+                      style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
+                      value={totalTargetTimeDisplay.minutes}
+                      readOnly
+                    />
+                    <label className='wot-footer-label wot-bg-span'>分</label>
+                  </div>
+                </div>
+              )}
             </div>
 
             <ActionFooter columns={5}>
@@ -1660,7 +1713,8 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
               {config.showStartStopButton ? (
                 <button
                   className='set-btn set-hand-input-btn'
-                  onClick={handleWorkStartStop}
+                  // レイアウト確認用の画面では表示のみ
+                  onClick={config.layoutOnly ? undefined : handleWorkStartStop}
                   disabled={workStartStopDisabled}
                   style={{
                     opacity: workStartStopDisabled ? 0.5 : 1,
