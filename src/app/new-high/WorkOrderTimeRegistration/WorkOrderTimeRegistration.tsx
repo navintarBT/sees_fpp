@@ -100,6 +100,7 @@ type Row = {
   itemNo: string
   itemName: string
   targetTime?: string
+  plannedQty?: string
   acceptedQty?: string
   defectiveQty?: string
   opOrder?: string
@@ -118,6 +119,7 @@ const GOSEN_COLUMN_DEFS: ColumnDef[] = [
   { key: 'itemNo', header: '品番' },
   { key: 'itemName', header: '品名' },
   { key: 'targetTime', header: '目標時間' },
+  { key: 'plannedQty', header: '計画数' },
   { key: 'acceptedQty', header: '合格数' },
   { key: 'defectiveQty', header: '不良数' },
   { key: 'opOrder', header: '作業順序' },
@@ -140,6 +142,7 @@ const getColumnTextValue = (key: string, row: Row): string => {
     case 'itemNo': return row.itemNo
     case 'itemName': return row.itemName
     case 'targetTime': return row.targetTime ?? ''
+    case 'plannedQty': return row.plannedQty ?? ''
     case 'acceptedQty': return row.acceptedQty ?? ''
     case 'defectiveQty': return row.defectiveQty ?? ''
     case 'opOrder': return row.opOrder ?? ''
@@ -244,12 +247,12 @@ const CHIBA_WORKPLACE_STORAGE_KEY = 'workOrderTimeRegistrationChiba_workplace'
 /* ------------------------- 五泉工場：WoNo入力時に取得するマスタ ------------------------- */
 
 const MASTER_WORK_ORDERS: Record<string, Partial<Row>> = {
-  'wo-1': { woNo: 'wo-1', itemNo: 'a', itemName: '製品a', targetTime: '50', acceptedQty: '9', defectiveQty: '1', opDesc: '研磨3', remarks: '' },
-  'wo-2': { woNo: 'wo-2', itemNo: 'b', itemName: '製品b', targetTime: '50', acceptedQty: '3', defectiveQty: '', opDesc: '研磨3', remarks: '' },
-  'wo-3': { woNo: 'wo-3', itemNo: 'c', itemName: '製品c', targetTime: '', acceptedQty: '', defectiveQty: '', opDesc: '研磨3', remarks: '' },
-  'wo-4': { woNo: 'wo-4', itemNo: 'd', itemName: '製品d', targetTime: '9', acceptedQty: '', defectiveQty: '', opDesc: '研磨3', remarks: '' },
-  'wo-5': { woNo: 'wo-5', itemNo: 'e', itemName: '製品e', targetTime: '10', acceptedQty: '', defectiveQty: '', opDesc: '研磨3', remarks: '' },
-  'wo-6': { woNo: 'wo-6', itemNo: 'f', itemName: '製品f', targetTime: '15', acceptedQty: '', defectiveQty: '', opDesc: '研磨3', remarks: '' },
+  'wo-1': { woNo: 'wo-1', itemNo: 'a', itemName: '製品a', targetTime: '50', plannedQty: '10', acceptedQty: '9', defectiveQty: '1', opDesc: '研磨3', remarks: '' },
+  'wo-2': { woNo: 'wo-2', itemNo: 'b', itemName: '製品b', targetTime: '50', plannedQty: '20', acceptedQty: '3', defectiveQty: '', opDesc: '研磨3', remarks: '' },
+  'wo-3': { woNo: 'wo-3', itemNo: 'c', itemName: '製品c', targetTime: '', plannedQty: '30', acceptedQty: '', defectiveQty: '', opDesc: '研磨3', remarks: '' },
+  'wo-4': { woNo: 'wo-4', itemNo: 'd', itemName: '製品d', targetTime: '9', plannedQty: '40', acceptedQty: '', defectiveQty: '', opDesc: '研磨3', remarks: '' },
+  'wo-5': { woNo: 'wo-5', itemNo: 'e', itemName: '製品e', targetTime: '10', plannedQty: '50', acceptedQty: '', defectiveQty: '', opDesc: '研磨3', remarks: '' },
+  'wo-6': { woNo: 'wo-6', itemNo: 'f', itemName: '製品f', targetTime: '15', plannedQty: '60', acceptedQty: '', defectiveQty: '', opDesc: '研磨3', remarks: '' },
 }
 
 const fetchWorkOrderDetails = async (woNo: string): Promise<Partial<Row> | null> => {
@@ -472,6 +475,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
       itemNo: '',
       itemName: '',
       targetTime: '',
+      plannedQty: '',
       acceptedQty: '',
       defectiveQty: '',
       opOrder: '',
@@ -882,6 +886,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
       itemNo: '',
       itemName: '',
       targetTime: '',
+      plannedQty: '',
       acceptedQty: '',
       defectiveQty: '',
       opOrder: '',
@@ -918,6 +923,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
         itemNo: row.itemNumber ?? '',
         itemName: row.itemName ?? '',
         targetTime: '',
+        plannedQty: '',
         acceptedQty: '',
         defectiveQty: '',
         opOrder: defaultOpOrder,
@@ -981,6 +987,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
           itemNo: '',
           itemName: '',
           targetTime: '',
+          plannedQty: '',
           acceptedQty: '',
           defectiveQty: '',
           opOrder: defaultOpOrder,
@@ -1167,10 +1174,9 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
       render: (row) => (
         <input
           type='text'
-          className='table-cell-input'
+          className={row.isLocked ? 'table-cell-input table-cell-input-locked' : 'table-cell-input'}
           value={row.woNo}
           readOnly={row.isLocked === true}
-          style={row.isLocked ? { backgroundColor: '#d9d9d9' } : {}}
           onChange={(e) => {
             if (row.isLocked) return
             setRows((prevRows) => prevRows.map((r) => (r.id === row.id ? { ...r, woNo: e.target.value } : r)))
@@ -1216,6 +1222,15 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
       header: '目標時間',
       render: (row) => (
         <input type='text' className='table-cell-input' value={row.targetTime ?? ''} readOnly onClick={(e) => e.stopPropagation()} />
+      ),
+    },
+    {
+      key: 'plannedQty',
+      headClassName: 'col-qty',
+      cellClassName: 'col-qty',
+      header: '計画数',
+      render: (row) => (
+        <input type='text' className='table-cell-input' value={row.plannedQty ?? ''} readOnly onClick={(e) => e.stopPropagation()} />
       ),
     },
     {
