@@ -289,6 +289,15 @@ textarea:focus {
   text-align: left;
 }
 
+/* 明細部：読込済み（入力不可）のセルはグレーをセル全体に広げる */
+/* .tf-tableCell の左右padding(10px)を打ち消して塗りつぶす */
+.table-cell-input-locked {
+  background-color: #d9d9d9;
+  margin: 0 -10px;
+  width: calc(100% + 20px);
+  padding: 0 16px;
+}
+
 /* Columns in the delivery/gosen table auto-size to fit data */
 .tf-tableHead,
 .tf-tableBody,
