@@ -55,6 +55,9 @@ const WorkOrderCompletion = () => {
   const [plannedCount, setPlannedCount] = useState(persistedState?.plannedCount ?? '')
   const [completedCount, setCompletedCount] = useState(persistedState?.completedCount ?? '')
   const [defectiveCount, setDefectiveCount] = useState(persistedState?.defectiveCount ?? '')
+  // WO読込後に入力可能となる項目（読込前は入力不可・グレー表示）
+  const [officeCode, setOfficeCode] = useState('')
+  const [storageLocation, setStorageLocation] = useState('')
   const [showWoSelect, setShowWoSelect] = useState(false)
   const [selectedWoNumber, setSelectedWoNumber] = useState('')
   const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
@@ -88,6 +91,8 @@ const WorkOrderCompletion = () => {
     setPlannedCount('')
     setCompletedCount('')
     setDefectiveCount('')
+    setOfficeCode('')
+    setStorageLocation('')
   }
 
   useEffect(() => {
@@ -246,6 +251,50 @@ const WorkOrderCompletion = () => {
                     onChange={(e) => setDefectiveCount(e.target.value)}
                     style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
                     aria-label='WO defective count'
+                  />
+                </div>
+
+              </div>
+
+              {/* WO読込後の動作が未決のため、製番は常に入力不可（グレー表示）とする */}
+              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
+                <label>製番</label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                  <input
+                    disabled
+                    value=''
+                    readOnly
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
+                    aria-label='Seiban'
+                  />
+                </div>
+
+              </div>
+
+              {/* 事業所・保管場所は画面初期表示時は入力不可、WO読込後に入力可能とする */}
+              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
+                <label>事業所</label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                  <input
+                    disabled={!woData}
+                    value={officeCode}
+                    onChange={(e) => setOfficeCode(e.target.value)}
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
+                    aria-label='Office'
+                  />
+                </div>
+
+              </div>
+
+              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
+                <label>保管場所</label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                  <input
+                    disabled={!woData}
+                    value={storageLocation}
+                    onChange={(e) => setStorageLocation(e.target.value)}
+                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
+                    aria-label='Storage location'
                   />
                 </div>
 
