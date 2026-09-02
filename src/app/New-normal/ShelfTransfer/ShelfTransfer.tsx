@@ -25,9 +25,9 @@ type ItemMaster = {
 }
 
 const ITEM_MASTER: Record<string, ItemMaster> = {
-  '1197101': {warehouse: '千葉工場：F0200', storage: 'W0001', product_name: 'ITE-IRIZZ', lot_serial_no: '001', transfer_qty: '2'},
-  '1197104': {warehouse: '千葉工場：F0200', storage: 'W0001', product_name: 'ITE-IRIY0', lot_serial_no: '001', transfer_qty: '4'},
-  '1197103': {warehouse: '千葉工場：F0200', storage: 'W0001', product_name: 'ITE-IRIY1', lot_serial_no: '001', transfer_qty: '1'},
+  '1197101': {warehouse: '千葉工場：F0200', storage: '保管場所1', product_name: 'ITE-IRIZZ', lot_serial_no: '001', transfer_qty: '2'},
+  '1197104': {warehouse: '千葉工場：F0200', storage: '保管場所1', product_name: 'ITE-IRIY0', lot_serial_no: '001', transfer_qty: '4'},
+  '1197103': {warehouse: '千葉工場：F0200', storage: '保管場所1', product_name: 'ITE-IRIY1', lot_serial_no: '001', transfer_qty: '1'},
 }
 
 // 画面モード： source = 移動元登録, dest = 移動先登録
@@ -106,6 +106,7 @@ const ShelfTransfer = () => {
 
   const tableScrollRef = useRef<HTMLDivElement | null>(null)
   const itemNoInputRef = useRef<HTMLInputElement | null>(null)
+  const warehouseSelectRef = useRef<HTMLSelectElement | null>(null)
   const [activeRowId, setActiveRowId] = useState<number | null>(
     persistedState?.activeRowId ?? null,
   )
@@ -122,9 +123,17 @@ const ShelfTransfer = () => {
     showBackKeepConfirm ||
     showDuplicateItemNo
 
-  // 初回表示：テーブルは空のまま、品目No. 入力にフォーカスする
+  // 初期表示のフォーカス：倉庫へ戻す。
+  // ただし「移動先」では倉庫が入力不可のため、品目No. にフォーカスする。
+  const focusInitialField = () => {
+    const warehouse = warehouseSelectRef.current
+    if (warehouse && !warehouse.disabled) warehouse.focus()
+    else itemNoInputRef.current?.focus()
+  }
+
+  // 初回表示：テーブルは空のまま、倉庫にフォーカスする
   useEffect(() => {
-    itemNoInputRef.current?.focus()
+    focusInitialField()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -140,10 +149,10 @@ const ShelfTransfer = () => {
     }
   }, [form, rows, mode, activeRowId])
 
-  // テーブルを初期状態（空）に戻し、品目No. 入力へフォーカスを戻す
+  // テーブルを初期状態（空）に戻し、初期表示と同じく倉庫へフォーカスを戻す
   const loadSourceRows = () => {
     setRows([])
-    requestAnimationFrame(() => itemNoInputRef.current?.focus())
+    requestAnimationFrame(focusInitialField)
   }
 
   // 品目No. を入力して Enter（庫内ラベル読取）：移動元・移動先の両方で使用。
@@ -199,7 +208,7 @@ const ShelfTransfer = () => {
 
     // 入力欄へ反映（品目No. は表示したまま入力待ち：次のラベル読取で上書き）
     // 移動先：保管場所はブランク（入力待ち）とし、追加行を選択状態にする。
-    // 移動元：保管場所はマスタの値を表示（編集不可）。
+    // 移動元：保管場所はマスタの値を表示（入力可）。
     setForm((prev) => ({
       ...prev,
       internalLabel: itemNo,
@@ -314,7 +323,8 @@ const ShelfTransfer = () => {
     setActiveRowId(null)
     resetTableScroll()
     setShowDiscardConfirm(false)
-    requestAnimationFrame(() => itemNoInputRef.current?.focus())
+    // 初期表示に戻すため、フォーカスも倉庫へ戻す
+    requestAnimationFrame(focusInitialField)
   }
 
   // ② 移動元登録完了
@@ -490,7 +500,7 @@ const ShelfTransfer = () => {
   }
 
   // 画面初期表示：データ未読込（明細が空）の状態。
-  // このとき 倉庫／保管場所／移動数量／一括ボタン はブランク＆編集不可にする。
+  // このとき 倉庫／保管場所／品目No.／移動数量 は入力可とし、一括ボタンのみ編集不可にする。
   const isInitialDisplay = rows.length === 0
 
   // 明細部：初期表示では空行を１行だけ表示させておく
@@ -553,24 +563,14 @@ const ShelfTransfer = () => {
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row'>
-                <label>品目No.</label>
-                <input
-                  ref={itemNoInputRef}
-                  autoFocus
-                  style={{textAlign: 'center'}}
-                  value={form.internalLabel}
-                  onChange={(e) => setForm({...form, internalLabel: e.target.value})}
-                  onKeyDown={handleItemNoEnter}
-                />
-              </div>
-
-              <div className='set-row'>
                 <label>倉庫</label>
                 <select
-                  style={isInitialDisplay || mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
+                  ref={warehouseSelectRef}
+                  autoFocus
+                  style={mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
                   value={form.parentWarehouse}
                   onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                  disabled={isInitialDisplay || mode === 'dest'}
+                  disabled={mode === 'dest'}
                 >
                   <option value=''></option>
                   <option value='千葉工場：F0200'>千葉工場：F0200</option>
@@ -588,20 +588,16 @@ const ShelfTransfer = () => {
               <div className='set-row set-row-wo'>
                 <label>保管場所</label>
                 <select
-                  style={isInitialDisplay ? grayFieldStyle : {textAlign: 'center'}}
+                  style={{textAlign: 'center'}}
                   value={form.parentStorage}
                   onChange={(e) => setForm({...form, parentStorage: e.target.value})}
-                  disabled={isInitialDisplay}
                 >
                   <option value=''></option>
-                  <option value='W0001'>W0001</option>
-                  <option value='W0040'>W0040</option>
-                  <option value='W0041'>W0041</option>
-                  <option value='W0042'>W0042</option>
-                  <option value='W0043'>W0043</option>
-                  <option value='W0044'>W0044</option>
-                  <option value='W0045'>W0045</option>
-                  <option value='W0046'>W0046</option>
+                  <option value='保管場所1'>保管場所1</option>
+                  <option value='保管場所2'>保管場所2</option>
+                  <option value='保管場所3'>保管場所3</option>
+                  <option value='保管場所4'>保管場所4</option>
+                  <option value='保管場所5'>保管場所5</option>
                 </select>
                 <button
                   className='set-search-btn set-success'
@@ -614,13 +610,16 @@ const ShelfTransfer = () => {
               </div>
 
               <div className='set-row'>
-                <label>品名</label>
+                <label>品目No.</label>
                 <input
-                  readOnly
-                  style={grayFieldStyle}
-                  value={form.shipmentQty}
+                  ref={itemNoInputRef}
+                  style={{textAlign: 'center'}}
+                  value={form.internalLabel}
+                  onChange={(e) => setForm({...form, internalLabel: e.target.value})}
+                  onKeyDown={handleItemNoEnter}
                 />
               </div>
+
               <div className='set-row'>
                 <label>ロットシリアル</label>
                 <input
@@ -629,11 +628,19 @@ const ShelfTransfer = () => {
                   value={form.lot_serial_no}
                 />
               </div>
+              <div className='set-row'>
+                <label>品名</label>
+                <input
+                  readOnly
+                  style={grayFieldStyle}
+                  value={form.shipmentQty}
+                />
+              </div>
               <div className='set-row set-row-wo'>
                 <label>移動数量</label>
                 <input
-                  readOnly={isInitialDisplay || mode === 'dest'}
-                  style={isInitialDisplay || mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
+                  readOnly={mode === 'dest'}
+                  style={mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
                   value={form.transfer_qty}
                   onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                 />
