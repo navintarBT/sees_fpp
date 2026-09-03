@@ -93,8 +93,10 @@ const ShelfTransfer = () => {
   // 登録完了：品目No. 未入力エラー／移動元 完了メッセージ
   const [showItemNoRequired, setShowItemNoRequired] = useState(false)
   const [showSourceCompleteDone, setShowSourceCompleteDone] = useState(false)
-  // 移動先：登録（選択行なし）エラー／先保管場所 未設定エラー／完了確認・完了メッセージ
+  // 選択削除：選択行なしエラー／削除確認
   const [showNoRowSelected, setShowNoRowSelected] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  // 移動先：先保管場所 未設定エラー／完了確認・完了メッセージ
   const [showIncompleteWarning, setShowIncompleteWarning] = useState(false)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
   const [showCompleteDone, setShowCompleteDone] = useState(false)
@@ -116,6 +118,7 @@ const ShelfTransfer = () => {
     showItemNoRequired ||
     showSourceCompleteDone ||
     showNoRowSelected ||
+    showDeleteConfirm ||
     showIncompleteWarning ||
     showCompleteConfirm ||
     showCompleteDone ||
@@ -156,7 +159,7 @@ const ShelfTransfer = () => {
   }
 
   // 品目No. を入力して Enter（庫内ラベル読取）：移動元・移動先の両方で使用。
-  // 品目マスタから該当データを展開し、明細に１行追加しつつ入力欄へ反映する。
+  // ※ 明細部への追加・変更は行わない（明細への反映は「明細追加」ボタンで行う）。
   const handleItemNoEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
     event.preventDefault()
@@ -168,7 +171,8 @@ const ShelfTransfer = () => {
 
     // 「移動先」：入力された品目No. と一致する明細行を選択状態にする
     // （明細は移動元登録で作成済みのため、ここでは行の選択のみを行う）
-    if (mode === 'dest' && existingRow) {
+    if (mode === 'dest') {
+      if (!existingRow) return // 明細に存在しない品目No. は無視
       setActiveRowId(existingRow.id)
       setForm((prev) => ({
         ...prev,
@@ -183,8 +187,48 @@ const ShelfTransfer = () => {
       return
     }
 
+    // 「移動元」：品目マスタの内容をヘッダー部へ展開するだけ（明細部は変更しない）
     const master = ITEM_MASTER[itemNo]
     if (!master) return // マスタに存在しない品目No. は無視
+
+    setForm((prev) => ({
+      ...prev,
+      internalLabel: itemNo,
+      parentWarehouse: master.warehouse,
+      parentStorage: master.storage,
+      shipmentQty: master.product_name,
+      lot_serial_no: master.lot_serial_no,
+      transfer_qty: master.transfer_qty,
+    }))
+
+    // 次のラベル読取に備え、品目No. にフォーカスだけ戻す（全選択はしない：単純に入力待ち）
+    requestAnimationFrame(() => {
+      itemNoInputRef.current?.focus()
+    })
+  }
+
+  // 「明細追加」ボタン：常時クリック可。
+  // 移動元：ヘッダー部に表示されている内容を明細部へ１行追加する。
+  // 移動先：ヘッダー部の保管場所を、同じ品目No. の明細行の「先保管場所」へ設定する。
+  const handleAddDetail = () => {
+    if (isAnyModalOpen) return
+
+    const itemNo = form.internalLabel.trim()
+    if (!itemNo) return // 品目No. 未入力のときは何もしない
+
+    const existingRow = rows.find((row) => row.item_no === itemNo)
+
+    if (mode === 'dest') {
+      if (!existingRow) return // 明細に存在しない品目No. は何もしない
+      const destLocation = form.parentStorage
+      setRows((prevRows) =>
+        prevRows.map((row) =>
+          row.id === existingRow.id ? {...row, dest_location: destLocation} : row
+        )
+      )
+      requestAnimationFrame(() => itemNoInputRef.current?.focus())
+      return
+    }
 
     // すでに明細に存在する品目No. は追加せず、編集中である旨を通知する
     if (existingRow) {
@@ -192,38 +236,22 @@ const ShelfTransfer = () => {
       return
     }
 
-    // 明細部に１行追加（先保管場所は移動先登録で設定するため空）
+    // ヘッダー部の表示内容で明細部に１行追加（先保管場所は移動先登録で設定するため空）
     const nextId = rows.reduce((max, row) => Math.max(max, row.id), 0) + 1
     const newRow: Row = {
       id: nextId,
-      source_location: master.storage,
+      source_location: form.parentStorage,
       item_no: itemNo,
-      lot_serial_no: master.lot_serial_no,
-      transfer_qty: master.transfer_qty,
-      product_name: master.product_name,
-      warehouse: master.warehouse,
+      lot_serial_no: form.lot_serial_no,
+      transfer_qty: form.transfer_qty,
+      product_name: form.shipmentQty,
+      warehouse: form.parentWarehouse,
       dest_location: '',
     }
     setRows((prev) => [...prev, newRow])
 
-    // 入力欄へ反映（品目No. は表示したまま入力待ち：次のラベル読取で上書き）
-    // 移動先：保管場所はブランク（入力待ち）とし、追加行を選択状態にする。
-    // 移動元：保管場所はマスタの値を表示（入力可）。
-    setForm((prev) => ({
-      ...prev,
-      internalLabel: itemNo,
-      parentWarehouse: master.warehouse,
-      parentStorage: mode === 'dest' ? '' : master.storage,
-      shipmentQty: master.product_name,
-      lot_serial_no: master.lot_serial_no,
-      transfer_qty: master.transfer_qty,
-    }))
-    if (mode === 'dest') setActiveRowId(nextId)
-
-    // 次のラベル読取に備え、品目No. にフォーカスだけ戻す（全選択はしない：単純に入力待ち）
-    requestAnimationFrame(() => {
-      itemNoInputRef.current?.focus()
-    })
+    // ヘッダー部の表示はそのまま残し、品目No. にフォーカスだけ戻す
+    requestAnimationFrame(() => itemNoInputRef.current?.focus())
   }
 
   const clearForm = () =>
@@ -357,25 +385,25 @@ const ShelfTransfer = () => {
     requestAnimationFrame(() => itemNoInputRef.current?.focus())
   }
 
-  // ④ 登録：選択中の行の先保管場所に保管場所を確定し、品目No. の入力待ちに戻す
-  const handleRegister = () => {
+  // ④ 選択削除：選択中の明細行を削除する（移動元・移動先の両方で使用）
+  const handleDeleteSelected = () => {
     if (isAnyModalOpen) return
     // 行が未選択なら「選択行がありません。」を表示
     if (activeRowId === null) {
       setShowNoRowSelected(true)
       return
     }
+    // 削除前に確認する
+    setShowDeleteConfirm(true)
+  }
 
-    const destLocation = form.parentStorage
+  // 削除確認「はい」：選択中の行を明細部から削除し、選択状態を解除する
+  const confirmDeleteSelected = () => {
+    setRows((prevRows) => prevRows.filter((row) => row.id !== activeRowId))
+    setActiveRowId(null)
+    setShowDeleteConfirm(false)
 
-    // 選択中の行に先保管場所を保存
-    setRows((prevRows) =>
-      prevRows.map((row) =>
-        row.id === activeRowId ? {...row, dest_location: destLocation} : row
-      )
-    )
-
-    // 次のラベル読取に備え、品目No. にフォーカスだけ戻す（全選択はしない：単純に入力待ち）
+    // 次のラベル読取に備え、品目No. にフォーカスだけ戻す
     requestAnimationFrame(() => {
       itemNoInputRef.current?.focus()
     })
@@ -465,12 +493,12 @@ const ShelfTransfer = () => {
       if (event.key === 'F2') {
         event.preventDefault()
         if (mode === 'source') handleSourceComplete()
-        else handleRegister()
+        else handleComplete()
         return
       }
       if (event.key === 'F3') {
         event.preventDefault()
-        if (mode === 'dest') handleComplete()
+        handleDeleteSelected()
         return
       }
       if (event.key === 'F4') {
@@ -636,7 +664,7 @@ const ShelfTransfer = () => {
                   value={form.shipmentQty}
                 />
               </div>
-              <div className='set-row set-row-wo'>
+              <div className='set-row set-row-qty-add'>
                 <label>移動数量</label>
                 <input
                   readOnly={mode === 'dest'}
@@ -646,6 +674,10 @@ const ShelfTransfer = () => {
                 />
                 <button className='set-search-btn set-primary' style={grayFieldStyle} disabled>
                   EA
+                </button>
+                {/* 明細追加：常時クリック可 */}
+                <button className='set-search-btn set-success' onClick={handleAddDetail}>
+                  明細追加
                 </button>
               </div>
             </div>
@@ -665,28 +697,21 @@ const ShelfTransfer = () => {
                 破棄
               </button>
 
-              {mode === 'source' ? (
-                <button className='set-btn set-warning' onClick={handleSourceComplete}>
-                  移動元登録完了
-                </button>
-              ) : (
-           
-                   <button className='set-btn set-warning' onClick={handleComplete}>
-                  完了
-                </button>
-              )}
+              {/* 完了：移動元＝移動先登録へ、移動先＝JDE へ送信して終了 */}
+              <button
+                className='set-btn set-warning'
+                onClick={mode === 'source' ? handleSourceComplete : handleComplete}
+              >
+                完了
+              </button>
 
-              {mode === 'source' ? (
-                <div style={{width: '100%'}}></div>
-              ) : (
-                  <button
-                  className='set-btn set-primary'
-                  onClick={handleRegister}
-                  style={{fontSize: '35px'}}
-                >
-                  登録
-                </button>
-              )}
+              <button
+                className='set-btn set-primary'
+                onClick={handleDeleteSelected}
+                style={{fontSize: '35px'}}
+              >
+                選択削除
+              </button>
 
               <button className='set-btn set-success' onClick={handleBack}>
                 戻る
@@ -794,7 +819,7 @@ const ShelfTransfer = () => {
             </div>
           )}
 
-          {/* ④ 登録：選択行なしエラー */}
+          {/* ④ 選択削除：選択行なしエラー */}
           {showNoRowSelected && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
@@ -806,6 +831,27 @@ const ShelfTransfer = () => {
                     onClick={() => setShowNoRowSelected(false)}
                   >
                     OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ④ 選択削除：削除の確認 */}
+          {showDeleteConfirm && (
+            <div className='set-modal-backdrop' role='presentation'>
+              <div className='set-modal' role='dialog' aria-modal='true'>
+                <div className='set-modal-header'>確認</div>
+                <div className='set-modal-body'>{'選択行を削除します。\n 宜しいですか？'}</div>
+                <div className='set-modal-actions'>
+                  <button className='set-modal-btn set-modal-yes' onClick={confirmDeleteSelected}>
+                    はい
+                  </button>
+                  <button
+                    className='set-modal-btn set-modal-no'
+                    onClick={() => setShowDeleteConfirm(false)}
+                  >
+                    いいえ
                   </button>
                 </div>
               </div>
