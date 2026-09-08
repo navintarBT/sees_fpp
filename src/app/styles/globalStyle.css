@@ -108,17 +108,20 @@ button:focus {
   color: #1a2a4a;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0 40px;
   border-bottom: 4px solid #2fb7ff;
   text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
   box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
   border-radius: 18px 18px 0 0;
   margin-bottom: 12px;
+  position: relative;
 }
 
 .set-header-landscape .set-header-title {
-  flex: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
   text-align: center;
   font-size: 32px;
   font-weight: 400;
@@ -126,6 +129,7 @@ button:focus {
 }
 
 .set-header-landscape .set-header-terminal-id {
+  position: relative;
   font-size: 18px;
   font-weight: 400;
   white-space: nowrap;
@@ -238,13 +242,18 @@ button:focus {
 }
 
 .inbound-detail-btn {
+  width: 74px;
   height: 30px;
-  padding: 0 14px;
+  padding: 0;
   border-radius: 6px;
   border: none;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 400;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .set-printer-row-landscape {
@@ -2163,13 +2172,13 @@ input[type='time'].wot-grid-value2 {
   min-width: 200px;
 }
 
-.woPartsIssuanceDetail-table .col-lot {
-  min-width: 350px;
-}
+/* .woPartsIssuanceDetail-table .col-lot {
+  min-width: 330px;
+} */
 
-.woPartsIssuanceDetail-table .col-move {
+/* .woPartsIssuanceDetail-table .col-move {
   min-width: 200px;
-}
+} */
 
 
 .woPartsIssuanceDetail-table .col-moveStorage {

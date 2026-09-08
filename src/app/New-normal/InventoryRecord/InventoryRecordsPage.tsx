@@ -17,7 +17,8 @@ type Row = {
   rowNo: string
   instruct: string
   Load: string
-  productName: string
+  productName1: string
+  productName2: string
 }
 
 const EMPTY_ROW: Row = {
@@ -30,7 +31,8 @@ const EMPTY_ROW: Row = {
   rowNo: '',
   instruct: '',
   Load: '' ,
-  productName: '',
+  productName1: '',
+  productName2: '',
 }
 
 const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: string; qty: string; janCode: string; janCodeDisabled?: boolean; rows: Row[]}> = {
@@ -50,7 +52,8 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         rowNo: '',
         instruct: '3',
         Load: '0',
-        productName: '品名001',
+        productName1: '品名001',
+        productName2: '品名001-補足',
       },
       {
         id: 2,
@@ -62,19 +65,21 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         rowNo: '',
         instruct: '2',
         Load: '2',
-        productName: '品名002',
+        productName1: '品名002',
+        productName2: '品名002-補足',
       },
       {
         id: 3,
         error: 'E',
-        item: '1003',
-        lot: 'Lot003',
+        item: 'XXXXX(15)XXXXX',
+        lot: 'XXXXX(15)XXXXX',
         lot2: '*',
-        inspection: '〇',
-        rowNo: '',
-        instruct: '15',
-        Load: '15',
-        productName: '品名003',
+        inspection: '全数検査',
+        rowNo: '123,456',
+        instruct: '12,345',
+        Load: '12,345',
+        productName1: 'XXXXX(15)XXXXX',
+        productName2: 'XXXXX(15)XXXXX',
       },
     ],
   },
@@ -94,7 +99,8 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         rowNo: '',
         instruct: '3',
         Load: '0',
-        productName: '品名001',
+        productName1: '品名001',
+        productName2: '品名001-補足',
       },
       {
         id: 2,
@@ -106,7 +112,8 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         rowNo: '',
         instruct: '2',
         Load: '2',
-        productName: '品名002',
+        productName1: '品名002',
+        productName2: '品名002-補足',
       },
       {
         id: 3,
@@ -118,7 +125,8 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         rowNo: '',
         instruct: '15',
         Load: '15',
-        productName: '品名003',
+        productName1: '品名003',
+        productName2: '品名003-補足',
       },
     ],
   },
@@ -139,7 +147,8 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         rowNo: '123456',
         instruct: '3',
         Load: '3',
-        productName: '品名005',
+        productName1: '品名005',
+        productName2: '品名005-補足',
       },
     ],
   },
@@ -232,7 +241,8 @@ const InventoryRecordsPage = () => {
           rowNo: '',
           instruct: qty,
           Load: qty,
-          productName: MOCK_ITEM_NAMES[itemNo] ?? '',
+          productName1: MOCK_ITEM_NAMES[itemNo] ?? '',
+          productName2: '',
         }
         setRows([...(r as Row[]), newRow])
       } else {
@@ -431,7 +441,8 @@ const InventoryRecordsPage = () => {
     {key: 'lot2', headClassName: 'col-lot2', cellClassName: 'col-lot2', header: '', render: (row) => row.lot2},
     {key: 'instruct', headClassName: 'col-instruct', cellClassName: 'col-instruct', header: '指示', render: (row) => row.instruct},
     {key: 'Load', headClassName: 'col-Load', cellClassName: 'col-Load', header: '読込', render: (row) => row.Load},
-    {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
+    {key: 'productName1', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名1', render: (row) => row.productName1},
+    {key: 'productName2', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名2', render: (row) => row.productName2},
     {key: 'inspection', headClassName: 'col-inspection', cellClassName: 'col-inspection', header: '検査', render: (row) => row.inspection},
     {key: 'rowNo', headClassName: 'col-rowNo', cellClassName: 'col-rowNo', header: '行番号', render: (row) => row.rowNo},
   ]
@@ -575,7 +586,7 @@ const InventoryRecordsPage = () => {
                   rows={rows}
                   scrollRef={tableScrollRef}
                   gridClassName='inventory-table inbound-table-landscape'
-                  gridStyle={{gridTemplateColumns: '90px 50px 50px minmax(110px, 1fr) minmax(150px, 1.2fr) 50px minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(160px, 1.4fr) minmax(100px, 0.7fr) minmax(110px, 0.8fr)'}}
+                  gridStyle={{gridTemplateColumns: '90px 50px 50px minmax(110px, 1fr) minmax(150px, 1.2fr) 50px minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(130px, 0.8fr) minmax(130px, 0.8fr) minmax(100px, 0.7fr) minmax(110px, 0.8fr)'}}
                   getRowKey={(row) => row.id}
                   activeRowKey={activeRowId}
                   onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
