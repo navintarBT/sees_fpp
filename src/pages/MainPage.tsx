@@ -24,6 +24,7 @@ import { WOPartsIssuanceDetail } from '../app/new-high/WOPartsIssuance/WOPartsIs
 import { ButtonAccess } from '../app/new-high/WOPartsIssuance/ButtonAccess'
 import { WorkOrderTimeRegistration } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistration'
 import { InventoryRecordsPage } from '../app/New-normal/InventoryRecord/InventoryRecordsPage'
+import { InventoryRecordsOrientationChoose } from '../app/New-normal/InventoryRecord/InventoryRecordsOrientationChoose'
 import { InventoryRecordsHandInputPage } from '../app/New-normal/InventoryRecord/InventoryRecordsHandInputPage'
 import { InventoryRecordDetail } from '../app/New-normal/InventoryRecord/InventoryRecordDetail'
 import { ShippingRecordPage } from '../app/New-normal/ShippingRecord/ShippingRecordPage'
@@ -66,6 +67,7 @@ const MainPage = () => {
         <Route path='wo-parts-issuance-detail' element={<WOPartsIssuanceDetail />} />
         <Route path='work-order-completion' element={<WorkOrderCompletion />} />
         <Route path='work-order-time-registration/:factory' element={<WorkOrderTimeRegistration />} />
+        <Route path='inventory-records-choose' element={<InventoryRecordsOrientationChoose />} />
         <Route path='inventory-records' element={<InventoryRecordsPage />} />
         <Route path='inventory-hand-input' element={<InventoryRecordsHandInputPage />} />
         <Route path='inventory-detail' element={<InventoryRecordDetail />} />
