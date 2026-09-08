@@ -4,7 +4,7 @@ import { GroupSelector } from './GroupSelector'
 const Factory = () => {
   const navigate = useNavigate()
   const factoryButtons = [
-    { label: '入庫実績登録', path: '/factory/inventory-records', className: 'mockup-red' },
+    { label: '入庫実績登録', path: '/factory/inventory-records-choose', className: 'mockup-red' },
     { label: '入荷工程登録', path: '/factory/incoming-process-registration', className: 'mockup-blue' },
     { label: '棚移動', path: '/factory/shelf-transfer', className: 'mockup-green' },
     { label: 'WO部品払出', path: '/factory/button-access', className: 'mockup-yellow' },

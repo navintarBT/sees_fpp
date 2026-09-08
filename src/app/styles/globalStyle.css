@@ -1,6 +1,7 @@
 ﻿input:focus,
 select:focus,
-textarea:focus {
+textarea:focus,
+button:focus {
   outline: none;
 }
 
@@ -97,6 +98,178 @@ textarea:focus {
 .set-row-inline {
   grid-template-columns: 240px 200px 200px 1fr;
 
+}
+
+/* ################## Landscape (横画面) variant — currently used by 入庫実績登録 only ################## */
+
+.set-header-landscape {
+  height: 100px;
+  background: linear-gradient(90deg, #e3f0fa 0%, #b6d0e2 100%);
+  color: #1a2a4a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  border-bottom: 4px solid #2fb7ff;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+  border-radius: 18px 18px 0 0;
+  margin-bottom: 12px;
+}
+
+.set-header-landscape .set-header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: .18em;
+}
+
+.set-header-landscape .set-header-terminal-id {
+  font-size: 18px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.set-body-landscape {
+  /* .set-header-landscape is 100px tall + 12px margin-bottom = 112px footprint */
+  height: calc(1200px - 112px);
+  padding: 20px 40px 34px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 14px;
+  color: black;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.set-form-landscape {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.set-form-landscape-row {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  min-width: 0;
+}
+
+.set-form-landscape-row .set-field-landscape {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.set-form-landscape-row .set-field-landscape.set-field-grow {
+  flex: 1 1 auto;
+}
+
+.set-form-landscape-row .set-field-landscape label {
+  font-size: 34px;
+  font-weight: 400;
+  color: black;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.set-form-landscape-row .set-field-landscape input,
+.set-form-landscape-row .set-field-landscape select {
+  width: 220px;
+  min-width: 0;
+  height: 78px;
+  border-radius: 14px;
+  border: 2px solid #5b6d86;
+  background: white;
+  color: black;
+  font-size: 30px;
+  font-weight: 400;
+  padding: 0 22px;
+  text-align: left;
+}
+
+.set-form-landscape-row .set-field-landscape.set-field-grow input,
+.set-form-landscape-row .set-field-landscape.set-field-grow select {
+  flex: 1;
+  width: auto;
+}
+
+.set-form-landscape-row .set-field-landscape input:disabled,
+.set-form-landscape-row .set-field-landscape select:disabled {
+  background: #d9d9d9;
+  color: #666;
+}
+
+.set-field-landscape input.set-input-gray,
+.set-field-landscape select.set-input-gray {
+  background: #d9d9d9;
+  color: #666;
+}
+
+.tf-tableGrid.inbound-table-landscape {
+  width: 100%;
+}
+
+.inbound-table-landscape .tf-tableHead .tf-tableCell {
+  height: 44px;
+  font-size: 18px;
+}
+
+.inbound-table-landscape .tf-tableHeadDivider {
+  top: 44px;
+}
+
+.inbound-table-landscape .tf-tableRow .tf-tableCell {
+  height: 46px;
+  font-size: 18px;
+}
+
+.inbound-table-landscape .tf-tableCell {
+  padding: 0 8px;
+}
+
+.inbound-table-landscape .col-detail {
+  min-width: 90px;
+}
+
+.inbound-detail-btn {
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.set-printer-row-landscape {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.set-printer-row-landscape label {
+  font-size: 34px;
+  font-weight: 400;
+  color: black;
+  white-space: nowrap;
+}
+
+.set-printer-row-landscape select {
+  flex: 0 0 340px;
+  height: 78px;
+  border-radius: 14px;
+  border: 2px solid #5b6d86;
+  background: white;
+  color: black;
+  font-size: 30px;
+  padding: 0 22px;
+  text-align: left;
 }
 
 .set-row-inline label {
@@ -554,6 +727,12 @@ textarea:focus {
     color 0.2s ease,
     box-shadow 0.2s ease,
     transform 0.1s ease;
+}
+
+.set-btn-landscape {
+  height: 100px;
+  border-radius: 18px;
+  font-size: 32px;
 }
 
 .set-btn:hover {
@@ -2264,3 +2443,11 @@ input[type='time'].wot-grid-value2 {
 }
 
 /* min-width  col-arrow-head-shelftransfer */
+
+/* Placed at end of file so it wins the cascade over the equal-specificity
+   .inventory-table .col-arrow-head / .tf-tableRow .col-arrow sticky rules above. */
+.inbound-table-landscape .col-arrow-head,
+.inbound-table-landscape .tf-tableRow .col-arrow {
+  position: static;
+  left: auto;
+}
