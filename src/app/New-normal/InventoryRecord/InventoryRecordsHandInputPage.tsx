@@ -70,7 +70,7 @@ const InventoryRecordsHandInputPage = () => {
           {isLandscape ? (
             <>
               <div className='set-header-landscape'>
-                <span className='set-header-title'>入庫実績登録手入力</span>
+                <span className='set-header-title'>入庫実績登録手入力登録</span>
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
               <div className='set-body-landscape'>
