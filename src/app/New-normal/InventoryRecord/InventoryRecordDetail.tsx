@@ -200,7 +200,7 @@ const InventoryRecordDetail = () => {
                   onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
                 />
 
-                <div style={{display: 'flex', justifyContent: 'flex-start', gap: 24}}>
+                <div style={{display: 'flex', justifyContent: 'flex-start', gap: 50, marginTop: 20}}>
                   <button
                     className='set-btn set-btn-landscape set-danger'
                     style={{width: 280}}
@@ -314,7 +314,7 @@ const InventoryRecordDetail = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/inventory-records', {state: {orientation: isLandscape ? 'landscape' : 'portrait'}})
+                      navigate('/factory/inventory-records')
                     }}
                   >
                     YES

@@ -77,8 +77,8 @@ const InventoryRecordsHandInputPage = () => {
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
-                      <label style={{width: 280, flexShrink: 0}}>倉庫</label>
-                      <select style={{width: 600}} value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
+                      <label style={{width: 220, flexShrink: 0}}>倉庫</label>
+                      <select style={{width: 635}} value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
                         <option value='A倉庫'>A倉庫</option>
                         <option value='B倉庫'>B倉庫</option>
                         <option value='C事業所'>C事業所</option>
@@ -86,10 +86,10 @@ const InventoryRecordsHandInputPage = () => {
                       </select>
                     </div>
                     <div className='set-field-landscape'>
-                      <label style={{width: 280, flexShrink: 0}}>保管場所</label>
+                      <label style={{width: 220, flexShrink: 0}}>保管場所</label>
                       <input
                         ref={moveStorageRef}
-                        style={{width: 600}}
+                        style={{width: 635}}
                         value={moveStorage}
                         onChange={(e) => setMoveStorage(e.target.value)}
                       />
@@ -97,26 +97,26 @@ const InventoryRecordsHandInputPage = () => {
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
-                      <label style={{width: 280, flexShrink: 0}}>ロット状況</label>
-                      <select style={{width: 600}} disabled>
+                      <label style={{width: 220, flexShrink: 0}}>ロット状況</label>
+                      <select style={{width: 635}} disabled>
                         <option value=''></option>
                         <option value='検査中'>検査中</option>
                       </select>
                     </div>
                     <div className='set-field-landscape'>
-                      <label style={{width: 280, flexShrink: 0}}>数量</label>
-                      <input style={{width: 600}} value={qty} onChange={(e) => setQty(e.target.value)} />
+                      <label style={{width: 220, flexShrink: 0}}>数量</label>
+                      <input style={{width: 635}} value={qty} onChange={(e) => setQty(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
-                      <label style={{width: 280, flexShrink: 0}}>品目No.</label>
-                      <input style={{width: 600}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
+                      <label style={{width: 220, flexShrink: 0}}>品目No.</label>
+                      <input style={{width: 635}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
                     </div>
                     <div className='set-field-landscape'>
-                      <label style={{width: 280, flexShrink: 0}}>ロット</label>
+                      <label style={{width: 220, flexShrink: 0}}>ロット</label>
                       <input
-                        style={{width: 600}}
+                        style={{width: 635}}
                         value={lot}
                         onChange={(e) => setLot(e.target.value)}
                         disabled={isMB}
@@ -125,24 +125,24 @@ const InventoryRecordsHandInputPage = () => {
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
-                      <label style={{width: 280, flexShrink: 0}}>シリアル</label>
+                      <label style={{width: 220, flexShrink: 0}}>シリアル</label>
                       <input
-                        style={{width: 600}}
+                        style={{width: 635}}
                         value={serial}
                         onChange={(e) => setSerial(e.target.value)}
                         disabled={isMB}
                       />
                     </div>
                     <div className='set-field-landscape'>
-                      <label style={{width: 280, flexShrink: 0}}>有効期限（yymm）</label>
-                      <input style={{width: 600}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
+                      <label style={{width: 220, flexShrink: 0}}>有効期限（yymm）</label>
+                      <input style={{width: 635}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
                     </div>
                   </div>
                 </div>
 
                 <div />
 
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 20}}>
                   <button
                     className='set-btn set-btn-landscape set-success'
                     style={{width: 280}}
