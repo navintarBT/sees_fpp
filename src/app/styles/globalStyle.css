@@ -2479,3 +2479,9 @@ input[type='time'].wot-grid-value2 {
   position: static;
   left: auto;
 }
+
+/* Overrides .inventory-table .col-lot2 { min-width: 50px } for landscape only —
+   placed at end of file to win the cascade at equal specificity. */
+.inbound-table-landscape .col-lot2 {
+  min-width: 30px;
+}

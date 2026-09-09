@@ -575,7 +575,7 @@ const InventoryRecordsPage = () => {
                   rows={rows}
                   scrollRef={tableScrollRef}
                   gridClassName='inventory-table inbound-table-landscape'
-                  gridStyle={{gridTemplateColumns: '90px 50px 50px minmax(110px, 1fr) minmax(150px, 1.2fr) 50px minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(160px, 1.4fr) 60px minmax(110px, 0.8fr)'}}
+                  gridStyle={{gridTemplateColumns: '90px 50px 50px minmax(110px, 1fr) minmax(150px, 1.2fr) 30px minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(160px, 1.4fr) 60px minmax(110px, 0.8fr)'}}
                   getRowKey={(row) => row.id}
                   activeRowKey={activeRowId}
                   onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
