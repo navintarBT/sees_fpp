@@ -4,7 +4,7 @@ import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 
-const TERMINAL_ID = 'ABCDEFGHIJKLMNOPQRST'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 const ORIENTATION_KEY = 'inventoryRecordsOrientation'
 
 type Row = {
@@ -521,7 +521,7 @@ const InventoryRecordsPage = () => {
                       <label style={{width: 210, flexShrink: 0}}>数量</label>
                       <div style={{display: 'flex', alignItems: 'center', gap: 14, width: 370, flexShrink: 0}}>
                         <input
-                          style={{flex: 1, minWidth: 0}}
+                          style={{flex: 1, minWidth: 0, textAlign: 'right'}}
                           value={form.qty}
                           onChange={(e) => setForm({...form, qty: e.target.value})}
                           disabled={!isLoaded}

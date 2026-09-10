@@ -143,17 +143,24 @@ button:focus {
   padding: 20px 40px 34px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto auto;
-  gap: 14px;
+  gap: 26px;
   color: black;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
 }
 
+/* For pages with only 3 sections (form/table/footer, no printer row) —
+   avoids reserving a trailing empty 4th row + its gap, so the footer
+   sits flush at the bottom just like the 4-section page. */
+.set-body-landscape-3row {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
 .set-form-landscape {
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 25px;
   min-width: 0;
 }
 
@@ -250,6 +257,14 @@ button:focus {
 
 .inbound-table-landscape .tf-tableCell {
   padding: 0 8px;
+}
+
+/* 数量系 (quantity-type) columns — right-aligned per client spec */
+.inbound-table-landscape .col-instruct,
+.inbound-table-landscape .col-Load,
+.inbound-table-landscape .col-num {
+  justify-content: flex-end;
+  text-align: right;
 }
 
 .inbound-table-landscape .col-detail {
@@ -760,7 +775,7 @@ button:focus {
 }
 
 .set-actionfooter-landscape-offset {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .set-btn:hover {
