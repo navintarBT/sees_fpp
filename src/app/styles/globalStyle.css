@@ -259,6 +259,12 @@ button:focus {
   padding: 0 8px;
 }
 
+/* Don't reserve a scrollbar gutter when the table doesn't need to scroll,
+   so the rightmost column sits flush against the table's border. */
+.inbound-table-landscape-wrap .tf-tableScroll {
+  scrollbar-gutter: auto;
+}
+
 /* Keep quantity values right-aligned; table headers use the shared centered alignment. */
 .inbound-table-landscape .tf-tableRow .col-instruct,
 .inbound-table-landscape .tf-tableRow .col-Load,
@@ -270,6 +276,13 @@ button:focus {
 /* Align only the ロットシリアル header to the left in both inventory screens. */
 .inventory-table .tf-tableHead .col-lot,
 .woPartsIssuanceDetail-table .tf-tableHead .col-lot {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* Align ロットシリアル values to the left without affecting other columns. */
+.inventory-table .tf-tableRow .col-lot,
+.woPartsIssuanceDetail-table .tf-tableRow .col-lot {
   justify-content: flex-start;
   text-align: left;
 }
@@ -2506,4 +2519,10 @@ input[type='time'].wot-grid-value2 {
    placed at end of file to win the cascade at equal specificity. */
 .inbound-table-landscape .col-lot2 {
   min-width: 30px;
+}
+
+/* Overrides .woPartsIssuanceDetail-table .col-num { min-width: 200px } for landscape only —
+   placed at end of file to win the cascade at equal specificity. */
+.inbound-table-landscape .col-num {
+  min-width: 70px;
 }

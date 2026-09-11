@@ -192,8 +192,9 @@ const InventoryRecordDetail = () => {
                 <TableSection
                   columns={tableColumns}
                   rows={rows}
+                  className='inbound-table-landscape-wrap'
                   gridClassName='woPartsIssuanceDetail-table inbound-table-landscape'
-                  gridStyle={{gridTemplateColumns: '50px 50px minmax(140px, 1fr) minmax(90px, 0.8fr) minmax(120px, 1fr) minmax(150px, 1.2fr) minmax(160px, 1.2fr)'}}
+                  gridStyle={{gridTemplateColumns: '50px 50px minmax(140px, 1fr) minmax(70px, 0.5fr) minmax(140px, 1.3fr) minmax(150px, 1.2fr) minmax(160px, 1.2fr)'}}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}
                   activeRowKey={activeRowId}
