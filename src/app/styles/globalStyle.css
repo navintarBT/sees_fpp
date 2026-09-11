@@ -268,7 +268,8 @@ button:focus {
 /* Keep quantity values right-aligned; table headers use the shared centered alignment. */
 .inbound-table-landscape .tf-tableRow .col-instruct,
 .inbound-table-landscape .tf-tableRow .col-Load,
-.inbound-table-landscape .tf-tableRow .col-num {
+.inbound-table-landscape .tf-tableRow .col-num,
+.inbound-table-landscape .tf-tableRow .col-rowNo {
   justify-content: flex-end;
   text-align: right;
 }
