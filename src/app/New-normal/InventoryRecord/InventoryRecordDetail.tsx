@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
 import {FaPlay} from 'react-icons/fa'
 
 type Row = {
@@ -167,6 +168,7 @@ const InventoryRecordDetail = () => {
 
   return (
     <div className='mockup-page'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
       <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
           {isLandscape ? (
@@ -315,7 +317,7 @@ const InventoryRecordDetail = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/inventory-records')
+                      navigate('/factory/inventory-records', {state: {orientation: isLandscape ? 'landscape' : 'portrait'}})
                     }}
                   >
                     YES
@@ -329,6 +331,7 @@ const InventoryRecordDetail = () => {
           )}
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

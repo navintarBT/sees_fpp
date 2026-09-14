@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
 
 const WAREHOUSE_BY_ORDER: Record<string, string> = {
   '12345678': 'A倉庫',
@@ -44,7 +45,7 @@ const InventoryRecordsHandInputPage = () => {
   const moveStorageRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
-    moveStorageRef.current?.focus()
+    moveStorageRef.current?.focus({preventScroll: true})
   }, [])
 
   const handleRead = () => {
@@ -65,6 +66,7 @@ const InventoryRecordsHandInputPage = () => {
 
   return (
     <div className='mockup-page'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
       <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
           {isLandscape ? (
@@ -323,6 +325,7 @@ const InventoryRecordsHandInputPage = () => {
             )}
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

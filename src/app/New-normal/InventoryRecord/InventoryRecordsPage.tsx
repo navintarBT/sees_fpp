@@ -3,6 +3,7 @@ import {useLocation, useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
 
 const TERMINAL_ID = 'ABCDEFGHIJ'
 const ORIENTATION_KEY = 'inventoryRecordsOrientation'
@@ -243,11 +244,11 @@ const InventoryRecordsPage = () => {
   }, [])
 
   useEffect(() => {
-    parentItemNoRef.current?.focus()
+    parentItemNoRef.current?.focus({preventScroll: true})
   }, [])
 
   useEffect(() => {
-    if (isLoaded) janCodeRef.current?.focus()
+    if (isLoaded) janCodeRef.current?.focus({preventScroll: true})
   }, [isLoaded])
 
   const handleSearch = () => {
@@ -449,6 +450,7 @@ const InventoryRecordsPage = () => {
 
   return (
     <div className='mockup-page' style={{textAlign: 'center'}}>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
       <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
           {isLandscape ? (
@@ -885,8 +887,10 @@ const InventoryRecordsPage = () => {
 
           </div>
         </div>
-      </div>
+      </ScaleToFit>
+    </div>
   )
 }
 
 export {InventoryRecordsPage}
+
