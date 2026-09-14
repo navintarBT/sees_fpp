@@ -9,7 +9,7 @@ const WAREHOUSE_BY_ORDER: Record<string, string> = {
 }
 
 const ORIENTATION_KEY = 'inventoryRecordsOrientation'
-const TERMINAL_ID = 'ABCDEFGHIJKLMNOPQRST'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const InventoryRecordsHandInputPage = () => {
   const navigate = useNavigate()
@@ -73,7 +73,7 @@ const InventoryRecordsHandInputPage = () => {
                 <span className='set-header-title'>入庫実績登録手入力登録</span>
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
-              <div className='set-body-landscape'>
+              <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
@@ -105,7 +105,7 @@ const InventoryRecordsHandInputPage = () => {
                     </div>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>数量</label>
-                      <input style={{width: 635}} value={qty} onChange={(e) => setQty(e.target.value)} />
+                      <input style={{width: 635, textAlign: 'right'}} value={qty} onChange={(e) => setQty(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
@@ -142,7 +142,7 @@ const InventoryRecordsHandInputPage = () => {
 
                 <div />
 
-                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 20}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 40}}>
                   <button
                     className='set-btn set-btn-landscape set-success'
                     style={{width: 280}}

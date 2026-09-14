@@ -143,17 +143,24 @@ button:focus {
   padding: 20px 40px 34px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto auto;
-  gap: 14px;
+  gap: 26px;
   color: black;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
 }
 
+/* For pages with only 3 sections (form/table/footer, no printer row) —
+   avoids reserving a trailing empty 4th row + its gap, so the footer
+   sits flush at the bottom just like the 4-section page. */
+.set-body-landscape-3row {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
 .set-form-landscape {
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 25px;
   min-width: 0;
 }
 
@@ -250,6 +257,35 @@ button:focus {
 
 .inbound-table-landscape .tf-tableCell {
   padding: 0 8px;
+}
+
+/* Don't reserve a scrollbar gutter when the table doesn't need to scroll,
+   so the rightmost column sits flush against the table's border. */
+.inbound-table-landscape-wrap .tf-tableScroll {
+  scrollbar-gutter: auto;
+}
+
+/* Keep quantity values right-aligned; table headers use the shared centered alignment. */
+.inbound-table-landscape .tf-tableRow .col-instruct,
+.inbound-table-landscape .tf-tableRow .col-Load,
+.inbound-table-landscape .tf-tableRow .col-num,
+.inbound-table-landscape .tf-tableRow .col-rowNo {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* Align only the ロットシリアル header to the left in both inventory screens. */
+.inventory-table .tf-tableHead .col-lot,
+.woPartsIssuanceDetail-table .tf-tableHead .col-lot {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* Align ロットシリアル values to the left without affecting other columns. */
+.inventory-table .tf-tableRow .col-lot,
+.woPartsIssuanceDetail-table .tf-tableRow .col-lot {
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .inbound-table-landscape .col-detail {
@@ -760,7 +796,7 @@ button:focus {
 }
 
 .set-actionfooter-landscape-offset {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .set-btn:hover {
@@ -2484,4 +2520,10 @@ input[type='time'].wot-grid-value2 {
    placed at end of file to win the cascade at equal specificity. */
 .inbound-table-landscape .col-lot2 {
   min-width: 30px;
+}
+
+/* Overrides .woPartsIssuanceDetail-table .col-num { min-width: 200px } for landscape only —
+   placed at end of file to win the cascade at equal specificity. */
+.inbound-table-landscape .col-num {
+  min-width: 70px;
 }

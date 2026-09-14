@@ -84,7 +84,7 @@ const MOCK_DETAIL_MB: Record<number, {productName: string; itemNo: string; rows:
 }
 
 const ORIENTATION_KEY = 'inventoryRecordsOrientation'
-const TERMINAL_ID = 'ABCDEFGHIJKLMNOPQRST'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const InventoryRecordDetail = () => {
   const navigate = useNavigate()
@@ -175,7 +175,7 @@ const InventoryRecordDetail = () => {
                 <span className='set-header-title'>入庫実績登録読込データ参照</span>
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
-              <div className='set-body-landscape'>
+              <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape set-field-grow'>
@@ -192,15 +192,16 @@ const InventoryRecordDetail = () => {
                 <TableSection
                   columns={tableColumns}
                   rows={rows}
+                  className='inbound-table-landscape-wrap'
                   gridClassName='woPartsIssuanceDetail-table inbound-table-landscape'
-                  gridStyle={{gridTemplateColumns: '50px 50px minmax(140px, 1fr) minmax(90px, 0.8fr) minmax(120px, 1fr) minmax(150px, 1.2fr) minmax(160px, 1.2fr)'}}
+                  gridStyle={{gridTemplateColumns: '50px 50px minmax(140px, 1fr) minmax(70px, 0.5fr) minmax(140px, 1.3fr) minmax(150px, 1.2fr) minmax(160px, 1.2fr)'}}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}
                   activeRowKey={activeRowId}
                   onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
                 />
 
-                <div style={{display: 'flex', justifyContent: 'flex-start', gap: 50, marginTop: 20}}>
+                <div style={{display: 'flex', justifyContent: 'flex-start', gap: 50, marginTop: 40}}>
                   <button
                     className='set-btn set-btn-landscape set-danger'
                     style={{width: 280}}

@@ -4,7 +4,7 @@ import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 
-const TERMINAL_ID = 'ABCDEFGHIJKLMNOPQRST'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 const ORIENTATION_KEY = 'inventoryRecordsOrientation'
 
 type Row = {
@@ -67,14 +67,14 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
       {
         id: 3,
         error: 'E',
-        item: '1003',
-        lot: 'Lot003',
+        item: 'ITEM-NO-0000001',
+        lot: 'LOT-SERIAL-0001',
         lot2: '*',
-        inspection: '〇',
-        rowNo: '',
-        instruct: '15',
-        Load: '15',
-        productName: '品名003',
+        inspection: '全数検査',
+        rowNo: '123.456',
+        instruct: '12345',
+        Load: '12345',
+        productName: 'PRODUCT-NAME-01',
       },
     ],
   },
@@ -111,14 +111,14 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
       {
         id: 3,
         error: 'E',
-        item: '1003',
-        lot: 'Lot003',
+        item: 'ITEM-NO-0000001',
+        lot: 'LOT-SERIAL-0001',
         lot2: '*',
-        inspection: '○',
-        rowNo: '',
-        instruct: '15',
-        Load: '15',
-        productName: '品名003',
+        inspection: '全数検査',
+        rowNo: '123.456',
+        instruct: '12345',
+        Load: '12345',
+        productName: 'PRODUCT-NAME-01',
       },
     ],
   },
@@ -521,7 +521,7 @@ const InventoryRecordsPage = () => {
                       <label style={{width: 210, flexShrink: 0}}>数量</label>
                       <div style={{display: 'flex', alignItems: 'center', gap: 14, width: 370, flexShrink: 0}}>
                         <input
-                          style={{flex: 1, minWidth: 0}}
+                          style={{flex: 1, minWidth: 0, textAlign: 'right'}}
                           value={form.qty}
                           onChange={(e) => setForm({...form, qty: e.target.value})}
                           disabled={!isLoaded}
@@ -574,8 +574,9 @@ const InventoryRecordsPage = () => {
                   columns={landscapeTableColumns}
                   rows={rows}
                   scrollRef={tableScrollRef}
+                  className='inbound-table-landscape-wrap'
                   gridClassName='inventory-table inbound-table-landscape'
-                  gridStyle={{gridTemplateColumns: '90px 50px 50px minmax(110px, 1fr) minmax(150px, 1.2fr) 30px minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(160px, 1.4fr) 60px minmax(110px, 0.8fr)'}}
+                  gridStyle={{gridTemplateColumns: '90px 50px 50px minmax(110px, 1.13fr) minmax(110px, 1.13fr) 30px minmax(80px, 0.5fr) minmax(80px, 0.5fr) minmax(110px, 1.13fr) minmax(90px, 0.8fr) minmax(90px, 0.6fr)'}}
                   getRowKey={(row) => row.id}
                   activeRowKey={activeRowId}
                   onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
