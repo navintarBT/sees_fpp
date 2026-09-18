@@ -100,7 +100,7 @@ button:focus {
 
 }
 
-/* ################## Landscape (横画面) variant — currently used by 入庫実績登録 only ################## */
+/* ################## Landscape (横画面) variant — shared by 入庫実績登録 and other landscape-enabled screens ################## */
 
 .set-header-landscape {
   height: 100px;
@@ -269,7 +269,11 @@ button:focus {
 .inbound-table-landscape .tf-tableRow .col-instruct,
 .inbound-table-landscape .tf-tableRow .col-Load,
 .inbound-table-landscape .tf-tableRow .col-num,
-.inbound-table-landscape .tf-tableRow .col-rowNo {
+.inbound-table-landscape .tf-tableRow .col-rowNo,
+.inbound-table-landscape .tf-tableRow .col-quantity-equipment,
+.inbound-table-landscape .tf-tableRow .col-quantity,
+.inbound-table-landscape .tf-tableRow .col-NumOfConfig,
+.inbound-table-landscape .tf-tableRow .col-NumOfCancel {
   justify-content: flex-end;
   text-align: right;
 }
@@ -2516,7 +2520,8 @@ input[type='time'].wot-grid-value2 {
   left: auto;
 }
 
-/* Overrides .inventory-table .col-lot2 { min-width: 50px } for landscape only —
+/* Overrides .inventory-table .col-lot2 { min-width: 50px } and
+   .shipping-table .col-lot2 { min-width: 120px } for landscape only —
    placed at end of file to win the cascade at equal specificity. */
 .inbound-table-landscape .col-lot2 {
   min-width: 30px;

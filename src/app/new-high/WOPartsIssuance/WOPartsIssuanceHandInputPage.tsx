@@ -3,6 +3,11 @@ import {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation} from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'woPartsIssuanceOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
   id: number
@@ -141,6 +146,7 @@ const EMPTY_ROW: Row = {
 
 const WOPartsIssuanceHandInputPage = () => {
   const navigate = useNavigate()
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [rows, setRows] = useState<Row[]>([EMPTY_ROW])
   const [parentItem, setParentItem] = useState('')
   const [parentItemLocked, setParentItemLocked] = useState(false)
@@ -380,8 +386,79 @@ const WOPartsIssuanceHandInputPage = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>WO部品出庫 品番別</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>品番</label>
+                      <input
+                        ref={itemInputRef}
+                        autoFocus
+                        style={{width: 300}}
+                        value={parentItem}
+                        disabled={parentItemLocked}
+                        onChange={(e) => setParentItem(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            handleItemScan()
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>WO番号</label>
+                      <input style={{width: 300}} value={parentSerial} disabled />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>必要数</label>
+                      <input style={{width: 300, textAlign: 'right'}} value={moveStorage} disabled />
+                    </div>
+                  </div>
+                </div>
+
+                <TableSection
+                  columns={tableColumns}
+                  rows={rows}
+                  className='inbound-table-landscape-wrap'
+                  gridClassName='wOHandInputPage-table inbound-table-landscape'
+                  gridStyle={{gridTemplateColumns: '50px minmax(200px, 1.2fr) 130px minmax(160px, 1fr) minmax(160px, 1fr)'}}
+                  scrollRef={tableScrollRef}
+                  getRowKey={(row) => row.id}
+                  isRowActive={(rowKey) => selectedRowIds.includes(Number(rowKey))}
+                  onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
+                />
+
+                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                  <button className='set-btn set-btn-landscape set-success' style={{visibility: 'hidden'}}>
+                    出庫登録
+                  </button>
+                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowHandInputConfirm(true)}>
+                    出庫登録
+                  </button>
+                  <button className='set-btn set-btn-landscape set-success' style={{visibility: 'hidden'}}>
+                    出庫登録
+                  </button>
+                  <button className='set-btn set-btn-landscape set-hand-input-btn' onClick={handleDeleteClick}>
+                    削除
+                  </button>
+                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>
+                    戻る
+                  </button>
+                </ActionFooter>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>{'WO部品出庫 品番別'}</div>
           <div className='set-body'>
             <div className='set-form'>
@@ -465,6 +542,8 @@ const WOPartsIssuanceHandInputPage = () => {
 
             </ActionFooter>
           </div>
+            </>
+          )}
 
           {showHandInputConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
@@ -592,6 +671,7 @@ const WOPartsIssuanceHandInputPage = () => {
           )}
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

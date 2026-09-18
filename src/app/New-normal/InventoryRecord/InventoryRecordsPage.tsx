@@ -1,9 +1,10 @@
 ﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation} from '../../hooks/useOrientation'
 
 const TERMINAL_ID = 'ABCDEFGHIJ'
 const ORIENTATION_KEY = 'inventoryRecordsOrientation'
@@ -164,15 +165,7 @@ const MOCK_ITEM_NAMES: Record<string, string> = {
 
 const InventoryRecordsPage = () => {
   const navigate = useNavigate()
-  const location = useLocation()
-  const [isLandscape] = useState(() => {
-    const navOrientation = (location.state as {orientation?: 'portrait' | 'landscape'} | null)?.orientation
-    if (navOrientation) {
-      sessionStorage.setItem(ORIENTATION_KEY, navOrientation)
-      return navOrientation === 'landscape'
-    }
-    return sessionStorage.getItem(ORIENTATION_KEY) === 'landscape'
-  })
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [printerDest, setPrinterDest] = useState('')
   const [rows, setRows] = useState<Row[]>([EMPTY_ROW])
   const [isLoaded, setIsLoaded] = useState(false)

@@ -1,12 +1,18 @@
 ﻿import {useEffect, useRef, useState} from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation} from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'inventoryPrintingOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const InventoryPrinting = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const orderNo = (location.state as {orderNo?: string} | null)?.orderNo ?? ''
   const isMB = orderNo === 'MB-12345678123456'
+  const isLandscape = useOrientation(ORIENTATION_KEY)
 
   const [warehouse, setWarehouse] = useState('A倉庫')
   const [moveStorage, setMoveStorage] = useState('')
@@ -76,8 +82,83 @@ const InventoryPrinting = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>庫内バーコードラベル印刷</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 200, flexShrink: 0}}>庫内ラベル</label>
+                      <input
+                        ref={moveStorageRef}
+                        autoFocus
+                        style={{width: 400, ...(isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
+                        value={moveStorage}
+                        onChange={(e) => setMoveStorage(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleMoveStorageSubmit()}
+                        readOnly={isLabelLocked}
+                        className={isLabelLocked ? 'set-input-gray' : ''}
+                      />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 200, flexShrink: 0}}>品番</label>
+                      <input
+                        style={{width: 400, backgroundColor: '#d9d9d9'}}
+                        value={itemNo}
+                        onChange={(e) => setItemNo(e.target.value)}
+                        disabled
+                        className='set-input-gray'
+                      />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
+                      <input
+                        style={{width: 400, ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
+                        value={lot}
+                        onChange={(e) => setLot(e.target.value)}
+                        disabled={!isLabelLocked}
+                        className={!isLabelLocked ? 'set-input-gray' : ''}
+                      />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 200, flexShrink: 0}}>印刷枚数</label>
+                      <input
+                        style={{width: 400, textAlign: 'right', ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
+                        value={qty}
+                        onChange={(e) => setQty(e.target.value)}
+                        disabled={!isLabelLocked}
+                        className={!isLabelLocked ? 'set-input-gray' : ''}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div />
+
+                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 40}}>
+                  <button className='set-btn set-btn-landscape set-danger' style={{width: 280}} onClick={() => setShowDiscardConfirm(true)}>
+                    破棄
+                  </button>
+                  <button className='set-btn set-btn-landscape set-success' style={{width: 280}} onClick={() => setShowBackConfirm(true)}>
+                    戻る
+                  </button>
+                  <button className='set-btn set-btn-landscape set-warning' style={{width: 280}} onClick={handleRead}>
+                    実行
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>庫内バーコードラベル印刷</div>
           <div className='hand-body'>
             <div className='hand-row hand-row-inventory-printing'>
@@ -128,6 +209,9 @@ const InventoryPrinting = () => {
               <button className='set-btn set-success' style={{visibility: 'hidden'}}>解除</button>
               <button className='set-btn set-success' onClick={() => setShowBackConfirm(true)}>戻る</button>
             </ActionFooter>
+          </div>
+            </>
+          )}
 
             {showItemNoConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -273,9 +357,9 @@ const InventoryPrinting = () => {
                 </div>
               </div>
             )}
-          </div>
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

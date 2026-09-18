@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
+import { useOrientation, orientationState } from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'workOrderCompletionOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const WO_MOCKUP_DATA: Record<string, { planned: number; completed: number; defective: number }> = {
   'WO-001': { planned: 10, completed: 9, defective: 1 },
@@ -48,6 +53,7 @@ const clearPersistedState = () => {
 const WorkOrderCompletion = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
   const [persistedState] = useState(loadPersistedState)
   const [woNumber, setWoNumber] = useState(persistedState?.woNumber ?? '')
@@ -181,8 +187,118 @@ const WorkOrderCompletion = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>WO完了実績登録</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape set-field-grow'>
+                      <label style={{width: 150, flexShrink: 0}}>WO番号</label>
+                      <input
+                        autoFocus
+                        style={{width: 400}}
+                        value={woNumber}
+                        onChange={(e) => {
+                          setWoNumber(e.target.value)
+                          clearWoData()
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') loadWoData()
+                        }}
+                      />
+                      <button
+                        type='button'
+                        className='set-search-btn set-primary'
+                        style={{height: 50, fontSize: 25}}
+                        onClick={() => navigate('/factory/work-order-completion-select-wo', orientationState(isLandscape))}
+                      >
+                        WO検索
+                      </button>
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>WO計画数</label>
+                      <input disabled style={{width: 300, textAlign: 'right'}} value={plannedCount} />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>WO完了済数</label>
+                      <input
+                        disabled
+                        style={{width: 300, textAlign: 'right'}}
+                        value={woData ? String(toCountNumber(plannedCount) - toCountNumber(completedCount)) : ''}
+                      />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>WO完了数</label>
+                      <input
+                        ref={completedCountInputRef}
+                        disabled={!woData}
+                        style={{width: 300, textAlign: 'right'}}
+                        value={completedCount}
+                        onChange={(e) => setCompletedCount(e.target.value)}
+                      />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>WO仕損数</label>
+                      <input
+                        disabled={!woData}
+                        style={{width: 300, textAlign: 'right'}}
+                        value={defectiveCount}
+                        onChange={(e) => setDefectiveCount(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>製番</label>
+                      <input disabled readOnly style={{width: 300}} value='' />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>事業所</label>
+                      <input
+                        disabled={!woData}
+                        style={{width: 300}}
+                        value={officeCode}
+                        onChange={(e) => setOfficeCode(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>保管場所</label>
+                      <input
+                        disabled={!woData}
+                        style={{width: 300}}
+                        value={storageLocation}
+                        onChange={(e) => setStorageLocation(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div />
+
+                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
+                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
+                  <button type='button' className='set-btn set-btn-landscape set-success' onClick={handleRegisterClick}>登録</button>
+                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
+                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>戻る</button>
+                </ActionFooter>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header' style={{ textAlign: 'center' }}>WO完了実績登録</div>
           <div className='hand-body'>
             <div className='hand-form'>
@@ -202,7 +318,7 @@ const WorkOrderCompletion = () => {
                     }}
                     style={{ textAlign: 'center', width: '540px' }}
                   />
-                  <button type='button' className='set-btnnew_high set-primary' onClick={() => navigate("/factory/work-order-completion-select-wo")}>WO検索</button>
+                  <button type='button' className='set-btnnew_high set-primary' onClick={() => navigate("/factory/work-order-completion-select-wo", orientationState(isLandscape))}>WO検索</button>
                 </div>
               </div>
               <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
@@ -309,6 +425,9 @@ const WorkOrderCompletion = () => {
               <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
               <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>{'戻る'}</button>
             </ActionFooter>
+          </div>
+            </>
+          )}
 
             {showWoSelect && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -533,9 +652,9 @@ const WorkOrderCompletion = () => {
               </div>
             </div>
           )}
-          </div>
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

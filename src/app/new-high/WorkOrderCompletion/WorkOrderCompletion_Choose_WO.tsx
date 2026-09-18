@@ -6,6 +6,11 @@ import {
   TableSection,
   type TableColumn as TFTableColumn,
 } from '../../components/TableSection/TableSection'
+import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
+import { useOrientation, orientationState } from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'workOrderCompletionOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const WO_MOCKUP_DATA: Record<string, { completed: number; defective: number }> = {
   'WO-001': { completed: 9, defective: 1 },
@@ -52,6 +57,7 @@ const DETAIL_COLUMNS: Array<{ key: keyof Row; header: string }> = [
 
 const WorkOrderCompletion_Choose_WO = () => {
   const navigate = useNavigate()
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [selectedWoNumber, setSelectedWoNumber] = useState('')
   const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
   const rows: Row[] = Object.keys(WO_MOCKUP_DATA).map((woNumber, index) => {
@@ -77,7 +83,7 @@ const WorkOrderCompletion_Choose_WO = () => {
 
   const completeWoSelection = () => {
     navigate('/factory/work-order-completion', {
-      state: { selectedWoNumber },
+      state: { selectedWoNumber, orientation: isLandscape ? 'landscape' : 'portrait' },
     })
   }
 
@@ -102,8 +108,52 @@ const WorkOrderCompletion_Choose_WO = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>WO検索</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div />
+
+                <TableSection
+                  columns={tableColumns}
+                  rows={rows}
+                  className='inbound-table-landscape-wrap'
+                  gridClassName='delivery-table inbound-table-landscape'
+                  gridStyle={{gridTemplateColumns: '50px repeat(9, minmax(120px, 1fr))'}}
+                  getRowKey={(row) => row.id}
+                  activeRowKey={activeRowId}
+                  isRowActive={(_rowKey, row) => row.woNumber === selectedWoNumber}
+                  onRowActivate={(_rowKey, row) => selectWoNumber(row.woNumber)}
+                />
+
+                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
+                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
+                  <button
+                    className='set-btn set-btn-landscape set-primary'
+                    disabled={!selectedWoNumber}
+                    onClick={() => selectedWoNumber && setShowWoLoadConfirm(true)}
+                  >
+                    読込
+                  </button>
+                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
+                  <button
+                    className='set-btn set-btn-landscape set-warning'
+                    onClick={() => navigate('/factory/work-order-completion', orientationState(isLandscape))}
+                  >
+                    戻る
+                  </button>
+                </ActionFooter>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>WO検索</div>
           <div className='set-body'>
             <div className='set-form'>
@@ -131,11 +181,13 @@ const WorkOrderCompletion_Choose_WO = () => {
                 読込
               </button>
               <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
-              <button className='set-btn set-warning' onClick={() => navigate('/factory/work-order-completion')}>
+              <button className='set-btn set-warning' onClick={() => navigate('/factory/work-order-completion', orientationState(isLandscape))}>
                 戻る
               </button>
             </ActionFooter>
           </div>
+            </>
+          )}
 
           {showWoLoadConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
@@ -164,6 +216,7 @@ const WorkOrderCompletion_Choose_WO = () => {
           )}
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

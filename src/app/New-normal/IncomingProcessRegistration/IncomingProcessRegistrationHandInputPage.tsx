@@ -1,9 +1,15 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
+import { useOrientation, orientationState } from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'incomingProcessRegistrationOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const IncomingProcessRegistrationHandInputPage = () => {
     const navigate = useNavigate()
+    const isLandscape = useOrientation(ORIENTATION_KEY)
     const [showBackConfirm, setShowBackConfirm] = useState(false)
     const [showError, setShowError] = useState<{ message: string } | null>(null)
     const [showReadConfirm, setShowReadConfirm] = useState(false)
@@ -79,8 +85,122 @@ const IncomingProcessRegistrationHandInputPage = () => {
 
     return (
         <div className='mockup-page'>
-            <div className='mockup-stage mockup-stage-dark'>
+            <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+            <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
                 <div className='mockup-frame'>
+                    {isLandscape ? (
+                        <>
+                            <div className='set-header-landscape'>
+                                <span className='set-header-title'>入荷工程登録手入力</span>
+                                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+                            </div>
+                            <div className='set-body-landscape set-body-landscape-3row'>
+                                <div className='set-form-landscape'>
+                                    <div className='set-form-landscape-row'>
+                                        <div className='set-field-landscape'>
+                                            <label style={{width: 200, flexShrink: 0}}>品名</label>
+                                            <input
+                                                autoFocus
+                                                style={{width: 400}}
+                                                value={productName}
+                                                onChange={(e) => setProductName(e.target.value)}
+                                                className='set-input-gray'
+                                            />
+                                        </div>
+                                        <div className='set-field-landscape'>
+                                            <label style={{width: 200, flexShrink: 0}}>品番</label>
+                                            <input
+                                                style={{width: 400}}
+                                                value={productCode}
+                                                onChange={(e) => setProductCode(e.target.value)}
+                                                className='set-input-gray'
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='set-form-landscape-row'>
+                                        <div className='set-field-landscape'>
+                                            <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
+                                            <input
+                                                style={{width: 400}}
+                                                value={lotSerial}
+                                                onChange={(e) => setLotSerial(e.target.value)}
+                                                className='set-input-gray'
+                                            />
+                                        </div>
+                                        <div className='set-field-landscape'>
+                                            <label style={{width: 200, flexShrink: 0}}>入荷数量</label>
+                                            <input
+                                                style={{width: 400, textAlign: 'right'}}
+                                                value={receivingQuantity}
+                                                onChange={(e) => handleReceivingQuantityChange(e.target.value)}
+                                                type='number'
+                                                className='set-input-gray'
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='set-form-landscape-row'>
+                                        <div className='set-field-landscape'>
+                                            <label style={{width: 200, flexShrink: 0}}>良品数量</label>
+                                            <input
+                                                style={{width: 400, textAlign: 'right'}}
+                                                value={goodQuantity}
+                                                onChange={(e) => handleGoodQuantityChange(e.target.value)}
+                                                type='number'
+                                                className='set-input-gray'
+                                            />
+                                        </div>
+                                        <div className='set-field-landscape'>
+                                            <label style={{width: 200, flexShrink: 0}}>不良数量</label>
+                                            <input
+                                                style={{width: 400, textAlign: 'right'}}
+                                                value={defectQuantity}
+                                                onChange={(e) => handleDefectQuantityChange(e.target.value)}
+                                                type='number'
+                                                className='set-input-gray'
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='set-form-landscape-row'>
+                                        <div className='set-field-landscape'>
+                                            <label style={{width: 200, flexShrink: 0}}>不良理由</label>
+                                            <select
+                                                style={{width: 400}}
+                                                value={defectReason}
+                                                onChange={(e) => setDefectReason(e.target.value)}
+                                            >
+                                                <option value=''></option>
+                                                <option value='キズ'>キズ</option>
+                                                <option value='汚れ・異物付着'>汚れ・異物付着</option>
+                                                <option value='メッキ不良'>メッキ不良</option>
+                                                <option value='寸法不良'>寸法不良</option>
+                                                <option value='穴位置ズレ'>穴位置ズレ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div />
+
+                                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 40}}>
+                                    <button
+                                        className='set-btn set-btn-landscape set-success'
+                                        style={{width: 280}}
+                                        onClick={() => setShowBackConfirm(true)}
+                                    >
+                                        戻る
+                                    </button>
+                                    <button
+                                        className='set-btn set-btn-landscape set-primary'
+                                        style={{width: 280}}
+                                        onClick={handleComplete}
+                                    >
+                                        完了
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <>
                     <div className='set-header'>入荷工程登録</div>
                     <div className='set-body'>
                         <div className='set-form'>
@@ -192,6 +312,8 @@ const IncomingProcessRegistrationHandInputPage = () => {
                             </button>
                         </ActionFooter>
                     </div>
+                        </>
+                    )}
 
                     {showReadConfirm && (
                         <div className='set-modal-backdrop' role='presentation'>
@@ -227,7 +349,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                         className='set-modal-btn set-modal-yes'
                                         onClick={() => {
                                             setShowReadConfirm(true)
-                                            navigate('/factory/incoming-process-registration')
+                                            navigate('/factory/incoming-process-registration', orientationState(isLandscape))
                                         }}
                                     >
                                         YES
@@ -264,6 +386,7 @@ const IncomingProcessRegistrationHandInputPage = () => {
                     )}
                 </div>
             </div>
+            </ScaleToFit>
         </div>
     )
 }

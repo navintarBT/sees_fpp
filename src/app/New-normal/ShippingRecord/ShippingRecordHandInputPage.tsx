@@ -1,11 +1,17 @@
 import {useEffect, useRef, useState} from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation, orientationState} from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'shippingRecordOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const ShippingRecordHandInputPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const state = location.state as {moveWarehouse?: string; moveStorage?: string} | null
+  const isLandscape = useOrientation(ORIENTATION_KEY)
 
   const [warehouse, setWarehouse] = useState(state?.moveWarehouse ?? 'A倉庫')
   const [storage, setStorage] = useState(state?.moveStorage ?? '')
@@ -44,8 +50,76 @@ const ShippingRecordHandInputPage = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>出庫実績登録手入力</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 220, flexShrink: 0}}>倉庫／工場</label>
+                      <select autoFocus style={{width: 635}} value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
+                        <option value='A倉庫'>A倉庫</option>
+                        <option value='B倉庫'>B倉庫</option>
+                        <option value='C工場'>C工場</option>
+                        <option value='D工場'>D工場</option>
+                      </select>
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 220, flexShrink: 0}}>保管場所</label>
+                      <input style={{width: 635}} value={storage} onChange={(e) => setStorage(e.target.value)} />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 220, flexShrink: 0}}>数量</label>
+                      <input style={{width: 635, textAlign: 'right'}} value={qty} onChange={(e) => setQty(e.target.value)} />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 220, flexShrink: 0}}>品目No.</label>
+                      <input ref={itemNoRef} style={{width: 635}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 220, flexShrink: 0}}>ロットシリアル</label>
+                      <input style={{width: 635}} value={lotSerial} onChange={(e) => setLotSerial(e.target.value)} />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 220, flexShrink: 0}}>有効期限(yymm)</label>
+                      <input style={{width: 635}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
+                    </div>
+                  </div>
+                </div>
+
+                <div />
+
+                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 40}}>
+                  <button
+                    className='set-btn set-btn-landscape set-success'
+                    style={{width: 280}}
+                    onClick={() => setShowBackConfirm(true)}
+                  >
+                    戻る
+                  </button>
+                  <button
+                    className='set-btn set-btn-landscape set-primary'
+                    style={{width: 280}}
+                    onClick={handleRead}
+                  >
+                    読込
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>出庫実績登録手入力</div>
           <div className='hand-body'>
               <div className='hand-row'>
@@ -103,6 +177,9 @@ const ShippingRecordHandInputPage = () => {
                 戻る
               </button>
             </ActionFooter>
+          </div>
+            </>
+          )}
 
             {showItemNoConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -160,7 +237,7 @@ const ShippingRecordHandInputPage = () => {
                           'shipping-hand-input-result',
                           JSON.stringify({itemNo, lotSerial, qty, storage}),
                         )
-                        navigate('/factory/shipping-records')
+                        navigate('/factory/shipping-records', orientationState(isLandscape))
                       }}
                     >
                       はい
@@ -186,7 +263,7 @@ const ShippingRecordHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/shipping-records')
+                        navigate('/factory/shipping-records', orientationState(isLandscape))
                       }}
                     >
                       YES
@@ -201,9 +278,9 @@ const ShippingRecordHandInputPage = () => {
                 </div>
               </div>
             )}
-          </div>
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

@@ -3,6 +3,11 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 import { FaPlay, FaRegCalendarAlt, FaRegClock } from 'react-icons/fa'
+import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
+import { useOrientation } from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'workOrderTimeRegistrationOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 /* ============================================================================
  * WO作業時間実績登録（五泉工場・千葉工場 共通1画面）
@@ -351,6 +356,7 @@ const TimePickerDropdown = ({
 const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
   const navigate = useNavigate()
   const location = useLocation()
+  const isLandscape = useOrientation(ORIENTATION_KEY)
 
   const config = FACTORY_CONFIG[factory]
   const isGosen = factory === 'gosen'
@@ -1390,7 +1396,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
             onClick={() => {
               if (config.layoutOnly) return
               navigate('/factory/work-order-time-registration-choose', {
-                state: { targetPath: getFactoryPath(factory) },
+                state: { targetPath: getFactoryPath(factory), orientation: isLandscape ? 'landscape' : 'portrait' },
               })
             }}
           >
@@ -1403,8 +1409,249 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>WO作業時間実績登録</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>日付</label>
+                      <div className='hand-date-field-register' style={{width: 300}}>
+                        <input
+                          readOnly
+                          style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 22px', cursor: 'pointer'}}
+                          value={formatWoDate(woDatePickerValue)}
+                          onClick={openWoDatePicker}
+                        />
+                        <button type='button' className='hand-date-btn2' aria-label='Choose date' onClick={openWoDatePicker}>
+                          <FaRegCalendarAlt />
+                        </button>
+                        {showWoCalendar && (
+                          <div className='hand-calendar hand-calendar-gosen' role='dialog' aria-label='Choose date'>
+                            <div className='hand-calendar-header'>
+                              <button type='button' onClick={() => changeWoCalendarMonth(-1)}>{'<'}</button>
+                              <span>{calendarMonthLabel}</span>
+                              <button type='button' onClick={() => changeWoCalendarMonth(1)}>{'>'}</button>
+                            </div>
+                            <div className='hand-calendar-weekdays'>
+                              {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
+                                <span key={day}>{day}</span>
+                              ))}
+                            </div>
+                            <div className='hand-calendar-days'>
+                              {calendarDays.map(({ date, value, inMonth }) => (
+                                <button
+                                  type='button'
+                                  key={value}
+                                  className={[
+                                    'hand-calendar-day',
+                                    inMonth ? '' : 'hand-calendar-muted',
+                                    value === woDatePickerValue ? 'hand-calendar-selected' : '',
+                                  ].filter(Boolean).join(' ')}
+                                  onClick={() => selectWoDate(value)}
+                                >
+                                  {date.getDate()}
+                                </button>
+                              ))}
+                            </div>
+                            <div className='hand-calendar-footer'>
+                              <button type='button' className='hand-calendar-btn-today' onClick={() => selectWoDate(toDateValue(new Date()))}>今日</button>
+                              <button type='button' className='hand-calendar-btn-clear' onClick={() => selectWoDate('')}>クリア</button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>人</label>
+                      <input
+                        autoFocus
+                        style={{width: 220}}
+                        ref={parentJanCodeInputRef}
+                        value={workerCode}
+                        onChange={(e) => setWorkerCode(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
+                          }
+                        }}
+                      />
+                      <input style={{width: 220, backgroundColor: '#d9d9d9', outline: 'none'}} value={workerName} readOnly />
+                    </div>
+                  </div>
+
+                  {config.showWorkplace && (
+                    <div className='set-form-landscape-row'>
+                      <div className='set-field-landscape'>
+                        <label style={{width: 150, flexShrink: 0}}>作業場</label>
+                        <input
+                          style={{width: 220}}
+                          value={workplaceCode}
+                          onChange={(e) => setWorkplaceCode(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              setWorkplaceName(getWorkplaceNameFromCode(e.currentTarget.value))
+                            }
+                          }}
+                        />
+                        <input style={{width: 220, backgroundColor: '#d9d9d9', outline: 'none'}} readOnly value={workplaceName} />
+                      </div>
+                    </div>
+                  )}
+
+                  {config.showProcessDefaults && (
+                    <>
+                      <div className='set-form-landscape-row'>
+                        <div className='set-field-landscape'>
+                          <label style={{width: 150, flexShrink: 0}}>工程状況初期値</label>
+                          <input style={{width: 220}} value={defaultProcessStatus} onChange={(e) => setDefaultProcessStatus(e.target.value)} />
+                        </div>
+                        <div className='set-field-landscape'>
+                          <label style={{width: 150, flexShrink: 0}}>作業順序</label>
+                          <input style={{width: 220}} value={defaultOpOrder} onChange={(e) => setDefaultOpOrder(e.target.value)} />
+                        </div>
+                      </div>
+                      <div className='set-form-landscape-row'>
+                        <div className='set-field-landscape set-field-grow'>
+                          <label style={{width: 150, flexShrink: 0}}>備考</label>
+                          <input style={{width: 400}} value={defaultRemarks} onChange={(e) => setDefaultRemarks(e.target.value)} />
+                          <button type='button' className='set-search-btn set-primary' style={{height: 50, fontSize: 25}} onClick={applyRemarksToAllRows}>
+                            一括反映
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  <div className='set-form-landscape-row'>
+                    {registrationTypeGroup}
+                  </div>
+                </div>
+
+                <TableSection
+                  columns={tableColumns}
+                  rows={rows}
+                  className='inbound-table-landscape-wrap'
+                  gridClassName={`${config.gridClassName} inbound-table-landscape`}
+                  gridStyle={gridStyle}
+                  scrollRef={tableScrollRef}
+                  getRowKey={(row) => row.id}
+                  activeRowKey={activeRowId}
+                  isRowActive={(rowKey) => activeRowId === Number(rowKey)}
+                  onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
+                />
+
+                <div className='set-form-landscape-row' style={{flexWrap: 'wrap', rowGap: 20}}>
+                  {config.footerLayout !== 'gosen' && (
+                    <>
+                      <div className='set-field-landscape'>
+                        <label style={{width: 100, flexShrink: 0}}>開始</label>
+                        <div style={{position: 'relative'}}>
+                          <input
+                            style={{width: 150, height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px'}}
+                            type='text'
+                            maxLength={5}
+                            value={workStartTime}
+                            onChange={(e) => setWorkStartTime(e.target.value.replace(/[^0-9:]/g, ''))}
+                            onClick={() => setShowStartTimePicker(true)}
+                            placeholder='--:--'
+                          />
+                          <button type='button' className='hand-date-btn' aria-label='Choose time' onClick={() => setShowStartTimePicker(!showStartTimePicker)}>
+                            <FaRegClock />
+                          </button>
+                          {showStartTimePicker && (
+                            <TimePickerDropdown value={workStartTime} onChange={setWorkStartTime} onClose={() => setShowStartTimePicker(false)} />
+                          )}
+                        </div>
+                      </div>
+                      <div className='set-field-landscape'>
+                        <label style={{width: 100, flexShrink: 0}}>終了</label>
+                        <div style={{position: 'relative'}}>
+                          <input
+                            style={{width: 150, height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px'}}
+                            type='text'
+                            maxLength={5}
+                            value={workEndTime}
+                            onChange={(e) => setWorkEndTime(e.target.value.replace(/[^0-9:]/g, ''))}
+                            onClick={() => setShowEndTimePicker(true)}
+                            placeholder='--:--'
+                          />
+                          <button type='button' className='hand-date-btn' aria-label='Choose time' onClick={() => setShowEndTimePicker(!showEndTimePicker)}>
+                            <FaRegClock />
+                          </button>
+                          {showEndTimePicker && (
+                            <TimePickerDropdown value={workEndTime} onChange={setWorkEndTime} onClose={() => setShowEndTimePicker(false)} />
+                          )}
+                        </div>
+                      </div>
+                      {config.footerLayout === 'chiba' && (
+                        <div className='set-field-landscape'>
+                          <label style={{width: 100, flexShrink: 0}}>作業時間</label>
+                          <input style={{width: 100, textAlign: 'right'}} value={workDurationHours} readOnly />
+                          <span style={{fontSize: 25}}>時間</span>
+                          <input style={{width: 100, textAlign: 'right'}} value={workDurationMinutes} readOnly />
+                          <span style={{fontSize: 25}}>分</span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  {config.footerLayout !== 'chiba' && (
+                    <>
+                      <div className='set-field-landscape'>
+                        <label style={{width: 100, flexShrink: 0}}>作業時間</label>
+                        <input style={{width: 100, textAlign: 'right'}} />
+                        <span style={{fontSize: 25}}>時間</span>
+                        <input style={{width: 100, textAlign: 'right'}} />
+                        <span style={{fontSize: 25}}>分</span>
+                      </div>
+                      <div className='set-field-landscape'>
+                        <label style={{width: 150, flexShrink: 0}}>目標時間計</label>
+                        <input style={{width: 100, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}} value={totalTargetTimeDisplay.hours} readOnly />
+                        <span style={{fontSize: 25}}>時間</span>
+                        <input style={{width: 100, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}} value={totalTargetTimeDisplay.minutes} readOnly />
+                        <span style={{fontSize: 25}}>分</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                  <button className='set-btn set-btn-landscape set-danger set-delete-btn-size' onClick={handleDeleteSelected}>
+                    選択行削除
+                  </button>
+                  <button className='set-btn set-btn-landscape set-primary' onClick={handleRegister}>
+                    登録
+                  </button>
+                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>手入力</button>
+                  {config.showStartStopButton ? (
+                    <button
+                      className='set-btn set-btn-landscape set-hand-input-btn'
+                      onClick={config.layoutOnly ? undefined : handleWorkStartStop}
+                      disabled={workStartStopDisabled}
+                      style={{opacity: workStartStopDisabled ? 0.5 : 1, cursor: workStartStopDisabled ? 'not-allowed' : 'pointer'}}
+                    >
+                      {workStartStopState === 'idle' ? '作業開始' : '作業終了'}
+                    </button>
+                  ) : (
+                    <div />
+                  )}
+                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>
+                    戻る
+                  </button>
+                </ActionFooter>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>WO作業時間実績登録</div>
           <div className='set-body'>
             <div className='set-formnew_high '>
@@ -1751,6 +1998,8 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
               </button>
             </ActionFooter>
           </div>
+            </>
+          )}
 
           {/* ------------------------------ モーダル ------------------------------ */}
 
@@ -1887,6 +2136,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
           )}
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

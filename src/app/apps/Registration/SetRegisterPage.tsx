@@ -3,6 +3,11 @@ import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation, orientationState} from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'setRegisterOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
   id: number
@@ -160,6 +165,7 @@ const SESSION_KEY = 'setRegisterPageState'
 
 const SetRegisterPage = () => {
   const navigate = useNavigate()
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState(initialForm)
   const [showHandInputConfirm, setShowHandInputConfirm] = useState(false)
@@ -473,8 +479,168 @@ const SetRegisterPage = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>セット構成登録</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>倉庫（親）</label>
+                      <select
+                        autoFocus
+                        disabled={isParentConfirmed}
+                        ref={parentWarehouseRef}
+                        tabIndex={isParentConfirmed ? -1 : 1}
+                        style={{width: 400}}
+                        value={form.parentWarehouse}
+                        onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                      >
+                        <option value=''></option>
+                        <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0020</option>
+                        <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0021</option>
+                        <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
+                      </select>
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>{isParentConfirmed ? '品目No.(親)' : 'JANコード(親)'}</label>
+                      <input
+                        disabled={isParentConfirmed}
+                        ref={parentJanCodeInputRef}
+                        tabIndex={isParentConfirmed ? -1 : 2}
+                        style={{width: 400}}
+                        value={form.parentItemNo}
+                        onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            validateParentJanCode()
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>移動倉庫</label>
+                      <select
+                        disabled={!isParentConfirmed}
+                        tabIndex={isParentConfirmed ? 1 : -1}
+                        style={{width: 400}}
+                        value={form.moveWarehouse}
+                        onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
+                      >
+                        <option value=''></option>
+                        <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
+                        <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
+                        <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                      </select>
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>移動保管場所</label>
+                      <input
+                        disabled={!isParentConfirmed}
+                        tabIndex={isParentConfirmed ? 2 : -1}
+                        style={{width: 400}}
+                        value={form.moveStorage}
+                        onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>数量</label>
+                      <input
+                        disabled={!isParentConfirmed}
+                        tabIndex={-1}
+                        style={{width: 400, textAlign: 'right'}}
+                        value={form.qty}
+                        onChange={(e) => setForm({...form, qty: e.target.value})}
+                      />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>JANコード</label>
+                      <input
+                        disabled={!isParentConfirmed}
+                        ref={janCodeInputRef}
+                        tabIndex={isParentConfirmed ? 3 : -1}
+                        style={{width: 400}}
+                        value={form.janCode}
+                        onChange={(e) => setForm({...form, janCode: e.target.value})}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            validateJanCode()
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <TableSection
+                  columns={tableColumns}
+                  rows={rows}
+                  rowTabIndex={isParentConfirmed ? 4 : -1}
+                  className='inbound-table-landscape-wrap'
+                  gridClassName='set-register-table inbound-table-landscape'
+                  gridStyle={{
+                    gridTemplateColumns:
+                      '50px 50px minmax(120px, 0.9fr) minmax(140px, 1fr) minmax(110px, 0.8fr) 100px 100px minmax(120px, 0.9fr) minmax(140px, 1fr) minmax(150px, 1.1fr)',
+                  }}
+                  scrollRef={tableScrollRef}
+                  getRowKey={(row) => row.id}
+                  activeRowKey={activeRowId}
+                  onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
+                />
+
+                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                  <button
+                    tabIndex={isParentConfirmed ? 5 : 3}
+                    className='set-btn set-btn-landscape set-danger'
+                    onClick={() => setShowClearConfirm(true)}
+                  >
+                    破棄
+                  </button>
+                  <button
+                    tabIndex={isParentConfirmed ? 6 : 4}
+                    className='set-btn set-btn-landscape set-primary'
+                    onClick={() => setShowCompleteConfirm(true)}
+                  >
+                    完了
+                  </button>
+                  <button
+                    tabIndex={isParentConfirmed ? 7 : 5}
+                    className='set-btn set-btn-landscape set-success'
+                    onClick={() => handleReleaseClick()}
+                  >
+                    解除
+                  </button>
+                  <button
+                    tabIndex={-1}
+                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
+                    onClick={() => handleReleaseClick({forceHandInput: true})}
+                  >
+                    手入力
+                  </button>
+                  <button
+                    tabIndex={isParentConfirmed ? 8 : 6}
+                    className='set-btn set-btn-landscape set-warning'
+                    onClick={() => setShowBackConfirm(true)}
+                  >
+                    戻る
+                  </button>
+                </ActionFooter>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>セット構成登録</div>
           <div className='set-body'>
             <div className='set-form'>
@@ -612,6 +778,8 @@ const SetRegisterPage = () => {
               </button>
             </ActionFooter>
        </div>
+            </>
+          )}
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
                 <div className='set-modal' role='dialog' aria-modal='true'>
@@ -622,7 +790,7 @@ const SetRegisterPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/set-register/hand-input')
+                        navigate('/factory/set-register/hand-input', orientationState(isLandscape))
                       }}
                     >
                       YES
@@ -809,7 +977,8 @@ const SetRegisterPage = () => {
             )}
           </div>
         </div>
-      </div>
+      </ScaleToFit>
+    </div>
   )
 }
 

@@ -1,6 +1,11 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
+import { useOrientation, orientationState } from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'equipmentOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const YymmDatePicker = ({
   value,
@@ -162,6 +167,7 @@ const YymmDatePicker = ({
 
 const EquipmentHandInputPage = () => {
   const navigate = useNavigate()
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [parentWarehouse, setParentWarehouse] = useState('')
   const [parentItem, setParentItem] = useState('')
   const [parentSerial, setParentSerial] = useState('')
@@ -177,8 +183,132 @@ const EquipmentHandInputPage = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>備品振分手入力</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>FR倉庫</label>
+                      <select
+                        autoFocus
+                        style={{ width: 635 }}
+                        value={parentWarehouse}
+                        onChange={(e) => setParentWarehouse(e.target.value)}
+                      >
+                        <option value=''></option>
+                        <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
+                        <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
+                        <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
+                      </select>
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>TO倉庫</label>
+                      <select
+                        style={{ width: 635 }}
+                        value={parentItem}
+                        onChange={(e) => setParentItem(e.target.value)}
+                      >
+                        <option value=''></option>
+                        <option value='羽田製品補充倉庫：W0041'>羽田製品倉庫：AA001</option>
+                        <option value='羽田製品補充倉庫：W0042'>羽田製品倉庫：AA002</option>
+                        <option value='羽田製品補充倉庫：W0043'>羽田製品倉庫：AA003</option>
+                        <option value='羽田製品補充倉庫：W0044'>羽田製品倉庫：AA004</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>保管場所</label>
+                      <input style={{ width: 635 }} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>数量</label>
+                      <input style={{ width: 635, textAlign: 'right' }} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
+                      <input
+                        ref={itemNoInputRef}
+                        style={{ width: 635 }}
+                        value={moveStorage}
+                        onChange={(e) => setMoveStorage(e.target.value)}
+                      />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>ロットシリアル</label>
+                      <input
+                        style={{ width: 635 }}
+                        value={lotSerial}
+                        onChange={(e) => setLotSerial(e.target.value)}
+                        placeholder=' '
+                      />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>移動数</label>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
+                          <input
+                            type='radio'
+                            name='quantityRange-landscape'
+                            checked={quantityRange === 'from'}
+                            onChange={() => setQuantityRange('from')}
+                            style={{ width: 28, height: 28 }}
+                          />
+                          From
+                        </label>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
+                          <input
+                            type='radio'
+                            name='quantityRange-landscape'
+                            checked={quantityRange === 'to'}
+                            onChange={() => setQuantityRange('to')}
+                            style={{ width: 28, height: 28 }}
+                          />
+                          To
+                        </label>
+                      </div>
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>有効日付(yymm)</label>
+                      <input placeholder=' ' style={{ width: 635 }} />
+                    </div>
+                  </div>
+                </div>
+
+                <div />
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 40 }}>
+                  <button
+                    className='set-btn set-btn-landscape set-warning'
+                    style={{ width: 280 }}
+                    onClick={() => setShowBackConfirm(true)}
+                  >
+                    戻る
+                  </button>
+                  <button
+                    className='set-btn set-btn-landscape set-primary'
+                    style={{ width: 280 }}
+                    onClick={() => setShowReadConfirm(true)}
+                  >
+                    読込
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>備品振分手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
@@ -286,6 +416,9 @@ const EquipmentHandInputPage = () => {
                 {'\u623B\u308B'}
               </button>
             </ActionFooter>
+          </div>
+            </>
+          )}
 
             {showReadConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -329,7 +462,7 @@ const EquipmentHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/equipment')
+                        navigate('/factory/equipment', orientationState(isLandscape))
                       }}
                     >
                      YES
@@ -349,9 +482,9 @@ const EquipmentHandInputPage = () => {
                 </div>
               </div>
             )}
-          </div>
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

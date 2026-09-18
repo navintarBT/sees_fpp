@@ -1,9 +1,15 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
+import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
+import { useOrientation, orientationState } from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'miscellaneousInAndOutBoundOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const MiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [showReadConfirm, setShowReadConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
   const [quantity, setQuantity] = useState('1')
@@ -11,8 +17,93 @@ const MiscellaneousInAndOutBound = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>予定なし入出庫手入力</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>倉庫</label>
+                      <select autoFocus style={{ width: 635, appearance: 'auto' }}>
+                        <option value=''></option>
+                        <option value='倉庫A:W0040'>倉庫A:W0040</option>
+                        <option value='倉庫B:W0041'>倉庫B:W0041</option>
+                        <option value='倉庫C:W0042'>倉庫C:W0042</option>
+                      </select>
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>保管場所</label>
+                      <input style={{ width: 635 }} />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>引当数</label>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, width: 635 }}>
+                        <select style={{ width: 120, flexShrink: 0, appearance: 'auto', padding: '0 8px' }}>
+                          <option value='+'>+</option>
+                          <option value='-'>-</option>
+                        </select>
+                        <input
+                          value={quantity}
+                          type='number'
+                          style={{ flex: 1, minWidth: 0, textAlign: 'right' }}
+                          onChange={(e) => setQuantity(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
+                      <input style={{ width: 635 }} />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>ロット</label>
+                      <input style={{ width: 635 }} />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>シリアル</label>
+                      <input style={{ width: 635 }} />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{ width: 220, flexShrink: 0 }}>有効期限(yymm)</label>
+                      <input type='text' ref={dateRef} style={{ width: 635 }} />
+                    </div>
+                  </div>
+                </div>
+
+                <div />
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 40 }}>
+                  <button
+                    className='set-btn set-btn-landscape set-warning'
+                    style={{ width: 280 }}
+                    onClick={() => setShowBackConfirm(true)}
+                  >
+                    戻る
+                  </button>
+                  <button
+                    className='set-btn set-btn-landscape set-primary'
+                    style={{ width: 280 }}
+                    onClick={() => setShowReadConfirm(true)}
+                  >
+                    読込
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>予定なし入出庫手入力</div>
           <div className='hand-body'>
             <div className='hand-form'>
@@ -94,6 +185,9 @@ const MiscellaneousInAndOutBound = () => {
                 {'\u623B\u308B'}
               </button>
             </ActionFooter>
+          </div>
+            </>
+          )}
 
             {showReadConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -128,7 +222,7 @@ const MiscellaneousInAndOutBound = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/set-miscellaneous-in-and-out-bound')
+                        navigate('/factory/set-miscellaneous-in-and-out-bound', orientationState(isLandscape))
                       }}
                     >
                       YES
@@ -143,9 +237,9 @@ const MiscellaneousInAndOutBound = () => {
                 </div>
               </div>
             )}
-          </div>
         </div>
       </div>
+      </ScaleToFit>
     </div >
   )
 }

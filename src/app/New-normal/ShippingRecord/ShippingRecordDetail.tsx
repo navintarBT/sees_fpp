@@ -2,7 +2,12 @@ import {useEffect, useRef, useState} from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation, orientationState} from '../../hooks/useOrientation'
 import {FaPlay} from 'react-icons/fa'
+
+const ORIENTATION_KEY = 'shippingRecordOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
   id: number
@@ -25,6 +30,7 @@ const ShippingRecordDetail = () => {
     moveWarehouse?: string
   } | null
 
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [parentSerial] = useState(state?.name ?? '')
   const [parentItem] = useState(state?.item ?? '')
   const [rows, setRows] = useState<Row[]>([
@@ -90,8 +96,62 @@ const ShippingRecordDetail = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>出庫実績登録読込データ参照</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape set-field-grow'>
+                      <label style={{width: 200, flexShrink: 0}}>品名</label>
+                      <input value={parentSerial} className='set-input-gray' style={{textAlign: 'left'}} readOnly />
+                    </div>
+                    <div className='set-field-landscape set-field-grow'>
+                      <label style={{width: 200, flexShrink: 0}}>品目No.</label>
+                      <input value={parentItem} className='set-input-gray' style={{textAlign: 'left'}} readOnly />
+                    </div>
+                  </div>
+                </div>
+
+                <TableSection
+                  columns={tableColumns}
+                  rows={rows}
+                  className='inbound-table-landscape-wrap'
+                  gridClassName='woPartsIssuanceDetail-table inbound-table-landscape'
+                  gridStyle={{gridTemplateColumns: '50px 50px minmax(140px, 1fr) minmax(90px, 0.8fr) minmax(120px, 1fr) minmax(150px, 1.2fr)'}}
+                  scrollRef={tableScrollRef}
+                  getRowKey={(row) => row.id}
+                  activeRowKey={activeRowId}
+                  onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
+                />
+
+                <div style={{display: 'flex', justifyContent: 'flex-start', gap: 50, marginTop: 40}}>
+                  <button
+                    className='set-btn set-btn-landscape set-danger'
+                    onClick={() => {
+                      if (checkedRowIds.length === 0) {
+                        setShowNoSelectionConfirm(true)
+                      } else {
+                        setShowDeleteConfirm(true)
+                      }
+                    }}
+                  >
+                    削除
+                  </button>
+                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
+                    戻る
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>出庫実績登録読込データ参照</div>
           <div className='set-body'>
             <div className='set-form'>
@@ -135,6 +195,8 @@ const ShippingRecordDetail = () => {
               </button>
             </ActionFooter>
           </div>
+            </>
+          )}
 
           {showDeleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
@@ -177,7 +239,7 @@ const ShippingRecordDetail = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/shipping-records')
+                      navigate('/factory/shipping-records', orientationState(isLandscape))
                     }}
                   >
                     はい
@@ -191,6 +253,7 @@ const ShippingRecordDetail = () => {
           )}
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

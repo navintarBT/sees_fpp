@@ -6,6 +6,11 @@ import {
   TableSection,
   type TableColumn as TFTableColumn,
 } from "../../components/TableSection/TableSection";
+import { ScaleToFit } from "../../components/ScaleToFit/ScaleToFit";
+import { useOrientation } from "../../hooks/useOrientation";
+
+const ORIENTATION_KEY = "deliverySlipOrientation";
+const TERMINAL_ID = "ABCDEFGHIJ";
 
 type Row = {
   id: number;
@@ -100,6 +105,7 @@ const clearPersistedState = () => {
 
 const DeliverySlipRegistration = () => {
   const navigate = useNavigate();
+  const isLandscape = useOrientation(ORIENTATION_KEY);
 
   // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
   const [persistedState] = useState(loadPersistedState);
@@ -502,8 +508,136 @@ const DeliverySlipRegistration = () => {
 
   return (
     <div className="mockup-page">
-      <div className="mockup-stage mockup-stage-dark">
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? "mockup-stage mockup-stage-dark mockup-stage-landscape" : "mockup-stage mockup-stage-dark"}>
         <div className="mockup-frame">
+          {isLandscape ? (
+            <>
+              <div className="set-header-landscape">
+                <span className="set-header-title">配送伝票登録</span>
+                <span className="set-header-terminal-id">端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className="set-body-landscape set-body-landscape-3row">
+                <div className="set-form-landscape">
+                  <div className="set-form-landscape-row">
+                    <div className="set-field-landscape">
+                      <label style={{ width: 150, flexShrink: 0 }}>出荷No.</label>
+                      <input
+                        ref={parentItemNoInputRef}
+                        autoFocus
+                        style={{ width: 320 }}
+                        value={form.parentItemNo}
+                        maxLength={8}
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        disabled={showErrorConfirm}
+                        onChange={(e) => {
+                          const rawValue = e.target.value;
+                          if (/[^0-9]/.test(rawValue)) {
+                            setInputError(
+                              "parentItemNo",
+                              "",
+                              `出荷No.は半角数字を\n入力してください。`,
+                            );
+                            return;
+                          }
+                          setForm({ ...form, parentItemNo: rawValue });
+                          if (rawValue.trim() === "") {
+                            clearRows();
+                          }
+                        }}
+                        onKeyDown={handleParentItemNoKeyDown}
+                      />
+                    </div>
+                    <div className="set-field-landscape set-field-grow">
+                      <label style={{ width: 180, flexShrink: 0 }}>配送伝票No.</label>
+                      <input
+                        ref={deliverySlipNoInputRef}
+                        readOnly={!isEnabled}
+                        disabled={showErrorConfirm}
+                        value={form.deliverySlipNo}
+                        style={{ backgroundColor: isEnabled ? "white" : "rgb(229, 231, 235)" }}
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={30}
+                        onChange={(e) => {
+                          const rawValue = e.target.value;
+                          if (/[^0-9]/.test(rawValue)) {
+                            setInputError(
+                              "deliverySlipNo",
+                              "",
+                              "配送伝票No.は半角数字を入力してください。",
+                            );
+                            return;
+                          }
+                          setForm({ ...form, deliverySlipNo: rawValue });
+                        }}
+                        onKeyDown={async (e) => {
+                          if (e.key !== "Enter" || !isEnabled) {
+                            return;
+                          }
+                          const slipNo = form.deliverySlipNo.trim();
+                          if (!slipNo) {
+                            e.preventDefault();
+                            return;
+                          }
+                          e.preventDefault();
+                          await saveDeliverySlip(slipNo);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <TableSection
+                  columns={tableColumns}
+                  rows={rows}
+                  className="inbound-table-landscape-wrap"
+                  gridClassName="delivery-table inbound-table-landscape"
+                  gridStyle={{ gridTemplateColumns: "50px 160px minmax(400px, 1fr)" }}
+                  scrollRef={tableScrollRef}
+                  getRowKey={(row) => row.id}
+                  activeRowKey={activeRowId}
+                  isRowActive={(rowKey) => checkedRowIds.includes(Number(rowKey))}
+                  onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
+                />
+
+                <ActionFooter columns={4} gapX={50} className="set-actionfooter-landscape-offset">
+                  <button
+                    className="set-btn set-btn-landscape set-danger"
+                    onClick={() => setShowClearConfirm(true)}
+                  >
+                    破棄
+                  </button>
+                  <button
+                    className="set-btn set-btn-landscape set-primary"
+                    onClick={() => setShowCompleteRegistrationConfirm(true)}
+                  >
+                    完了
+                  </button>
+                  <button
+                    className="set-btn set-btn-landscape set-primary set-success"
+                    onClick={() => {
+                      if (checkedRowIds.length === 0) {
+                        setShowNoSelectionConfirm(true);
+                        return;
+                      }
+                      setShowDeleteRowConfirm(true);
+                    }}
+                  >
+                    削除
+                  </button>
+                  <button
+                    className="set-btn set-btn-landscape set-warning"
+                    onClick={() => setShowBackConfirm(true)}
+                  >
+                    戻る
+                  </button>
+                </ActionFooter>
+              </div>
+            </>
+          ) : (
+            <>
           <div className="set-header">配送伝票登録</div>
           <div className="set-body">
             <div className="set-form">
@@ -624,6 +758,8 @@ const DeliverySlipRegistration = () => {
               </button>
             </ActionFooter>
           </div>
+            </>
+          )}
           {showHandInputConfirm && (
             <div className="set-modal-backdrop" role="presentation">
               <div className="set-modal" role="dialog" aria-modal="true">
@@ -850,6 +986,7 @@ const DeliverySlipRegistration = () => {
           )}
         </div>
       </div>
+      </ScaleToFit>
     </div>
   );
 };

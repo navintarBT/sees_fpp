@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 const ButtonAccess = () => {
   const navigate = useNavigate()
   const factoryButtons = [
-    { label: 'WO別', path: '/factory/wo-parts-issuance', className: 'mockup-red' },
-    { label: '品番別', path: '/factory/wo-parts-issuance-hand-input', className: 'mockup-blue' },
+    { label: 'WO別', path: '/factory/wo-parts-issuance-choose', className: 'mockup-red' },
+    { label: '品番別', path: '/factory/wo-parts-issuance-hand-input-choose', className: 'mockup-blue' },
   ] as const
 
   return (

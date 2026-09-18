@@ -3,6 +3,11 @@ import {useLocation, useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
+import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation} from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'woPartsIssuanceOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
   id: number
@@ -247,6 +252,7 @@ const WOPartsIssuance = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const restoredState = (location.state as WOPartsIssuanceReturnState | null) ?? null
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [rows, setRows] = useState<Row[]>(restoredState?.rows?.length ? restoredState.rows : [EMPTY_ROW])
   const [form, setForm] = useState<FormState>(restoredState?.form ?? initialForm)
   const [showDetailConfirm, setShowDetailConfirm] = useState(false)
@@ -601,8 +607,136 @@ const WOPartsIssuance = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage mockup-stage-dark'>
+      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
         <div className='mockup-frame'>
+          {isLandscape ? (
+            <>
+              <div className='set-header-landscape'>
+                <span className='set-header-title'>WO部品出庫　WO別</span>
+                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+              </div>
+              <div className='set-body-landscape set-body-landscape-3row'>
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>WO番号</label>
+                      <input
+                        autoFocus
+                        style={{width: 300}}
+                        value={form.woNumber}
+                        disabled={isWoNumberLocked}
+                        onChange={(e) => setForm({...form, woNumber: e.target.value})}
+                      />
+                      <button
+                        className='set-search-btn set-success'
+                        style={{height: 50, fontSize: 25}}
+                        onClick={handleSearchWoNumber}
+                        disabled={isWoNumberLocked}
+                      >
+                        WO部品リスト表示
+                      </button>
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>庫内ラベル</label>
+                      <input
+                        ref={internalLabelInputRef}
+                        style={{width: 300}}
+                        disabled={isInternalLabelLocked}
+                        value={form.internalLabel}
+                        onChange={(e) => setForm({...form, internalLabel: e.target.value})}
+                        onKeyDown={handleInternalLabelEnter}
+                      />
+                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25}} onClick={handleDecide}>
+                        決定
+                      </button>
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>出庫数</label>
+                      <input
+                        ref={shipmentQtyInputRef}
+                        style={{width: 300, textAlign: 'right'}}
+                        disabled={isIssueDetailLocked}
+                        value={form.shipmentQty}
+                        onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
+                      />
+                    </div>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>保管場所</label>
+                      <input
+                        style={{width: 300}}
+                        disabled={isIssueDetailLocked}
+                        value={form.storage}
+                        onChange={(e) => setForm({...form, storage: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape'>
+                      <label style={{width: 150, flexShrink: 0}}>事業所</label>
+                      <input
+                        style={{width: 300}}
+                        disabled={isIssueDetailLocked}
+                        value={form.office}
+                        onChange={(e) => setForm({...form, office: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <TableSection
+                  columns={tableColumns}
+                  rows={rows}
+                  className='inbound-table-landscape-wrap'
+                  gridClassName='woPartsIssuance-table inbound-table-landscape'
+                  gridStyle={{
+                    gridTemplateColumns:
+                      '50px minmax(110px, 0.8fr) minmax(110px, 0.8fr) 90px minmax(120px, 0.9fr) minmax(110px, 0.8fr) 90px minmax(130px, 1fr)',
+                  }}
+                  scrollRef={tableScrollRef}
+                  getRowKey={(row) => row.id}
+                  activeRowKey={activeRowId}
+                  onRowActivate={(rowKey) => {
+                    const selectedRow = rows.find((row) => row.id === Number(rowKey))
+                    if (!selectedRow) return
+                    setActiveRowId((prev) => (prev === selectedRow.id ? null : selectedRow.id))
+                  }}
+                />
+
+                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                  <button className='set-btn set-btn-landscape set-primary set-success' style={{visibility: 'hidden'}}>
+                    決定
+                  </button>
+                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowRegistration(true)}>
+                    出庫登録
+                  </button>
+                  <button className='set-btn set-btn-landscape set-danger' style={{visibility: 'hidden'}}>
+                    出庫登録
+                  </button>
+                  <button
+                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
+                    onClick={() => {
+                      if (activeRowId == null) {
+                        setShowNoSelectionAlert(true)
+                        return
+                      }
+                      setShowDetailConfirm(true)
+                    }}
+                  >
+                    明細確認
+                  </button>
+                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>
+                    戻る
+                  </button>
+                </ActionFooter>
+              </div>
+            </>
+          ) : (
+            <>
           <div className='set-header'>WO部品出庫　WO別</div>
           <div className='set-body'>
             <div className='set-form'>
@@ -731,6 +865,8 @@ const WOPartsIssuance = () => {
               </button>
             </ActionFooter>
           </div>
+            </>
+          )}
 
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -861,6 +997,7 @@ const WOPartsIssuance = () => {
                             ...selectedRowPayload,
                             returnState,
                             detailRows: activeRowId != null ? (detailHistory[activeRowId] ?? []) : [],
+                            orientation: isLandscape ? 'landscape' : 'portrait',
                           },
                         })
                       }}
@@ -915,7 +1052,8 @@ const WOPartsIssuance = () => {
             )}
           </div>
         </div>
-      </div>
+      </ScaleToFit>
+    </div>
   )
 }
 

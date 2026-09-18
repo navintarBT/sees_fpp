@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation, orientationState} from '../../hooks/useOrientation'
 
 const WAREHOUSE_BY_ORDER: Record<string, string> = {
   '12345678': 'A倉庫',
@@ -18,13 +19,7 @@ const InventoryRecordsHandInputPage = () => {
   const state = location.state as {orderNo?: string; orientation?: 'portrait' | 'landscape'} | null
   const orderNo = state?.orderNo ?? ''
   const isMB = orderNo === 'MB-12345678123456'
-  const [isLandscape] = useState(() => {
-    if (state?.orientation) {
-      sessionStorage.setItem(ORIENTATION_KEY, state.orientation)
-      return state.orientation === 'landscape'
-    }
-    return sessionStorage.getItem(ORIENTATION_KEY) === 'landscape'
-  })
+  const isLandscape = useOrientation(ORIENTATION_KEY)
 
   const defaultWarehouse = WAREHOUSE_BY_ORDER[orderNo] ?? 'A倉庫'
 
@@ -288,7 +283,7 @@ const InventoryRecordsHandInputPage = () => {
                           'inventory-hand-input-result',
                           JSON.stringify({itemNo, lot, qty}),
                         )
-                        navigate('/factory/inventory-records', {state: {orientation: isLandscape ? 'landscape' : 'portrait'}})
+                        navigate('/factory/inventory-records', orientationState(isLandscape))
                       }}
                     >
                       YES
@@ -311,7 +306,7 @@ const InventoryRecordsHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/inventory-records', {state: {orientation: isLandscape ? 'landscape' : 'portrait'}})
+                        navigate('/factory/inventory-records', orientationState(isLandscape))
                       }}
                     >
                       YES
