@@ -6,6 +6,11 @@ import {
     TableSection,
     type TableColumn as TFTableColumn,
 } from '../../components/TableSection/TableSection'
+import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
+import { useOrientation, orientationState } from '../../hooks/useOrientation'
+
+const ORIENTATION_KEY = 'workOrderTimeRegistrationOrientation'
+const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const DEFAULT_TARGET_PATH = '/factory/work-order-time-registration/gosen'
 
@@ -76,6 +81,7 @@ const readStoredSelection = (targetPath: string): string[] => {
 const WorkOrderTimeRegistrationChoose = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const isLandscape = useOrientation(ORIENTATION_KEY)
     const locationState = location.state as { selectedWoNumbers?: string[]; targetPath?: string } | null
     const targetPath = locationState?.targetPath ?? DEFAULT_TARGET_PATH
     const rows = targetPath === '/factory/work-order-time-registration/chiba' ? CHIBA_ROWS : GOSEN_ROWS
@@ -107,7 +113,7 @@ const WorkOrderTimeRegistrationChoose = () => {
         setShowLoadConfirm(false)
         const selectedRows = rows.filter((row) => selectedWoNumbers.includes(row.woNumber))
         navigate(targetPath, {
-            state: { selectedWoNumbers, selectedRows },
+            state: { selectedWoNumbers, selectedRows, orientation: isLandscape ? 'landscape' : 'portrait' },
         })
     }
 
@@ -154,8 +160,46 @@ const WorkOrderTimeRegistrationChoose = () => {
 
     return (
         <div className='mockup-page'>
-            <div className='mockup-stage mockup-stage-dark'>
+            <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
+            <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
                 <div className='mockup-frame'>
+                    {isLandscape ? (
+                        <>
+                            <div className='set-header-landscape'>
+                                <span className='set-header-title'>WO検索</span>
+                                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+                            </div>
+                            <div className='set-body-landscape set-body-landscape-3row'>
+                                <div />
+
+                                <TableSection
+                                    columns={tableColumns}
+                                    rows={rows}
+                                    className='inbound-table-landscape-wrap'
+                                    gridClassName='work-order-choose-table inbound-table-landscape'
+                                    getRowKey={(row) => row.id}
+                                    isRowActive={(_rowKey, row) => isSelectedWoNumber(row.woNumber)}
+                                    onRowActivate={(_rowKey, row) => toggleWoSelection(row)}
+                                />
+
+                                <ActionFooter columns={4} gapX={50} className='set-actionfooter-landscape-offset'>
+                                    <button className='set-btn set-btn-landscape set-primary' style={{ visibility: 'hidden' }}>読込</button>
+                                    <button
+                                        className='set-btn set-btn-landscape set-primary'
+                                        disabled={selectedWoNumbers.length === 0}
+                                        onClick={handleLoad}
+                                    >
+                                        読込
+                                    </button>
+                                    <button className='set-btn set-btn-landscape set-primary' style={{ visibility: 'hidden' }}>読込</button>
+                                    <button className='set-btn set-btn-landscape set-warning' onClick={() => navigate(targetPath, orientationState(isLandscape))}>
+                                        戻る
+                                    </button>
+                                </ActionFooter>
+                            </div>
+                        </>
+                    ) : (
+                        <>
                     <div className='set-header'>WO検索</div>
                     <div className='set-body'>
                         <TableSection
@@ -185,36 +229,39 @@ const WorkOrderTimeRegistrationChoose = () => {
                                 戻る
                             </button>
                         </ActionFooter>
+                    </div>
+                        </>
+                    )}
 
-                        {showLoadConfirm && (
-                            <div className='set-modal-backdrop' role='presentation'>
-                                <div className='set-modal' role='dialog' aria-modal='true'>
-                                    <div className='set-modal-header'>確認</div>
-                                    <div className='set-modal-body'>
-                                        選択したWO番号で読込を完了しますか？
-                                    </div>
-                                    <div className='set-modal-actions'>
-                                        <button
-                                            type='button'
-                                            className='set-modal-btn set-modal-yes'
-                                            onClick={confirmLoad}
-                                        >
-                                            はい
-                                        </button>
-                                        <button
-                                            type='button'
-                                            className='set-modal-btn set-modal-no'
-                                            onClick={() => setShowLoadConfirm(false)}
-                                        >
-                                            いいえ
-                                        </button>
-                                    </div>
+                    {showLoadConfirm && (
+                        <div className='set-modal-backdrop' role='presentation'>
+                            <div className='set-modal' role='dialog' aria-modal='true'>
+                                <div className='set-modal-header'>確認</div>
+                                <div className='set-modal-body'>
+                                    選択したWO番号で読込を完了しますか？
+                                </div>
+                                <div className='set-modal-actions'>
+                                    <button
+                                        type='button'
+                                        className='set-modal-btn set-modal-yes'
+                                        onClick={confirmLoad}
+                                    >
+                                        はい
+                                    </button>
+                                    <button
+                                        type='button'
+                                        className='set-modal-btn set-modal-no'
+                                        onClick={() => setShowLoadConfirm(false)}
+                                    >
+                                        いいえ
+                                    </button>
                                 </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
             </div>
+            </ScaleToFit>
         </div>
     )
 }

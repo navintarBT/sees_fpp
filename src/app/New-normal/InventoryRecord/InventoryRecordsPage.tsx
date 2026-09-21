@@ -1,9 +1,10 @@
 ﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation} from '../../hooks/useOrientation'
 
 const TERMINAL_ID = 'ABCDEFGHIJ'
 const ORIENTATION_KEY = 'inventoryRecordsOrientation'
@@ -164,15 +165,7 @@ const MOCK_ITEM_NAMES: Record<string, string> = {
 
 const InventoryRecordsPage = () => {
   const navigate = useNavigate()
-  const location = useLocation()
-  const [isLandscape] = useState(() => {
-    const navOrientation = (location.state as {orientation?: 'portrait' | 'landscape'} | null)?.orientation
-    if (navOrientation) {
-      sessionStorage.setItem(ORIENTATION_KEY, navOrientation)
-      return navOrientation === 'landscape'
-    }
-    return sessionStorage.getItem(ORIENTATION_KEY) === 'landscape'
-  })
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [printerDest, setPrinterDest] = useState('')
   const [rows, setRows] = useState<Row[]>([EMPTY_ROW])
   const [isLoaded, setIsLoaded] = useState(false)
@@ -462,11 +455,11 @@ const InventoryRecordsPage = () => {
               <div className='set-body-landscape'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>出荷No.／発注No.</label>
                       <input
                         ref={parentItemNoRef}
-                        style={{width: 370}}
+                        style={{flex: 1, minWidth: 0}}
                         value={form.parentItemNo}
                         disabled={isLoaded}
                         onChange={(e) => {
@@ -482,10 +475,10 @@ const InventoryRecordsPage = () => {
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>倉庫</label>
                       <select
-                        style={{width: 370}}
+                        style={{flex: 1, minWidth: 0}}
                         value={form.parentWarehouse}
                         onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                         disabled={!isLoaded}
@@ -496,19 +489,19 @@ const InventoryRecordsPage = () => {
                         <option value='D事業所'>D事業所</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 270, flexShrink: 0}}>保管場所</label>
                       <input
-                        style={{width: 286}}
+                        style={{flex: 1, minWidth: 0}}
                         value={form.moveStorage}
                         onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                         disabled={!isLoaded}
                       />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 185, flexShrink: 0}}>ロット状況</label>
                       <select
-                        style={{width: 286}}
+                        style={{flex: 1, minWidth: 0}}
                         value={form.moveWarehouse}
                         onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                         disabled
@@ -519,9 +512,9 @@ const InventoryRecordsPage = () => {
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>数量</label>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 14, width: 370, flexShrink: 0}}>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 14, flex: 1, minWidth: 0}}>
                         <input
                           style={{flex: 1, minWidth: 0, textAlign: 'right'}}
                           value={form.qty}
@@ -538,17 +531,17 @@ const InventoryRecordsPage = () => {
                           className='set-search-btn set-success'
                           disabled={!isLoaded}
                           onClick={handleReflect}
-                          style={!isLoaded ? {background: '#d9d9d9', color: '#666'} : undefined}
+                          style={!isLoaded ? {background: '#d9d9d9', color: '#666', flexShrink: 0} : {flexShrink: 0}}
                         >
                           反映
                         </button>
                       </div>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 270, flexShrink: 0}}>JANコード／品目コード</label>
                       <input
                         ref={janCodeRef}
-                        style={{width: 286}}
+                        style={{flex: 1, minWidth: 0}}
                         value={form.janCode}
                         onChange={(e) => setForm({...form, janCode: e.target.value})}
                         disabled={!isLoaded || janCodeDisabled}
@@ -560,10 +553,10 @@ const InventoryRecordsPage = () => {
                         }}
                       />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 185, flexShrink: 0}}>移動元（移動先）</label>
                       <input
-                        style={{width: 286}}
+                        style={{flex: 1, minWidth: 0}}
                         value={form.source}
                         onChange={(e) => setForm({...form, source: e.target.value})}
                         disabled

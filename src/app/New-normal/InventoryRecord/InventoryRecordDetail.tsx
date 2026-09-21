@@ -3,6 +3,7 @@ import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation, orientationState} from '../../hooks/useOrientation'
 import {FaPlay} from 'react-icons/fa'
 
 type Row = {
@@ -93,13 +94,7 @@ const InventoryRecordDetail = () => {
   const state = location.state as {activeRowId?: number; orderNo?: string; orientation?: 'portrait' | 'landscape'} | null
   const selectedRowId: number = state?.activeRowId ?? 1
   const orderNo: string = state?.orderNo ?? ''
-  const [isLandscape] = useState(() => {
-    if (state?.orientation) {
-      sessionStorage.setItem(ORIENTATION_KEY, state.orientation)
-      return state.orientation === 'landscape'
-    }
-    return sessionStorage.getItem(ORIENTATION_KEY) === 'landscape'
-  })
+  const isLandscape = useOrientation(ORIENTATION_KEY)
   const detailMap =
     orderNo === 'OT-12345678' ? MOCK_DETAIL_OT :
     orderNo === '12345678MB123456' ? MOCK_DETAIL_MB :
@@ -317,7 +312,7 @@ const InventoryRecordDetail = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/inventory-records', {state: {orientation: isLandscape ? 'landscape' : 'portrait'}})
+                      navigate('/factory/inventory-records', orientationState(isLandscape))
                     }}
                   >
                     YES

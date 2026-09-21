@@ -7,12 +7,12 @@ const Warehouse = () => {
   const warehouseButtons = [
     // { label: '出庫', path: '/factory/dispatch', className: 'mockup-red' },
     // { label: '入庫', path: '/factory/inbound', className: 'mockup-blue' },
-    { label: '配送伝票登録', path: '/factory/delivery-slip-registration', className: 'mockup-green' },
-    { label: 'セット戻り構成登録', path: '/factory/set-return-configuration', className: 'mockup-yellow' },
-    { label: 'セット構成登録', path: '/factory/set-register', className: 'mockup-gray' },
-    { label: '予定なし入出庫', path: '/factory/set-miscellaneous-in-and-out-bound', className: 'mockup-gray' },
-    { label: '備品振分登録', path: '/factory/equipment', className: 'mockup-orange' },
-    { label: '販売セット登録', path: '/factory/bundle-page', className: 'mockup-pink' },
+    { label: '配送伝票登録', path: '/factory/delivery-slip-registration-choose', className: 'mockup-green' },
+    { label: 'セット戻り構成登録', path: '/factory/set-return-configuration-choose', className: 'mockup-yellow' },
+    { label: 'セット構成登録', path: '/factory/set-register-choose', className: 'mockup-gray' },
+    { label: '予定なし入出庫', path: '/factory/set-miscellaneous-in-and-out-bound-choose', className: 'mockup-gray' },
+    { label: '備品振分登録', path: '/factory/equipment-choose', className: 'mockup-orange' },
+    { label: '販売セット登録', path: '/factory/bundle-page-choose', className: 'mockup-pink' },
   ] as const
 
   return (

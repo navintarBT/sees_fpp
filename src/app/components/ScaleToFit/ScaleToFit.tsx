@@ -21,31 +21,35 @@ type FitState = {
   scrollFallback: boolean
 }
 
+const computeFit = (designWidth: number, designHeight: number): FitState => {
+  const rawX = Math.min(1, window.innerWidth / designWidth)
+  const rawY = Math.min(1, window.innerHeight / designHeight)
+  const minScale = Math.min(rawX, rawY)
+  const maxScale = Math.max(rawX, rawY)
+  const mismatch = maxScale === 0 ? 1 : minScale / maxScale
+
+  if (minScale < SCALE_FLOOR) {
+    return {scaleX: SCALE_FLOOR, scaleY: SCALE_FLOOR, scrollFallback: true}
+  }
+  if (mismatch >= FILL_MISMATCH_THRESHOLD) {
+    return {scaleX: rawX, scaleY: rawY, scrollFallback: false}
+  }
+  return {scaleX: minScale, scaleY: minScale, scrollFallback: false}
+}
+
 const ScaleToFit = ({active, designWidth, designHeight, children}: ScaleToFitProps) => {
-  const [fit, setFit] = useState<FitState>({scaleX: 1, scaleY: 1, scrollFallback: false})
+  // Lazy-initialized so the very first paint already uses the correct scale —
+  // avoids a flash of full-size (scale=1) content snapping down a frame later.
+  const [fit, setFit] = useState<FitState>(() =>
+    active ? computeFit(designWidth, designHeight) : {scaleX: 1, scaleY: 1, scrollFallback: false},
+  )
 
   useEffect(() => {
     if (!active) return
 
-    const compute = () => {
-      const rawX = Math.min(1, window.innerWidth / designWidth)
-      const rawY = Math.min(1, window.innerHeight / designHeight)
-      const minScale = Math.min(rawX, rawY)
-      const maxScale = Math.max(rawX, rawY)
-      const mismatch = maxScale === 0 ? 1 : minScale / maxScale
-
-      if (minScale < SCALE_FLOOR) {
-        setFit({scaleX: SCALE_FLOOR, scaleY: SCALE_FLOOR, scrollFallback: true})
-      } else if (mismatch >= FILL_MISMATCH_THRESHOLD) {
-        setFit({scaleX: rawX, scaleY: rawY, scrollFallback: false})
-      } else {
-        setFit({scaleX: minScale, scaleY: minScale, scrollFallback: false})
-      }
-    }
-
-    compute()
-    window.addEventListener('resize', compute)
-    return () => window.removeEventListener('resize', compute)
+    const onResize = () => setFit(computeFit(designWidth, designHeight))
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
   }, [active, designWidth, designHeight])
 
   if (!active) return <>{children}</>

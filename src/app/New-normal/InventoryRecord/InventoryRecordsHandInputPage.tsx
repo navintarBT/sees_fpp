@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
+import {useOrientation, orientationState} from '../../hooks/useOrientation'
 
 const WAREHOUSE_BY_ORDER: Record<string, string> = {
   '12345678': 'A倉庫',
@@ -18,13 +19,7 @@ const InventoryRecordsHandInputPage = () => {
   const state = location.state as {orderNo?: string; orientation?: 'portrait' | 'landscape'} | null
   const orderNo = state?.orderNo ?? ''
   const isMB = orderNo === 'MB-12345678123456'
-  const [isLandscape] = useState(() => {
-    if (state?.orientation) {
-      sessionStorage.setItem(ORIENTATION_KEY, state.orientation)
-      return state.orientation === 'landscape'
-    }
-    return sessionStorage.getItem(ORIENTATION_KEY) === 'landscape'
-  })
+  const isLandscape = useOrientation(ORIENTATION_KEY)
 
   const defaultWarehouse = WAREHOUSE_BY_ORDER[orderNo] ?? 'A倉庫'
 
@@ -78,47 +73,47 @@ const InventoryRecordsHandInputPage = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>倉庫</label>
-                      <select style={{width: 635}} value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
+                      <select style={{flex: 1, minWidth: 0}} value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
                         <option value='A倉庫'>A倉庫</option>
                         <option value='B倉庫'>B倉庫</option>
                         <option value='C事業所'>C事業所</option>
                         <option value='D事業所'>D事業所</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>保管場所</label>
                       <input
                         ref={moveStorageRef}
-                        style={{width: 635}}
+                        style={{flex: 1, minWidth: 0}}
                         value={moveStorage}
                         onChange={(e) => setMoveStorage(e.target.value)}
                       />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>ロット状況</label>
-                      <select style={{width: 635}} disabled>
+                      <select style={{flex: 1, minWidth: 0}} disabled>
                         <option value=''></option>
                         <option value='検査中'>検査中</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>数量</label>
-                      <input style={{width: 635, textAlign: 'right'}} value={qty} onChange={(e) => setQty(e.target.value)} />
+                      <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={qty} onChange={(e) => setQty(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>品目No.</label>
-                      <input style={{width: 635}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
+                      <input style={{flex: 1, minWidth: 0}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>ロット</label>
                       <input
-                        style={{width: 635}}
+                        style={{flex: 1, minWidth: 0}}
                         value={lot}
                         onChange={(e) => setLot(e.target.value)}
                         disabled={isMB}
@@ -126,18 +121,18 @@ const InventoryRecordsHandInputPage = () => {
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>シリアル</label>
                       <input
-                        style={{width: 635}}
+                        style={{flex: 1, minWidth: 0}}
                         value={serial}
                         onChange={(e) => setSerial(e.target.value)}
                         disabled={isMB}
                       />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>有効期限（yymm）</label>
-                      <input style={{width: 635}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
+                      <input style={{flex: 1, minWidth: 0}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
                     </div>
                   </div>
                 </div>
@@ -288,7 +283,7 @@ const InventoryRecordsHandInputPage = () => {
                           'inventory-hand-input-result',
                           JSON.stringify({itemNo, lot, qty}),
                         )
-                        navigate('/factory/inventory-records', {state: {orientation: isLandscape ? 'landscape' : 'portrait'}})
+                        navigate('/factory/inventory-records', orientationState(isLandscape))
                       }}
                     >
                       YES
@@ -311,7 +306,7 @@ const InventoryRecordsHandInputPage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowBackConfirm(false)
-                        navigate('/factory/inventory-records', {state: {orientation: isLandscape ? 'landscape' : 'portrait'}})
+                        navigate('/factory/inventory-records', orientationState(isLandscape))
                       }}
                     >
                       YES

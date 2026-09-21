@@ -5,13 +5,13 @@ const Factory = () => {
   const navigate = useNavigate()
   const factoryButtons = [
     { label: '入庫実績登録', path: '/factory/inventory-records-choose', className: 'mockup-red' },
-    { label: '入荷工程登録', path: '/factory/incoming-process-registration', className: 'mockup-blue' },
-    { label: '棚移動', path: '/factory/shelf-transfer', className: 'mockup-green' },
+    { label: '入荷工程登録', path: '/factory/incoming-process-registration-choose', className: 'mockup-blue' },
+    { label: '棚移動', path: '/factory/shelf-transfer-choose', className: 'mockup-green' },
     { label: 'WO部品払出', path: '/factory/button-access', className: 'mockup-yellow' },
     { label: 'WO作業時間実績登録', path: '/factory/button-work-order-time', className: 'mockup-gray' },
-    { label: 'WO完了実績登録', path: '/factory/work-order-completion', className: 'mockup-orange' },
-    { label: '出庫実績登録', path: '/factory/shipping-records', className: 'mockup-pink' },
-    { label: '庫内バーコード\nラベル印刷', path: '/factory/inventory-label-printing', className: 'mockup-pink' },
+    { label: 'WO完了実績登録', path: '/factory/work-order-completion-choose', className: 'mockup-orange' },
+    { label: '出庫実績登録', path: '/factory/shipping-records-choose', className: 'mockup-pink' },
+    { label: '庫内バーコード\nラベル印刷', path: '/factory/inventory-label-printing-choose', className: 'mockup-pink' },
   ] as const
 
   return (
