@@ -1,4 +1,4 @@
-﻿import {useEffect, useRef, useState, type ReactNode} from 'react'
+import {useEffect, useRef, useState, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
@@ -703,8 +703,7 @@ const SetRegisterPage = () => {
               <div className='set-row'>
                 <label>数量</label>
                 <input
-                 
-                 disabled={!isParentConfirmed}
+                  disabled={!isParentConfirmed}
                   tabIndex={-1}
                   value={form.qty}
                   onChange={(e) => setForm({...form, qty: e.target.value})}

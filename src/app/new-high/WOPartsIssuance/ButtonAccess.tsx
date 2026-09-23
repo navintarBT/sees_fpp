@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
 
 const ButtonAccess = () => {
   const navigate = useNavigate()
@@ -9,11 +10,12 @@ const ButtonAccess = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage'>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-landscape'>
         <div className='mockup-frame'>
           <div className='mockup-header'>WO部品払出</div>
-          <div className='mockup-body'>
-            <div className='mockup-grid'>
+          <div className='mockup-body-landscape'>
+            <div className='mockup-grid-landscape' style={{gridTemplateColumns: 'repeat(2, 1fr)'}}>
               {factoryButtons.map((btn) => (
                 <button key={btn.label} className={`mockup-btn ${btn.className}`} onClick={() => navigate(btn.path)}>
                   {btn.label}
@@ -26,6 +28,7 @@ const ButtonAccess = () => {
           </div>
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

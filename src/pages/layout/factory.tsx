@@ -1,5 +1,6 @@
 ﻿import { useNavigate } from 'react-router-dom'
 import { GroupSelector } from './GroupSelector'
+import { ScaleToFit } from '../../app/components/ScaleToFit/ScaleToFit'
 
 const Factory = () => {
   const navigate = useNavigate()
@@ -16,10 +17,11 @@ const Factory = () => {
 
   return (
     <div className='mockup-page'>
-      <div className='mockup-stage'>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-landscape'>
         <div className='mockup-frame'>
           <div className='mockup-header'>メインメニュー</div>
-          <div className='mockup-body'>
+          <div className='mockup-body-landscape'>
             <GroupSelector
               value='factory'
               onChange={(value) => {
@@ -27,7 +29,7 @@ const Factory = () => {
               }}
             />
 
-            <div className='mockup-grid'>
+            <div className='mockup-grid-landscape'>
               {factoryButtons.map((btn) => (
                 <button
                   key={btn.label}
@@ -45,6 +47,7 @@ const Factory = () => {
           </div>
         </div>
       </div>
+      </ScaleToFit>
     </div>
   )
 }

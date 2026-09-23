@@ -133,6 +133,35 @@
   transform: translateY(35px);
 }
 
+/* BODY (landscape) */
+
+.mockup-body-landscape{
+  height:calc(1200px - 150px);
+  padding:40px 100px 34px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  gap:40px;
+}
+
+/* Match the bottom offset used by the set-body-landscape footer row
+   (34px, e.g. 破棄/戻る/実行 on InventoryPrinting.tsx). margin-top:auto still
+   pushes only this button to the bottom — it doesn't re-center the grid
+   above it, since flex-start already packs the earlier items at the top. */
+.mockup-body-landscape .mockup-exit{
+  margin-top:auto;
+  transform:none;
+}
+
+/* GRID (landscape) */
+
+.mockup-grid-landscape{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:200px;
+  gap:40px 60px;
+}
+
 /* BUTTON */
 
 .mockup-btn{
