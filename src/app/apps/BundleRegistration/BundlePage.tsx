@@ -466,7 +466,7 @@ const BundlePage = () => {
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>FR倉庫</label>
+                      <label style={{width: 210, flexShrink: 0}}>FR倉庫</label>
                       <select
                         autoFocus
                         style={{flex: 1, minWidth: 0}}
@@ -480,7 +480,7 @@ const BundlePage = () => {
                       </select>
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>TO倉庫</label>
+                      <label style={{width: 210, flexShrink: 0}}>TO倉庫</label>
                       <select
                         style={{flex: 1, minWidth: 0}}
                         value={form.moveWarehouse}
@@ -492,28 +492,26 @@ const BundlePage = () => {
                         <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
                       </select>
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>保管場所</label>
+                      <label style={{width: 210, flexShrink: 0}}>保管場所</label>
                       <input
                         style={{flex: 1, minWidth: 0}}
                         value={form.parentItemNo}
                         onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                       />
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>数量</label>
+                      <label style={{width: 210, flexShrink: 0}}>数量</label>
                       <input
                         style={{flex: 1, minWidth: 0, textAlign: 'right'}}
                         value={form.qty}
                         onChange={(e) => setForm({...form, qty: e.target.value})}
                       />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>移動数</label>
+                      <label style={{width: 210, flexShrink: 0}}>移動数</label>
                       <div style={{display: 'flex', alignItems: 'center', gap: 40}}>
                         <label style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap'}}>
                           <input
@@ -538,7 +536,7 @@ const BundlePage = () => {
                       </div>
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>JANコード</label>
+                      <label style={{width: 210, flexShrink: 0}}>JANコード</label>
                       <input
                         ref={janCodeInputRef}
                         style={{flex: 1, minWidth: 0}}
@@ -556,13 +554,14 @@ const BundlePage = () => {
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>理由</label>
+                      <label style={{width: 210, flexShrink: 0}}>理由</label>
                       <input
                         style={{flex: 1, minWidth: 0}}
                         value={form.moveStorage}
                         onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                       />
                     </div>
+                    <div style={{flex: '1 1 0', minWidth: 0}} />
                     <div style={{flex: '1 1 0', minWidth: 0}} />
                   </div>
                 </div>

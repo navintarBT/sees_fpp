@@ -473,6 +473,8 @@ const InventoryRecordsPage = () => {
                         }}
                       />
                     </div>
+                    <div style={{flex: '1 1 0', minWidth: 0}} />
+                    <div style={{flex: '1 1 0', minWidth: 0}} />
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>

@@ -199,11 +199,11 @@ const WorkOrderCompletion = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape set-field-grow'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 150, flexShrink: 0}}>WO番号</label>
                       <input
                         autoFocus
-                        style={{width: 400}}
+                        style={{flex: 1, minWidth: 0}}
                         value={woNumber}
                         onChange={(e) => {
                           setWoNumber(e.target.value)
@@ -216,19 +216,19 @@ const WorkOrderCompletion = () => {
                       <button
                         type='button'
                         className='set-search-btn set-primary'
-                        style={{height: 50, fontSize: 25}}
+                        style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}}
                         onClick={() => navigate('/factory/work-order-completion-select-wo', orientationState(isLandscape))}
                       >
                         WO検索
                       </button>
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 150, flexShrink: 0}}>WO計画数</label>
                       <input disabled style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={plannedCount} />
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 150, flexShrink: 0}}>WO完了済数</label>
                       <input
                         disabled
@@ -236,9 +236,7 @@ const WorkOrderCompletion = () => {
                         value={woData ? String(toCountNumber(plannedCount) - toCountNumber(completedCount)) : ''}
                       />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 150, flexShrink: 0}}>WO完了数</label>
                       <input
                         ref={completedCountInputRef}
@@ -248,7 +246,9 @@ const WorkOrderCompletion = () => {
                         onChange={(e) => setCompletedCount(e.target.value)}
                       />
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 150, flexShrink: 0}}>WO仕損数</label>
                       <input
                         disabled={!woData}
@@ -257,13 +257,13 @@ const WorkOrderCompletion = () => {
                         onChange={(e) => setDefectiveCount(e.target.value)}
                       />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 150, flexShrink: 0}}>製番</label>
                       <input disabled readOnly style={{flex: 1, minWidth: 0}} value='' />
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 150, flexShrink: 0}}>事業所</label>
                       <input
                         disabled={!woData}
@@ -272,9 +272,7 @@ const WorkOrderCompletion = () => {
                         onChange={(e) => setOfficeCode(e.target.value)}
                       />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 150, flexShrink: 0}}>保管場所</label>
                       <input
                         disabled={!woData}
@@ -283,7 +281,6 @@ const WorkOrderCompletion = () => {
                         onChange={(e) => setStorageLocation(e.target.value)}
                       />
                     </div>
-                    <div style={{flex: '1 1 0', minWidth: 0}} />
                   </div>
                 </div>
 

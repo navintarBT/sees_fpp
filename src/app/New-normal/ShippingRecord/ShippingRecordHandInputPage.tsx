@@ -100,7 +100,7 @@ const ShippingRecordHandInputPage = () => {
 
                 <div />
 
-                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 40}}>
+                <div style={{display: 'flex', justifyContent: 'flex-start', gap: 30, marginTop: 40}}>
                   <button
                     className='set-btn set-btn-landscape set-success'
                     style={{width: 280}}
@@ -163,19 +163,19 @@ const ShippingRecordHandInputPage = () => {
               >
                 破棄
               </button>
-              <button className='set-btn set-primary' onClick={handleRead}>読込</button>
-              <button
-                className='set-btn set-success'
-                style={{ visibility: 'hidden' }}
-              >
-                解除
-              </button>
               <button
                 className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
               </button>
+              <button
+                className='set-btn set-success'
+                style={{ visibility: 'hidden' }}
+              >
+                解除
+              </button>
+              <button className='set-btn set-primary' onClick={handleRead}>読込</button>
             </ActionFooter>
           </div>
             </>

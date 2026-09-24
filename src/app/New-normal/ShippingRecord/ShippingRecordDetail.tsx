@@ -132,6 +132,9 @@ const ShippingRecordDetail = () => {
                 />
 
                 <div style={{display: 'flex', justifyContent: 'flex-start', gap: 50, marginTop: 40}}>
+                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
+                    戻る
+                  </button>
                   <button
                     className='set-btn set-btn-landscape set-danger'
                     onClick={() => {
@@ -143,9 +146,6 @@ const ShippingRecordDetail = () => {
                     }}
                   >
                     削除
-                  </button>
-                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
-                    戻る
                   </button>
                 </div>
               </div>
@@ -176,6 +176,11 @@ const ShippingRecordDetail = () => {
             />
 
             <ActionFooter columns={4}>
+              <button className='set-btn set-success' onClick={() => setShowBackConfirm(true)}>
+                戻る
+              </button>
+              <button className='set-btn set-primary' style={{visibility: 'hidden'}}></button>
+              <button className='set-btn set-primary' style={{visibility: 'hidden'}}></button>
               <button
                 className='set-btn set-danger'
                 onClick={() => {
@@ -187,11 +192,6 @@ const ShippingRecordDetail = () => {
                 }}
               >
                 削除
-              </button>
-              <button className='set-btn set-primary' style={{visibility: 'hidden'}}></button>
-              <button className='set-btn set-primary' style={{visibility: 'hidden'}}></button>
-              <button className='set-btn set-success' onClick={() => setShowBackConfirm(true)}>
-                戻る
               </button>
             </ActionFooter>
           </div>

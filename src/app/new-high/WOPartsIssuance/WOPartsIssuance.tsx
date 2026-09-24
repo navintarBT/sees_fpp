@@ -619,8 +619,8 @@ const WOPartsIssuance = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO番号</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>WO番号</label>
                       <input
                         autoFocus
                         style={{flex: 1, minWidth: 0}}
@@ -630,17 +630,15 @@ const WOPartsIssuance = () => {
                       />
                       <button
                         className='set-search-btn set-success'
-                        style={{height: 50, fontSize: 25, flexShrink: 0}}
+                        style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}}
                         onClick={handleSearchWoNumber}
                         disabled={isWoNumberLocked}
                       >
                         WO部品リスト表示
                       </button>
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>庫内ラベル</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>庫内ラベル</label>
                       <input
                         ref={internalLabelInputRef}
                         style={{flex: 1, minWidth: 0}}
@@ -649,14 +647,12 @@ const WOPartsIssuance = () => {
                         onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                         onKeyDown={handleInternalLabelEnter}
                       />
-                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0}} onClick={handleDecide}>
+                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}} onClick={handleDecide}>
                         決定
                       </button>
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>出庫数</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>出庫数</label>
                       <input
                         ref={shipmentQtyInputRef}
                         style={{flex: 1, minWidth: 0, textAlign: 'right'}}
@@ -665,8 +661,10 @@ const WOPartsIssuance = () => {
                         onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
                       />
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>保管場所</label>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>保管場所</label>
                       <input
                         style={{flex: 1, minWidth: 0}}
                         disabled={isIssueDetailLocked}
@@ -674,10 +672,8 @@ const WOPartsIssuance = () => {
                         onChange={(e) => setForm({...form, storage: e.target.value})}
                       />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>事業所</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>事業所</label>
                       <input
                         style={{flex: 1, minWidth: 0}}
                         disabled={isIssueDetailLocked}
