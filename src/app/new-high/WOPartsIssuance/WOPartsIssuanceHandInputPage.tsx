@@ -398,12 +398,12 @@ const WOPartsIssuanceHandInputPage = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>品番</label>
                       <input
                         ref={itemInputRef}
                         autoFocus
-                        style={{width: 300}}
+                        style={{flex: 1, minWidth: 0}}
                         value={parentItem}
                         disabled={parentItemLocked}
                         onChange={(e) => setParentItem(e.target.value)}
@@ -415,13 +415,13 @@ const WOPartsIssuanceHandInputPage = () => {
                         }}
                       />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>WO番号</label>
-                      <input style={{width: 300}} value={parentSerial} disabled />
+                      <input style={{flex: 1, minWidth: 0}} value={parentSerial} disabled />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>必要数</label>
-                      <input style={{width: 300, textAlign: 'right'}} value={moveStorage} disabled />
+                      <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={moveStorage} disabled />
                     </div>
                   </div>
                 </div>

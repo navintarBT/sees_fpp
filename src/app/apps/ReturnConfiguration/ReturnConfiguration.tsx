@@ -42,21 +42,21 @@ const ReturnConfiguration = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>品目No.(親)</label>
-                      <input autoFocus style={{ width: 635 }} />
+                      <input autoFocus style={{ flex: 1, minWidth: 0 }} />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>シリアル(親)</label>
-                      <input style={{ width: 635 }} />
+                      <input style={{ flex: 1, minWidth: 0 }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>数量</label>
-                      <input type='number' style={{ width: 635, textAlign: 'right' }} onChange={(e) => setQuantity(e.target.value)} />
+                      <input type='number' style={{ flex: 1, minWidth: 0, textAlign: 'right' }} onChange={(e) => setQuantity(e.target.value)} />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>状態</label>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                         <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
@@ -83,19 +83,19 @@ const ReturnConfiguration = () => {
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
-                      <input style={{ width: 635, backgroundColor: '#fff', color: '#000' }} />
+                      <input style={{ flex: 1, minWidth: 0, backgroundColor: '#fff', color: '#000' }} />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>ロット</label>
-                      <input style={{ width: 635, backgroundColor: '#fff', color: '#000' }} />
+                      <input style={{ flex: 1, minWidth: 0, backgroundColor: '#fff', color: '#000' }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>シリアル</label>
-                      <input style={{ width: 635, backgroundColor: '#fff', color: '#000' }} />
+                      <input style={{ flex: 1, minWidth: 0, backgroundColor: '#fff', color: '#000' }} />
                     </div>
                   </div>
                 </div>

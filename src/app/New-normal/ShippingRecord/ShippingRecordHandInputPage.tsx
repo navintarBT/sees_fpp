@@ -62,45 +62,45 @@ const ShippingRecordHandInputPage = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>倉庫／工場</label>
-                      <select autoFocus style={{width: 635}} value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
+                      <select autoFocus style={{flex: 1, minWidth: 0}} value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
                         <option value='A倉庫'>A倉庫</option>
                         <option value='B倉庫'>B倉庫</option>
                         <option value='C工場'>C工場</option>
                         <option value='D工場'>D工場</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>保管場所</label>
-                      <input style={{width: 635}} value={storage} onChange={(e) => setStorage(e.target.value)} />
+                      <input style={{flex: 1, minWidth: 0}} value={storage} onChange={(e) => setStorage(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>数量</label>
-                      <input style={{width: 635, textAlign: 'right'}} value={qty} onChange={(e) => setQty(e.target.value)} />
+                      <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={qty} onChange={(e) => setQty(e.target.value)} />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>品目No.</label>
-                      <input ref={itemNoRef} style={{width: 635}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
+                      <input ref={itemNoRef} style={{flex: 1, minWidth: 0}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>ロットシリアル</label>
-                      <input style={{width: 635}} value={lotSerial} onChange={(e) => setLotSerial(e.target.value)} />
+                      <input style={{flex: 1, minWidth: 0}} value={lotSerial} onChange={(e) => setLotSerial(e.target.value)} />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>有効期限(yymm)</label>
-                      <input style={{width: 635}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
+                      <input style={{flex: 1, minWidth: 0}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
                     </div>
                   </div>
                 </div>
 
                 <div />
 
-                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 40}}>
+                <div style={{display: 'flex', justifyContent: 'flex-start', gap: 30, marginTop: 40}}>
                   <button
                     className='set-btn set-btn-landscape set-success'
                     style={{width: 280}}
@@ -163,19 +163,19 @@ const ShippingRecordHandInputPage = () => {
               >
                 破棄
               </button>
-              <button className='set-btn set-primary' onClick={handleRead}>読込</button>
-              <button
-                className='set-btn set-success'
-                style={{ visibility: 'hidden' }}
-              >
-                解除
-              </button>
               <button
                 className='set-btn set-success'
                 onClick={() => setShowBackConfirm(true)}
               >
                 戻る
               </button>
+              <button
+                className='set-btn set-success'
+                style={{ visibility: 'hidden' }}
+              >
+                解除
+              </button>
+              <button className='set-btn set-primary' onClick={handleRead}>読込</button>
             </ActionFooter>
           </div>
             </>

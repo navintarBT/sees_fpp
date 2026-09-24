@@ -352,17 +352,17 @@ const WOPartsIssuanceDetail = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>WO番号</label>
-                      <input value={parentSerial} className='set-input-gray' style={{width: 300}} readOnly />
+                      <input value={parentSerial} className='set-input-gray' style={{flex: 1, minWidth: 0}} readOnly />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>品番</label>
-                      <input value={parentItem} className='set-input-gray' style={{width: 300}} readOnly />
+                      <input value={parentItem} className='set-input-gray' style={{flex: 1, minWidth: 0}} readOnly />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>必要数</label>
-                      <input value={moveStorage} className='set-input-gray' style={{width: 300, textAlign: 'right'}} readOnly />
+                      <input value={moveStorage} className='set-input-gray' style={{flex: 1, minWidth: 0, textAlign: 'right'}} readOnly />
                     </div>
                   </div>
                 </div>

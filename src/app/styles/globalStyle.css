@@ -1723,7 +1723,7 @@ input[type='time'].wot-grid-value2 {
 }
 
 .wot-radio-title {
-  font-size: 33px;
+  font-size: 38px;
   color: #343a40;
 }
 
@@ -1731,7 +1731,7 @@ input[type='time'].wot-grid-value2 {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 33px;
+  font-size: 38px;
   cursor: pointer;
   color: #495057;
 }

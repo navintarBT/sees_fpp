@@ -97,20 +97,20 @@ const IncomingProcessRegistrationHandInputPage = () => {
                             <div className='set-body-landscape set-body-landscape-3row'>
                                 <div className='set-form-landscape'>
                                     <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>品名</label>
                                             <input
                                                 autoFocus
-                                                style={{width: 400}}
+                                                style={{flex: 1, minWidth: 0}}
                                                 value={productName}
                                                 onChange={(e) => setProductName(e.target.value)}
                                                 className='set-input-gray'
                                             />
                                         </div>
-                                        <div className='set-field-landscape'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>品番</label>
                                             <input
-                                                style={{width: 400}}
+                                                style={{flex: 1, minWidth: 0}}
                                                 value={productCode}
                                                 onChange={(e) => setProductCode(e.target.value)}
                                                 className='set-input-gray'
@@ -118,19 +118,19 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                         </div>
                                     </div>
                                     <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
                                             <input
-                                                style={{width: 400}}
+                                                style={{flex: 1, minWidth: 0}}
                                                 value={lotSerial}
                                                 onChange={(e) => setLotSerial(e.target.value)}
                                                 className='set-input-gray'
                                             />
                                         </div>
-                                        <div className='set-field-landscape'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>入荷数量</label>
                                             <input
-                                                style={{width: 400, textAlign: 'right'}}
+                                                style={{flex: 1, minWidth: 0, textAlign: 'right'}}
                                                 value={receivingQuantity}
                                                 onChange={(e) => handleReceivingQuantityChange(e.target.value)}
                                                 type='number'
@@ -139,20 +139,20 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                         </div>
                                     </div>
                                     <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>良品数量</label>
                                             <input
-                                                style={{width: 400, textAlign: 'right'}}
+                                                style={{flex: 1, minWidth: 0, textAlign: 'right'}}
                                                 value={goodQuantity}
                                                 onChange={(e) => handleGoodQuantityChange(e.target.value)}
                                                 type='number'
                                                 className='set-input-gray'
                                             />
                                         </div>
-                                        <div className='set-field-landscape'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>不良数量</label>
                                             <input
-                                                style={{width: 400, textAlign: 'right'}}
+                                                style={{flex: 1, minWidth: 0, textAlign: 'right'}}
                                                 value={defectQuantity}
                                                 onChange={(e) => handleDefectQuantityChange(e.target.value)}
                                                 type='number'
@@ -161,10 +161,10 @@ const IncomingProcessRegistrationHandInputPage = () => {
                                         </div>
                                     </div>
                                     <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>不良理由</label>
                                             <select
-                                                style={{width: 400}}
+                                                style={{flex: 1, minWidth: 0}}
                                                 value={defectReason}
                                                 onChange={(e) => setDefectReason(e.target.value)}
                                             >

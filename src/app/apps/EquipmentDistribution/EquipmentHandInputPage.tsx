@@ -257,7 +257,7 @@ const EquipmentHandInputPage = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{ width: 220, flexShrink: 0 }}>移動数</label>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 40, width: 635 }}>
                         <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
                           <input
                             type='radio'

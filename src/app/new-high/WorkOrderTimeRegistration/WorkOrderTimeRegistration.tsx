@@ -1421,9 +1421,9 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
               <div className='set-body-landscape'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>日付</label>
-                      <div className='hand-date-field-register' style={{width: 300}}>
+                      <div className='hand-date-field-register' style={{flex: 1, minWidth: 0}}>
                         <input
                           readOnly
                           style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 22px', cursor: 'pointer'}}
@@ -1469,11 +1469,11 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                         )}
                       </div>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>人</label>
                       <input
                         autoFocus
-                        style={{width: 220}}
+                        style={{flex: 1, minWidth: 0}}
                         ref={parentJanCodeInputRef}
                         value={workerCode}
                         onChange={(e) => setWorkerCode(e.target.value)}
@@ -1484,16 +1484,16 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                           }
                         }}
                       />
-                      <input style={{width: 220, backgroundColor: '#d9d9d9', outline: 'none'}} value={workerName} readOnly />
+                      <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value={workerName} readOnly />
                     </div>
                   </div>
 
                   {config.showWorkplace && (
                     <div className='set-form-landscape-row'>
-                      <div className='set-field-landscape'>
+                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                         <label style={{width: 150, flexShrink: 0}}>作業場</label>
                         <input
-                          style={{width: 220}}
+                          style={{flex: 1, minWidth: 0}}
                           value={workplaceCode}
                           onChange={(e) => setWorkplaceCode(e.target.value)}
                           onKeyDown={(e) => {
@@ -1503,7 +1503,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                             }
                           }}
                         />
-                        <input style={{width: 220, backgroundColor: '#d9d9d9', outline: 'none'}} readOnly value={workplaceName} />
+                        <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} readOnly value={workplaceName} />
                       </div>
                     </div>
                   )}
@@ -1511,20 +1511,20 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                   {config.showProcessDefaults && (
                     <>
                       <div className='set-form-landscape-row'>
-                        <div className='set-field-landscape'>
+                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                           <label style={{width: 150, flexShrink: 0}}>工程状況初期値</label>
-                          <input style={{width: 220}} value={defaultProcessStatus} onChange={(e) => setDefaultProcessStatus(e.target.value)} />
+                          <input style={{flex: 1, minWidth: 0}} value={defaultProcessStatus} onChange={(e) => setDefaultProcessStatus(e.target.value)} />
                         </div>
-                        <div className='set-field-landscape'>
+                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                           <label style={{width: 150, flexShrink: 0}}>作業順序</label>
-                          <input style={{width: 220}} value={defaultOpOrder} onChange={(e) => setDefaultOpOrder(e.target.value)} />
+                          <input style={{flex: 1, minWidth: 0}} value={defaultOpOrder} onChange={(e) => setDefaultOpOrder(e.target.value)} />
                         </div>
                       </div>
                       <div className='set-form-landscape-row'>
-                        <div className='set-field-landscape set-field-grow'>
+                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                           <label style={{width: 150, flexShrink: 0}}>備考</label>
-                          <input style={{width: 400}} value={defaultRemarks} onChange={(e) => setDefaultRemarks(e.target.value)} />
-                          <button type='button' className='set-search-btn set-primary' style={{height: 50, fontSize: 25}} onClick={applyRemarksToAllRows}>
+                          <input style={{flex: 1, minWidth: 0}} value={defaultRemarks} onChange={(e) => setDefaultRemarks(e.target.value)} />
+                          <button type='button' className='set-search-btn set-primary' style={{height: 50, fontSize: 25, flexShrink: 0}} onClick={applyRemarksToAllRows}>
                             一括反映
                           </button>
                         </div>

@@ -520,12 +520,12 @@ const DeliverySlipRegistration = () => {
               <div className="set-body-landscape set-body-landscape-3row">
                 <div className="set-form-landscape">
                   <div className="set-form-landscape-row">
-                    <div className="set-field-landscape">
+                    <div className="set-field-landscape" style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 150, flexShrink: 0 }}>出荷No.</label>
                       <input
                         ref={parentItemNoInputRef}
                         autoFocus
-                        style={{ width: 320 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.parentItemNo}
                         maxLength={8}
                         inputMode="numeric"
@@ -549,14 +549,14 @@ const DeliverySlipRegistration = () => {
                         onKeyDown={handleParentItemNoKeyDown}
                       />
                     </div>
-                    <div className="set-field-landscape set-field-grow">
+                    <div className="set-field-landscape" style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 180, flexShrink: 0 }}>配送伝票No.</label>
                       <input
                         ref={deliverySlipNoInputRef}
                         readOnly={!isEnabled}
                         disabled={showErrorConfirm}
                         value={form.deliverySlipNo}
-                        style={{ backgroundColor: isEnabled ? "white" : "rgb(229, 231, 235)" }}
+                        style={{ flex: 1, minWidth: 0, backgroundColor: isEnabled ? "white" : "rgb(229, 231, 235)" }}
                         inputMode="numeric"
                         pattern="[0-9]*"
                         maxLength={30}

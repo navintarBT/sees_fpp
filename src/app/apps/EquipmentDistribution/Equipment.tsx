@@ -497,11 +497,11 @@ const Equipment = () => {
               <div className="set-body-landscape set-body-landscape-3row">
                 <div className="set-form-landscape">
                   <div className="set-form-landscape-row">
-                    <div className="set-field-landscape">
-                      <label style={{ width: 150, flexShrink: 0 }}>FR倉庫</label>
+                    <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>FR倉庫</label>
                       <select
                         autoFocus
-                        style={{ width: 400 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.parentWarehouse}
                         onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
                       >
@@ -511,10 +511,10 @@ const Equipment = () => {
                         <option value="羽田製品倉庫：W0042">羽田製品倉庫：W0042</option>
                       </select>
                     </div>
-                    <div className="set-field-landscape">
-                      <label style={{ width: 150, flexShrink: 0 }}>TO倉庫</label>
+                    <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>TO倉庫</label>
                       <select
-                        style={{ width: 400 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.moveWarehouse}
                         onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
                       >
@@ -525,28 +525,26 @@ const Equipment = () => {
                         <option value="羽田製品倉庫：W0046">羽田製品倉庫：W0046</option>
                       </select>
                     </div>
-                  </div>
-                  <div className="set-form-landscape-row">
-                    <div className="set-field-landscape">
-                      <label style={{ width: 150, flexShrink: 0 }}>保管場所</label>
+                    <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>保管場所</label>
                       <input
-                        style={{ width: 400 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.moveStorage}
                         onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
                       />
                     </div>
-                    <div className="set-field-landscape">
-                      <label style={{ width: 150, flexShrink: 0 }}>数量</label>
+                  </div>
+                  <div className="set-form-landscape-row">
+                    <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>数量</label>
                       <input
-                        style={{ width: 400, textAlign: "right" }}
+                        style={{ flex: 1, minWidth: 0, textAlign: "right" }}
                         value={form.qty}
                         onChange={(e) => setForm({ ...form, qty: e.target.value })}
                       />
                     </div>
-                  </div>
-                  <div className="set-form-landscape-row">
-                    <div className="set-field-landscape">
-                      <label style={{ width: 150, flexShrink: 0 }}>移動数</label>
+                    <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>移動数</label>
                       <div style={{ display: "flex", alignItems: "center", gap: 40 }}>
                         <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 25, whiteSpace: "nowrap" }}>
                           <input
@@ -570,11 +568,11 @@ const Equipment = () => {
                         </label>
                       </div>
                     </div>
-                    <div className="set-field-landscape">
-                      <label style={{ width: 150, flexShrink: 0 }}>JANコード</label>
+                    <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>JANコード</label>
                       <input
                         ref={janCodeInputRef}
-                        style={{ width: 400 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.janCode}
                         onChange={handleJanCodeChange}
                         onKeyDown={handleJanCodeKeyDown}
@@ -585,14 +583,16 @@ const Equipment = () => {
                     </div>
                   </div>
                   <div className="set-form-landscape-row">
-                    <div className="set-field-landscape set-field-grow">
-                      <label style={{ width: 150, flexShrink: 0 }}>理由</label>
+                    <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>理由</label>
                       <input
-                        style={{ width: 400 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.parentItemNo}
                         onChange={(e) => setForm({ ...form, parentItemNo: e.target.value })}
                       />
                     </div>
+                    <div style={{ flex: "1 1 0", minWidth: 0 }} />
+                    <div style={{ flex: "1 1 0", minWidth: 0 }} />
                   </div>
                 </div>
 

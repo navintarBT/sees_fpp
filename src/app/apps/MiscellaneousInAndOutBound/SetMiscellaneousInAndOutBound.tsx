@@ -350,12 +350,12 @@ const SetMiscellaneousInAndOutBound = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 150, flexShrink: 0 }}>倉庫</label>
                       <select
                         ref={warehouseRef}
                         autoFocus
-                        style={{ width: 320 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.moveWarehouse}
                         onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
                       >
@@ -365,19 +365,19 @@ const SetMiscellaneousInAndOutBound = () => {
                         <option value='倉庫C：W0042'>倉庫C：W0042</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape set-field-grow'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 150, flexShrink: 0 }}>保管場所</label>
                       <input
-                        style={{ width: 320 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.moveStorage}
                         onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
                       />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 150, flexShrink: 0 }}>引当数</label>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, width: 320 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
                         <select className='pg-sign-select' style={{ width: 110, flexShrink: 0, padding: '0 8px' }}>
                           <option value='+'>+</option>
                           <option value='-'>-</option>
@@ -390,11 +390,11 @@ const SetMiscellaneousInAndOutBound = () => {
                         />
                       </div>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 150, flexShrink: 0 }}>JANコード</label>
                       <input
                         ref={janCodeRef}
-                        style={{ width: 320 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={form.janCode}
                         onChange={(e) => setForm({ ...form, janCode: e.target.value })}
                         onKeyDown={(e) => {

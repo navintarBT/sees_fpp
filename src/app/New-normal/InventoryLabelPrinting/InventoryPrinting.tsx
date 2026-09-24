@@ -94,12 +94,12 @@ const InventoryPrinting = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 200, flexShrink: 0}}>庫内ラベル</label>
                       <input
                         ref={moveStorageRef}
                         autoFocus
-                        style={{width: 400, ...(isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
+                        style={{flex: 1, minWidth: 0, ...(isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
                         value={moveStorage}
                         onChange={(e) => setMoveStorage(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleMoveStorageSubmit()}
@@ -107,10 +107,10 @@ const InventoryPrinting = () => {
                         className={isLabelLocked ? 'set-input-gray' : ''}
                       />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 200, flexShrink: 0}}>品番</label>
                       <input
-                        style={{width: 400, backgroundColor: '#d9d9d9'}}
+                        style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9'}}
                         value={itemNo}
                         onChange={(e) => setItemNo(e.target.value)}
                         disabled
@@ -119,20 +119,20 @@ const InventoryPrinting = () => {
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
                       <input
-                        style={{width: 400, ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
+                        style={{flex: 1, minWidth: 0, ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
                         value={lot}
                         onChange={(e) => setLot(e.target.value)}
                         disabled={!isLabelLocked}
                         className={!isLabelLocked ? 'set-input-gray' : ''}
                       />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 200, flexShrink: 0}}>印刷枚数</label>
                       <input
-                        style={{width: 400, textAlign: 'right', ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
+                        style={{flex: 1, minWidth: 0, textAlign: 'right', ...(!isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
                         value={qty}
                         onChange={(e) => setQty(e.target.value)}
                         disabled={!isLabelLocked}

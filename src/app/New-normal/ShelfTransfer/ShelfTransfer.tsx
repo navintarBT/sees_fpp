@@ -601,8 +601,8 @@ const ShelfTransfer = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>倉庫</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>倉庫</label>
                       <select
                         ref={warehouseSelectRef}
                         autoFocus
@@ -623,8 +623,8 @@ const ShelfTransfer = () => {
                         <option value='千葉工場：F0209'>千葉工場：F0209</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>保管場所</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>保管場所</label>
                       <select
                         style={{flex: 1, minWidth: 0}}
                         value={form.parentStorage}
@@ -646,10 +646,8 @@ const ShelfTransfer = () => {
                         一括
                       </button>
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>品目No.</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>品目No.</label>
                       <input
                         ref={itemNoInputRef}
                         style={{flex: 1, minWidth: 0}}
@@ -658,28 +656,28 @@ const ShelfTransfer = () => {
                         onKeyDown={handleItemNoEnter}
                       />
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>ロットシリアル</label>
-                      <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle}} value={form.lot_serial_no} />
-                    </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>品名</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>ロットシリアル</label>
+                      <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle}} value={form.lot_serial_no} />
+                    </div>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>品名</label>
                       <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle}} value={form.shipmentQty} />
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>移動数量</label>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 180, flexShrink: 0}}>移動数量</label>
                       <input
                         readOnly={mode === 'dest'}
                         style={{flex: 1, minWidth: 0, textAlign: 'right', ...(mode === 'dest' ? grayFieldStyle : {})}}
                         value={form.transfer_qty}
                         onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                       />
-                      <button className='set-search-btn set-primary' style={{...grayFieldStyle, height: 50, fontSize: 25, flexShrink: 0}} disabled>
+                      <button className='set-search-btn set-primary' style={{...grayFieldStyle, height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}} disabled>
                         EA
                       </button>
-                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0}} onClick={handleAddDetail}>
+                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}} onClick={handleAddDetail}>
                         明細追加
                       </button>
                     </div>

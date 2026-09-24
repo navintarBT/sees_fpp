@@ -1,4 +1,4 @@
-import {useNavigate} from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
 
 type OrientationChooseProps = {
   title: string
@@ -6,38 +6,9 @@ type OrientationChooseProps = {
   backPath: string
 }
 
-const OrientationChoose = ({title, targetPath, backPath}: OrientationChooseProps) => {
-  const navigate = useNavigate()
-  const orientationButtons = [
-    {label: '縦画面', orientation: 'portrait' as const, className: 'mockup-red'},
-    {label: '横画面', orientation: 'landscape' as const, className: 'mockup-blue'},
-  ]
-
-  return (
-    <div className='mockup-page'>
-      <div className='mockup-stage'>
-        <div className='mockup-frame'>
-          <div className='mockup-header'>{title}</div>
-          <div className='mockup-body'>
-            <div className='mockup-grid'>
-              {orientationButtons.map((btn) => (
-                <button
-                  key={btn.label}
-                  className={`mockup-btn ${btn.className}`}
-                  onClick={() => navigate(targetPath, {state: {orientation: btn.orientation}})}
-                >
-                  {btn.label}
-                </button>
-              ))}
-            </div>
-            <button className='mockup-exit' onClick={() => navigate(backPath)}>
-              戻る
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+// 縦画面の選択肢を廃止し、常に横画面で直接遷移する
+const OrientationChoose = ({targetPath}: OrientationChooseProps) => (
+  <Navigate to={targetPath} state={{orientation: 'landscape'}} replace />
+)
 
 export {OrientationChoose}

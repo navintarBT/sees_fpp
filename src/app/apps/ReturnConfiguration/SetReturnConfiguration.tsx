@@ -414,7 +414,7 @@ const SetReturnConfiguration = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 200, flexShrink: 0 }}>JANコード(親)</label>
                       <input
                         ref={parentJanCodeInputRef}
@@ -425,10 +425,10 @@ const SetReturnConfiguration = () => {
                         onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
                         readOnly={!isParentJanCodeEditable}
                         className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
-                        style={{ width: 320, ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
+                        style={{ flex: 1, minWidth: 0, ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
                       />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 100, flexShrink: 0 }}>状態</label>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                         <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
@@ -457,15 +457,15 @@ const SetReturnConfiguration = () => {
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 200, flexShrink: 0 }}>数量</label>
                       <input
                         value={parentQty}
                         readOnly
-                        style={{ width: 320, textAlign: 'right', backgroundColor: '#d9d9d9' }}
+                        style={{ flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: '#d9d9d9' }}
                       />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 100, flexShrink: 0 }}>JANコード</label>
                       <input
                         value={janCode}
@@ -480,7 +480,7 @@ const SetReturnConfiguration = () => {
                           }
                         }}
                         readOnly
-                        style={{ width: 320, backgroundColor: '#d9d9d9' }}
+                        style={{ flex: 1, minWidth: 0, backgroundColor: '#d9d9d9' }}
                       />
                     </div>
                   </div>

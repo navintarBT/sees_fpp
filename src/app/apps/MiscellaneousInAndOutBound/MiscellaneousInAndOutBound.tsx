@@ -29,24 +29,24 @@ const MiscellaneousInAndOutBound = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>倉庫</label>
-                      <select autoFocus style={{ width: 635, appearance: 'auto' }}>
+                      <select autoFocus style={{ flex: 1, minWidth: 0, appearance: 'auto' }}>
                         <option value=''></option>
                         <option value='倉庫A:W0040'>倉庫A:W0040</option>
                         <option value='倉庫B:W0041'>倉庫B:W0041</option>
                         <option value='倉庫C:W0042'>倉庫C:W0042</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>保管場所</label>
-                      <input style={{ width: 635 }} />
+                      <input style={{ flex: 1, minWidth: 0 }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>引当数</label>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, width: 635 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
                         <select style={{ width: 120, flexShrink: 0, appearance: 'auto', padding: '0 8px' }}>
                           <option value='+'>+</option>
                           <option value='-'>-</option>
@@ -59,25 +59,25 @@ const MiscellaneousInAndOutBound = () => {
                         />
                       </div>
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
-                      <input style={{ width: 635 }} />
+                      <input style={{ flex: 1, minWidth: 0 }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>ロット</label>
-                      <input style={{ width: 635 }} />
+                      <input style={{ flex: 1, minWidth: 0 }} />
                     </div>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>シリアル</label>
-                      <input style={{ width: 635 }} />
+                      <input style={{ flex: 1, minWidth: 0 }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>有効期限(yymm)</label>
-                      <input type='text' ref={dateRef} style={{ width: 635 }} />
+                      <input type='text' ref={dateRef} style={{ flex: 1, minWidth: 0 }} />
                     </div>
                   </div>
                 </div>
