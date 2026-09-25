@@ -144,17 +144,19 @@ const InventoryPrinting = () => {
 
                 <div />
 
-                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 40}}>
-                  <button className='set-btn set-btn-landscape set-danger' style={{width: 280}} onClick={() => setShowDiscardConfirm(true)}>
+                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowDiscardConfirm(true)}>
                     破棄
                   </button>
-                  <button className='set-btn set-btn-landscape set-success' style={{width: 280}} onClick={() => setShowBackConfirm(true)}>
+                  <div aria-hidden='true' />
+                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
                     戻る
                   </button>
-                  <button className='set-btn set-btn-landscape set-warning' style={{width: 280}} onClick={handleRead}>
+                  <div aria-hidden='true' />
+                  <button className='set-btn set-btn-landscape set-warning' onClick={handleRead}>
                     実行
                   </button>
-                </div>
+                </ActionFooter>
               </div>
             </>
           ) : (

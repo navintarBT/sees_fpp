@@ -602,18 +602,12 @@ const DeliverySlipRegistration = () => {
                   onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
                 />
 
-                <ActionFooter columns={4} gapX={50} className="set-actionfooter-landscape-offset">
+                <ActionFooter columns={5} gapX={50} className="set-actionfooter-landscape-offset">
                   <button
                     className="set-btn set-btn-landscape set-danger"
                     onClick={() => setShowClearConfirm(true)}
                   >
                     破棄
-                  </button>
-                  <button
-                    className="set-btn set-btn-landscape set-primary"
-                    onClick={() => setShowCompleteRegistrationConfirm(true)}
-                  >
-                    完了
                   </button>
                   <button
                     className="set-btn set-btn-landscape set-primary set-success"
@@ -632,6 +626,13 @@ const DeliverySlipRegistration = () => {
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
+                  </button>
+                  <div aria-hidden='true' />
+                  <button
+                    className="set-btn set-btn-landscape set-primary"
+                    onClick={() => setShowCompleteRegistrationConfirm(true)}
+                  >
+                    完了
                   </button>
                 </ActionFooter>
               </div>

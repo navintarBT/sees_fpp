@@ -331,7 +331,7 @@ const SetMiscellaneousInAndOutBound = () => {
     { key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item },
     { key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot },
     { key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '倉庫', render: (row) => row.status },
-    { key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.build },
+    { key: 'build', headClassName: 'col-storage-SetMis', cellClassName: 'col-storage-SetMis', header: '保管場所', render: (row) => row.build },
     { key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '引当数', render: (row) => row.release },
     { key: 'move', headClassName: 'col-move-SetMis', cellClassName: 'col-move-SetMis', header: '品名', render: (row) => row.move },
   ]
@@ -427,9 +427,6 @@ const SetMiscellaneousInAndOutBound = () => {
                   <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
                     破棄
                   </button>
-                  <button className='set-btn set-btn-landscape set-primary' onClick={handleCompleteClick}>
-                    完了
-                  </button>
                   <button className='set-btn set-btn-landscape set-success' onClick={() => handleReleaseClick()}>
                     削除
                   </button>
@@ -445,6 +442,9 @@ const SetMiscellaneousInAndOutBound = () => {
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
+                  </button>
+                  <button className='set-btn set-btn-landscape set-primary' onClick={handleCompleteClick}>
+                    完了
                   </button>
                 </ActionFooter>
               </div>

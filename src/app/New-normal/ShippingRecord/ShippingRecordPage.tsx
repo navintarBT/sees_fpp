@@ -286,23 +286,7 @@ const ShippingRecordPage = () => {
   }
 
   const handleRowClick = (rowId: number) => {
-    const isActivating = activeRowId !== rowId
-    const row = rows.find((r) => r.id === rowId) ?? null
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
-    if (isActivating) {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId: rowId}))
-      navigate('/factory/shipping-detail', {
-        state: {
-          name: row?.name ?? '',
-          item: row?.item ?? '',
-          lot: row?.lot ?? '',
-          release: row?.release ?? '',
-          moveStorage: row?.moveStorage ?? '',
-          moveWarehouse: form.moveWarehouse,
-          orientation: isLandscape ? 'landscape' : 'portrait',
-        },
-      })
-    }
   }
 
   const handleReleaseClick = (options?: {forceRelease?: boolean; forceHandInput?: boolean}) => {
@@ -405,8 +389,8 @@ const ShippingRecordPage = () => {
     {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '基本保管場所', render: (row) => row.status},
     {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '指示', render: (row) => row.build},
     {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.release},
-    {key: 'name', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.name},
-    {key: 'moveStorage', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.moveStorage},
+    {key: 'name', headClassName: 'col-name-ship', cellClassName: 'col-name-ship', header: '品名', render: (row) => row.name},
+    {key: 'moveStorage', headClassName: 'col-moveStorage-ship', cellClassName: 'col-moveStorage-ship', header: '保管場所', render: (row) => row.moveStorage},
 
   ]
 
