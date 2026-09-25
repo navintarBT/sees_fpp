@@ -101,21 +101,21 @@ const ShippingRecordHandInputPage = () => {
                 <div />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-success'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
                   </button>
-                  <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-primary'
                     onClick={handleRead}
                   >
                     読込
                   </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
                 </ActionFooter>
               </div>
             </>
