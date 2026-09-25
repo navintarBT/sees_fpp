@@ -107,15 +107,15 @@ const ShippingRecordHandInputPage = () => {
                   >
                     戻る
                   </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-primary'
                     onClick={handleRead}
                   >
                     読込
                   </button>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
                 </ActionFooter>
               </div>
             </>

@@ -2469,6 +2469,10 @@ input[type='time'].wot-grid-value2 {
 
 .shipping-table .col-lot {
   min-width: 120px;
+}
+
+/* Scoped to row cells only so the header keeps the shared centered alignment. */
+.shipping-table .tf-tableRow .col-lot {
   justify-content: flex-start;
 }
 

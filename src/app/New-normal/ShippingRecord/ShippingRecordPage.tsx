@@ -394,6 +394,38 @@ const ShippingRecordPage = () => {
 
   ]
 
+  const landscapeTableColumns: Array<TFTableColumn<Row>> = [
+    {
+      key: 'detail',
+      headClassName: 'col-detail',
+      cellClassName: 'col-detail',
+      header: '',
+      render: (row) => (
+        <button
+          className='inbound-detail-btn set-primary'
+          onClick={(e) => {
+            e.stopPropagation()
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify({form, rows, isLoaded, activeRowId: row.id}))
+            navigate('/factory/shipping-detail', {
+              state: {
+                name: row.name ?? '',
+                item: row.item ?? '',
+                lot: row.lot ?? '',
+                release: row.release ?? '',
+                moveStorage: row.moveStorage ?? '',
+                moveWarehouse: form.moveWarehouse,
+                orientation: isLandscape ? 'landscape' : 'portrait',
+              },
+            })
+          }}
+        >
+          詳細
+        </button>
+      ),
+    },
+    ...tableColumns,
+  ]
+
   return (
     <div className='mockup-page'>
       <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
@@ -505,13 +537,13 @@ const ShippingRecordPage = () => {
                 </div>
 
                 <TableSection
-                  columns={tableColumns}
+                  columns={landscapeTableColumns}
                   rows={rows}
                   className='inbound-table-landscape-wrap'
                   gridClassName='shipping-table inbound-table-landscape'
                   gridStyle={{
                     gridTemplateColumns:
-                      '50px 50px minmax(110px, 1fr) minmax(140px, 1.1fr) 30px minmax(180px, 1fr) minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(150px, 1.1fr) minmax(130px, 1fr)',
+                      '90px 50px 50px minmax(110px, 1fr) minmax(140px, 1.1fr) 30px minmax(180px, 1fr) minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(150px, 1.1fr) minmax(130px, 1fr)',
                   }}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}
