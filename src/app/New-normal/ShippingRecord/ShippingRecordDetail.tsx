@@ -132,9 +132,6 @@ const ShippingRecordDetail = () => {
                 />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
-                    戻る
-                  </button>
                   <button
                     className='set-btn set-btn-landscape set-danger'
                     onClick={() => {
@@ -146,6 +143,9 @@ const ShippingRecordDetail = () => {
                     }}
                   >
                     削除
+                  </button>
+                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
+                    戻る
                   </button>
                   <div aria-hidden='true' />
                   <div aria-hidden='true' />
