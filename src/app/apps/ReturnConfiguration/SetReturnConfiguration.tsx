@@ -505,9 +505,6 @@ const SetReturnConfiguration = () => {
                   <button className='set-btn set-btn-landscape set-danger' onClick={handleClearClick}>
                     破棄
                   </button>
-                  <button className='set-btn set-btn-landscape set-primary' onClick={handleCompleteClick}>
-                    完了
-                  </button>
                   <button className='set-btn set-btn-landscape set-success' onClick={handleDeleteClick}>
                     削除
                   </button>
@@ -519,6 +516,9 @@ const SetReturnConfiguration = () => {
                   </button>
                   <button className='set-btn set-btn-landscape set-warning' onClick={handleBackClick}>
                     戻る
+                  </button>
+                  <button className='set-btn set-btn-landscape set-primary' onClick={handleCompleteClick}>
+                    完了
                   </button>
                 </ActionFooter>
               </div>

@@ -607,13 +607,6 @@ const SetRegisterPage = () => {
                     破棄
                   </button>
                   <button
-                    tabIndex={isParentConfirmed ? 6 : 4}
-                    className='set-btn set-btn-landscape set-primary'
-                    onClick={() => setShowCompleteConfirm(true)}
-                  >
-                    完了
-                  </button>
-                  <button
                     tabIndex={isParentConfirmed ? 7 : 5}
                     className='set-btn set-btn-landscape set-success'
                     onClick={() => handleReleaseClick()}
@@ -633,6 +626,13 @@ const SetRegisterPage = () => {
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
+                  </button>
+                  <button
+                    tabIndex={isParentConfirmed ? 6 : 4}
+                    className='set-btn set-btn-landscape set-primary'
+                    onClick={() => setShowCompleteConfirm(true)}
+                  >
+                    完了
                   </button>
                 </ActionFooter>
               </div>

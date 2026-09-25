@@ -181,22 +181,23 @@ const IncomingProcessRegistrationHandInputPage = () => {
 
                                 <div />
 
-                                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 40}}>
+                                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                                    <div aria-hidden='true' />
+                                    <div aria-hidden='true' />
                                     <button
                                         className='set-btn set-btn-landscape set-success'
-                                        style={{width: 280}}
                                         onClick={() => setShowBackConfirm(true)}
                                     >
                                         戻る
                                     </button>
+                                    <div aria-hidden='true' />
                                     <button
                                         className='set-btn set-btn-landscape set-primary'
-                                        style={{width: 280}}
                                         onClick={handleComplete}
                                     >
                                         完了
                                     </button>
-                                </div>
+                                </ActionFooter>
                             </div>
                         </>
                     ) : (

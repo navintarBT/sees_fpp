@@ -335,7 +335,7 @@ const WOPartsIssuanceHandInputPage = () => {
       header: '出庫数',
       render: (row) => (
         <input
-          style={{...inputStyle, width: '120px'}}
+          style={{...inputStyle, width: '120px', textAlign: 'right'}}
           value={row.numOfShipments}
           onChange={(e) => updateRow(row.id, {numOfShipments: e.target.value})}
           onClick={(e) => e.stopPropagation()}

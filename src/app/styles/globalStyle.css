@@ -269,7 +269,6 @@ button:focus {
 .inbound-table-landscape .tf-tableRow .col-instruct,
 .inbound-table-landscape .tf-tableRow .col-Load,
 .inbound-table-landscape .tf-tableRow .col-num,
-.inbound-table-landscape .tf-tableRow .col-rowNo,
 .inbound-table-landscape .tf-tableRow .col-quantity-equipment,
 .inbound-table-landscape .tf-tableRow .col-quantity,
 .inbound-table-landscape .tf-tableRow .col-NumOfConfig,
@@ -278,14 +277,56 @@ button:focus {
   text-align: right;
 }
 
-/* Align only the ロットシリアル header to the left in both inventory screens. */
-.inventory-table .tf-tableHead .col-lot,
-.woPartsIssuanceDetail-table .tf-tableHead .col-lot {
+/* col-rowNo (行番号) is a reference/line number, not a summed quantity — keep it left
+   (it used to share the numeric right-align rule above; split out so it defaults left). */
+.inbound-table-landscape .tf-tableRow .col-rowNo {
   justify-content: flex-start;
   text-align: left;
 }
 
-/* Align ロットシリアル values to the left without affecting other columns. */
+/* WOPartsIssuance: 必要数・出庫数 are numeric quantities. col-reqNumber/col-numOfShipments
+   are reused with non-numeric meanings by other tables, so scope this to this table only
+   rather than the shared .inbound-table-landscape selector. */
+.woPartsIssuance-table .tf-tableRow .col-reqNumber,
+.woPartsIssuance-table .tf-tableRow .col-numOfShipments,
+.woPartsIssuanceDetail-table .tf-tableRow .col-numOfShipments {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* WOPartsIssuance: 保管場所・ロット can render a literal "*" wildcard (mixed-value
+   indicator) when a WO/part combination has been issued with differing values — center
+   them. Scoped to this table only; col-storage/col-lot are plain left-aligned text
+   elsewhere. */
+.woPartsIssuance-table .tf-tableRow .col-storage,
+.woPartsIssuance-table .tf-tableRow .col-lot {
+  justify-content: center;
+  text-align: center;
+}
+
+/* WorkOrderTimeRegistration gosen/common table: 計画数・合格数・不良数・目標時間 are numeric
+   quantities rendered via an editable <input class="table-cell-input">, whose shared base
+   class defaults to text-align:left — override just these two columns to right-align. */
+.delivery-table .tf-tableRow .col-qty,
+.delivery-table .tf-tableRow .col-target-time {
+  justify-content: flex-end;
+}
+
+.delivery-table .tf-tableCell.col-qty .table-cell-input,
+.delivery-table .tf-tableCell.col-target-time .table-cell-input {
+  text-align: right;
+}
+
+/* ShelfTransfer: 移動数 (transfer_qty) is a numeric quantity. */
+.ShelfTransfer-table .tf-tableRow .col-storage-shef {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* Align ロットシリアル values to the left without affecting other columns.
+   (The header used to have its own left-align override here too, but headers are now
+   centered app-wide via the shared .tf-tableHead .tf-tableCell rule — removed so it
+   inherits that instead.) */
 .inventory-table .tf-tableRow .col-lot,
 .woPartsIssuanceDetail-table .tf-tableRow .col-lot {
   justify-content: flex-start;
@@ -556,6 +597,8 @@ button:focus {
   background: white;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.30);
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  text-align: center;
 }
 
 .tf-tableHeadDivider {
@@ -2395,7 +2438,7 @@ input[type='time'].wot-grid-value2 {
   min-width: 0;
   flex: 1 1 auto;
   padding: 0;
-  text-align: left;
+  text-align: right;
 }
 
 /* 移動数：「移動先」の表示に合わせて 150px を最小幅とする。
@@ -2426,7 +2469,7 @@ input[type='time'].wot-grid-value2 {
 
 .shipping-table .col-lot {
   min-width: 120px;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .shipping-table .col-lot2 {

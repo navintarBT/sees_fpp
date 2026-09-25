@@ -405,8 +405,8 @@ const ShippingRecordPage = () => {
     {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '基本保管場所', render: (row) => row.status},
     {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '指示', render: (row) => row.build},
     {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.release},
-    {key: 'name', headClassName: 'col-num', cellClassName: 'col-num', header: '品名', render: (row) => row.name},
-    {key: 'moveStorage', headClassName: 'col-num', cellClassName: 'col-num', header: '保管場所', render: (row) => row.moveStorage},
+    {key: 'name', headClassName: 'col-name-ship', cellClassName: 'col-name-ship', header: '品名', render: (row) => row.name},
+    {key: 'moveStorage', headClassName: 'col-moveStorage-ship', cellClassName: 'col-moveStorage-ship', header: '保管場所', render: (row) => row.moveStorage},
 
   ]
 

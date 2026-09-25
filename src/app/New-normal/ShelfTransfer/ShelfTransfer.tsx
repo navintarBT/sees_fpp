@@ -606,7 +606,7 @@ const ShelfTransfer = () => {
                       <select
                         ref={warehouseSelectRef}
                         autoFocus
-                        style={{flex: 1, minWidth: 0, ...(mode === 'dest' ? grayFieldStyle : {})}}
+                        style={{flex: 1, minWidth: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'left'}}
                         value={form.parentWarehouse}
                         onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                         disabled={mode === 'dest'}
@@ -660,17 +660,17 @@ const ShelfTransfer = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>ロットシリアル</label>
-                      <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle}} value={form.lot_serial_no} />
+                      <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.lot_serial_no} />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>品名</label>
-                      <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle}} value={form.shipmentQty} />
+                      <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.shipmentQty} />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>移動数量</label>
                       <input
                         readOnly={mode === 'dest'}
-                        style={{flex: 1, minWidth: 0, textAlign: 'right', ...(mode === 'dest' ? grayFieldStyle : {})}}
+                        style={{flex: 1, minWidth: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'right'}}
                         value={form.transfer_qty}
                         onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                       />
@@ -699,21 +699,22 @@ const ShelfTransfer = () => {
                   onRowActivate={handleRowActivate}
                 />
 
-                <ActionFooter columns={4} gapX={50} className='set-actionfooter-landscape-offset'>
+                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
                   <button className='set-btn set-btn-landscape set-danger' onClick={handleDiscard}>
                     破棄
-                  </button>
-                  <button
-                    className='set-btn set-btn-landscape set-warning'
-                    onClick={mode === 'source' ? handleSourceComplete : handleComplete}
-                  >
-                    完了
                   </button>
                   <button className='set-btn set-btn-landscape set-primary' onClick={handleDeleteSelected}>
                     選択削除
                   </button>
                   <button className='set-btn set-btn-landscape set-success' onClick={handleBack}>
                     戻る
+                  </button>
+                  <div aria-hidden='true' />
+                  <button
+                    className='set-btn set-btn-landscape set-warning'
+                    onClick={mode === 'source' ? handleSourceComplete : handleComplete}
+                  >
+                    完了
                   </button>
                 </ActionFooter>
               </div>
