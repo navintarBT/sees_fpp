@@ -52,7 +52,7 @@ const DETAIL_COLUMNS: Array<{ key: keyof Row; header: string }> = [
   { key: 'workplace', header: '作業場' },
   { key: 'opOrder', header: '作業順序' },
   { key: 'requestDate', header: '要求日' },
-  { key: 'adjustDate', header: '調整日' },
+  { key: 'adjustDate', header: '開始日' },
 ]
 
 const WorkOrderCompletion_Choose_WO = () => {
@@ -60,6 +60,12 @@ const WorkOrderCompletion_Choose_WO = () => {
   const isLandscape = useOrientation(ORIENTATION_KEY)
   const [selectedWoNumber, setSelectedWoNumber] = useState('')
   const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
+  const [workplaceFilter, setWorkplaceFilter] = useState('')
+  const [requestDateFrom, setRequestDateFrom] = useState('')
+  const [requestDateTo, setRequestDateTo] = useState('')
+  const [startDateFrom, setStartDateFrom] = useState('')
+  const [startDateTo, setStartDateTo] = useState('')
+  const [filteredRows, setFilteredRows] = useState<Row[] | null>(null)
   const rows: Row[] = Object.keys(WO_MOCKUP_DATA).map((woNumber, index) => {
     const sequence = String(index + 1).padStart(3, '0')
     return {
@@ -76,9 +82,22 @@ const WorkOrderCompletion_Choose_WO = () => {
     }
   })
   const activeRowId = rows.find((row) => row.woNumber === selectedWoNumber)?.id ?? null
+  const displayRows = filteredRows ?? rows
 
   const selectWoNumber = (woNumber: string) => {
     setSelectedWoNumber(woNumber)
+  }
+
+  const handleSearch = () => {
+    const filtered = rows.filter((row) => {
+      if (workplaceFilter && !row.workplace.includes(workplaceFilter)) return false
+      if (requestDateFrom && row.requestDate < requestDateFrom) return false
+      if (requestDateTo && row.requestDate > requestDateTo) return false
+      if (startDateFrom && row.adjustDate < startDateFrom) return false
+      if (startDateTo && row.adjustDate > startDateTo) return false
+      return true
+    })
+    setFilteredRows(filtered)
   }
 
   const completeWoSelection = () => {
@@ -99,8 +118,8 @@ const WorkOrderCompletion_Choose_WO = () => {
     },
     ...DETAIL_COLUMNS.map(({ key, header }) => ({
       key,
-      headClassName: 'col-wo-search',
-      cellClassName: 'col-wo-search',
+      headClassName: key === 'opOrder' ? 'col-op-order-search' : 'col-wo-search',
+      cellClassName: key === 'opOrder' ? 'col-op-order-search' : 'col-wo-search',
       header,
       render: (row: Row) => row[key],
     })),
@@ -118,11 +137,46 @@ const WorkOrderCompletion_Choose_WO = () => {
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
               <div className='set-body-landscape set-body-landscape-3row'>
-                <div />
+                <div className='set-form-landscape'>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 150, flexShrink: 0}}>作業場</label>
+                      <input
+                        style={{flex: 1, minWidth: 0}}
+                        value={workplaceFilter}
+                        onChange={(e) => setWorkplaceFilter(e.target.value)}
+                      />
+                      <input disabled readOnly style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value='' />
+                    </div>
+                    <div style={{flex: '1 1 0', minWidth: 0}} />
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 150, flexShrink: 0}}>要求日</label>
+                      <input style={{flex: 1, minWidth: 0}} value={requestDateFrom} onChange={(e) => setRequestDateFrom(e.target.value)} />
+                      <span style={{fontSize: 25, flexShrink: 0}}>～</span>
+                      <input style={{flex: 1, minWidth: 0}} value={requestDateTo} onChange={(e) => setRequestDateTo(e.target.value)} />
+                    </div>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 150, flexShrink: 0}}>開始日</label>
+                      <input style={{flex: 1, minWidth: 0}} value={startDateFrom} onChange={(e) => setStartDateFrom(e.target.value)} />
+                      <span style={{fontSize: 25, flexShrink: 0}}>～</span>
+                      <input style={{flex: 1, minWidth: 0}} value={startDateTo} onChange={(e) => setStartDateTo(e.target.value)} />
+                      <button
+                        type='button'
+                        className='set-search-btn set-primary'
+                        style={{height: 50, fontSize: 25, flexShrink: 0}}
+                        onClick={handleSearch}
+                      >
+                        検索
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
                 <TableSection
                   columns={tableColumns}
-                  rows={rows}
+                  rows={displayRows}
                   className='inbound-table-landscape-wrap'
                   gridClassName='delivery-table inbound-table-landscape'
                   gridStyle={{gridTemplateColumns: '50px repeat(9, minmax(120px, 1fr))'}}
@@ -133,21 +187,21 @@ const WorkOrderCompletion_Choose_WO = () => {
                 />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
+                  <button
+                    className='set-btn set-btn-landscape set-warning'
+                    onClick={() => navigate('/factory/work-order-completion', orientationState(isLandscape))}
+                  >
+                    戻る
+                  </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-primary'
                     disabled={!selectedWoNumber}
                     onClick={() => selectedWoNumber && setShowWoLoadConfirm(true)}
                   >
                     読込
-                  </button>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
-                  <button
-                    className='set-btn set-btn-landscape set-warning'
-                    onClick={() => navigate('/factory/work-order-completion', orientationState(isLandscape))}
-                  >
-                    戻る
                   </button>
                 </ActionFooter>
               </div>

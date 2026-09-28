@@ -317,12 +317,12 @@ const InventoryRecordsPage = () => {
   }
 
   const handleRowClick = (rowId: number) => {
-    const isActivating = activeRowId !== rowId
     setActiveRowId((prev) => (prev === rowId ? null : rowId))
-    if (isActivating) {
-      saveStateToSession()
-      navigate('/factory/inventory-detail', {state: {activeRowId: rowId, orderNo: form.parentItemNo, orientation: isLandscape ? 'landscape' : 'portrait'}})
-    }
+  }
+
+  const handleDetailClick = (rowId: number) => {
+    saveStateToSession()
+    navigate('/factory/inventory-detail', {state: {activeRowId: rowId, orderNo: form.parentItemNo, orientation: isLandscape ? 'landscape' : 'portrait'}})
   }
 
   const handleReflect = () => {
@@ -436,7 +436,17 @@ const InventoryRecordsPage = () => {
       headClassName: 'col-detail',
       cellClassName: 'col-detail',
       header: '',
-      render: () => <button className='inbound-detail-btn set-primary'>詳細</button>,
+      render: (row) => (
+        <button
+          className='inbound-detail-btn set-primary'
+          onClick={(e) => {
+            e.stopPropagation()
+            handleDetailClick(row.id)
+          }}
+        >
+          詳細
+        </button>
+      ),
     },
     ...tableColumns,
   ]

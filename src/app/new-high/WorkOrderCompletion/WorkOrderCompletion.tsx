@@ -64,6 +64,7 @@ const WorkOrderCompletion = () => {
   // WO読込後に入力可能となる項目（読込前は入力不可・グレー表示）
   const [officeCode, setOfficeCode] = useState('')
   const [storageLocation, setStorageLocation] = useState('')
+  const [printerDest, setPrinterDest] = useState('')
   const [showWoSelect, setShowWoSelect] = useState(false)
   const [selectedWoNumber, setSelectedWoNumber] = useState('')
   const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
@@ -196,7 +197,7 @@ const WorkOrderCompletion = () => {
                 <span className='set-header-title'>WO完了実績登録</span>
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
-              <div className='set-body-landscape set-body-landscape-3row'>
+              <div className='set-body-landscape'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
@@ -286,12 +287,25 @@ const WorkOrderCompletion = () => {
 
                 <div />
 
+                <div className='set-printer-row-landscape'>
+                  <label>出力先プリンター</label>
+                  <select
+                    value={printerDest}
+                    onChange={(e) => setPrinterDest(e.target.value)}
+                  >
+                    <option value=''></option>
+                    <option value='プリンター1'>プリンター1</option>
+                    <option value='プリンター2'>プリンター2</option>
+                    <option value='Printer-3-ABCDE12345'>Printer-3-ABCDE12345</option>
+                  </select>
+                </div>
+
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
-                  <button type='button' className='set-btn set-btn-landscape set-success' onClick={handleRegisterClick}>登録</button>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
                   <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>戻る</button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <button type='button' className='set-btn set-btn-landscape set-success' onClick={handleRegisterClick}>登録</button>
                 </ActionFooter>
               </div>
             </>

@@ -381,21 +381,15 @@ const WOPartsIssuanceDetail = () => {
                 />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>
-                    出庫登録
-                  </button>
                   <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowDeleteConfirm(true)}>
                     削除
-                  </button>
-                  <button className='set-btn set-btn-landscape set-primary set-success' style={{visibility: 'hidden'}}>
-                    出庫票印刷
-                  </button>
-                  <button className='set-btn set-btn-landscape set-primary set-hand-input-btn' style={{visibility: 'hidden'}}>
-                    明細確認
                   </button>
                   <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
                     戻る
                   </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
                 </ActionFooter>
               </div>
             </>
