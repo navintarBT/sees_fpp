@@ -239,6 +239,7 @@ const IncomingProcessRegistration = () => {
                                                 value={productTicketNo}
                                                 onChange={(e) => handleBarcodeScan(e.target.value)}
                                                 onKeyDown={handleBarcodeKeyDown}
+                                                className='set-input-gray'
                                             />
                                         </div>
                                         <div style={{flex: '1 1 0', minWidth: 0}} />
@@ -272,7 +273,7 @@ const IncomingProcessRegistration = () => {
                                             />
                                         </div>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>検査工程</label>
+                                            <label style={{width: 200, flexShrink: 0}}>良品数量</label>
                                             <input
                                                 style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={goodQuantity}
@@ -293,7 +294,7 @@ const IncomingProcessRegistration = () => {
                                             />
                                         </div>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>良品数</label>
+                                            <label style={{width: 200, flexShrink: 0}}>不良理由</label>
                                             <select
                                                 style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={defectReason}
@@ -386,7 +387,7 @@ const IncomingProcessRegistration = () => {
                                     value={productTicketNo}
                                     onChange={(e) => handleBarcodeScan(e.target.value)}
                                     onKeyDown={handleBarcodeKeyDown}
-                                    className='set-small'
+                                    className='set-small set-input-gray'
                                     style={{ textAlign: 'center'}}
                                 />
                             </div>
