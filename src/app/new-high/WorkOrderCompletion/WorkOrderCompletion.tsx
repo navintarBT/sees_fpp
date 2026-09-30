@@ -61,6 +61,7 @@ const WorkOrderCompletion = () => {
   const [plannedCount, setPlannedCount] = useState(persistedState?.plannedCount ?? '')
   const [completedCount, setCompletedCount] = useState(persistedState?.completedCount ?? '')
   const [defectiveCount, setDefectiveCount] = useState(persistedState?.defectiveCount ?? '')
+  const [lotSerial, setLotSerial] = useState('')
   // WO読込後に入力可能となる項目（読込前は入力不可・グレー表示）
   const [officeCode, setOfficeCode] = useState('')
   const [storageLocation, setStorageLocation] = useState('')
@@ -100,6 +101,7 @@ const WorkOrderCompletion = () => {
     setDefectiveCount('')
     setOfficeCode('')
     setStorageLocation('')
+    setLotSerial('')
   }
 
   useEffect(() => {
@@ -201,7 +203,7 @@ const WorkOrderCompletion = () => {
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO番号</label>
+                      <label style={{width: 200, flexShrink: 0}}>WO番号</label>
                       <input
                         autoFocus
                         style={{flex: 1, minWidth: 0}}
@@ -223,14 +225,11 @@ const WorkOrderCompletion = () => {
                         WO検索
                       </button>
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO計画数</label>
-                      <input disabled style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={plannedCount} />
-                    </div>
+                    <div style={{flex: '1 1 0', minWidth: 0}} />
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO完了済数</label>
+                      <label style={{width: 200, flexShrink: 0}}>WO計画数</label>
                       <input
                         disabled
                         style={{flex: 1, minWidth: 0, textAlign: 'right'}}
@@ -238,7 +237,22 @@ const WorkOrderCompletion = () => {
                       />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO完了数</label>
+                      <label style={{width: 200, flexShrink: 0}}>WO完了済数</label>
+                      <input disabled style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={plannedCount} />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 200, flexShrink: 0}}>WO完了数</label>
+                      <input
+                        disabled={!woData}
+                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        value={defectiveCount}
+                        onChange={(e) => setDefectiveCount(e.target.value)}
+                      />
+                    </div>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 200, flexShrink: 0}}>WO仕損数</label>
                       <input
                         ref={completedCountInputRef}
                         disabled={!woData}
@@ -250,22 +264,22 @@ const WorkOrderCompletion = () => {
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO仕損数</label>
+                      <label style={{width: 200, flexShrink: 0}}>ロットシリアル</label>
                       <input
                         disabled={!woData}
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
-                        value={defectiveCount}
-                        onChange={(e) => setDefectiveCount(e.target.value)}
+                        style={{flex: 1, minWidth: 0}}
+                        value={lotSerial}
+                        onChange={(e) => setLotSerial(e.target.value)}
                       />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>製番</label>
+                      <label style={{width: 200, flexShrink: 0}}>製番</label>
                       <input disabled readOnly style={{flex: 1, minWidth: 0}} value='' />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>事業所</label>
+                      <label style={{width: 200, flexShrink: 0}}>事業所</label>
                       <input
                         disabled={!woData}
                         style={{flex: 1, minWidth: 0}}
@@ -274,7 +288,7 @@ const WorkOrderCompletion = () => {
                       />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>保管場所</label>
+                      <label style={{width: 200, flexShrink: 0}}>保管場所</label>
                       <input
                         disabled={!woData}
                         style={{flex: 1, minWidth: 0}}

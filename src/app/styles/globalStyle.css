@@ -302,16 +302,18 @@ button:focus {
   text-align: left;
 }
 
-/* WorkOrderTimeRegistration gosen/common table: 計画数・合格数・不良数・目標時間 are numeric
-   quantities rendered via an editable <input class="table-cell-input">, whose shared base
-   class defaults to text-align:left — override just these two columns to right-align. */
+/* WorkOrderTimeRegistration gosen/common table: 計画数・合格数・不良数・目標時間・作業順序 are
+   numeric quantities rendered via an editable <input class="table-cell-input">, whose shared
+   base class defaults to text-align:left — override these columns to right-align. */
 .delivery-table .tf-tableRow .col-qty,
-.delivery-table .tf-tableRow .col-target-time {
+.delivery-table .tf-tableRow .col-target-time,
+.delivery-table .tf-tableRow .col-op-order {
   justify-content: flex-end;
 }
 
 .delivery-table .tf-tableCell.col-qty .table-cell-input,
-.delivery-table .tf-tableCell.col-target-time .table-cell-input {
+.delivery-table .tf-tableCell.col-target-time .table-cell-input,
+.delivery-table .tf-tableCell.col-op-order .table-cell-input {
   text-align: right;
 }
 
@@ -1836,7 +1838,6 @@ input[type='time'].wot-grid-value2 {
   min-width: 80px;
   width: auto;
   padding: 0 6px;
-  justify-content: flex-start;
 }
 
 .delivery-table .tf-tableCell.col-item-name,
@@ -1849,6 +1850,15 @@ input[type='time'].wot-grid-value2 {
   min-width: 80px;
   width: auto;
   padding: 0 6px;
+}
+
+/* justify-content scoped to row cells only, so headers keep the shared centered alignment.
+   col-qty/col-target-time/col-op-order excluded — they have their own right-align rule further up. */
+.delivery-table .tf-tableRow .col-item-no,
+.delivery-table .tf-tableRow .col-item-name,
+.delivery-table .tf-tableRow .col-op,
+.delivery-table .tf-tableRow .col-process,
+.delivery-table .tf-tableRow .col-remarks {
   justify-content: flex-start;
 }
 
