@@ -79,20 +79,21 @@ const MiscellaneousInAndOutBound = () => {
                       <label style={{ width: 220, flexShrink: 0 }}>有効期限(yymm)</label>
                       <input type='text' ref={dateRef} style={{ flex: 1, minWidth: 0 }} />
                     </div>
+                    <div style={{ flex: '1 1 0', minWidth: 0 }} />
                   </div>
                 </div>
 
                 <div />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-warning'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
                   </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
                   <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-primary'

@@ -103,7 +103,7 @@ const InventoryPrinting = () => {
           {isLandscape ? (
             <>
               <div className='set-header-landscape'>
-                <span className='set-header-title'>庫内バーコードラベル印刷</span>
+                <span className='set-header-title'>庫内ラベル印刷</span>
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
               <div className='set-body-landscape'>
@@ -195,7 +195,7 @@ const InventoryPrinting = () => {
                       <label style={{width: 200, flexShrink: 0}}>不良</label>
                       <input
                         type='checkbox'
-                        style={{width: 28, height: 28, flex: '0 0 auto'}}
+                        style={{width: 36, height: 36, flex: '0 0 auto'}}
                         checked={isDefective}
                         onChange={(e) => setIsDefective(e.target.checked)}
                       />
@@ -241,10 +241,10 @@ const InventoryPrinting = () => {
                   <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowDiscardConfirm(true)}>
                     破棄
                   </button>
-                  <div aria-hidden='true' />
                   <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
                     戻る
                   </button>
+                  <div aria-hidden='true' />
                   <div aria-hidden='true' />
                   <button className='set-btn set-btn-landscape set-warning' onClick={handleRead}>
                     実行

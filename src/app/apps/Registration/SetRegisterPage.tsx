@@ -466,14 +466,14 @@ const SetRegisterPage = () => {
     {key: 'NumOfConfig', headClassName: 'col-NumOfConfig', cellClassName: 'col-NumOfConfig', header: '構成数', render: (row) => row.NumOfConfig},
     {key: 'NumOfCancel', headClassName: 'col-NumOfCancel', cellClassName: 'col-NumOfCancel', header: '解除数', render: (row) => row.NumOfCancel},
     {key: 'moveWarehouse', headClassName: 'col-move', cellClassName: 'col-move', header: '移動倉庫', render: (row) => row.moveWarehouse},
-    {
-      key: 'moveStorage',
-      headClassName: 'col-move',
-      cellClassName: 'col-move',
-      header: '移動保管場所',
-      render: (row) => row.moveStorage,
-    },
-    {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
+    // {
+    //   key: 'moveStorage',
+    //   headClassName: 'col-move',
+    //   cellClassName: 'col-move',
+    //   header: '移動保管場所',
+    //   render: (row) => row.moveStorage,
+    // },
+    // {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
 
   ]
 
@@ -508,6 +508,9 @@ const SetRegisterPage = () => {
                         <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
                       </select>
                     </div>
+                    <div style={{flex: '1 1 0', minWidth: 0}} />
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>{isParentConfirmed ? '品目No.(親)' : 'JANコード(親)'}</label>
                       <input
@@ -590,7 +593,7 @@ const SetRegisterPage = () => {
                   gridClassName='set-register-table inbound-table-landscape'
                   gridStyle={{
                     gridTemplateColumns:
-                      '50px 50px minmax(120px, 0.9fr) minmax(140px, 1fr) minmax(110px, 0.8fr) 100px 100px minmax(120px, 0.9fr) minmax(140px, 1fr) minmax(150px, 1.1fr)',
+                      '50px 50px minmax(120px, 1.3fr) minmax(140px, 1.5fr) minmax(110px, 1.2fr) 100px 100px minmax(120px, 1.3fr)',
                   }}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}
@@ -614,18 +617,18 @@ const SetRegisterPage = () => {
                     解除
                   </button>
                   <button
-                    tabIndex={-1}
-                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
-                    onClick={() => handleReleaseClick({forceHandInput: true})}
-                  >
-                    手入力
-                  </button>
-                  <button
                     tabIndex={isParentConfirmed ? 8 : 6}
                     className='set-btn set-btn-landscape set-warning'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
+                  </button>
+                  <button
+                    tabIndex={-1}
+                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
+                    onClick={() => handleReleaseClick({forceHandInput: true})}
+                  >
+                    手入力
                   </button>
                   <button
                     tabIndex={isParentConfirmed ? 6 : 4}
