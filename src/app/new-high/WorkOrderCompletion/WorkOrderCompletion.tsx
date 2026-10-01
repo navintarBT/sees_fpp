@@ -61,9 +61,11 @@ const WorkOrderCompletion = () => {
   const [plannedCount, setPlannedCount] = useState(persistedState?.plannedCount ?? '')
   const [completedCount, setCompletedCount] = useState(persistedState?.completedCount ?? '')
   const [defectiveCount, setDefectiveCount] = useState(persistedState?.defectiveCount ?? '')
+  const [lotSerial, setLotSerial] = useState('')
   // WO読込後に入力可能となる項目（読込前は入力不可・グレー表示）
   const [officeCode, setOfficeCode] = useState('')
   const [storageLocation, setStorageLocation] = useState('')
+  const [printerDest, setPrinterDest] = useState('')
   const [showWoSelect, setShowWoSelect] = useState(false)
   const [selectedWoNumber, setSelectedWoNumber] = useState('')
   const [showWoLoadConfirm, setShowWoLoadConfirm] = useState(false)
@@ -99,6 +101,7 @@ const WorkOrderCompletion = () => {
     setDefectiveCount('')
     setOfficeCode('')
     setStorageLocation('')
+    setLotSerial('')
   }
 
   useEffect(() => {
@@ -196,11 +199,11 @@ const WorkOrderCompletion = () => {
                 <span className='set-header-title'>WO完了実績登録</span>
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
-              <div className='set-body-landscape set-body-landscape-3row'>
+              <div className='set-body-landscape'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO番号</label>
+                      <label style={{width: 200, flexShrink: 0}}>WO番号</label>
                       <input
                         autoFocus
                         style={{flex: 1, minWidth: 0}}
@@ -222,14 +225,11 @@ const WorkOrderCompletion = () => {
                         WO検索
                       </button>
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO計画数</label>
-                      <input disabled style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={plannedCount} />
-                    </div>
+                    <div style={{flex: '1 1 0', minWidth: 0}} />
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO完了済数</label>
+                      <label style={{width: 200, flexShrink: 0}}>WO計画数</label>
                       <input
                         disabled
                         style={{flex: 1, minWidth: 0, textAlign: 'right'}}
@@ -237,7 +237,22 @@ const WorkOrderCompletion = () => {
                       />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO完了数</label>
+                      <label style={{width: 200, flexShrink: 0}}>WO完了済数</label>
+                      <input disabled style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={plannedCount} />
+                    </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 200, flexShrink: 0}}>WO完了数</label>
+                      <input
+                        disabled={!woData}
+                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        value={defectiveCount}
+                        onChange={(e) => setDefectiveCount(e.target.value)}
+                      />
+                    </div>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                      <label style={{width: 200, flexShrink: 0}}>WO仕損数</label>
                       <input
                         ref={completedCountInputRef}
                         disabled={!woData}
@@ -249,22 +264,22 @@ const WorkOrderCompletion = () => {
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO仕損数</label>
+                      <label style={{width: 200, flexShrink: 0}}>ロットシリアル</label>
                       <input
                         disabled={!woData}
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
-                        value={defectiveCount}
-                        onChange={(e) => setDefectiveCount(e.target.value)}
+                        style={{flex: 1, minWidth: 0}}
+                        value={lotSerial}
+                        onChange={(e) => setLotSerial(e.target.value)}
                       />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>製番</label>
+                      <label style={{width: 200, flexShrink: 0}}>製番</label>
                       <input disabled readOnly style={{flex: 1, minWidth: 0}} value='' />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>事業所</label>
+                      <label style={{width: 200, flexShrink: 0}}>事業所</label>
                       <input
                         disabled={!woData}
                         style={{flex: 1, minWidth: 0}}
@@ -273,7 +288,7 @@ const WorkOrderCompletion = () => {
                       />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 150, flexShrink: 0}}>保管場所</label>
+                      <label style={{width: 200, flexShrink: 0}}>保管場所</label>
                       <input
                         disabled={!woData}
                         style={{flex: 1, minWidth: 0}}
@@ -286,12 +301,25 @@ const WorkOrderCompletion = () => {
 
                 <div />
 
+                <div className='set-printer-row-landscape'>
+                  <label>出力先プリンター</label>
+                  <select
+                    value={printerDest}
+                    onChange={(e) => setPrinterDest(e.target.value)}
+                  >
+                    <option value=''></option>
+                    <option value='プリンター1'>プリンター1</option>
+                    <option value='プリンター2'>プリンター2</option>
+                    <option value='Printer-3-ABCDE12345'>Printer-3-ABCDE12345</option>
+                  </select>
+                </div>
+
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
-                  <button type='button' className='set-btn set-btn-landscape set-success' onClick={handleRegisterClick}>登録</button>
-                  <button className='set-btn set-btn-landscape set-primary' style={{visibility: 'hidden'}}>読込</button>
                   <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>戻る</button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <button type='button' className='set-btn set-btn-landscape set-success' onClick={handleRegisterClick}>登録</button>
                 </ActionFooter>
               </div>
             </>

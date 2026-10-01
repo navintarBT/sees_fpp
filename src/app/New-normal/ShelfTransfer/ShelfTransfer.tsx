@@ -646,6 +646,8 @@ const ShelfTransfer = () => {
                         一括
                       </button>
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>品目No.</label>
                       <input
@@ -656,12 +658,12 @@ const ShelfTransfer = () => {
                         onKeyDown={handleItemNoEnter}
                       />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>ロットシリアル</label>
                       <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.lot_serial_no} />
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>品名</label>
                       <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.shipmentQty} />

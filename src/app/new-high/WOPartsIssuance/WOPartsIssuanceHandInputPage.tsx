@@ -312,6 +312,7 @@ const WOPartsIssuanceHandInputPage = () => {
               ...inputStyle,
               background: 'transparent',
               cursor: isLocked ? 'default' : 'text',
+              textAlign: 'left',
             }}
             value={row.Interior}
             disabled={isLocked}
@@ -355,7 +356,7 @@ const WOPartsIssuanceHandInputPage = () => {
         //   onChange={(value) => updateRow(row.id, {storage: value})}
         // />
         <input
-          style={{...inputStyle, width: '240px'}}
+          style={{...inputStyle, width: '240px', textAlign: 'left'}}
           value={row.storage}
           onChange={(e) => updateRow(row.id, {storage: e.target.value})}
           onClick={(e) => e.stopPropagation()}
@@ -375,7 +376,7 @@ const WOPartsIssuanceHandInputPage = () => {
         //   onChange={(value) => updateRow(row.id, {office: value})}
         // />
         <input
-          style={{...inputStyle, width: '236px'}}
+          style={{...inputStyle, width: '236px', textAlign: 'left'}}
           value={row.office}
           onChange={(e) => updateRow(row.id, {office: e.target.value})}
           onClick={(e) => e.stopPropagation()}
@@ -439,20 +440,16 @@ const WOPartsIssuanceHandInputPage = () => {
                 />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-success' style={{visibility: 'hidden'}}>
-                    出庫登録
-                  </button>
-                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowHandInputConfirm(true)}>
-                    出庫登録
-                  </button>
-                  <button className='set-btn set-btn-landscape set-success' style={{visibility: 'hidden'}}>
-                    出庫登録
-                  </button>
                   <button className='set-btn set-btn-landscape set-hand-input-btn' onClick={handleDeleteClick}>
                     削除
                   </button>
                   <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>
                     戻る
+                  </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowHandInputConfirm(true)}>
+                    出庫登録
                   </button>
                 </ActionFooter>
               </div>

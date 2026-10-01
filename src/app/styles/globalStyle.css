@@ -294,27 +294,59 @@ button:focus {
   text-align: right;
 }
 
-/* WOPartsIssuance: 保管場所・ロット can render a literal "*" wildcard (mixed-value
-   indicator) when a WO/part combination has been issued with differing values — center
-   them. Scoped to this table only; col-storage/col-lot are plain left-aligned text
-   elsewhere. */
-.woPartsIssuance-table .tf-tableRow .col-storage,
-.woPartsIssuance-table .tf-tableRow .col-lot {
-  justify-content: center;
-  text-align: center;
+/* ロット・保管場所 can also render a literal "*" mixed-value indicator, but the
+   client wants both left-aligned regardless. */
+.woPartsIssuance-table .tf-tableRow .col-lot,
+.woPartsIssuance-table .tf-tableRow .col-storage {
+  justify-content: flex-start;
+  text-align: left;
 }
 
-/* WorkOrderTimeRegistration gosen/common table: 計画数・合格数・不良数・目標時間 are numeric
-   quantities rendered via an editable <input class="table-cell-input">, whose shared base
-   class defaults to text-align:left — override just these two columns to right-align. */
+/* WorkOrderTimeRegistration gosen/common table: 計画数・合格数・不良数・目標時間・作業順序 are
+   numeric quantities rendered via an editable <input class="table-cell-input">, whose shared
+   base class defaults to text-align:left — override these columns to right-align. */
 .delivery-table .tf-tableRow .col-qty,
-.delivery-table .tf-tableRow .col-target-time {
+.delivery-table .tf-tableRow .col-target-time,
+.delivery-table .tf-tableRow .col-op-order {
   justify-content: flex-end;
 }
 
 .delivery-table .tf-tableCell.col-qty .table-cell-input,
-.delivery-table .tf-tableCell.col-target-time .table-cell-input {
+.delivery-table .tf-tableCell.col-target-time .table-cell-input,
+.delivery-table .tf-tableCell.col-op-order .table-cell-input {
   text-align: right;
+}
+
+/* WorkOrderTimeRegistration 共通（レイアウト確認用）: client wants the opposite alignment
+   from 五泉/千葉 for this review-only screen — text columns right-aligned, quantity/order
+   columns left-aligned. Scoped to .delivery-table-common (common only) so it doesn't
+   affect 五泉's real production table, which shares .delivery-table with it. */
+.delivery-table-common .tf-tableRow .col-wo,
+.delivery-table-common .tf-tableRow .col-item-no,
+.delivery-table-common .tf-tableRow .col-item-name,
+.delivery-table-common .tf-tableRow .col-op,
+.delivery-table-common .tf-tableRow .col-process,
+.delivery-table-common .tf-tableRow .col-remarks {
+  justify-content: flex-end;
+}
+.delivery-table-common .tf-tableCell.col-wo .table-cell-input,
+.delivery-table-common .tf-tableCell.col-item-no .table-cell-input,
+.delivery-table-common .tf-tableCell.col-item-name .table-cell-input,
+.delivery-table-common .tf-tableCell.col-op .table-cell-input,
+.delivery-table-common .tf-tableCell.col-process .table-cell-input,
+.delivery-table-common .tf-tableCell.col-remarks .table-cell-input {
+  text-align: right;
+}
+
+.delivery-table-common .tf-tableRow .col-qty,
+.delivery-table-common .tf-tableRow .col-target-time,
+.delivery-table-common .tf-tableRow .col-op-order {
+  justify-content: flex-start;
+}
+.delivery-table-common .tf-tableCell.col-qty .table-cell-input,
+.delivery-table-common .tf-tableCell.col-target-time .table-cell-input,
+.delivery-table-common .tf-tableCell.col-op-order .table-cell-input {
+  text-align: left;
 }
 
 /* ShelfTransfer: 移動数 (transfer_qty) is a numeric quantity. */
@@ -1766,7 +1798,7 @@ input[type='time'].wot-grid-value2 {
 }
 
 .wot-radio-title {
-  font-size: 38px;
+  font-size: 25px;
   color: #343a40;
 }
 
@@ -1774,7 +1806,7 @@ input[type='time'].wot-grid-value2 {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 38px;
+  font-size: 25px;
   cursor: pointer;
   color: #495057;
 }
@@ -1806,18 +1838,27 @@ input[type='time'].wot-grid-value2 {
   min-width: 80px;
   width: auto;
   padding: 0 6px;
-  justify-content: flex-start;
 }
 
 .delivery-table .tf-tableCell.col-item-name,
 .delivery-table .tf-tableCell.col-target-time,
 .delivery-table .tf-tableCell.col-qty,
 .delivery-table .tf-tableCell.col-op,
+.delivery-table .tf-tableCell.col-op-order,
 .delivery-table .tf-tableCell.col-process,
 .delivery-table .tf-tableCell.col-remarks {
   min-width: 80px;
   width: auto;
   padding: 0 6px;
+}
+
+/* justify-content scoped to row cells only, so headers keep the shared centered alignment.
+   col-qty/col-target-time/col-op-order excluded — they have their own right-align rule further up. */
+.delivery-table .tf-tableRow .col-item-no,
+.delivery-table .tf-tableRow .col-item-name,
+.delivery-table .tf-tableRow .col-op,
+.delivery-table .tf-tableRow .col-process,
+.delivery-table .tf-tableRow .col-remarks {
   justify-content: flex-start;
 }
 
@@ -1912,9 +1953,10 @@ input[type='time'].wot-grid-value2 {
 
 .wot-radio-group {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: auto 1fr;
   align-items: center;
   height: 85px;
+  gap: 30px;
 }
 
 .wot-radio-items-box {
@@ -2230,7 +2272,7 @@ input[type='time'].wot-grid-value2 {
 }
 
 .woPartsIssuance-table .col-numOfShipments {
-  min-width: 224px;
+  min-width: 90px;
 }
 
 .woPartsIssuance-table .col-office {
@@ -2543,6 +2585,13 @@ input[type='time'].wot-grid-value2 {
   min-width: 200px;
   padding: 0 10px;
   justify-content: flex-start;
+}
+
+/* WO完了実績登録のWO検索: 作業順序だけ右寄せ（他は col-wo-search のまま左寄せ） */
+.col-op-order-search {
+  min-width: 200px;
+  padding: 0 10px;
+  justify-content: flex-end;
 }
 
 /* min-width  choose wo */

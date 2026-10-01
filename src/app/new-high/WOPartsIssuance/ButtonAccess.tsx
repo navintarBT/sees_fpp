@@ -5,7 +5,6 @@ const ButtonAccess = () => {
   const navigate = useNavigate()
   const factoryButtons = [
     { label: 'WO別', path: '/factory/wo-parts-issuance-choose', className: 'mockup-red' },
-    { label: '品番別', path: '/factory/wo-parts-issuance-hand-input-choose', className: 'mockup-blue' },
   ] as const
 
   return (
@@ -15,7 +14,7 @@ const ButtonAccess = () => {
         <div className='mockup-frame'>
           <div className='mockup-header'>WO部品払出</div>
           <div className='mockup-body-landscape'>
-            <div className='mockup-grid-landscape' style={{gridTemplateColumns: 'repeat(2, 1fr)'}}>
+            <div className='mockup-grid-landscape' style={{gridTemplateColumns: 'repeat(1, 1fr)'}}>
               {factoryButtons.map((btn) => (
                 <button key={btn.label} className={`mockup-btn ${btn.className}`} onClick={() => navigate(btn.path)}>
                   {btn.label}

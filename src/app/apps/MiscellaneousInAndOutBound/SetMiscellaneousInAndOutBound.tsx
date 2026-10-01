@@ -431,17 +431,17 @@ const SetMiscellaneousInAndOutBound = () => {
                     削除
                   </button>
                   <button
-                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
-                    onClick={() => handleReleaseClick({ forceHandInput: true })}
-                  >
-                    手入力
-                  </button>
-                  <button
                     ref={backBtnRef}
                     className='set-btn set-btn-landscape set-warning'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
+                  </button>
+                  <button
+                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
+                    onClick={() => handleReleaseClick({ forceHandInput: true })}
+                  >
+                    手入力
                   </button>
                   <button className='set-btn set-btn-landscape set-primary' onClick={handleCompleteClick}>
                     完了

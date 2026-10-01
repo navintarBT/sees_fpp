@@ -19,6 +19,8 @@ type StoredForm = {
     goodQuantity: string
     defectQuantity: string
     defectReason: string
+    defectReasonNote: string
+    additionalNote: string
     fieldsEnabled: boolean
 }
 
@@ -53,6 +55,9 @@ const IncomingProcessRegistration = () => {
     const [goodQuantity, setGoodQuantity] = useState<string>(storedForm?.goodQuantity ?? '')
     const [defectQuantity, setDefectQuantity] = useState<string>(storedForm?.defectQuantity ?? '')
     const [defectReason, setDefectReason] = useState(storedForm?.defectReason ?? '')
+    const [defectReasonNote, setDefectReasonNote] = useState(storedForm?.defectReasonNote ?? '')
+    const [additionalNote, setAdditionalNote] = useState(storedForm?.additionalNote ?? '')
+    const [printerDest, setPrinterDest] = useState('')
     const [fieldsEnabled, setFieldsEnabled] = useState(storedForm?.fieldsEnabled ?? false)
 
     useEffect(() => {
@@ -70,10 +75,12 @@ const IncomingProcessRegistration = () => {
             goodQuantity,
             defectQuantity,
             defectReason,
+            defectReasonNote,
+            additionalNote,
             fieldsEnabled,
         }
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-    }, [productTicketNo, productName, productCode, lotSerial, orderQuantity, receivingQuantity, goodQuantity, defectQuantity, defectReason, fieldsEnabled])
+    }, [productTicketNo, productName, productCode, lotSerial, orderQuantity, receivingQuantity, goodQuantity, defectQuantity, defectReason, defectReasonNote, additionalNote, fieldsEnabled])
 
     const clearFormAndRows = () => {
         setProductTicketNo('')
@@ -85,6 +92,8 @@ const IncomingProcessRegistration = () => {
         setGoodQuantity('')
         setDefectQuantity('')
         setDefectReason('')
+        setDefectReasonNote('')
+        setAdditionalNote('')
         setFieldsEnabled(false)
         sessionStorage.removeItem(STORAGE_KEY)
 
@@ -219,7 +228,7 @@ const IncomingProcessRegistration = () => {
                                 <span className='set-header-title'>入荷工程登録</span>
                                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
                             </div>
-                            <div className='set-body-landscape set-body-landscape-3row'>
+                            <div className='set-body-landscape'>
                                 <div className='set-form-landscape'>
                                     <div className='set-form-landscape-row'>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
@@ -230,9 +239,11 @@ const IncomingProcessRegistration = () => {
                                                 value={productTicketNo}
                                                 onChange={(e) => handleBarcodeScan(e.target.value)}
                                                 onKeyDown={handleBarcodeKeyDown}
-                                                className='set-input-gray'
                                             />
                                         </div>
+                                        <div style={{flex: '1 1 0', minWidth: 0}} />
+                                    </div>
+                                    <div className='set-form-landscape-row'>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>品名</label>
                                             <input
@@ -241,8 +252,6 @@ const IncomingProcessRegistration = () => {
                                                 readOnly
                                             />
                                         </div>
-                                    </div>
-                                    <div className='set-form-landscape-row'>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>品番</label>
                                             <input
@@ -251,12 +260,24 @@ const IncomingProcessRegistration = () => {
                                                 readOnly
                                             />
                                         </div>
+                                    </div>
+                                    <div className='set-form-landscape-row'>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
                                             <input
                                                 style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={lotSerial}
                                                 onChange={(e) => setLotSerial(e.target.value)}
+                                                readOnly={!fieldsEnabled}
+                                            />
+                                        </div>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                            <label style={{width: 200, flexShrink: 0}}>検査工程</label>
+                                            <input
+                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                value={goodQuantity}
+                                                onChange={(e) => handleGoodQuantityChange(e.target.value)}
+                                                type='number'
                                                 readOnly={!fieldsEnabled}
                                             />
                                         </div>
@@ -272,29 +293,7 @@ const IncomingProcessRegistration = () => {
                                             />
                                         </div>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>良品数量</label>
-                                            <input
-                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={goodQuantity}
-                                                onChange={(e) => handleGoodQuantityChange(e.target.value)}
-                                                type='number'
-                                                readOnly={!fieldsEnabled}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>不良数量</label>
-                                            <input
-                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={defectQuantity}
-                                                onChange={(e) => handleDefectQuantityChange(e.target.value)}
-                                                type='number'
-                                                readOnly={!fieldsEnabled}
-                                            />
-                                        </div>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>不良理由</label>
+                                            <label style={{width: 200, flexShrink: 0}}>良品数</label>
                                             <select
                                                 style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={defectReason}
@@ -310,24 +309,64 @@ const IncomingProcessRegistration = () => {
                                             </select>
                                         </div>
                                     </div>
+                                    <div className='set-form-landscape-row'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                            <label style={{width: 200, flexShrink: 0}}>不良数量</label>
+                                            <input
+                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                value={defectQuantity}
+                                                onChange={(e) => handleDefectQuantityChange(e.target.value)}
+                                                type='number'
+                                                readOnly={!fieldsEnabled}
+                                            />
+                                        </div>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                            <label style={{width: 200, flexShrink: 0}}>不良理由</label>
+                                            <input
+                                                style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                value={defectReasonNote}
+                                                onChange={(e) => setDefectReasonNote(e.target.value)}
+                                                readOnly={!fieldsEnabled}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='set-form-landscape-row'>
+                                        <div style={{flex: '1 1 0', minWidth: 0}} />
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                            <label style={{width: 200, flexShrink: 0}}></label>
+                                            <input
+                                                style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                value={additionalNote}
+                                                onChange={(e) => setAdditionalNote(e.target.value)}
+                                                readOnly={!fieldsEnabled}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div />
+
+                                <div className='set-printer-row-landscape'>
+                                    <label>出力先プリンター</label>
+                                    <select
+                                        value={printerDest}
+                                        onChange={(e) => setPrinterDest(e.target.value)}
+                                    >
+                                        <option value=''></option>
+                                        <option value='プリンター1'>プリンター1</option>
+                                        <option value='プリンター2'>プリンター2</option>
+                                        <option value='Printer-3-ABCDE12345'>Printer-3-ABCDE12345</option>
+                                    </select>
+                                </div>
 
                                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
                                     <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
                                         破棄
                                     </button>
-                                    <button
-                                        className='set-btn set-btn-landscape set-primary'
-                                        onClick={() => setShowHandInputConfirm(true)}
-                                        style={{visibility: 'hidden'}}
-                                    >
-                                        手入力
-                                    </button>
                                     <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
                                         戻る
                                     </button>
+                                    <div aria-hidden='true' />
                                     <div aria-hidden='true' />
                                     <button className='set-btn set-btn-landscape set-warning' onClick={handleComplete}>
                                         完了

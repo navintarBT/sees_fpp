@@ -613,7 +613,7 @@ const WOPartsIssuance = () => {
           {isLandscape ? (
             <>
               <div className='set-header-landscape'>
-                <span className='set-header-title'>WO部品出庫　WO別</span>
+                <span className='set-header-title'>WO部品出庫</span>
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
               <div className='set-body-landscape set-body-landscape-3row'>
@@ -651,6 +651,8 @@ const WOPartsIssuance = () => {
                         決定
                       </button>
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>出庫数</label>
                       <input
@@ -661,8 +663,6 @@ const WOPartsIssuance = () => {
                         onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
                       />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>保管場所</label>
                       <input
@@ -681,7 +681,6 @@ const WOPartsIssuance = () => {
                         onChange={(e) => setForm({...form, office: e.target.value})}
                       />
                     </div>
-                    <div style={{flex: '1 1 0', minWidth: 0}} />
                   </div>
                 </div>
 
@@ -705,15 +704,6 @@ const WOPartsIssuance = () => {
                 />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-primary set-success' style={{visibility: 'hidden'}}>
-                    決定
-                  </button>
-                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowRegistration(true)}>
-                    出庫登録
-                  </button>
-                  <button className='set-btn set-btn-landscape set-danger' style={{visibility: 'hidden'}}>
-                    出庫登録
-                  </button>
                   <button
                     className='set-btn set-btn-landscape set-primary set-hand-input-btn'
                     onClick={() => {
@@ -729,12 +719,17 @@ const WOPartsIssuance = () => {
                   <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>
                     戻る
                   </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
+                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowRegistration(true)}>
+                    出庫登録
+                  </button>
                 </ActionFooter>
               </div>
             </>
           ) : (
             <>
-          <div className='set-header'>WO部品出庫　WO別</div>
+          <div className='set-header'>WO部品出庫</div>
           <div className='set-body'>
             <div className='set-form'>
               <div className='set-row set-row-wo wo-parts-row-wo'>
