@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FaPlay } from 'react-icons/fa'
+import { FaPlay, FaRegCalendarAlt } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import {
@@ -41,6 +41,101 @@ type Row = {
 // 要求日・調整日は「YYYY/MM/DD」形式
 const formatDate = (year: number, month: number, day: number) =>
   `${year}/${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}`
+
+const toDateValue = (date: Date) => formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
+
+const parseDateValue = (value: string) => {
+  const [year, month, day] = value.split('/').map(Number)
+  return year && month && day ? new Date(year, month - 1, day) : new Date()
+}
+
+const getCalendarDays = (monthDate: Date) => {
+  const year = monthDate.getFullYear()
+  const month = monthDate.getMonth()
+  const startDate = new Date(year, month, 1 - new Date(year, month, 1).getDay())
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(startDate)
+    date.setDate(startDate.getDate() + index)
+
+    return {
+      date,
+      value: toDateValue(date),
+      inMonth: date.getMonth() === month,
+    }
+  })
+}
+
+const DateField = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [calendarMonth, setCalendarMonth] = useState(() => parseDateValue(value || toDateValue(new Date())))
+
+  const openPicker = () => {
+    setCalendarMonth(parseDateValue(value || toDateValue(new Date())))
+    setIsOpen((prev) => !prev)
+  }
+
+  const changeMonth = (amount: number) => {
+    setCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() + amount, 1))
+  }
+
+  const selectDate = (nextValue: string) => {
+    onChange(nextValue)
+    setIsOpen(false)
+  }
+
+  const calendarDays = getCalendarDays(calendarMonth)
+  const monthLabel = calendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
+
+  return (
+    <div style={{ position: 'relative', flex: 1, minWidth: 0 }}>
+      <input
+        readOnly
+        style={{ width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', cursor: 'pointer' }}
+        value={value}
+        onClick={openPicker}
+        placeholder='yyyy/mm/dd'
+      />
+      <button type='button' className='hand-date-btn' aria-label='Choose date' onClick={openPicker}>
+        <FaRegCalendarAlt />
+      </button>
+      {isOpen && (
+        <div className='hand-calendar hand-calendar-gosen' role='dialog' aria-label='Choose date'>
+          <div className='hand-calendar-header'>
+            <button type='button' onClick={() => changeMonth(-1)}>{'<'}</button>
+            <span>{monthLabel}</span>
+            <button type='button' onClick={() => changeMonth(1)}>{'>'}</button>
+          </div>
+          <div className='hand-calendar-weekdays'>
+            {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
+              <span key={day}>{day}</span>
+            ))}
+          </div>
+          <div className='hand-calendar-days'>
+            {calendarDays.map(({ date, value: dayValue, inMonth }) => (
+              <button
+                type='button'
+                key={dayValue}
+                className={[
+                  'hand-calendar-day',
+                  inMonth ? '' : 'hand-calendar-muted',
+                  dayValue === value ? 'hand-calendar-selected' : '',
+                ].filter(Boolean).join(' ')}
+                onClick={() => selectDate(dayValue)}
+              >
+                {date.getDate()}
+              </button>
+            ))}
+          </div>
+          <div className='hand-calendar-footer'>
+            <button type='button' className='hand-calendar-btn-today' onClick={() => selectDate(toDateValue(new Date()))}>今日</button>
+            <button type='button' className='hand-calendar-btn-clear' onClick={() => selectDate('')}>クリア</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 // 明細部の表示項目（WO作業時間実績登録のWO検索画面と統一）
 const DETAIL_COLUMNS: Array<{ key: keyof Row; header: string }> = [
@@ -153,24 +248,24 @@ const WorkOrderCompletion_Choose_WO = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>要求日</label>
-                      <input style={{flex: 1, minWidth: 0}} value={requestDateFrom} onChange={(e) => setRequestDateFrom(e.target.value)} />
+                      <DateField value={requestDateFrom} onChange={setRequestDateFrom} />
                       <span style={{fontSize: 25, flexShrink: 0}}>～</span>
-                      <input style={{flex: 1, minWidth: 0}} value={requestDateTo} onChange={(e) => setRequestDateTo(e.target.value)} />
+                      <DateField value={requestDateTo} onChange={setRequestDateTo} />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>開始日</label>
-                      <input style={{flex: 1, minWidth: 0}} value={startDateFrom} onChange={(e) => setStartDateFrom(e.target.value)} />
+                      <DateField value={startDateFrom} onChange={setStartDateFrom} />
                       <span style={{fontSize: 25, flexShrink: 0}}>～</span>
-                      <input style={{flex: 1, minWidth: 0}} value={startDateTo} onChange={(e) => setStartDateTo(e.target.value)} />
-                      <button
-                        type='button'
-                        className='set-search-btn set-primary'
-                        style={{height: 50, fontSize: 25, flexShrink: 0}}
-                        onClick={handleSearch}
-                      >
-                        検索
-                      </button>
+                      <DateField value={startDateTo} onChange={setStartDateTo} />
                     </div>
+                    <button
+                      type='button'
+                      className='set-search-btn set-primary'
+                      style={{height: 50, fontSize: 25, flexShrink: 0}}
+                      onClick={handleSearch}
+                    >
+                      検索
+                    </button>
                   </div>
                 </div>
 
@@ -188,7 +283,7 @@ const WorkOrderCompletion_Choose_WO = () => {
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
                   <button
-                    className='set-btn set-btn-landscape set-warning'
+                    className='set-btn set-btn-landscape set-success'
                     onClick={() => navigate('/factory/work-order-completion', orientationState(isLandscape))}
                   >
                     戻る

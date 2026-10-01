@@ -219,7 +219,7 @@ const WorkOrderCompletion = () => {
                       <button
                         type='button'
                         className='set-search-btn set-primary'
-                        style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}}
+                        style={{height: 50, fontSize: 25, flexShrink: 0, width: 210, padding: '0 14px'}}
                         onClick={() => navigate('/factory/work-order-completion-select-wo', orientationState(isLandscape))}
                       >
                         WO検索
@@ -315,11 +315,11 @@ const WorkOrderCompletion = () => {
                 </div>
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>戻る</button>
+                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>戻る</button>
                   <div aria-hidden='true' />
                   <div aria-hidden='true' />
                   <div aria-hidden='true' />
-                  <button type='button' className='set-btn set-btn-landscape set-success' onClick={handleRegisterClick}>登録</button>
+                  <button type='button' className='set-btn set-btn-landscape set-warning' onClick={handleRegisterClick}>登録</button>
                 </ActionFooter>
               </div>
             </>
