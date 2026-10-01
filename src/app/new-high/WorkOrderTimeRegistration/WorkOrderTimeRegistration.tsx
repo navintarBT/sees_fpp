@@ -1735,6 +1735,16 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                       </div>
                     </div>
                   )}
+                  {config.footerLayout === 'chiba' && (
+                    <div className='set-form-landscape-row'>
+                      <div style={{flex: '1 1 0', minWidth: 0}} />
+                      <div style={{flex: '1 1 0', minWidth: 0}} />
+                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                        <label style={{width: 150, flexShrink: 0}}>ロットシリアル</label>
+                        <input disabled readOnly style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value={commonLotSerial} className='set-input-gray' />
+                      </div>
+                    </div>
+                  )}
                   <div className='set-form-landscape-row' style={{flexWrap: 'wrap', rowGap: 20}}>
                     {config.footerLayout !== 'gosen' && (
                       <>
