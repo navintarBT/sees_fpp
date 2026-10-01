@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FaPlay, FaRegCalendarAlt } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
@@ -66,13 +66,34 @@ const getCalendarDays = (monthDate: Date) => {
   })
 }
 
-const DateField = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
-  const [isOpen, setIsOpen] = useState(false)
+const DateField = ({
+  value,
+  onChange,
+  isOpen,
+  onToggle,
+}: {
+  value: string
+  onChange: (value: string) => void
+  isOpen: boolean
+  onToggle: (open: boolean) => void
+}) => {
   const [calendarMonth, setCalendarMonth] = useState(() => parseDateValue(value || toDateValue(new Date())))
+  const wrapperRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        onToggle(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen, onToggle])
 
   const openPicker = () => {
     setCalendarMonth(parseDateValue(value || toDateValue(new Date())))
-    setIsOpen((prev) => !prev)
+    onToggle(!isOpen)
   }
 
   const changeMonth = (amount: number) => {
@@ -81,22 +102,22 @@ const DateField = ({ value, onChange }: { value: string; onChange: (value: strin
 
   const selectDate = (nextValue: string) => {
     onChange(nextValue)
-    setIsOpen(false)
+    onToggle(false)
   }
 
   const calendarDays = getCalendarDays(calendarMonth)
   const monthLabel = calendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
 
   return (
-    <div style={{ position: 'relative', flex: 1, minWidth: 0 }}>
+    <div ref={wrapperRef} className='hand-date-field-register' style={{ flex: 1, minWidth: 0 }}>
       <input
         readOnly
-        style={{ width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', cursor: 'pointer' }}
+        style={{ width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 22px', cursor: 'pointer' }}
         value={value}
         onClick={openPicker}
         placeholder='yyyy/mm/dd'
       />
-      <button type='button' className='hand-date-btn' aria-label='Choose date' onClick={openPicker}>
+      <button type='button' className='hand-date-btn2' aria-label='Choose date' onClick={openPicker}>
         <FaRegCalendarAlt />
       </button>
       {isOpen && (
@@ -161,6 +182,7 @@ const WorkOrderCompletion_Choose_WO = () => {
   const [startDateFrom, setStartDateFrom] = useState('')
   const [startDateTo, setStartDateTo] = useState('')
   const [filteredRows, setFilteredRows] = useState<Row[] | null>(null)
+  const [openDateField, setOpenDateField] = useState<string | null>(null)
   const rows: Row[] = Object.keys(WO_MOCKUP_DATA).map((woNumber, index) => {
     const sequence = String(index + 1).padStart(3, '0')
     return {
@@ -248,20 +270,40 @@ const WorkOrderCompletion_Choose_WO = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>要求日</label>
-                      <DateField value={requestDateFrom} onChange={setRequestDateFrom} />
+                      <DateField
+                        value={requestDateFrom}
+                        onChange={setRequestDateFrom}
+                        isOpen={openDateField === 'requestFrom'}
+                        onToggle={(open) => setOpenDateField(open ? 'requestFrom' : null)}
+                      />
                       <span style={{fontSize: 25, flexShrink: 0}}>～</span>
-                      <DateField value={requestDateTo} onChange={setRequestDateTo} />
+                      <DateField
+                        value={requestDateTo}
+                        onChange={setRequestDateTo}
+                        isOpen={openDateField === 'requestTo'}
+                        onToggle={(open) => setOpenDateField(open ? 'requestTo' : null)}
+                      />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 150, flexShrink: 0}}>開始日</label>
-                      <DateField value={startDateFrom} onChange={setStartDateFrom} />
+                      <DateField
+                        value={startDateFrom}
+                        onChange={setStartDateFrom}
+                        isOpen={openDateField === 'startFrom'}
+                        onToggle={(open) => setOpenDateField(open ? 'startFrom' : null)}
+                      />
                       <span style={{fontSize: 25, flexShrink: 0}}>～</span>
-                      <DateField value={startDateTo} onChange={setStartDateTo} />
+                      <DateField
+                        value={startDateTo}
+                        onChange={setStartDateTo}
+                        isOpen={openDateField === 'startTo'}
+                        onToggle={(open) => setOpenDateField(open ? 'startTo' : null)}
+                      />
                     </div>
                     <button
                       type='button'
                       className='set-search-btn set-primary'
-                      style={{height: 50, fontSize: 25, flexShrink: 0}}
+                      style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}}
                       onClick={handleSearch}
                     >
                       検索

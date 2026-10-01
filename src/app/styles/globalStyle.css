@@ -1799,7 +1799,7 @@ input[type='time'].wot-grid-value2 {
 
 .wot-radio-title {
   font-size: 25px;
-  color: #343a40;
+  color: black;
 }
 
 .wot-radio-item {
@@ -1955,7 +1955,7 @@ input[type='time'].wot-grid-value2 {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  height: 85px;
+  height: 50px;
   gap: 30px;
 }
 

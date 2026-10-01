@@ -1427,7 +1427,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
     <button
       type='button'
       className='set-search-btn set-primary'
-      style={{height: 50, fontSize: 25, flexShrink: 0}}
+      style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}}
       // レイアウト確認用の画面では表示のみ（遷移しない）
       onClick={() => {
         if (config.layoutOnly) return
@@ -1504,7 +1504,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                       <button
                         type='button'
                         className='set-search-btn set-primary'
-                        style={{height: 50, fontSize: 25, flexShrink: 0}}
+                        style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}}
                         onClick={() => selectWoDate('')}
                       >
                         クリア
@@ -1563,7 +1563,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                           <label style={{width: 150, flexShrink: 0}}>備考</label>
                           <input style={{flex: 1, minWidth: 0}} value={defaultRemarks} onChange={(e) => setDefaultRemarks(e.target.value)} />
-                          <button type='button' className='set-search-btn set-primary' style={{height: 50, fontSize: 25, flexShrink: 0}} onClick={applyRemarksToAllRows}>
+                          <button type='button' className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}} onClick={applyRemarksToAllRows}>
                             一括反映
                           </button>
                         </div>
@@ -1615,7 +1615,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                             <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                               <label style={{width: 150, flexShrink: 0}}>備考</label>
                               <input style={{flex: 1, minWidth: 0}} value={defaultRemarks} onChange={(e) => setDefaultRemarks(e.target.value)} />
-                              <button type='button' className='set-search-btn set-primary' style={{height: 50, fontSize: 25, flexShrink: 0}} onClick={applyRemarksToAllRows}>
+                              <button type='button' className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}} onClick={applyRemarksToAllRows}>
                                 一括反映
                               </button>
                             </div>
@@ -1815,7 +1815,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                   <button className='set-btn set-btn-landscape set-danger set-delete-btn-size' onClick={handleDeleteSelected}>
                     選択行削除
                   </button>
-                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>
+                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
                     戻る
                   </button>
                   <div aria-hidden='true' />
@@ -1831,7 +1831,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                   ) : (
                     <div />
                   )}
-                  <button className='set-btn set-btn-landscape set-primary' onClick={handleRegister}>
+                  <button className='set-btn set-btn-landscape set-warning' onClick={handleRegister}>
                     登録
                   </button>
                 </ActionFooter>
@@ -2151,7 +2151,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                 選択行削除
               </button>
 
-              <button className='set-btn set-primary' onClick={handleRegister}>
+              <button className='set-btn set-warning' onClick={handleRegister}>
                 登録
               </button>
 
@@ -2183,7 +2183,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                 </div>
               )}
 
-              <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>
+              <button className='set-btn set-success' onClick={() => setShowBackConfirm(true)}>
                 戻る
               </button>
             </ActionFooter>
