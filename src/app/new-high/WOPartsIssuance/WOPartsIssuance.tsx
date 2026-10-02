@@ -647,7 +647,7 @@ const WOPartsIssuance = () => {
                         onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                         onKeyDown={handleInternalLabelEnter}
                       />
-                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}} onClick={handleDecide}>
+                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 200, padding: '0 14px'}} onClick={handleDecide}>
                         決定
                       </button>
                     </div>
@@ -691,7 +691,7 @@ const WOPartsIssuance = () => {
                   gridClassName='woPartsIssuance-table inbound-table-landscape'
                   gridStyle={{
                     gridTemplateColumns:
-                      '50px minmax(110px, 0.8fr) minmax(110px, 0.8fr) 110px minmax(120px, 0.9fr) minmax(110px, 0.8fr) 90px minmax(130px, 1fr)',
+                      '50px minmax(110px, 0.8fr) minmax(110px, 0.8fr) 110px minmax(120px, 0.9fr) minmax(110px, 0.8fr) 110px minmax(110px, 1fr)',
                   }}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}
@@ -716,12 +716,12 @@ const WOPartsIssuance = () => {
                   >
                     明細確認
                   </button>
-                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>
+                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
                     戻る
                   </button>
                   <div aria-hidden='true' />
                   <div aria-hidden='true' />
-                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowRegistration(true)}>
+                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowRegistration(true)}>
                     出庫登録
                   </button>
                 </ActionFooter>
@@ -764,6 +764,7 @@ const WOPartsIssuance = () => {
                 />
                 <button
                   className='set-search-btn set-success'
+                  style={{width: 200}}
                   onClick={handleDecide}
                 >
                   決定

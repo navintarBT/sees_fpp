@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { FaPlay } from 'react-icons/fa'
+import { useEffect, useRef, useState } from 'react'
+import { FaPlay, FaRegCalendarAlt } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import {
@@ -44,8 +44,128 @@ const DETAIL_COLUMNS: Array<{ key: keyof Row; header: string }> = [
     { key: 'workplace', header: '作業場' },
     { key: 'opOrder', header: '作業順序' },
     { key: 'requestDate', header: '要求日' },
-    { key: 'adjustDate', header: '調整日' },
+    { key: 'adjustDate', header: '開始日' },
 ]
+
+// 要求日・開始日は「YYYY/MM/DD」形式
+const formatDate = (year: number, month: number, day: number) =>
+    `${year}/${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}`
+
+const toDateValue = (date: Date) => formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
+
+const parseDateValue = (value: string) => {
+    const [year, month, day] = value.split('/').map(Number)
+    return year && month && day ? new Date(year, month - 1, day) : new Date()
+}
+
+const getCalendarDays = (monthDate: Date) => {
+    const year = monthDate.getFullYear()
+    const month = monthDate.getMonth()
+    const startDate = new Date(year, month, 1 - new Date(year, month, 1).getDay())
+
+    return Array.from({ length: 42 }, (_, index) => {
+        const date = new Date(startDate)
+        date.setDate(startDate.getDate() + index)
+
+        return {
+            date,
+            value: toDateValue(date),
+            inMonth: date.getMonth() === month,
+        }
+    })
+}
+
+const DateField = ({
+    value,
+    onChange,
+    isOpen,
+    onToggle,
+}: {
+    value: string
+    onChange: (value: string) => void
+    isOpen: boolean
+    onToggle: (open: boolean) => void
+}) => {
+    const [calendarMonth, setCalendarMonth] = useState(() => parseDateValue(value || toDateValue(new Date())))
+    const wrapperRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (!isOpen) return
+        const handleClickOutside = (event: MouseEvent) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+                onToggle(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [isOpen, onToggle])
+
+    const openPicker = () => {
+        setCalendarMonth(parseDateValue(value || toDateValue(new Date())))
+        onToggle(!isOpen)
+    }
+
+    const changeMonth = (amount: number) => {
+        setCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() + amount, 1))
+    }
+
+    const selectDate = (nextValue: string) => {
+        onChange(nextValue)
+        onToggle(false)
+    }
+
+    const calendarDays = getCalendarDays(calendarMonth)
+    const monthLabel = calendarMonth.toLocaleString('ja-JP', { month: 'long', year: 'numeric' })
+
+    return (
+        <div ref={wrapperRef} className='hand-date-field-register' style={{ flex: 1, minWidth: 0 }}>
+            <input
+                readOnly
+                style={{ width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 22px', cursor: 'pointer' }}
+                value={value}
+                onClick={openPicker}
+                placeholder='yyyy/mm/dd'
+            />
+            <button type='button' className='hand-date-btn2' aria-label='Choose date' onClick={openPicker}>
+                <FaRegCalendarAlt />
+            </button>
+            {isOpen && (
+                <div className='hand-calendar hand-calendar-gosen' role='dialog' aria-label='Choose date'>
+                    <div className='hand-calendar-header'>
+                        <button type='button' onClick={() => changeMonth(-1)}>{'<'}</button>
+                        <span>{monthLabel}</span>
+                        <button type='button' onClick={() => changeMonth(1)}>{'>'}</button>
+                    </div>
+                    <div className='hand-calendar-weekdays'>
+                        {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
+                            <span key={day}>{day}</span>
+                        ))}
+                    </div>
+                    <div className='hand-calendar-days'>
+                        {calendarDays.map(({ date, value: dayValue, inMonth }) => (
+                            <button
+                                type='button'
+                                key={dayValue}
+                                className={[
+                                    'hand-calendar-day',
+                                    inMonth ? '' : 'hand-calendar-muted',
+                                    dayValue === value ? 'hand-calendar-selected' : '',
+                                ].filter(Boolean).join(' ')}
+                                onClick={() => selectDate(dayValue)}
+                            >
+                                {date.getDate()}
+                            </button>
+                        ))}
+                    </div>
+                    <div className='hand-calendar-footer'>
+                        <button type='button' className='hand-calendar-btn-today' onClick={() => selectDate(toDateValue(new Date()))}>今日</button>
+                        <button type='button' className='hand-calendar-btn-clear' onClick={() => selectDate('')}>クリア</button>
+                    </div>
+                </div>
+            )}
+        </div>
+    )
+}
 
 // Gosen factory data (from document example)
 const GOSEN_ROWS: Row[] = [
@@ -91,6 +211,13 @@ const WorkOrderTimeRegistrationChoose = () => {
         readStoredSelection(targetPath)
     )
     const [showLoadConfirm, setShowLoadConfirm] = useState(false)
+    const [workplaceFilter, setWorkplaceFilter] = useState('')
+    const [requestDateFrom, setRequestDateFrom] = useState('')
+    const [requestDateTo, setRequestDateTo] = useState('')
+    const [startDateFrom, setStartDateFrom] = useState('')
+    const [startDateTo, setStartDateTo] = useState('')
+    const [filteredRows, setFilteredRows] = useState<Row[] | null>(null)
+    const [openDateField, setOpenDateField] = useState<string | null>(null)
 
     // Re-sync selection when the page becomes visible again
     useEffect(() => {
@@ -102,6 +229,20 @@ const WorkOrderTimeRegistrationChoose = () => {
         window.addEventListener('focus', syncFromStorage)
         return () => window.removeEventListener('focus', syncFromStorage)
     }, [targetPath])
+
+    const displayRows = filteredRows ?? rows
+
+    const handleSearch = () => {
+        const filtered = rows.filter((row) => {
+            if (workplaceFilter && !row.workplace.includes(workplaceFilter)) return false
+            if (requestDateFrom && row.requestDate < requestDateFrom) return false
+            if (requestDateTo && row.requestDate > requestDateTo) return false
+            if (startDateFrom && row.adjustDate < startDateFrom) return false
+            if (startDateTo && row.adjustDate > startDateTo) return false
+            return true
+        })
+        setFilteredRows(filtered)
+    }
 
     const handleLoad = () => {
         if (selectedWoNumbers.length === 0) return
@@ -170,11 +311,66 @@ const WorkOrderTimeRegistrationChoose = () => {
                                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
                             </div>
                             <div className='set-body-landscape set-body-landscape-3row'>
-                                <div />
+                                <div className='set-form-landscape'>
+                                    <div className='set-form-landscape-row'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                            <label style={{width: 150, flexShrink: 0}}>作業場</label>
+                                            <input
+                                                style={{flex: 1, minWidth: 0}}
+                                                value={workplaceFilter}
+                                                onChange={(e) => setWorkplaceFilter(e.target.value)}
+                                            />
+                                            <input disabled readOnly style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value='' />
+                                        </div>
+                                        <div style={{flex: '1 1 0', minWidth: 0}} />
+                                    </div>
+                                    <div className='set-form-landscape-row'>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                            <label style={{width: 150, flexShrink: 0}}>要求日</label>
+                                            <DateField
+                                                value={requestDateFrom}
+                                                onChange={setRequestDateFrom}
+                                                isOpen={openDateField === 'requestFrom'}
+                                                onToggle={(open) => setOpenDateField(open ? 'requestFrom' : null)}
+                                            />
+                                            <span style={{fontSize: 25, flexShrink: 0}}>～</span>
+                                            <DateField
+                                                value={requestDateTo}
+                                                onChange={setRequestDateTo}
+                                                isOpen={openDateField === 'requestTo'}
+                                                onToggle={(open) => setOpenDateField(open ? 'requestTo' : null)}
+                                            />
+                                        </div>
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                            <label style={{width: 150, flexShrink: 0}}>開始日</label>
+                                            <DateField
+                                                value={startDateFrom}
+                                                onChange={setStartDateFrom}
+                                                isOpen={openDateField === 'startFrom'}
+                                                onToggle={(open) => setOpenDateField(open ? 'startFrom' : null)}
+                                            />
+                                            <span style={{fontSize: 25, flexShrink: 0}}>～</span>
+                                            <DateField
+                                                value={startDateTo}
+                                                onChange={setStartDateTo}
+                                                isOpen={openDateField === 'startTo'}
+                                                onToggle={(open) => setOpenDateField(open ? 'startTo' : null)}
+                                            />
+                                        </div>
+                                        <button
+                                            type='button'
+                                            className='set-search-btn set-primary'
+                                            style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}}
+                                            onClick={handleSearch}
+                                        >
+                                            検索
+                                        </button>
+                                    </div>
+                                </div>
 
                                 <TableSection
                                     columns={tableColumns}
-                                    rows={rows}
+                                    rows={displayRows}
                                     className='inbound-table-landscape-wrap'
                                     gridClassName='work-order-choose-table inbound-table-landscape'
                                     getRowKey={(row) => row.id}
@@ -182,18 +378,19 @@ const WorkOrderTimeRegistrationChoose = () => {
                                     onRowActivate={(_rowKey, row) => toggleWoSelection(row)}
                                 />
 
-                                <ActionFooter columns={4} gapX={50} className='set-actionfooter-landscape-offset'>
-                                    <button className='set-btn set-btn-landscape set-primary' style={{ visibility: 'hidden' }}>読込</button>
+                                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                                    <button className='set-btn set-btn-landscape set-success' onClick={() => navigate(targetPath, orientationState(isLandscape))}>
+                                        戻る
+                                    </button>
+                                    <div aria-hidden='true' />
+                                    <div aria-hidden='true' />
+                                    <div aria-hidden='true' />
                                     <button
                                         className='set-btn set-btn-landscape set-primary'
                                         disabled={selectedWoNumbers.length === 0}
                                         onClick={handleLoad}
                                     >
                                         読込
-                                    </button>
-                                    <button className='set-btn set-btn-landscape set-primary' style={{ visibility: 'hidden' }}>読込</button>
-                                    <button className='set-btn set-btn-landscape set-warning' onClick={() => navigate(targetPath, orientationState(isLandscape))}>
-                                        戻る
                                     </button>
                                 </ActionFooter>
                             </div>

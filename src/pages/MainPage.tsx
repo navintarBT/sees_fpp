@@ -66,7 +66,7 @@ const MainPage = () => {
         <Route path='equipment-choose' element={<OrientationChoose title='備品振分登録' targetPath='/factory/equipment' backPath='/factory/warehouse' />} />
         <Route path='equipment' element={<Equipment />} />
         <Route path='equipment-hand-input' element={<EquipmentHandInputPage />} />
-        <Route path='wo-parts-issuance-choose' element={<OrientationChoose title='WO部品出庫　WO別' targetPath='/factory/wo-parts-issuance' backPath='/factory/button-access' />} />
+        <Route path='wo-parts-issuance-choose' element={<OrientationChoose title='WO部品出庫' targetPath='/factory/wo-parts-issuance' backPath='/factory/factory' />} />
         <Route path='wo-parts-issuance-hand-input-choose' element={<OrientationChoose title='WO部品出庫 品番別' targetPath='/factory/wo-parts-issuance-hand-input' backPath='/factory/button-access' />} />
         <Route path='wo-parts-issuance' element={<WOPartsIssuance />} />
         <Route path='wo-parts-issuance-hand-input' element={<WOPartsIssuanceHandInputPage />} />

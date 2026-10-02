@@ -50,16 +50,18 @@ const SetRegisterHandInputPage = () => {
                         <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                       </select>
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>品目No.(親)</label>
                       <input style={{width: 635}} value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>シリアル(親)</label>
                       <input style={{width: 635}} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>移動倉庫</label>
                       <select style={{width: 635}}>
@@ -69,28 +71,26 @@ const SetRegisterHandInputPage = () => {
                         <option>千葉倉庫（WMS）：W004</option>
                       </select>
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>移動保管場所</label>
                       <input style={{width: 635}} value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>数量</label>
                       <input style={{width: 635, textAlign: 'right'}} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>品目No.</label>
                       <input ref={itemNoInputRef} placeholder=' ' style={{width: 635}} />
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>ロット</label>
                       <input placeholder=' ' style={{width: 635}} />
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape'>
                       <label style={{width: 220, flexShrink: 0}}>シリアル</label>
                       <input placeholder=' ' style={{width: 635}} />
@@ -101,14 +101,14 @@ const SetRegisterHandInputPage = () => {
                 <div />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-warning'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
                   </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
                   <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-primary'
