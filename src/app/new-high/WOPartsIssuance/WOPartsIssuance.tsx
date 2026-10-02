@@ -647,7 +647,7 @@ const WOPartsIssuance = () => {
                         onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                         onKeyDown={handleInternalLabelEnter}
                       />
-                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 260, padding: '0 14px'}} onClick={handleDecide}>
+                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 200, padding: '0 14px'}} onClick={handleDecide}>
                         決定
                       </button>
                     </div>
@@ -764,6 +764,7 @@ const WOPartsIssuance = () => {
                 />
                 <button
                   className='set-search-btn set-success'
+                  style={{width: 200}}
                   onClick={handleDecide}
                 >
                   決定
