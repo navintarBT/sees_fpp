@@ -1980,7 +1980,6 @@ input[type='time'].wot-grid-value2 {
 
 .work-order-choose-table {
   min-width: 1056px;
-  min-height: 1436px;
   grid-template-columns: 45px repeat(9, minmax(max-content, 1fr));
 }
 
@@ -2582,14 +2581,14 @@ input[type='time'].wot-grid-value2 {
 
 /* WO検索 明細部（WO作業時間実績登録／WO完了実績登録で共通） */
 .col-wo-search {
-  min-width: 200px;
+  min-width: 180px;
   padding: 0 10px;
   justify-content: flex-start;
 }
 
 /* WO完了実績登録のWO検索: 作業順序だけ右寄せ（他は col-wo-search のまま左寄せ） */
 .col-op-order-search {
-  min-width: 200px;
+  min-width: 180px;
   padding: 0 10px;
   justify-content: flex-end;
 }
