@@ -13,6 +13,8 @@ const ORIENTATION_KEY = 'workOrderTimeRegistrationOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const DEFAULT_TARGET_PATH = '/factory/work-order-time-registration/gosen'
+const COMPLETION_ROUTE_PATH = '/factory/work-order-completion-select-wo'
+const COMPLETION_BACK_PATH = '/factory/work-order-completion'
 
 const getSessionStorageKey = (targetPath: string) => {
     const suffix = targetPath === '/factory/work-order-time-registration/chiba' ? 'chiba' : 'gosen'
@@ -50,6 +52,37 @@ const DETAIL_COLUMNS: Array<{ key: keyof Row; header: string }> = [
 // 要求日・開始日は「YYYY/MM/DD」形式
 const formatDate = (year: number, month: number, day: number) =>
     `${year}/${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}`
+
+// S006 WO完了実績登録のWO検索（mock data; completed/defective is used by the registration page, not this table）
+const WO_MOCKUP_DATA: Record<string, { completed: number; defective: number }> = {
+    'WO-001': { completed: 9, defective: 1 },
+    'WO-002': { completed: 5, defective: 5 },
+    'WO-003': { completed: 8, defective: 2 },
+    'WO-004': { completed: 2, defective: 5 },
+    'WO-005': { completed: 6, defective: 4 },
+    'WO-006': { completed: 4, defective: 6 },
+    'WO-007': { completed: 9, defective: 1 },
+    'WO-008': { completed: 7, defective: 3 },
+    'WO-009': { completed: 4, defective: 6 },
+    'WO-010': { completed: 5, defective: 5 },
+}
+
+const COMPLETION_ROWS: Row[] = Object.keys(WO_MOCKUP_DATA).map((woNumber, index) => {
+    const sequence = String(index + 1).padStart(3, '0')
+    return {
+        id: index + 1,
+        seiban: `製番${sequence}`,
+        woNumber,
+        orderType: index % 2 === 0 ? '製造' : '外注',
+        itemNumber: `品番${sequence}`,
+        itemName: `品名${sequence}`,
+        workplace: `作業場${String((index % 3) + 1).padStart(3, '0')}`,
+        opOrder: String(((index % 3) + 1) * 10),
+        requestDate: formatDate(2026, 6, index + 1),
+        adjustDate: formatDate(2026, 6, index + 3),
+        orderQuantity: 10,
+    }
+})
 
 const toDateValue = (date: Date) => formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
 
@@ -202,13 +235,17 @@ const WorkOrderTimeRegistrationChoose = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const isLandscape = useOrientation(ORIENTATION_KEY)
+    // S006 WO完了実績登録もこの画面を共用する（単一選択・戻り先・データソースが異なるのでモードで分岐）
+    const isCompletionMode = location.pathname === COMPLETION_ROUTE_PATH
     const locationState = location.state as { selectedWoNumbers?: string[]; targetPath?: string } | null
-    const targetPath = locationState?.targetPath ?? DEFAULT_TARGET_PATH
-    const rows = targetPath === '/factory/work-order-time-registration/chiba' ? CHIBA_ROWS : GOSEN_ROWS
+    const targetPath = isCompletionMode ? COMPLETION_BACK_PATH : (locationState?.targetPath ?? DEFAULT_TARGET_PATH)
+    const rows = isCompletionMode
+        ? COMPLETION_ROWS
+        : targetPath === '/factory/work-order-time-registration/chiba' ? CHIBA_ROWS : GOSEN_ROWS
 
-    // Initialize directly from sessionStorage (changed from localStorage)
+    // Initialize directly from sessionStorage (changed from localStorage) — completion mode has no persisted selection
     const [selectedWoNumbers, setSelectedWoNumbers] = useState<string[]>(() =>
-        readStoredSelection(targetPath)
+        isCompletionMode ? [] : readStoredSelection(targetPath)
     )
     const [showLoadConfirm, setShowLoadConfirm] = useState(false)
     const [workplaceFilter, setWorkplaceFilter] = useState('')
@@ -219,8 +256,9 @@ const WorkOrderTimeRegistrationChoose = () => {
     const [filteredRows, setFilteredRows] = useState<Row[] | null>(null)
     const [openDateField, setOpenDateField] = useState<string | null>(null)
 
-    // Re-sync selection when the page becomes visible again
+    // Re-sync selection when the page becomes visible again (time registration modes only)
     useEffect(() => {
+        if (isCompletionMode) return
         const syncFromStorage = () => {
             setSelectedWoNumbers(readStoredSelection(targetPath))
         }
@@ -228,7 +266,7 @@ const WorkOrderTimeRegistrationChoose = () => {
         syncFromStorage()
         window.addEventListener('focus', syncFromStorage)
         return () => window.removeEventListener('focus', syncFromStorage)
-    }, [targetPath])
+    }, [isCompletionMode, targetPath])
 
     const displayRows = filteredRows ?? rows
 
@@ -250,8 +288,14 @@ const WorkOrderTimeRegistrationChoose = () => {
     }
 
     const confirmLoad = () => {
-        storeSelection()
         setShowLoadConfirm(false)
+        if (isCompletionMode) {
+            navigate(COMPLETION_BACK_PATH, {
+                state: { selectedWoNumber: selectedWoNumbers[0], orientation: isLandscape ? 'landscape' : 'portrait' },
+            })
+            return
+        }
+        storeSelection()
         const selectedRows = rows.filter((row) => selectedWoNumbers.includes(row.woNumber))
         navigate(targetPath, {
             state: { selectedWoNumbers, selectedRows, orientation: isLandscape ? 'landscape' : 'portrait' },
@@ -259,6 +303,10 @@ const WorkOrderTimeRegistrationChoose = () => {
     }
 
     const toggleWoSelection = (row: Row) => {
+        if (isCompletionMode) {
+            setSelectedWoNumbers([row.woNumber])
+            return
+        }
         setSelectedWoNumbers((prev) =>
             prev.includes(row.woNumber)
                 ? prev.filter((item) => item !== row.woNumber)
@@ -280,6 +328,7 @@ const WorkOrderTimeRegistrationChoose = () => {
     const isSelectedWoNumber = (woNumber: string) => selectedWoNumbers.includes(woNumber)
 
     // Table columns: arrow + 製番/WO番号/オーダータイプ/品番/品名/作業場/作業順序/要求日/調整日
+    // 完了実績登録（S006）だけ作業順序を右寄せにする（元の画面の見た目を維持）
     const tableColumns: Array<TFTableColumn<Row>> = [
         {
             key: 'arrow',
@@ -292,8 +341,8 @@ const WorkOrderTimeRegistrationChoose = () => {
         },
         ...DETAIL_COLUMNS.map(({ key, header }) => ({
             key,
-            headClassName: 'col-wo-search',
-            cellClassName: 'col-wo-search',
+            headClassName: isCompletionMode && key === 'opOrder' ? 'col-op-order-search' : 'col-wo-search',
+            cellClassName: isCompletionMode && key === 'opOrder' ? 'col-op-order-search' : 'col-wo-search',
             header,
             render: (row: Row) => row[key],
         })),

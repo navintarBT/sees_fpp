@@ -1633,7 +1633,11 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                   {!isCommon && config.showWoSearchButton && (
                     <div className='set-form-landscape-row'>
                       <div style={{flex: '1 1 0', minWidth: 0}} />
-                      <div className='wot-top-row' style={{flexShrink: 0}}>{woSearchButton}</div>
+                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                        <label style={{width: 150, flexShrink: 0}}>WO番号</label>
+                        <input style={{flex: 1, minWidth: 0}} value={commonWoNumberInput} onChange={(e) => setCommonWoNumberInput(e.target.value)} />
+                        {woSearchButton}
+                      </div>
                     </div>
                   )}
                 </div>
