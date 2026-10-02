@@ -34,7 +34,6 @@ import { ShelfTransfer } from '../app/New-normal/ShelfTransfer/ShelfTransfer'
 import { IncomingProcessRegistration } from '../app/New-normal/IncomingProcessRegistration/IncomingProcessRegistration'
 import { IncomingProcessRegistrationHandInputPage } from '../app/New-normal/IncomingProcessRegistration/IncomingProcessRegistrationHandInputPage'
 import { ButtonWorkOrderTime } from '../app/new-high/WorkOrderTimeRegistration/ButtonWorkOrderTime'
-import { WorkOrderCompletion_Choose_WO } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion_Choose_WO'
 import { WorkOrderTimeRegistrationChoose } from '../app/new-high/WorkOrderTimeRegistration/WorkOrderTimeChooseGosen'
 import { InventoryPrinting } from '../app/New-normal/InventoryLabelPrinting/InventoryPrinting'
 
@@ -92,7 +91,7 @@ const MainPage = () => {
         <Route path='incoming-process-registration-choose' element={<OrientationChoose title='入荷工程登録' targetPath='/factory/incoming-process-registration' backPath='/factory/factory' />} />
         <Route path='incoming-process-registration' element={<IncomingProcessRegistration />} />
         <Route path='incoming-process-registration-hand-input' element={<IncomingProcessRegistrationHandInputPage />} />
-        <Route path='work-order-completion-select-wo' element={<WorkOrderCompletion_Choose_WO />} />
+        <Route path='work-order-completion-select-wo' element={<WorkOrderTimeRegistrationChoose />} />
         <Route path='work-order-time-registration-choose' element={<WorkOrderTimeRegistrationChoose />} />
         <Route path='inventory-label-printing-choose' element={<OrientationChoose title='庫内バーコードラベル印刷' targetPath='/factory/inventory-label-printing' backPath='/factory/factory' />} />
         <Route path='inventory-label-printing' element={<InventoryPrinting />} />
