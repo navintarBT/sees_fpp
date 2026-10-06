@@ -76,7 +76,6 @@ const DEFAULT_FORM = {
   janCode: "",
 };
 
-// เก็บ snapshot ของหน้าจอไว้ตอนกด NO เพื่อกลับมาแล้วข้อมูลยังอยู่เหมือนเดิม
 const BACK_STATE_KEY = "DeliverySlipRegistration:backState";
 
 type PersistedState = {
