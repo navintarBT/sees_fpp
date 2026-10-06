@@ -427,23 +427,23 @@ const SetMiscellaneousInAndOutBound = () => {
                   <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
                     破棄
                   </button>
-                  <button className='set-btn set-btn-landscape set-success' onClick={() => handleReleaseClick()}>
+                  <button className='set-btn set-btn-landscape set-hand-input-btn' onClick={() => handleReleaseClick()}>
                     削除
                   </button>
                   <button
                     ref={backBtnRef}
-                    className='set-btn set-btn-landscape set-warning'
+                    className='set-btn set-btn-landscape set-success'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
                   </button>
                   <button
-                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
+                    className='set-btn set-btn-landscape set-primary '
                     onClick={() => handleReleaseClick({ forceHandInput: true })}
                   >
                     手入力
                   </button>
-                  <button className='set-btn set-btn-landscape set-primary' onClick={handleCompleteClick}>
+                  <button className='set-btn set-btn-landscape set-warning' onClick={handleCompleteClick}>
                     完了
                   </button>
                 </ActionFooter>

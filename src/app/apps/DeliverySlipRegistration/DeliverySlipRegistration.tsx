@@ -76,7 +76,6 @@ const DEFAULT_FORM = {
   janCode: "",
 };
 
-// เก็บ snapshot ของหน้าจอไว้ตอนกด NO เพื่อกลับมาแล้วข้อมูลยังอยู่เหมือนเดิม
 const BACK_STATE_KEY = "DeliverySlipRegistration:backState";
 
 type PersistedState = {
@@ -594,7 +593,7 @@ const DeliverySlipRegistration = () => {
                   rows={rows}
                   className="inbound-table-landscape-wrap"
                   gridClassName="delivery-table inbound-table-landscape"
-                  gridStyle={{ gridTemplateColumns: "50px 160px minmax(400px, 1fr)" }}
+                  gridStyle={{ gridTemplateColumns: "50px 200px minmax(400px, 1fr)" }}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}
                   activeRowKey={activeRowId}

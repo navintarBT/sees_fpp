@@ -386,7 +386,6 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
 
   // 共通（レイアウト確認用）：WO番号入力欄
   const [commonWoNumberInput, setCommonWoNumberInput] = useState('')
-  const [commonLotSerial, setCommonLotSerial] = useState('')
 
   // 千葉工場用
   const [showStartTimePicker, setShowStartTimePicker] = useState(false)
@@ -1428,7 +1427,6 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
       type='button'
       className='set-search-btn set-primary'
       style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}}
-      // レイアウト確認用の画面では表示のみ（遷移しない）
       onClick={() => {
         if (config.layoutOnly) return
         navigate('/factory/work-order-time-registration-choose', {
@@ -1510,45 +1508,72 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                         クリア
                       </button>
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>作業者</label>
-                      <input
-                        autoFocus
-                        style={{flex: 1, minWidth: 0}}
-                        ref={parentJanCodeInputRef}
-                        value={workerCode}
-                        onChange={(e) => setWorkerCode(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault()
-                            setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
-                          }
-                        }}
-                      />
-                      <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value={workerName} readOnly />
-                    </div>
+                    {isGosen ? (
+                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                        <label style={{width: 150, flexShrink: 0}}>作業者</label>
+                        <input
+                          autoFocus
+                          style={{flex: 1, minWidth: 0}}
+                          ref={parentJanCodeInputRef}
+                          value={workerCode}
+                          onChange={(e) => setWorkerCode(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
+                            }
+                          }}
+                        />
+                        <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value={workerName} readOnly />
+                      </div>
+                    ) : isCommon || config.showWorkplace ? (
+                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                        <label style={{width: 150, flexShrink: 0}}>作業場</label>
+                        <input
+                          style={{flex: 1, minWidth: 0}}
+                          value={workplaceCode}
+                          onChange={(e) => setWorkplaceCode(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              setWorkplaceName(getWorkplaceNameFromCode(e.currentTarget.value))
+                            }
+                          }}
+                        />
+                        <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} readOnly value={workplaceName} />
+                      </div>
+                    ) : (
+                      <div style={{flex: '1 1 0', minWidth: 0}} />
+                    )}
+                  </div>
+
+                  <div className='set-form-landscape-row'>
+                    {isGosen ? (
+                      <div style={{flex: '1 1 0', minWidth: 0}} />
+                    ) : (
+                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                        <label style={{width: 150, flexShrink: 0}}>作業者</label>
+                        <input
+                          autoFocus
+                          style={{flex: 1, minWidth: 0}}
+                          ref={parentJanCodeInputRef}
+                          value={workerCode}
+                          onChange={(e) => setWorkerCode(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              setWorkerName(getWorkerNameFromCode(e.currentTarget.value))
+                            }
+                          }}
+                        />
+                        <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value={workerName} readOnly />
+                      </div>
+                    )}
+                    <div style={{flex: '1 1 0', minWidth: 0}}>{registrationTypeGroup}</div>
                   </div>
 
                   {isCommon ? (
                     <>
-                      <div className='set-form-landscape-row'>
-                        <div style={{flex: '1 1 0', minWidth: 0}}>{registrationTypeGroup}</div>
-                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                          <label style={{width: 150, flexShrink: 0}}>作業場</label>
-                          <input
-                            style={{flex: 1, minWidth: 0}}
-                            value={workplaceCode}
-                            onChange={(e) => setWorkplaceCode(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                e.preventDefault()
-                                setWorkplaceName(getWorkplaceNameFromCode(e.currentTarget.value))
-                              }
-                            }}
-                          />
-                          <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} readOnly value={workplaceName} />
-                        </div>
-                      </div>
                       <div className='set-form-landscape-row'>
                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                           <label style={{width: 150, flexShrink: 0}}>工程状況初期値</label>
@@ -1576,29 +1601,6 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                     </>
                   ) : (
                     <>
-                      <div className='set-form-landscape-row'>
-                        <div style={{flex: '1 1 0', minWidth: 0}}>{registrationTypeGroup}</div>
-                        {config.showWorkplace ? (
-                          <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                            <label style={{width: 150, flexShrink: 0}}>作業場</label>
-                            <input
-                              style={{flex: 1, minWidth: 0}}
-                              value={workplaceCode}
-                              onChange={(e) => setWorkplaceCode(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                  e.preventDefault()
-                                  setWorkplaceName(getWorkplaceNameFromCode(e.currentTarget.value))
-                                }
-                              }}
-                            />
-                            <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} readOnly value={workplaceName} />
-                          </div>
-                        ) : (
-                          <div style={{flex: '1 1 0', minWidth: 0}} />
-                        )}
-                      </div>
-
                       {config.showProcessDefaults && (
                         <>
                           <div className='set-form-landscape-row'>
@@ -1698,16 +1700,6 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                           )}
                         </div>
                       </div>
-                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                        <label style={{width: 150, flexShrink: 0}}>ロットシリアル</label>
-                        <input
-                          disabled
-                          readOnly
-                          style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
-                          value={commonLotSerial}
-                          className='set-input-gray'
-                        />
-                      </div>
                     </div>
                     <div className='set-form-landscape-row'>
                       <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
@@ -1728,30 +1720,18 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                   </>
                 ) : (
                   <>
-                  {config.footerLayout === 'gosen' && (
-                    <div className='set-form-landscape-row'>
-                      {/* 開始・終了は一旦非表示 */}
-                      <div style={{flex: '1 1 0', minWidth: 0}} />
-                      <div style={{flex: '1 1 0', minWidth: 0}} />
-                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                        <label style={{width: 150, flexShrink: 0}}>ロットシリアル</label>
-                        <input disabled readOnly style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value={commonLotSerial} className='set-input-gray' />
-                      </div>
-                    </div>
-                  )}
-                  {config.footerLayout === 'chiba' && (
-                    <div className='set-form-landscape-row'>
-                      <div style={{flex: '1 1 0', minWidth: 0}} />
-                      <div style={{flex: '1 1 0', minWidth: 0}} />
-                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                        <label style={{width: 150, flexShrink: 0}}>ロットシリアル</label>
-                        <input disabled readOnly style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value={commonLotSerial} className='set-input-gray' />
-                      </div>
-                    </div>
-                  )}
                   <div className='set-form-landscape-row' style={{flexWrap: 'wrap', rowGap: 20}}>
                     {config.footerLayout !== 'gosen' && (
                       <>
+                        {config.footerLayout === 'chiba' && (
+                          <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                            <label style={{width: 100, flexShrink: 0}}>作業時間</label>
+                            <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={workDurationHours} readOnly />
+                            <span style={{fontSize: 25, flexShrink: 0}}>時間</span>
+                            <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={workDurationMinutes} readOnly />
+                            <span style={{fontSize: 25, flexShrink: 0}}>分</span>
+                          </div>
+                        )}
                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                           <label style={{width: 100, flexShrink: 0}}>開始</label>
                           <div style={{position: 'relative', flex: 1, minWidth: 0}}>
@@ -1792,15 +1772,6 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                             )}
                           </div>
                         </div>
-                        {config.footerLayout === 'chiba' && (
-                          <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                            <label style={{width: 100, flexShrink: 0}}>作業時間</label>
-                            <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={workDurationHours} readOnly />
-                            <span style={{fontSize: 25, flexShrink: 0}}>時間</span>
-                            <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={workDurationMinutes} readOnly />
-                            <span style={{fontSize: 25, flexShrink: 0}}>分</span>
-                          </div>
-                        )}
                       </>
                     )}
                     {config.footerLayout !== 'chiba' && (
@@ -1826,16 +1797,18 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                 )}
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-danger set-delete-btn-size' onClick={handleDeleteSelected}>
+                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
+                    破棄
+                  </button>
+                  <button className='set-btn set-btn-landscape set-hand-input-btn set-delete-btn-size' onClick={handleDeleteSelected}>
                     選択行削除
                   </button>
                   <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
                     戻る
                   </button>
-                  <div aria-hidden='true' />
                   {config.showStartStopButton ? (
                     <button
-                      className='set-btn set-btn-landscape set-hand-input-btn'
+                      className='set-btn set-btn-landscape set-primary'
                       onClick={config.layoutOnly ? undefined : handleWorkStartStop}
                       disabled={workStartStopDisabled}
                       style={{opacity: workStartStopDisabled ? 0.5 : 1, cursor: workStartStopDisabled ? 'not-allowed' : 'pointer'}}
@@ -2178,7 +2151,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
 
               {config.showStartStopButton ? (
                 <button
-                  className='set-btn set-hand-input-btn'
+                  className='set-btn set-primary'
                   // レイアウト確認用の画面では表示のみ
                   onClick={config.layoutOnly ? undefined : handleWorkStartStop}
                   disabled={workStartStopDisabled}
@@ -2232,7 +2205,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
             </div>
           )}
 
-          {isGosen && showClearConfirm && (
+          {showClearConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
               <div className='set-modal' role='dialog' aria-modal='true'>
                 <div className='set-modal-header'>確認</div>
@@ -2240,7 +2213,15 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                 <div className='set-modal-actions'>
                   <button
                     className='set-modal-btn set-modal-yes'
-                    onClick={() => { setShowClearConfirm(false); clearLoadedRowsGosen(); resetTableScroll() }}
+                    onClick={() => {
+                      setShowClearConfirm(false)
+                      if (isChiba) {
+                        clearAllChiba()
+                      } else {
+                        clearLoadedRowsGosen()
+                      }
+                      resetTableScroll()
+                    }}
                   >
                     はい
                   </button>

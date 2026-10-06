@@ -611,28 +611,28 @@ const SetRegisterPage = () => {
                   </button>
                   <button
                     tabIndex={isParentConfirmed ? 7 : 5}
-                    className='set-btn set-btn-landscape set-success'
+                    className='set-btn set-btn-landscape set-hand-input-btn'
                     onClick={() => handleReleaseClick()}
                   >
                     解除
                   </button>
                   <button
                     tabIndex={isParentConfirmed ? 8 : 6}
-                    className='set-btn set-btn-landscape set-warning'
+                    className='set-btn set-btn-landscape set-success'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
                   </button>
                   <button
                     tabIndex={-1}
-                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
+                    className='set-btn set-btn-landscape set-primary set-primary'
                     onClick={() => handleReleaseClick({forceHandInput: true})}
                   >
                     手入力
                   </button>
                   <button
                     tabIndex={isParentConfirmed ? 6 : 4}
-                    className='set-btn set-btn-landscape set-primary'
+                    className='set-btn set-btn-landscape set-warning'
                     onClick={() => setShowCompleteConfirm(true)}
                   >
                     完了
@@ -751,7 +751,7 @@ const SetRegisterPage = () => {
               </button>
               <button
                 tabIndex={isParentConfirmed ? 6 : 4}
-                className='set-btn set-primary'
+                className='set-btn set-warning'
                 onClick={() => setShowCompleteConfirm(true)}
               >
                 完了
