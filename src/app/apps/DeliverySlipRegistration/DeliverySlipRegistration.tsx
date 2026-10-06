@@ -593,7 +593,7 @@ const DeliverySlipRegistration = () => {
                   rows={rows}
                   className="inbound-table-landscape-wrap"
                   gridClassName="delivery-table inbound-table-landscape"
-                  gridStyle={{ gridTemplateColumns: "50px 160px minmax(400px, 1fr)" }}
+                  gridStyle={{ gridTemplateColumns: "50px 200px minmax(400px, 1fr)" }}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}
                   activeRowKey={activeRowId}
