@@ -7,6 +7,9 @@ import { useOrientation, orientationState } from '../../hooks/useOrientation'
 const ORIENTATION_KEY = 'workOrderCompletionOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
+// 入力欄の幅を「半角文字 n 文字が収まるサイズ」にする（padding・border は幅の外側に加算）
+const charWidth = (n: number) => ({ boxSizing: 'content-box' as const, width: `${n}ch`, flex: '0 0 auto' })
+
 const WO_MOCKUP_DATA: Record<string, { planned: number; completed: number; defective: number }> = {
   'WO-001': { planned: 10, completed: 9, defective: 1 },
   'WO-002': { planned: 10, completed: 5, defective: 5 },
@@ -206,7 +209,7 @@ const WorkOrderCompletion = () => {
                       <label style={{width: 200, flexShrink: 0}}>WO番号</label>
                       <input
                         autoFocus
-                        style={{flex: 1, minWidth: 0}}
+                        style={charWidth(8)}
                         value={woNumber}
                         onChange={(e) => {
                           setWoNumber(e.target.value)
@@ -232,13 +235,13 @@ const WorkOrderCompletion = () => {
                       <label style={{width: 200, flexShrink: 0}}>WO計画数</label>
                       <input
                         disabled
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        style={{...charWidth(15), textAlign: 'right'}}
                         value={woData ? String(toCountNumber(plannedCount) - toCountNumber(completedCount)) : ''}
                       />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 200, flexShrink: 0}}>WO完了済数</label>
-                      <input disabled style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={plannedCount} />
+                      <input disabled style={{...charWidth(15), textAlign: 'right'}} value={plannedCount} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
@@ -246,7 +249,7 @@ const WorkOrderCompletion = () => {
                       <label style={{width: 200, flexShrink: 0}}>WO完了数</label>
                       <input
                         disabled={!woData}
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        style={{...charWidth(15), textAlign: 'right'}}
                         value={defectiveCount}
                         onChange={(e) => setDefectiveCount(e.target.value)}
                       />
@@ -256,7 +259,7 @@ const WorkOrderCompletion = () => {
                       <input
                         ref={completedCountInputRef}
                         disabled={!woData}
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        style={{...charWidth(15), textAlign: 'right'}}
                         value={completedCount}
                         onChange={(e) => setCompletedCount(e.target.value)}
                       />
@@ -267,14 +270,14 @@ const WorkOrderCompletion = () => {
                       <label style={{width: 200, flexShrink: 0}}>ロットシリアル</label>
                       <input
                         disabled={!woData}
-                        style={{flex: 1, minWidth: 0}}
+                        style={charWidth(30)}
                         value={lotSerial}
                         onChange={(e) => setLotSerial(e.target.value)}
                       />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 200, flexShrink: 0}}>製番</label>
-                      <input disabled readOnly style={{flex: 1, minWidth: 0}} value='' />
+                      <input disabled readOnly style={charWidth(30)} value='' />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
@@ -291,7 +294,7 @@ const WorkOrderCompletion = () => {
                       <label style={{width: 200, flexShrink: 0}}>保管場所</label>
                       <input
                         disabled={!woData}
-                        style={{flex: 1, minWidth: 0}}
+                        style={charWidth(20)}
                         value={storageLocation}
                         onChange={(e) => setStorageLocation(e.target.value)}
                       />
@@ -304,6 +307,7 @@ const WorkOrderCompletion = () => {
                 <div className='set-printer-row-landscape'>
                   <label>出力先プリンター</label>
                   <select
+                    style={{...charWidth(40), paddingRight: 52}}
                     value={printerDest}
                     onChange={(e) => setPrinterDest(e.target.value)}
                   >
