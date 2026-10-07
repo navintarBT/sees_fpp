@@ -365,7 +365,7 @@ const WorkOrderTimeRegistrationChoose = () => {
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 150, flexShrink: 0}}>作業場</label>
                                             <input
-                                                style={{flex: 1, minWidth: 0}}
+                                                style={{boxSizing: 'content-box', width: '12ch', flex: '0 0 auto'}}
                                                 value={workplaceFilter}
                                                 onChange={(e) => setWorkplaceFilter(e.target.value)}
                                             />
