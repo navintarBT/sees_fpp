@@ -20,7 +20,6 @@ type StoredForm = {
     defectQuantity: string
     defectReason: string
     defectReasonNote: string
-    additionalNote: string
     fieldsEnabled: boolean
 }
 
@@ -56,7 +55,7 @@ const IncomingProcessRegistration = () => {
     const [defectQuantity, setDefectQuantity] = useState<string>(storedForm?.defectQuantity ?? '')
     const [defectReason, setDefectReason] = useState(storedForm?.defectReason ?? '')
     const [defectReasonNote, setDefectReasonNote] = useState(storedForm?.defectReasonNote ?? '')
-    const [additionalNote, setAdditionalNote] = useState(storedForm?.additionalNote ?? '')
+    const [inspectionProcess, setInspectionProcess] = useState('')
     const [printerDest, setPrinterDest] = useState('')
     const [fieldsEnabled, setFieldsEnabled] = useState(storedForm?.fieldsEnabled ?? false)
 
@@ -76,11 +75,10 @@ const IncomingProcessRegistration = () => {
             defectQuantity,
             defectReason,
             defectReasonNote,
-            additionalNote,
             fieldsEnabled,
         }
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-    }, [productTicketNo, productName, productCode, lotSerial, orderQuantity, receivingQuantity, goodQuantity, defectQuantity, defectReason, defectReasonNote, additionalNote, fieldsEnabled])
+    }, [productTicketNo, productName, productCode, lotSerial, orderQuantity, receivingQuantity, goodQuantity, defectQuantity, defectReason, defectReasonNote, fieldsEnabled])
 
     const clearFormAndRows = () => {
         setProductTicketNo('')
@@ -93,7 +91,6 @@ const IncomingProcessRegistration = () => {
         setDefectQuantity('')
         setDefectReason('')
         setDefectReasonNote('')
-        setAdditionalNote('')
         setFieldsEnabled(false)
         sessionStorage.removeItem(STORAGE_KEY)
 
@@ -274,10 +271,9 @@ const IncomingProcessRegistration = () => {
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>検査工程</label>
                                             <input
-                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={goodQuantity}
-                                                onChange={(e) => handleGoodQuantityChange(e.target.value)}
-                                                type='number'
+                                                style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                value={inspectionProcess}
+                                                onChange={(e) => setInspectionProcess(e.target.value)}
                                                 readOnly={!fieldsEnabled}
                                             />
                                         </div>
@@ -294,22 +290,16 @@ const IncomingProcessRegistration = () => {
                                         </div>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>良品数</label>
-                                            <select
-                                                style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={defectReason}
-                                                onChange={(e) => setDefectReason(e.target.value)}
-                                                disabled={!fieldsEnabled}
-                                            >
-                                                <option value=''></option>
-                                                <option value='キズ'>キズ</option>
-                                                <option value='汚れ・異物付着'>汚れ・異物付着</option>
-                                                <option value='メッキ不良'>メッキ不良</option>
-                                                <option value='寸法不良'>寸法不良</option>
-                                                <option value='穴位置ズレ'>穴位置ズレ</option>
-                                            </select>
+                                            <input
+                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                value={goodQuantity}
+                                                onChange={(e) => handleGoodQuantityChange(e.target.value)}
+                                                type='number'
+                                                readOnly={!fieldsEnabled}
+                                            />
                                         </div>
                                     </div>
-                                    <div className='set-form-landscape-row'>
+                                    <div className='set-form-landscape-row' style={{alignItems: 'flex-start'}}>
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>不良数量</label>
                                             <input
@@ -320,26 +310,29 @@ const IncomingProcessRegistration = () => {
                                                 readOnly={!fieldsEnabled}
                                             />
                                         </div>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>不良理由</label>
-                                            <input
-                                                style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={defectReasonNote}
-                                                onChange={(e) => setDefectReasonNote(e.target.value)}
-                                                readOnly={!fieldsEnabled}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className='set-form-landscape-row'>
-                                        <div style={{flex: '1 1 0', minWidth: 0}} />
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}></label>
-                                            <input
-                                                style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={additionalNote}
-                                                onChange={(e) => setAdditionalNote(e.target.value)}
-                                                readOnly={!fieldsEnabled}
-                                            />
+                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, alignItems: 'flex-start'}}>
+                                            <label style={{width: 200, flexShrink: 0, paddingTop: 12}}>不良理由</label>
+                                            <div style={{display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minWidth: 0}}>
+                                                <select
+                                                    style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                    value={defectReason}
+                                                    onChange={(e) => setDefectReason(e.target.value)}
+                                                    disabled={!fieldsEnabled}
+                                                >
+                                                    <option value=''></option>
+                                                    <option value='キズ'>キズ</option>
+                                                    <option value='汚れ・異物付着'>汚れ・異物付着</option>
+                                                    <option value='メッキ不良'>メッキ不良</option>
+                                                    <option value='寸法不良'>寸法不良</option>
+                                                    <option value='穴位置ズレ'>穴位置ズレ</option>
+                                                </select>
+                                                <textarea
+                                                    style={{width: '100%', minHeight: 80, resize: 'vertical', fontSize: 20, padding: 10, borderRadius: 14, border: '2px solid #5b6d86', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                    value={defectReasonNote}
+                                                    onChange={(e) => setDefectReasonNote(e.target.value)}
+                                                    readOnly={!fieldsEnabled}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
