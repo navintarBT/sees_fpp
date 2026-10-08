@@ -180,14 +180,14 @@ const InventoryPrinting = () => {
                         onChange={(e) => setArrivalDate(e.target.value)}
                       />
                     </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 200, flexShrink: 0}}>入荷数量</label>
                       <input
                         style={{flex: 1, minWidth: 0, textAlign: 'right'}}
                         value={arrivalQty}
                         onChange={(e) => setArrivalQty(e.target.value)}
                       />
-                      <input disabled readOnly style={{width: 80, flexShrink: 0, textAlign: 'center', backgroundColor: '#d9d9d9'}} value='EA' className='set-input-gray' />
+                      <input disabled readOnly style={{width: 80, flexShrink: 0, marginLeft: -18, textAlign: 'center', backgroundColor: '#d9d9d9'}} value='EA' className='set-input-gray' />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
