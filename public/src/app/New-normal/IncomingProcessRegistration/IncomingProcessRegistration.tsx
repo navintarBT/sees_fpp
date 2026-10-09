@@ -326,10 +326,8 @@ const IncomingProcessRegistration = () => {
                                                     <option value='寸法不良'>寸法不良</option>
                                                     <option value='穴位置ズレ'>穴位置ズレ</option>
                                                 </select>
-                                                <input
-                                                    type='text'
-                                                    maxLength={30}
-                                                    style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                <textarea
+                                                    style={{width: '100%', minHeight: 80, resize: 'vertical', fontSize: 20, padding: 10, borderRadius: 14, border: '2px solid #5b6d86', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                     value={defectReasonNote}
                                                     onChange={(e) => setDefectReasonNote(e.target.value)}
                                                     readOnly={!fieldsEnabled}
