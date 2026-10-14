@@ -17,7 +17,6 @@ import { Equipment } from '../app/apps/EquipmentDistribution/Equipment'
 import { EquipmentHandInputPage } from '../app/apps/EquipmentDistribution/EquipmentHandInputPage'
 import { WorkOrderCompletion } from '../app/new-high/WorkOrderCompletion/WorkOrderCompletion'
 import { Factory } from './layout/factory'
-import { Warehouse } from './layout/warehouse'
 import { WOPartsIssuance } from '../app/new-high/WOPartsIssuance/WOPartsIssuance'
 import { WOPartsIssuanceHandInputPage } from '../app/new-high/WOPartsIssuance/WOPartsIssuanceHandInputPage'
 import { WOPartsIssuanceDetail } from '../app/new-high/WOPartsIssuance/WOPartsIssuanceDetail'
@@ -41,8 +40,8 @@ const MainPage = () => {
   return (
     <Routes>
       <Route element={<Outlet />}>
-        <Route index element={<Warehouse />} />
-        <Route path='warehouse' element={<Warehouse />} />
+        <Route index element={<Factory />} />
+        <Route path='warehouse' element={<Factory />} />
         <Route path='factory' element={<Factory />} />
         <Route path='set-register-choose' element={<OrientationChoose title='セット構成登録' targetPath='/factory/set-register' backPath='/factory/warehouse' />} />
         <Route path='set-register' element={<SetRegisterPage />} />

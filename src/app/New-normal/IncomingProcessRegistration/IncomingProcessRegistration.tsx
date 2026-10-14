@@ -344,6 +344,7 @@ const IncomingProcessRegistration = () => {
                                 <div className='set-printer-row-landscape'>
                                     <label>出力先プリンター</label>
                                     <select
+                                        style={{flex: '0 0 650px'}}
                                         value={printerDest}
                                         onChange={(e) => setPrinterDest(e.target.value)}
                                     >
