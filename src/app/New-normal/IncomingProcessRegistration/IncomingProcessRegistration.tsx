@@ -232,7 +232,7 @@ const IncomingProcessRegistration = () => {
                                             <label style={{width: 200, flexShrink: 0}}>現品票No.</label>
                                             <input
                                                 autoFocus
-                                                style={{flex: 1, minWidth: 0}}
+                                                style={{width: 305, flexShrink: 0}}
                                                 value={productTicketNo}
                                                 onChange={(e) => handleBarcodeScan(e.target.value)}
                                                 onKeyDown={handleBarcodeKeyDown}
@@ -252,7 +252,7 @@ const IncomingProcessRegistration = () => {
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>品番</label>
                                             <input
-                                                style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
+                                                style={{width: 425, flexShrink: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
                                                 value={productCode}
                                                 readOnly
                                             />
@@ -262,7 +262,7 @@ const IncomingProcessRegistration = () => {
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
                                             <input
-                                                style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                style={{width: 500, flexShrink: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={lotSerial}
                                                 onChange={(e) => setLotSerial(e.target.value)}
                                                 readOnly={!fieldsEnabled}
@@ -282,7 +282,7 @@ const IncomingProcessRegistration = () => {
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>入荷数量</label>
                                             <input
-                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}}
+                                                style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}}
                                                 value={receivingQuantity}
                                                 onChange={(e) => handleReceivingQuantityChange(e.target.value)}
                                                 readOnly
@@ -291,7 +291,7 @@ const IncomingProcessRegistration = () => {
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>良品数</label>
                                             <input
-                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={goodQuantity}
                                                 onChange={(e) => handleGoodQuantityChange(e.target.value)}
                                                 type='number'
@@ -303,7 +303,7 @@ const IncomingProcessRegistration = () => {
                                         <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                                             <label style={{width: 200, flexShrink: 0}}>不良数量</label>
                                             <input
-                                                style={{flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={defectQuantity}
                                                 onChange={(e) => handleDefectQuantityChange(e.target.value)}
                                                 type='number'

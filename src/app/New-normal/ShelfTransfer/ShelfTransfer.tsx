@@ -626,7 +626,7 @@ const ShelfTransfer = () => {
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>保管場所</label>
                       <select
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 350, flexShrink: 0}}
                         value={form.parentStorage}
                         onChange={(e) => setForm({...form, parentStorage: e.target.value})}
                       >
@@ -652,7 +652,7 @@ const ShelfTransfer = () => {
                       <label style={{width: 180, flexShrink: 0}}>品目No.</label>
                       <input
                         ref={itemNoInputRef}
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 425, flexShrink: 0}}
                         value={form.internalLabel}
                         onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                         onKeyDown={handleItemNoEnter}
@@ -660,7 +660,7 @@ const ShelfTransfer = () => {
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>ロットシリアル</label>
-                      <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.lot_serial_no} />
+                      <input readOnly style={{width: 500, flexShrink: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.lot_serial_no} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
@@ -672,11 +672,11 @@ const ShelfTransfer = () => {
                       <label style={{width: 180, flexShrink: 0}}>移動数量</label>
                       <input
                         readOnly={mode === 'dest'}
-                        style={{flex: 1, minWidth: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'right'}}
+                        style={{width: 275, flexShrink: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'right'}}
                         value={form.transfer_qty}
                         onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                       />
-                      <button className='set-search-btn set-primary' style={{...grayFieldStyle, height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}} disabled>
+                      <button className='set-search-btn set-primary' style={{...grayFieldStyle, height: 50, fontSize: 25, flexShrink: 0, width: 140, padding: '0 14px'}} disabled>
                         EA
                       </button>
                       <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}} onClick={handleAddDetail}>
