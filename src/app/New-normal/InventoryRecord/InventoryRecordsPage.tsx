@@ -469,7 +469,7 @@ const InventoryRecordsPage = () => {
                       <label style={{width: 210, flexShrink: 0}}>出荷No.／発注No.</label>
                       <input
                         ref={parentItemNoRef}
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 260, flexShrink: 0}}
                         value={form.parentItemNo}
                         disabled={isLoaded}
                         onChange={(e) => {
@@ -592,6 +592,7 @@ const InventoryRecordsPage = () => {
                 <div className='set-printer-row-landscape'>
                   <label>出力先プリンター</label>
                   <select
+                    style={{flex: '0 0 650px'}}
                     value={printerDest}
                     onChange={(e) => setPrinterDest(e.target.value)}
                   >

@@ -623,7 +623,7 @@ const WOPartsIssuance = () => {
                       <label style={{width: 180, flexShrink: 0}}>WO番号</label>
                       <input
                         autoFocus
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 170, flexShrink: 0}}
                         value={form.woNumber}
                         disabled={isWoNumberLocked}
                         onChange={(e) => setForm({...form, woNumber: e.target.value})}
@@ -657,7 +657,7 @@ const WOPartsIssuance = () => {
                       <label style={{width: 180, flexShrink: 0}}>出庫数</label>
                       <input
                         ref={shipmentQtyInputRef}
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        style={{width: 275, flexShrink: 0, textAlign: 'right'}}
                         disabled={isIssueDetailLocked}
                         value={form.shipmentQty}
                         onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
@@ -666,7 +666,7 @@ const WOPartsIssuance = () => {
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>保管場所</label>
                       <input
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 350, flexShrink: 0}}
                         disabled={isIssueDetailLocked}
                         value={form.storage}
                         onChange={(e) => setForm({...form, storage: e.target.value})}
@@ -675,7 +675,7 @@ const WOPartsIssuance = () => {
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 180, flexShrink: 0}}>事業所</label>
                       <input
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 230, flexShrink: 0}}
                         disabled={isIssueDetailLocked}
                         value={form.office}
                         onChange={(e) => setForm({...form, office: e.target.value})}

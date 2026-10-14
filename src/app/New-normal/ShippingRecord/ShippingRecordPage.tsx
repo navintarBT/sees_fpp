@@ -444,7 +444,7 @@ const ShippingRecordPage = () => {
                       <label style={{width: 210, flexShrink: 0}}>出荷指示No.</label>
                       <input
                         autoFocus
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 170, flexShrink: 0}}
                         value={form.parentItemNo}
                         disabled={isLoaded}
                         onChange={(e) => {
@@ -480,7 +480,7 @@ const ShippingRecordPage = () => {
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 270, flexShrink: 0}}>保管場所</label>
                       <input
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 350, flexShrink: 0}}
                         value={form.moveStorage}
                         onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                         disabled={!isLoaded}
@@ -491,7 +491,7 @@ const ShippingRecordPage = () => {
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
                       <label style={{width: 210, flexShrink: 0}}>数量</label>
                       <input
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        style={{width: 275, flexShrink: 0, textAlign: 'right'}}
                         value={form.qty}
                         onChange={(e) => setForm({...form, qty: e.target.value})}
                         disabled={!isLoaded}

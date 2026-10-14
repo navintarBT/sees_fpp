@@ -73,27 +73,27 @@ const ShippingRecordHandInputPage = () => {
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>保管場所</label>
-                      <input style={{flex: 1, minWidth: 0}} value={storage} onChange={(e) => setStorage(e.target.value)} />
+                      <input style={{width: 350, flexShrink: 0}} value={storage} onChange={(e) => setStorage(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>数量</label>
-                      <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={qty} onChange={(e) => setQty(e.target.value)} />
+                      <input style={{width: 275, flexShrink: 0, textAlign: 'right'}} value={qty} onChange={(e) => setQty(e.target.value)} />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>品目No.</label>
-                      <input ref={itemNoRef} style={{flex: 1, minWidth: 0}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
+                      <input ref={itemNoRef} style={{width: 425, flexShrink: 0}} value={itemNo} onChange={(e) => setItemNo(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>ロットシリアル</label>
-                      <input style={{flex: 1, minWidth: 0}} value={lotSerial} onChange={(e) => setLotSerial(e.target.value)} />
+                      <input style={{width: 500, flexShrink: 0}} value={lotSerial} onChange={(e) => setLotSerial(e.target.value)} />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 220, flexShrink: 0}}>有効期限(yymm)</label>
-                      <input style={{flex: 1, minWidth: 0}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
+                      <input style={{width: 110, flexShrink: 0}} value={expiry} onChange={(e) => setExpiry(e.target.value)} />
                     </div>
                   </div>
                 </div>
