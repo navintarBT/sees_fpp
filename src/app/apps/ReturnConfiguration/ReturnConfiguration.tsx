@@ -44,17 +44,17 @@ const ReturnConfiguration = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>品目No.(親)</label>
-                      <input autoFocus style={{ flex: 1, minWidth: 0 }} />
+                      <input autoFocus style={{ width: 425, flexShrink: 0 }} />
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>シリアル(親)</label>
-                      <input style={{ flex: 1, minWidth: 0 }} />
+                      <input style={{ width: 425, flexShrink: 0 }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>数量</label>
-                      <input type='number' style={{ flex: 1, minWidth: 0, textAlign: 'right' }} onChange={(e) => setQuantity(e.target.value)} />
+                      <input type='number' value={quantity} style={{ width: 275, flexShrink: 0, textAlign: 'right' }} onChange={(e) => setQuantity(e.target.value)} />
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>状態</label>
@@ -85,17 +85,18 @@ const ReturnConfiguration = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
-                      <input style={{ flex: 1, minWidth: 0, backgroundColor: '#fff', color: '#000' }} />
+                      <input style={{ width: 425, flexShrink: 0, backgroundColor: '#fff', color: '#000' }} />
                     </div>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 220, flexShrink: 0 }}>ロット</label>
-                      <input style={{ flex: 1, minWidth: 0, backgroundColor: '#fff', color: '#000' }} />
-                    </div>
+                    <div style={{ flex: '1 1 0', minWidth: 0 }} />
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <label style={{ width: 220, flexShrink: 0 }}>ロット</label>
+                      <input style={{ width: 500, flexShrink: 0, backgroundColor: '#fff', color: '#000' }} />
+                    </div>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>シリアル</label>
-                      <input style={{ flex: 1, minWidth: 0, backgroundColor: '#fff', color: '#000' }} />
+                      <input style={{ width: 425, flexShrink: 0, backgroundColor: '#fff', color: '#000' }} />
                     </div>
                   </div>
                 </div>
@@ -103,14 +104,14 @@ const ReturnConfiguration = () => {
                 <div />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
                   <button
-                    className='set-btn set-btn-landscape set-warning'
+                    className='set-btn set-btn-landscape set-success'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
                   </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
                   <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-primary'

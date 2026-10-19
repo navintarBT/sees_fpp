@@ -40,7 +40,7 @@ const MiscellaneousInAndOutBound = () => {
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>保管場所</label>
-                      <input style={{ flex: 1, minWidth: 0 }} />
+                      <input style={{ width: 350, flexShrink: 0 }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
@@ -54,30 +54,30 @@ const MiscellaneousInAndOutBound = () => {
                         <input
                           value={quantity}
                           type='number'
-                          style={{ flex: 1, minWidth: 0, textAlign: 'right' }}
+                          style={{ width: 275, flexShrink: 0, textAlign: 'right' }}
                           onChange={(e) => setQuantity(e.target.value)}
                         />
                       </div>
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
-                      <input style={{ flex: 1, minWidth: 0 }} />
+                      <input style={{ width: 425, flexShrink: 0 }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>ロット</label>
-                      <input style={{ flex: 1, minWidth: 0 }} />
+                      <input style={{ width: 500, flexShrink: 0 }} />
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>シリアル</label>
-                      <input style={{ flex: 1, minWidth: 0 }} />
+                      <input style={{ width: 425, flexShrink: 0 }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>有効期限(yymm)</label>
-                      <input type='text' ref={dateRef} style={{ flex: 1, minWidth: 0 }} />
+                      <input type='text' ref={dateRef} style={{ width: 110, flexShrink: 0 }} />
                     </div>
                     <div style={{ flex: '1 1 0', minWidth: 0 }} />
                   </div>

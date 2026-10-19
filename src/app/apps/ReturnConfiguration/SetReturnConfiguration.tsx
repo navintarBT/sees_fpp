@@ -425,7 +425,7 @@ const SetReturnConfiguration = () => {
                         onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
                         readOnly={!isParentJanCodeEditable}
                         className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
-                        style={{ flex: 1, minWidth: 0, ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
+                        style={{ width: 275, flexShrink: 0, ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
                       />
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
@@ -462,7 +462,7 @@ const SetReturnConfiguration = () => {
                       <input
                         value={parentQty}
                         readOnly
-                        style={{ flex: 1, minWidth: 0, textAlign: 'right', backgroundColor: '#d9d9d9' }}
+                        style={{ width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: '#d9d9d9' }}
                       />
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
@@ -480,7 +480,7 @@ const SetReturnConfiguration = () => {
                           }
                         }}
                         readOnly
-                        style={{ flex: 1, minWidth: 0, backgroundColor: '#d9d9d9' }}
+                        style={{ width: 275, flexShrink: 0, backgroundColor: '#d9d9d9' }}
                       />
                     </div>
                   </div>
@@ -505,19 +505,19 @@ const SetReturnConfiguration = () => {
                   <button className='set-btn set-btn-landscape set-danger' onClick={handleClearClick}>
                     破棄
                   </button>
-                  <button className='set-btn set-btn-landscape set-success' onClick={handleDeleteClick}>
-                    削除
-                  </button>
                   <button
                     className='set-btn set-btn-landscape set-primary set-hand-input-btn'
-                    onClick={handleHandInputClick}
+                    onClick={handleDeleteClick}
                   >
-                    手入力
+                    削除
                   </button>
-                  <button className='set-btn set-btn-landscape set-warning' onClick={handleBackClick}>
+                  <button className='set-btn set-btn-landscape set-success' onClick={handleBackClick}>
                     戻る
                   </button>
-                  <button className='set-btn set-btn-landscape set-primary' onClick={handleCompleteClick}>
+                  <button className='set-btn set-btn-landscape set-primary' onClick={handleHandInputClick}>
+                    手入力
+                  </button>
+                  <button className='set-btn set-btn-landscape set-warning' onClick={handleCompleteClick}>
                     完了
                   </button>
                 </ActionFooter>

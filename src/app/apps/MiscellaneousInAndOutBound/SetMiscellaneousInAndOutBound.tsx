@@ -368,7 +368,7 @@ const SetMiscellaneousInAndOutBound = () => {
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 150, flexShrink: 0 }}>保管場所</label>
                       <input
-                        style={{ flex: 1, minWidth: 0 }}
+                        style={{ width: 350, flexShrink: 0 }}
                         value={form.moveStorage}
                         onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
                       />
@@ -385,7 +385,7 @@ const SetMiscellaneousInAndOutBound = () => {
                         <input
                           value={quantity}
                           type='number'
-                          style={{ flex: 1, minWidth: 0, textAlign: 'right' }}
+                          style={{ width: 275, flexShrink: 0, textAlign: 'right' }}
                           onChange={(e) => setQuantity(e.target.value)}
                         />
                       </div>
@@ -394,7 +394,7 @@ const SetMiscellaneousInAndOutBound = () => {
                       <label style={{ width: 150, flexShrink: 0 }}>JANコード</label>
                       <input
                         ref={janCodeRef}
-                        style={{ flex: 1, minWidth: 0 }}
+                        style={{ width: 275, flexShrink: 0 }}
                         value={form.janCode}
                         onChange={(e) => setForm({ ...form, janCode: e.target.value })}
                         onKeyDown={(e) => {
