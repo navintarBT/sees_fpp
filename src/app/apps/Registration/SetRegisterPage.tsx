@@ -508,16 +508,13 @@ const SetRegisterPage = () => {
                         <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
                       </select>
                     </div>
-                    <div style={{flex: '1 1 0', minWidth: 0}} />
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>{isParentConfirmed ? '品目No.(親)' : 'JANコード(親)'}</label>
                       <input
                         disabled={isParentConfirmed}
                         ref={parentJanCodeInputRef}
                         tabIndex={isParentConfirmed ? -1 : 2}
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 260, flexShrink: 0}}
                         value={form.parentItemNo}
                         onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                         onKeyDown={(e) => {
@@ -528,6 +525,8 @@ const SetRegisterPage = () => {
                         }}
                       />
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>移動倉庫</label>
                       <select
@@ -543,24 +542,24 @@ const SetRegisterPage = () => {
                         <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
                       </select>
                     </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>移動保管場所</label>
                       <input
                         disabled={!isParentConfirmed}
                         tabIndex={isParentConfirmed ? 2 : -1}
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 350, flexShrink: 0}}
                         value={form.moveStorage}
                         onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                       />
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>数量</label>
                       <input
                         disabled={!isParentConfirmed}
                         tabIndex={-1}
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        style={{width: 275, flexShrink: 0, textAlign: 'right'}}
                         value={form.qty}
                         onChange={(e) => setForm({...form, qty: e.target.value})}
                       />
@@ -571,7 +570,7 @@ const SetRegisterPage = () => {
                         disabled={!isParentConfirmed}
                         ref={janCodeInputRef}
                         tabIndex={isParentConfirmed ? 3 : -1}
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 260, flexShrink: 0}}
                         value={form.janCode}
                         onChange={(e) => setForm({...form, janCode: e.target.value})}
                         onKeyDown={(e) => {

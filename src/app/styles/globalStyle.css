@@ -241,6 +241,11 @@ button:focus {
   border-top-right-radius: 14px;
 }
 
+/* Table doesn't span the full width, so its last header cell shouldn't round the corner. */
+.inbound-table-landscape.delivery-slip-table .tf-tableHead .tf-tableCell:last-child {
+  border-top-right-radius: 0;
+}
+
 .inbound-table-landscape .tf-tableHeadDivider {
   top: 50px;
 }

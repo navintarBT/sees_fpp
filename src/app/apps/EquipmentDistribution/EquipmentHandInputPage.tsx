@@ -189,17 +189,17 @@ const EquipmentHandInputPage = () => {
           {isLandscape ? (
             <>
               <div className='set-header-landscape'>
-                <span className='set-header-title'>備品振分手入力</span>
+                <span className='set-header-title'>備品振分登録手入力</span>
                 <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
               </div>
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{ width: 220, flexShrink: 0 }}>FR倉庫</label>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>FR倉庫</label>
                       <select
                         autoFocus
-                        style={{ width: 635 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={parentWarehouse}
                         onChange={(e) => setParentWarehouse(e.target.value)}
                       >
@@ -209,10 +209,10 @@ const EquipmentHandInputPage = () => {
                         <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape'>
-                      <label style={{ width: 220, flexShrink: 0 }}>TO倉庫</label>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>TO倉庫</label>
                       <select
-                        style={{ width: 635 }}
+                        style={{ flex: 1, minWidth: 0 }}
                         value={parentItem}
                         onChange={(e) => setParentItem(e.target.value)}
                       >
@@ -225,29 +225,29 @@ const EquipmentHandInputPage = () => {
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{ width: 220, flexShrink: 0 }}>保管場所</label>
-                      <input style={{ width: 635 }} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>保管場所</label>
+                      <input style={{ width: 350, flexShrink: 0 }} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
                     </div>
-                    <div className='set-field-landscape'>
-                      <label style={{ width: 220, flexShrink: 0 }}>数量</label>
-                      <input style={{ width: 635, textAlign: 'right' }} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>数量</label>
+                      <input style={{ width: 275, flexShrink: 0, textAlign: 'right' }} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>品目No.</label>
                       <input
                         ref={itemNoInputRef}
-                        style={{ width: 635 }}
+                        style={{ width: 425, flexShrink: 0 }}
                         value={moveStorage}
                         onChange={(e) => setMoveStorage(e.target.value)}
                       />
                     </div>
-                    <div className='set-field-landscape'>
-                      <label style={{ width: 220, flexShrink: 0 }}>ロットシリアル</label>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>ロットシリアル</label>
                       <input
-                        style={{ width: 635 }}
+                        style={{ width: 500, flexShrink: 0 }}
                         value={lotSerial}
                         onChange={(e) => setLotSerial(e.target.value)}
                         placeholder=' '
@@ -255,9 +255,8 @@ const EquipmentHandInputPage = () => {
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{ width: 220, flexShrink: 0 }}>移動数</label>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 40, width: 635 }}>
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 40, paddingLeft: 240 }}>
                         <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
                           <input
                             type='radio'
@@ -280,9 +279,9 @@ const EquipmentHandInputPage = () => {
                         </label>
                       </div>
                     </div>
-                    <div className='set-field-landscape'>
-                      <label style={{ width: 220, flexShrink: 0 }}>有効日付(yymm)</label>
-                      <input placeholder=' ' style={{ width: 635 }} />
+                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                      <label style={{ width: 210, flexShrink: 0 }}>有効日付(yymm)</label>
+                      <input placeholder=' ' style={{ width: 120, flexShrink: 0 }} />
                     </div>
                   </div>
                 </div>
@@ -290,14 +289,14 @@ const EquipmentHandInputPage = () => {
                 <div />
 
                 <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
                   <button
-                    className='set-btn set-btn-landscape set-warning'
+                    className='set-btn set-btn-landscape set-success'
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
                   </button>
+                  <div aria-hidden='true' />
+                  <div aria-hidden='true' />
                   <div aria-hidden='true' />
                   <button
                     className='set-btn set-btn-landscape set-primary'
@@ -310,7 +309,7 @@ const EquipmentHandInputPage = () => {
             </>
           ) : (
             <>
-          <div className='set-header'>備品振分手入力</div>
+          <div className='set-header'>備品振分登録手入力</div>
           <div className='hand-body'>
             <div className={`hand-form ${isEnabled ? '' : 'hand-form-disabled'}`}>
 

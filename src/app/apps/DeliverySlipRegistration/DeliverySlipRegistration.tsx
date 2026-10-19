@@ -524,7 +524,7 @@ const DeliverySlipRegistration = () => {
                       <input
                         ref={parentItemNoInputRef}
                         autoFocus
-                        style={{ flex: 1, minWidth: 0 }}
+                        style={{ width: 260, flexShrink: 0 }}
                         value={form.parentItemNo}
                         maxLength={8}
                         inputMode="numeric"
@@ -555,7 +555,7 @@ const DeliverySlipRegistration = () => {
                         readOnly={!isEnabled}
                         disabled={showErrorConfirm}
                         value={form.deliverySlipNo}
-                        style={{ flex: 1, minWidth: 0, backgroundColor: isEnabled ? "white" : "rgb(229, 231, 235)" }}
+                        style={{ width: 500, flexShrink: 0, backgroundColor: isEnabled ? "white" : "#d9d9d9" }}
                         inputMode="numeric"
                         pattern="[0-9]*"
                         maxLength={30}
@@ -592,8 +592,8 @@ const DeliverySlipRegistration = () => {
                   columns={tableColumns}
                   rows={rows}
                   className="inbound-table-landscape-wrap"
-                  gridClassName="delivery-table inbound-table-landscape"
-                  gridStyle={{ gridTemplateColumns: "50px 200px minmax(400px, 1fr)" }}
+                  gridClassName="delivery-table delivery-slip-table inbound-table-landscape"
+                  gridStyle={{ gridTemplateColumns: "50px 250px 800px" }}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}
                   activeRowKey={activeRowId}
@@ -609,7 +609,7 @@ const DeliverySlipRegistration = () => {
                     破棄
                   </button>
                   <button
-                    className="set-btn set-btn-landscape set-primary set-success"
+                    className="set-btn set-btn-landscape set-hand-input-btn"
                     onClick={() => {
                       if (checkedRowIds.length === 0) {
                         setShowNoSelectionConfirm(true);
@@ -621,14 +621,14 @@ const DeliverySlipRegistration = () => {
                     削除
                   </button>
                   <button
-                    className="set-btn set-btn-landscape set-warning"
+                    className="set-btn set-btn-landscape set-success"
                     onClick={() => setShowBackConfirm(true)}
                   >
                     戻る
                   </button>
                   <div aria-hidden='true' />
                   <button
-                    className="set-btn set-btn-landscape set-primary"
+                    className="set-btn set-btn-landscape set-warning"
                     onClick={() => setShowCompleteRegistrationConfirm(true)}
                   >
                     完了
