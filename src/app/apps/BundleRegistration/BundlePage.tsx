@@ -492,27 +492,28 @@ const BundlePage = () => {
                         <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
                       </select>
                     </div>
+                  </div>
+                  <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>保管場所</label>
                       <input
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 350, flexShrink: 0}}
                         value={form.parentItemNo}
                         onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                      />
+                    </div>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>数量</label>
+                      <input
+                        style={{width: 275, flexShrink: 0, textAlign: 'right'}}
+                        value={form.qty}
+                        onChange={(e) => setForm({...form, qty: e.target.value})}
                       />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 210, flexShrink: 0}}>数量</label>
-                      <input
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
-                        value={form.qty}
-                        onChange={(e) => setForm({...form, qty: e.target.value})}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 210, flexShrink: 0}}>移動数</label>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 40}}>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 40, paddingLeft: 240}}>
                         <label style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap'}}>
                           <input
                             type='radio'
@@ -539,7 +540,7 @@ const BundlePage = () => {
                       <label style={{width: 210, flexShrink: 0}}>JANコード</label>
                       <input
                         ref={janCodeInputRef}
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 260, flexShrink: 0}}
                         inputMode='numeric'
                         maxLength={14}
                         value={form.janCode}
@@ -556,12 +557,11 @@ const BundlePage = () => {
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>理由</label>
                       <input
-                        style={{flex: 1, minWidth: 0}}
+                        style={{width: 600, flexShrink: 0}}
                         value={form.moveStorage}
                         onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                       />
                     </div>
-                    <div style={{flex: '1 1 0', minWidth: 0}} />
                     <div style={{flex: '1 1 0', minWidth: 0}} />
                   </div>
                 </div>
@@ -585,17 +585,17 @@ const BundlePage = () => {
                   <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
                     破棄
                   </button>
+                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
+                    戻る
+                  </button>
+                  <div aria-hidden='true' />
                   <button
-                    className='set-btn set-btn-landscape set-primary set-success'
+                    className='set-btn set-btn-landscape set-primary'
                     onClick={() => handleReleaseClick({forceHandInput: true})}
                   >
                     手入力
                   </button>
-                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowBackConfirm(true)}>
-                    戻る
-                  </button>
-                  <div aria-hidden='true' />
-                  <button className='set-btn set-btn-landscape set-primary' onClick={() => setShowCompleteConfirm(true)}>
+                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowCompleteConfirm(true)}>
                     完了
                   </button>
                 </ActionFooter>

@@ -41,59 +41,60 @@ const SetRegisterHandInputPage = () => {
               <div className='set-body-landscape set-body-landscape-3row'>
                 <div className='set-form-landscape'>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>倉庫（親）</label>
-                      <select autoFocus style={{width: 635}} value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>倉庫（親）</label>
+                      <select autoFocus style={{flex: 1, minWidth: 0}} value={parentWarehouse} onChange={(e) => setParentWarehouse(e.target.value)}>
                         <option value=''></option>
                         <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                         <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
                         <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                       </select>
                     </div>
+                    <div style={{flex: '1 1 0', minWidth: 0}} />
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>品目No.(親)</label>
-                      <input style={{width: 635}} value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>品目No.(親)</label>
+                      <input style={{width: 425, flexShrink: 0}} value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
                     </div>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>シリアル(親)</label>
-                      <input style={{width: 635}} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>シリアル(親)</label>
+                      <input style={{width: 425, flexShrink: 0}} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>移動倉庫</label>
-                      <select style={{width: 635}}>
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>移動倉庫</label>
+                      <select style={{flex: 1, minWidth: 0}}>
                         <option value=''></option>
                         <option>千葉倉庫（WMS）：W002</option>
                         <option>千葉倉庫（WMS）：W003</option>
                         <option>千葉倉庫（WMS）：W004</option>
                       </select>
                     </div>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>移動保管場所</label>
-                      <input style={{width: 635}} value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>移動保管場所</label>
+                      <input style={{width: 350, flexShrink: 0}} value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>数量</label>
-                      <input style={{width: 635, textAlign: 'right'}} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>数量</label>
+                      <input style={{width: 275, flexShrink: 0, textAlign: 'right'}} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                     </div>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>品目No.</label>
-                      <input ref={itemNoInputRef} placeholder=' ' style={{width: 635}} />
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>品目No.</label>
+                      <input ref={itemNoInputRef} placeholder=' ' style={{width: 425, flexShrink: 0}} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>ロット</label>
-                      <input placeholder=' ' style={{width: 635}} />
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>ロット</label>
+                      <input placeholder=' ' style={{width: 500, flexShrink: 0}} />
                     </div>
-                    <div className='set-field-landscape'>
-                      <label style={{width: 220, flexShrink: 0}}>シリアル</label>
-                      <input placeholder=' ' style={{width: 635}} />
+                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                      <label style={{width: 210, flexShrink: 0}}>シリアル</label>
+                      <input placeholder=' ' style={{width: 425, flexShrink: 0}} />
                     </div>
                   </div>
                 </div>
