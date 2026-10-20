@@ -355,7 +355,7 @@ const SetMiscellaneousInAndOutBound = () => {
                       <select
                         ref={warehouseRef}
                         autoFocus
-                        style={{ flex: 1, minWidth: 0 }}
+                        style={{ boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto' }}
                         value={form.moveWarehouse}
                         onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
                       >
@@ -368,7 +368,7 @@ const SetMiscellaneousInAndOutBound = () => {
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 150, flexShrink: 0 }}>保管場所</label>
                       <input
-                        style={{ width: 350, flexShrink: 0 }}
+                        style={{ boxSizing: 'content-box', width: '20ch', flex: '0 0 auto' }}
                         value={form.moveStorage}
                         onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
                       />
@@ -378,14 +378,14 @@ const SetMiscellaneousInAndOutBound = () => {
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 150, flexShrink: 0 }}>引当数</label>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                        <select className='pg-sign-select' style={{ width: 110, flexShrink: 0, padding: '0 8px' }}>
+                        <select className='pg-sign-select' style={{ width: 80, flexShrink: 0, padding: '0 8px' }}>
                           <option value='+'>+</option>
                           <option value='-'>-</option>
                         </select>
                         <input
                           value={quantity}
                           type='number'
-                          style={{ width: 275, flexShrink: 0, textAlign: 'right' }}
+                          style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right' }}
                           onChange={(e) => setQuantity(e.target.value)}
                         />
                       </div>
@@ -394,7 +394,7 @@ const SetMiscellaneousInAndOutBound = () => {
                       <label style={{ width: 150, flexShrink: 0 }}>JANコード</label>
                       <input
                         ref={janCodeRef}
-                        style={{ width: 275, flexShrink: 0 }}
+                        style={{ boxSizing: 'content-box', width: '14ch', flex: '0 0 auto' }}
                         value={form.janCode}
                         onChange={(e) => setForm({ ...form, janCode: e.target.value })}
                         onKeyDown={(e) => {

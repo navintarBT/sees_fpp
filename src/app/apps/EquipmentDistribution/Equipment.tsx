@@ -501,7 +501,7 @@ const Equipment = () => {
                       <label style={{ width: 210, flexShrink: 0 }}>FR倉庫</label>
                       <select
                         autoFocus
-                        style={{ flex: 1, minWidth: 0 }}
+                        style={{ boxSizing: "content-box", width: "calc(42ch + 30px)", flex: "0 0 auto" }}
                         value={form.parentWarehouse}
                         onChange={(e) => setForm({ ...form, parentWarehouse: e.target.value })}
                       >
@@ -514,7 +514,7 @@ const Equipment = () => {
                     <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
                       <label style={{ width: 210, flexShrink: 0 }}>TO倉庫</label>
                       <select
-                        style={{ flex: 1, minWidth: 0 }}
+                        style={{ boxSizing: "content-box", width: "calc(42ch + 30px)", flex: "0 0 auto" }}
                         value={form.moveWarehouse}
                         onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
                       >
@@ -530,7 +530,7 @@ const Equipment = () => {
                     <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
                       <label style={{ width: 210, flexShrink: 0 }}>保管場所</label>
                       <input
-                        style={{ width: 350, flexShrink: 0 }}
+                        style={{ boxSizing: "content-box", width: "20ch", flex: "0 0 auto" }}
                         value={form.moveStorage}
                         onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
                       />
@@ -538,7 +538,7 @@ const Equipment = () => {
                     <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
                       <label style={{ width: 210, flexShrink: 0 }}>数量</label>
                       <input
-                        style={{ width: 275, flexShrink: 0, textAlign: "right" }}
+                        style={{ boxSizing: "content-box", width: "15ch", flex: "0 0 auto", textAlign: "right" }}
                         value={form.qty}
                         onChange={(e) => setForm({ ...form, qty: e.target.value })}
                       />
@@ -573,7 +573,7 @@ const Equipment = () => {
                       <label style={{ width: 210, flexShrink: 0 }}>JANコード</label>
                       <input
                         ref={janCodeInputRef}
-                        style={{ width: 260, flexShrink: 0 }}
+                        style={{ boxSizing: "content-box", width: "15ch", flex: "0 0 auto" }}
                         value={form.janCode}
                         onChange={handleJanCodeChange}
                         onKeyDown={handleJanCodeKeyDown}
@@ -587,7 +587,7 @@ const Equipment = () => {
                     <div className="set-field-landscape" style={{ flex: "1 1 0", minWidth: 0 }}>
                       <label style={{ width: 210, flexShrink: 0 }}>理由</label>
                       <input
-                        style={{ width: 600, flexShrink: 0 }}
+                        style={{ boxSizing: "content-box", width: "30ch", flex: "0 0 auto" }}
                         value={form.parentItemNo}
                         onChange={(e) => setForm({ ...form, parentItemNo: e.target.value })}
                       />
@@ -603,7 +603,7 @@ const Equipment = () => {
                   gridClassName="equipment-table inbound-table-landscape"
                   gridStyle={{
                     gridTemplateColumns:
-                      "50px 50px 90px minmax(120px, 0.9fr) minmax(140px, 1fr) 100px minmax(130px, 1fr) minmax(140px, 1.1fr) minmax(160px, 1.2fr)",
+                      "50px 50px 120px minmax(120px, 0.9fr) minmax(140px, 1fr) 100px minmax(130px, 1fr) minmax(140px, 1.1fr) minmax(160px, 1.2fr)",
                   }}
                   scrollRef={tableScrollRef}
                   getRowKey={(row) => row.id}

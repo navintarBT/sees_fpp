@@ -31,7 +31,7 @@ const MiscellaneousInAndOutBound = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>倉庫</label>
-                      <select autoFocus style={{ flex: 1, minWidth: 0, appearance: 'auto' }}>
+                      <select autoFocus style={{ boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto', appearance: 'auto' }}>
                         <option value=''></option>
                         <option value='倉庫A:W0040'>倉庫A:W0040</option>
                         <option value='倉庫B:W0041'>倉庫B:W0041</option>
@@ -40,38 +40,38 @@ const MiscellaneousInAndOutBound = () => {
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>保管場所</label>
-                      <input style={{ width: 350, flexShrink: 0 }} />
+                      <input style={{ boxSizing: 'content-box', width: '20ch', flex: '0 0 auto' }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>引当数</label>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                        <select style={{ width: 120, flexShrink: 0, appearance: 'auto', padding: '0 8px' }}>
+                        <select style={{ width: 80, flexShrink: 0, appearance: 'auto', padding: '0 8px' }}>
                           <option value='+'>+</option>
                           <option value='-'>-</option>
                         </select>
                         <input
                           value={quantity}
                           type='number'
-                          style={{ width: 275, flexShrink: 0, textAlign: 'right' }}
+                          style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right' }}
                           onChange={(e) => setQuantity(e.target.value)}
                         />
                       </div>
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
-                      <input style={{ width: 425, flexShrink: 0 }} />
+                      <input style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto' }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>ロット</label>
-                      <input style={{ width: 500, flexShrink: 0 }} />
+                      <input style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto' }} />
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>シリアル</label>
-                      <input style={{ width: 425, flexShrink: 0 }} />
+                      <input style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto' }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>

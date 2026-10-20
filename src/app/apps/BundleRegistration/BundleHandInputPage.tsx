@@ -54,7 +54,7 @@ const BundleHandInputPage = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>FR倉庫</label>
-                      <select autoFocus style={{flex: 1, minWidth: 0}} value={fromWarehouse} onChange={(e) => setFromWarehouse(e.target.value)}>
+                      <select autoFocus style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}} value={fromWarehouse} onChange={(e) => setFromWarehouse(e.target.value)}>
                         <option value=''></option>
                         <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0040</option>
                         <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0041</option>
@@ -63,7 +63,7 @@ const BundleHandInputPage = () => {
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>TO倉庫</label>
-                      <select style={{flex: 1, minWidth: 0}} value={toWarehouse} onChange={(e) => setToWarehouse(e.target.value)}>
+                      <select style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}} value={toWarehouse} onChange={(e) => setToWarehouse(e.target.value)}>
                         <option value=''></option>
                         <option value='羽田製品補充倉庫：W0040'>羽田製品補充倉庫：W0040</option>
                         <option value='羽田製品補充倉庫：W0041'>羽田製品補充倉庫：W0041</option>
@@ -74,21 +74,21 @@ const BundleHandInputPage = () => {
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>保管場所</label>
-                      <input style={{width: 350, flexShrink: 0}} value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
+                      <input style={{boxSizing: 'content-box', width: '20ch', flex: '0 0 auto'}} value={parentItem} onChange={(e) => setParentItem(e.target.value)} />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>数量</label>
-                      <input style={{width: 275, flexShrink: 0, textAlign: 'right'}} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                      <input style={{boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right'}} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>品目No.</label>
-                      <input ref={itemNoInputRef} style={{width: 425, flexShrink: 0}} value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
+                      <input ref={itemNoInputRef} style={{boxSizing: 'content-box', width: '25ch', flex: '0 0 auto'}} value={moveStorage} onChange={(e) => setMoveStorage(e.target.value)} />
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>ロットシリアル</label>
-                      <input style={{width: 500, flexShrink: 0}} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                      <input style={{boxSizing: 'content-box', width: '30ch', flex: '0 0 auto'}} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
@@ -118,7 +118,7 @@ const BundleHandInputPage = () => {
                     </div>
                     <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
                       <label style={{width: 210, flexShrink: 0}}>有効日付(yymm)</label>
-                      <input placeholder=' ' style={{width: 120, flexShrink: 0}} />
+                      <input placeholder=' ' style={{boxSizing: 'content-box', width: '4ch', flex: '0 0 auto'}} />
                     </div>
                   </div>
                 </div>
