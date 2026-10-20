@@ -337,14 +337,14 @@ const SetReturnConfiguration = () => {
       key: 'buildQty',
       headClassName: 'col-num',
       cellClassName: 'col-num',
-      header: '構成',
+      header: '構成数',
       render: (row) => row.buildQty
     },
     {
       key: 'returnQty',
       headClassName: 'col-num',
       cellClassName: 'col-num',
-      header: '戻り',
+      header: '戻り数',
       render: (row) => row.returnQty
     },
     {
@@ -425,7 +425,7 @@ const SetReturnConfiguration = () => {
                         onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
                         readOnly={!isParentJanCodeEditable}
                         className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
-                        style={{ width: 275, flexShrink: 0, ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
+                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
                       />
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
@@ -462,7 +462,7 @@ const SetReturnConfiguration = () => {
                       <input
                         value={parentQty}
                         readOnly
-                        style={{ width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: '#d9d9d9' }}
+                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right', backgroundColor: '#d9d9d9' }}
                       />
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
@@ -480,7 +480,7 @@ const SetReturnConfiguration = () => {
                           }
                         }}
                         readOnly
-                        style={{ width: 275, flexShrink: 0, backgroundColor: '#d9d9d9' }}
+                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', backgroundColor: '#d9d9d9' }}
                       />
                     </div>
                   </div>

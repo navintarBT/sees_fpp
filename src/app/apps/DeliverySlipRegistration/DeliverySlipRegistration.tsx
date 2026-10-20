@@ -524,7 +524,7 @@ const DeliverySlipRegistration = () => {
                       <input
                         ref={parentItemNoInputRef}
                         autoFocus
-                        style={{ width: 260, flexShrink: 0 }}
+                        style={{ boxSizing: 'content-box', width: '8ch', flex: '0 0 auto' }}
                         value={form.parentItemNo}
                         maxLength={8}
                         inputMode="numeric"
@@ -555,7 +555,7 @@ const DeliverySlipRegistration = () => {
                         readOnly={!isEnabled}
                         disabled={showErrorConfirm}
                         value={form.deliverySlipNo}
-                        style={{ width: 500, flexShrink: 0, backgroundColor: isEnabled ? "white" : "#d9d9d9" }}
+                        style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto', backgroundColor: isEnabled ? "white" : "#d9d9d9" }}
                         inputMode="numeric"
                         pattern="[0-9]*"
                         maxLength={30}

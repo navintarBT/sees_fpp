@@ -498,7 +498,7 @@ const SetRegisterPage = () => {
                         disabled={isParentConfirmed}
                         ref={parentWarehouseRef}
                         tabIndex={isParentConfirmed ? -1 : 1}
-                        style={{flex: 1, minWidth: 0}}
+                        style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}}
                         value={form.parentWarehouse}
                         onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                       >
@@ -514,7 +514,7 @@ const SetRegisterPage = () => {
                         disabled={isParentConfirmed}
                         ref={parentJanCodeInputRef}
                         tabIndex={isParentConfirmed ? -1 : 2}
-                        style={{width: 260, flexShrink: 0}}
+                        style={{boxSizing: 'content-box', width: '42ch', flex: '0 0 auto'}}
                         value={form.parentItemNo}
                         onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                         onKeyDown={(e) => {
@@ -532,7 +532,7 @@ const SetRegisterPage = () => {
                       <select
                         disabled={!isParentConfirmed}
                         tabIndex={isParentConfirmed ? 1 : -1}
-                        style={{flex: 1, minWidth: 0}}
+                        style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}}
                         value={form.moveWarehouse}
                         onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                       >
@@ -547,7 +547,7 @@ const SetRegisterPage = () => {
                       <input
                         disabled={!isParentConfirmed}
                         tabIndex={isParentConfirmed ? 2 : -1}
-                        style={{width: 350, flexShrink: 0}}
+                        style={{boxSizing: 'content-box', width: '20ch', flex: '0 0 auto'}}
                         value={form.moveStorage}
                         onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                       />
@@ -559,7 +559,7 @@ const SetRegisterPage = () => {
                       <input
                         disabled={!isParentConfirmed}
                         tabIndex={-1}
-                        style={{width: 275, flexShrink: 0, textAlign: 'right'}}
+                        style={{boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right'}}
                         value={form.qty}
                         onChange={(e) => setForm({...form, qty: e.target.value})}
                       />
@@ -570,7 +570,7 @@ const SetRegisterPage = () => {
                         disabled={!isParentConfirmed}
                         ref={janCodeInputRef}
                         tabIndex={isParentConfirmed ? 3 : -1}
-                        style={{width: 260, flexShrink: 0}}
+                        style={{boxSizing: 'content-box', width: '14ch', flex: '0 0 auto'}}
                         value={form.janCode}
                         onChange={(e) => setForm({...form, janCode: e.target.value})}
                         onKeyDown={(e) => {
