@@ -514,7 +514,7 @@ const SetRegisterPage = () => {
                         disabled={isParentConfirmed}
                         ref={parentJanCodeInputRef}
                         tabIndex={isParentConfirmed ? -1 : 2}
-                        style={{boxSizing: 'content-box', width: '42ch', flex: '0 0 auto'}}
+                        style={{boxSizing: 'content-box', width: '14ch', flex: '0 0 auto'}}
                         value={form.parentItemNo}
                         onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                         onKeyDown={(e) => {
