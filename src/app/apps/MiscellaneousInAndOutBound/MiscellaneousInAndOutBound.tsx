@@ -61,7 +61,7 @@ const MiscellaneousInAndOutBound = () => {
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
-                      <input style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto' }} />
+                      <input style={{ boxSizing: 'content-box', width: '25ch', flex: '0 0 auto' }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
@@ -71,7 +71,7 @@ const MiscellaneousInAndOutBound = () => {
                     </div>
                     <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
                       <label style={{ width: 220, flexShrink: 0 }}>シリアル</label>
-                      <input style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto' }} />
+                      <input style={{ boxSizing: 'content-box', width: '25ch', flex: '0 0 auto' }} />
                     </div>
                   </div>
                   <div className='set-form-landscape-row'>
