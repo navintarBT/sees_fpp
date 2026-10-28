@@ -4,9 +4,7 @@ import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
-import {useOrientation} from '../../hooks/useOrientation'
 
-const ORIENTATION_KEY = 'woPartsIssuanceOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
@@ -252,7 +250,6 @@ const WOPartsIssuance = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const restoredState = (location.state as WOPartsIssuanceReturnState | null) ?? null
-  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [rows, setRows] = useState<Row[]>(restoredState?.rows?.length ? restoredState.rows : [EMPTY_ROW])
   const [form, setForm] = useState<FormState>(restoredState?.form ?? initialForm)
   const [showDetailConfirm, setShowDetailConfirm] = useState(false)
@@ -607,259 +604,125 @@ const WOPartsIssuance = () => {
 
   return (
     <div className='mockup-page'>
-      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
-          {isLandscape ? (
-            <>
-              <div className='set-header-landscape'>
-                <span className='set-header-title'>WO部品出庫</span>
-                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-              </div>
-              <div className='set-body-landscape set-body-landscape-3row'>
-                <div className='set-form-landscape'>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>WO番号</label>
-                      <input
-                        autoFocus
-                        style={{width: 170, flexShrink: 0}}
-                        value={form.woNumber}
-                        disabled={isWoNumberLocked}
-                        onChange={(e) => setForm({...form, woNumber: e.target.value})}
-                      />
-                      <button
-                        className='set-search-btn set-success'
-                        style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}}
-                        onClick={handleSearchWoNumber}
-                        disabled={isWoNumberLocked}
-                      >
-                        WO部品リスト表示
-                      </button>
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>庫内ラベル</label>
-                      <input
-                        ref={internalLabelInputRef}
-                        style={{flex: 1, minWidth: 0}}
-                        disabled={isInternalLabelLocked}
-                        value={form.internalLabel}
-                        onChange={(e) => setForm({...form, internalLabel: e.target.value})}
-                        onKeyDown={handleInternalLabelEnter}
-                      />
-                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 200, padding: '0 14px'}} onClick={handleDecide}>
-                        決定
-                      </button>
-                    </div>
+          <>
+            <div className='set-header-landscape'>
+              <span className='set-header-title'>WO部品出庫</span>
+              <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+            </div>
+            <div className='set-body-landscape set-body-landscape-3row'>
+              <div className='set-form-landscape'>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>WO番号</label>
+                    <input
+                      autoFocus
+                      style={{width: 170, flexShrink: 0}}
+                      value={form.woNumber}
+                      disabled={isWoNumberLocked}
+                      onChange={(e) => setForm({...form, woNumber: e.target.value})}
+                    />
+                    <button
+                      className='set-search-btn set-success'
+                      style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}}
+                      onClick={handleSearchWoNumber}
+                      disabled={isWoNumberLocked}
+                    >
+                      WO部品リスト表示
+                    </button>
                   </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>出庫数</label>
-                      <input
-                        ref={shipmentQtyInputRef}
-                        style={{width: 275, flexShrink: 0, textAlign: 'right'}}
-                        disabled={isIssueDetailLocked}
-                        value={form.shipmentQty}
-                        onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>保管場所</label>
-                      <input
-                        style={{width: 350, flexShrink: 0}}
-                        disabled={isIssueDetailLocked}
-                        value={form.storage}
-                        onChange={(e) => setForm({...form, storage: e.target.value})}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>事業所</label>
-                      <input
-                        style={{width: 230, flexShrink: 0}}
-                        disabled={isIssueDetailLocked}
-                        value={form.office}
-                        onChange={(e) => setForm({...form, office: e.target.value})}
-                      />
-                    </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>庫内ラベル</label>
+                    <input
+                      ref={internalLabelInputRef}
+                      style={{flex: 1, minWidth: 0}}
+                      disabled={isInternalLabelLocked}
+                      value={form.internalLabel}
+                      onChange={(e) => setForm({...form, internalLabel: e.target.value})}
+                      onKeyDown={handleInternalLabelEnter}
+                    />
+                    <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 200, padding: '0 14px'}} onClick={handleDecide}>
+                      決定
+                    </button>
                   </div>
                 </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>出庫数</label>
+                    <input
+                      ref={shipmentQtyInputRef}
+                      style={{width: 275, flexShrink: 0, textAlign: 'right'}}
+                      disabled={isIssueDetailLocked}
+                      value={form.shipmentQty}
+                      onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>保管場所</label>
+                    <input
+                      style={{width: 350, flexShrink: 0}}
+                      disabled={isIssueDetailLocked}
+                      value={form.storage}
+                      onChange={(e) => setForm({...form, storage: e.target.value})}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>事業所</label>
+                    <input
+                      style={{width: 230, flexShrink: 0}}
+                      disabled={isIssueDetailLocked}
+                      value={form.office}
+                      onChange={(e) => setForm({...form, office: e.target.value})}
+                    />
+                  </div>
+                </div>
+              </div>
 
-                <TableSection
-                  columns={tableColumns}
-                  rows={rows}
-                  className='inbound-table-landscape-wrap'
-                  gridClassName='woPartsIssuance-table inbound-table-landscape'
-                  gridStyle={{
-                    gridTemplateColumns:
-                      '50px minmax(110px, 0.8fr) minmax(110px, 0.8fr) 110px minmax(120px, 0.9fr) minmax(110px, 0.8fr) 110px minmax(110px, 1fr)',
-                  }}
-                  scrollRef={tableScrollRef}
-                  getRowKey={(row) => row.id}
-                  activeRowKey={activeRowId}
-                  onRowActivate={(rowKey) => {
-                    const selectedRow = rows.find((row) => row.id === Number(rowKey))
-                    if (!selectedRow) return
-                    setActiveRowId((prev) => (prev === selectedRow.id ? null : selectedRow.id))
-                  }}
-                />
-
-                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button
-                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
-                    onClick={() => {
-                      if (activeRowId == null) {
-                        setShowNoSelectionAlert(true)
-                        return
-                      }
-                      setShowDetailConfirm(true)
-                    }}
-                  >
-                    明細確認
-                  </button>
-                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
-                    戻る
-                  </button>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
-                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowRegistration(true)}>
-                    出庫登録
-                  </button>
-                </ActionFooter>
-              </div>
-            </>
-          ) : (
-            <>
-          <div className='set-header'>WO部品出庫</div>
-          <div className='set-body'>
-            <div className='set-form'>
-              <div className='set-row set-row-wo wo-parts-row-wo'>
-                <label>WO番号</label>
-                <input
-                  ref={woNumberInputRef}
-                  style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
-                  value={form.woNumber}
-                  disabled={isWoNumberLocked}
-                  onChange={(e) => setForm({...form, woNumber: e.target.value})}
-                  className='set-small'
-                />
-                <button
-                className='set-search-btn set-success'
-                onClick={handleSearchWoNumber}
-                disabled={isWoNumberLocked}
-                style={isWoNumberLocked ? {background: '#d9d9d9', color: '#666'} : undefined}
-              >
-                WO部品リスト表示
-              </button>
-              </div>
-              <div className='set-row set-row-wo wo-parts-row-wo'>
-                <label>庫内ラベル</label>
-                <input
-                  ref={internalLabelInputRef}
-                  disabled={isInternalLabelLocked}
-                  value={form.internalLabel}
-                  onChange={(e) => setForm({...form, internalLabel: e.target.value})}
-                  onKeyDown={handleInternalLabelEnter}
-                  style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
-                  className='set-small'
-                />
-                <button
-                  className='set-search-btn set-success'
-                  style={{width: 200}}
-                  onClick={handleDecide}
-                >
-                  決定
-                </button>
-              </div>
-              <div className='set-row'>
-                <label>出庫数</label>
-                <input
-                  ref={shipmentQtyInputRef}
-                  disabled={isIssueDetailLocked}
-                  value={form.shipmentQty}
-                  onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
-                  style={{textAlign: 'center', outline: 'none', boxShadow: 'none'}}
-                />
-              </div>
-              <div className='set-row'>
-                <label>保管場所</label>
-                <input
-                  disabled={isIssueDetailLocked}
-                  value={form.storage}
-                  onChange={(e) => setForm({...form, storage: e.target.value})}
-                  style={{textAlign: 'center'}}
-                />
-              </div>
-              <div className='set-row'>
-                <label>事業所</label>
-                <input
-                  disabled={isIssueDetailLocked}
-                  style={{textAlign: 'center'}}
-                  value={form.office}
-                  onChange={(e) => setForm({...form, office: e.target.value})}
-                />
-              </div>
-            </div>
-
-            <TableSection
-              columns={tableColumns}
-              rows={rows}
-              scrollRef={tableScrollRef}
-              getRowKey={(row) => row.id}
-              activeRowKey={activeRowId}
-              gridClassName='woPartsIssuance-table'
-              onRowActivate={(rowKey) => {
-                const selectedRow = rows.find((row) => row.id === Number(rowKey))
-                if (!selectedRow) return
-                setActiveRowId((prev) => (prev === selectedRow.id ? null : selectedRow.id))
-              }}
-            />
-
-            <ActionFooter columns={5}>
-              <button
-                className='set-btn set-primary set-success'
-                onClick={handleDecide}
-                disabled
-                style={{visibility: 'hidden'}}
-              >
-                決定
-              </button>
-              <button
-                className='set-btn set-danger'
-                onClick={() => setShowRegistration(true)}
-              >
-                出庫登録
-              </button>
-                <button
-                className='set-btn set-danger'
-                onClick={() => setShowRegistration(true)}
-                style={{visibility: 'hidden'}}
-
-              >
-                出庫登録
-              </button>
-              <button
-                className='set-btn set-primary set-hand-input-btn'
-                onClick={() => {
-                  if (activeRowId == null) {
-                    setShowNoSelectionAlert(true)
-                    return
-                  }
-                  setShowDetailConfirm(true)
+              <TableSection
+                columns={tableColumns}
+                rows={rows}
+                className='inbound-table-landscape-wrap'
+                gridClassName='woPartsIssuance-table inbound-table-landscape'
+                gridStyle={{
+                  gridTemplateColumns:
+                    '50px minmax(110px, 0.8fr) minmax(110px, 0.8fr) 110px minmax(120px, 0.9fr) minmax(110px, 0.8fr) 110px minmax(110px, 1fr)',
                 }}
-              >
-                明細確認
-              </button>
-              <button
-                className='set-btn set-warning'
-                onClick={() => setShowBackConfirm(true)}
-              >
-                戻る
+                scrollRef={tableScrollRef}
+                getRowKey={(row) => row.id}
+                activeRowKey={activeRowId}
+                onRowActivate={(rowKey) => {
+                  const selectedRow = rows.find((row) => row.id === Number(rowKey))
+                  if (!selectedRow) return
+                  setActiveRowId((prev) => (prev === selectedRow.id ? null : selectedRow.id))
+                }}
+              />
 
-              </button>
-            </ActionFooter>
-          </div>
-            </>
-          )}
+              <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                <button
+                  className='set-btn set-btn-landscape set-primary set-hand-input-btn'
+                  onClick={() => {
+                    if (activeRowId == null) {
+                      setShowNoSelectionAlert(true)
+                      return
+                    }
+                    setShowDetailConfirm(true)
+                  }}
+                >
+                  明細確認
+                </button>
+                <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
+                  戻る
+                </button>
+                <div aria-hidden='true' />
+                <div aria-hidden='true' />
+                <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowRegistration(true)}>
+                  出庫登録
+                </button>
+              </ActionFooter>
+            </div>
+          </>
 
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -990,7 +853,6 @@ const WOPartsIssuance = () => {
                             ...selectedRowPayload,
                             returnState,
                             detailRows: activeRowId != null ? (detailHistory[activeRowId] ?? []) : [],
-                            orientation: isLandscape ? 'landscape' : 'portrait',
                           },
                         })
                       }}

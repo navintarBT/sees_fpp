@@ -7,9 +7,7 @@ import {
     type TableColumn as TFTableColumn,
 } from '../../components/TableSection/TableSection'
 import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
-import { useOrientation, orientationState } from '../../hooks/useOrientation'
 
-const ORIENTATION_KEY = 'workOrderTimeRegistrationOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const DEFAULT_TARGET_PATH = '/factory/work-order-time-registration/gosen'
@@ -234,7 +232,6 @@ const readStoredSelection = (targetPath: string): string[] => {
 const WorkOrderTimeRegistrationChoose = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const isLandscape = useOrientation(ORIENTATION_KEY)
     // S006 WO完了実績登録もこの画面を共用する（単一選択・戻り先・データソースが異なるのでモードで分岐）
     const isCompletionMode = location.pathname === COMPLETION_ROUTE_PATH
     const locationState = location.state as { selectedWoNumbers?: string[]; targetPath?: string } | null
@@ -291,14 +288,14 @@ const WorkOrderTimeRegistrationChoose = () => {
         setShowLoadConfirm(false)
         if (isCompletionMode) {
             navigate(COMPLETION_BACK_PATH, {
-                state: { selectedWoNumber: selectedWoNumbers[0], orientation: isLandscape ? 'landscape' : 'portrait' },
+                state: { selectedWoNumber: selectedWoNumbers[0] },
             })
             return
         }
         storeSelection()
         const selectedRows = rows.filter((row) => selectedWoNumbers.includes(row.woNumber))
         navigate(targetPath, {
-            state: { selectedWoNumbers, selectedRows, orientation: isLandscape ? 'landscape' : 'portrait' },
+            state: { selectedWoNumbers, selectedRows },
         })
     }
 
@@ -350,134 +347,99 @@ const WorkOrderTimeRegistrationChoose = () => {
 
     return (
         <div className='mockup-page'>
-            <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-            <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+            <ScaleToFit active designWidth={1920} designHeight={1200}>
+            <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
                 <div className='mockup-frame'>
-                    {isLandscape ? (
-                        <>
-                            <div className='set-header-landscape'>
-                                <span className='set-header-title'>WO検索</span>
-                                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-                            </div>
-                            <div className='set-body-landscape set-body-landscape-3row'>
-                                <div className='set-form-landscape'>
-                                    <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 150, flexShrink: 0}}>作業場</label>
-                                            <input
-                                                style={{boxSizing: 'content-box', width: '12ch', flex: '0 0 auto'}}
-                                                value={workplaceFilter}
-                                                onChange={(e) => setWorkplaceFilter(e.target.value)}
-                                            />
-                                            <input disabled readOnly style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value='' />
-                                        </div>
-                                        <div style={{flex: '1 1 0', minWidth: 0}} />
+                    <>
+                        <div className='set-header-landscape'>
+                            <span className='set-header-title'>WO検索</span>
+                            <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+                        </div>
+                        <div className='set-body-landscape set-body-landscape-3row'>
+                            <div className='set-form-landscape'>
+                                <div className='set-form-landscape-row'>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 150, flexShrink: 0}}>作業場</label>
+                                        <input
+                                            style={{boxSizing: 'content-box', width: '12ch', flex: '0 0 auto'}}
+                                            value={workplaceFilter}
+                                            onChange={(e) => setWorkplaceFilter(e.target.value)}
+                                        />
+                                        <input disabled readOnly style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value='' />
                                     </div>
-                                    <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 150, flexShrink: 0}}>要求日</label>
-                                            <DateField
-                                                value={requestDateFrom}
-                                                onChange={setRequestDateFrom}
-                                                isOpen={openDateField === 'requestFrom'}
-                                                onToggle={(open) => setOpenDateField(open ? 'requestFrom' : null)}
-                                            />
-                                            <span style={{fontSize: 25, flexShrink: 0}}>～</span>
-                                            <DateField
-                                                value={requestDateTo}
-                                                onChange={setRequestDateTo}
-                                                isOpen={openDateField === 'requestTo'}
-                                                onToggle={(open) => setOpenDateField(open ? 'requestTo' : null)}
-                                            />
-                                        </div>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 150, flexShrink: 0}}>開始日</label>
-                                            <DateField
-                                                value={startDateFrom}
-                                                onChange={setStartDateFrom}
-                                                isOpen={openDateField === 'startFrom'}
-                                                onToggle={(open) => setOpenDateField(open ? 'startFrom' : null)}
-                                            />
-                                            <span style={{fontSize: 25, flexShrink: 0}}>～</span>
-                                            <DateField
-                                                value={startDateTo}
-                                                onChange={setStartDateTo}
-                                                isOpen={openDateField === 'startTo'}
-                                                onToggle={(open) => setOpenDateField(open ? 'startTo' : null)}
-                                            />
-                                        </div>
-                                        <button
-                                            type='button'
-                                            className='set-search-btn set-primary'
-                                            style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}}
-                                            onClick={handleSearch}
-                                        >
-                                            検索
-                                        </button>
-                                    </div>
+                                    <div style={{flex: '1 1 0', minWidth: 0}} />
                                 </div>
-
-                                <TableSection
-                                    columns={tableColumns}
-                                    rows={displayRows}
-                                    className='inbound-table-landscape-wrap'
-                                    gridClassName='work-order-choose-table inbound-table-landscape'
-                                    getRowKey={(row) => row.id}
-                                    isRowActive={(_rowKey, row) => isSelectedWoNumber(row.woNumber)}
-                                    onRowActivate={(_rowKey, row) => toggleWoSelection(row)}
-                                />
-
-                                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                                    <button className='set-btn set-btn-landscape set-success' onClick={() => navigate(targetPath, orientationState(isLandscape))}>
-                                        戻る
-                                    </button>
-                                    <div aria-hidden='true' />
-                                    <div aria-hidden='true' />
-                                    <div aria-hidden='true' />
+                                <div className='set-form-landscape-row'>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 150, flexShrink: 0}}>要求日</label>
+                                        <DateField
+                                            value={requestDateFrom}
+                                            onChange={setRequestDateFrom}
+                                            isOpen={openDateField === 'requestFrom'}
+                                            onToggle={(open) => setOpenDateField(open ? 'requestFrom' : null)}
+                                        />
+                                        <span style={{fontSize: 25, flexShrink: 0}}>～</span>
+                                        <DateField
+                                            value={requestDateTo}
+                                            onChange={setRequestDateTo}
+                                            isOpen={openDateField === 'requestTo'}
+                                            onToggle={(open) => setOpenDateField(open ? 'requestTo' : null)}
+                                        />
+                                    </div>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 150, flexShrink: 0}}>開始日</label>
+                                        <DateField
+                                            value={startDateFrom}
+                                            onChange={setStartDateFrom}
+                                            isOpen={openDateField === 'startFrom'}
+                                            onToggle={(open) => setOpenDateField(open ? 'startFrom' : null)}
+                                        />
+                                        <span style={{fontSize: 25, flexShrink: 0}}>～</span>
+                                        <DateField
+                                            value={startDateTo}
+                                            onChange={setStartDateTo}
+                                            isOpen={openDateField === 'startTo'}
+                                            onToggle={(open) => setOpenDateField(open ? 'startTo' : null)}
+                                        />
+                                    </div>
                                     <button
-                                        className='set-btn set-btn-landscape set-primary'
-                                        disabled={selectedWoNumbers.length === 0}
-                                        onClick={handleLoad}
+                                        type='button'
+                                        className='set-search-btn set-primary'
+                                        style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}}
+                                        onClick={handleSearch}
                                     >
-                                        読込
+                                        検索
                                     </button>
-                                </ActionFooter>
+                                </div>
                             </div>
-                        </>
-                    ) : (
-                        <>
-                    <div className='set-header'>WO検索</div>
-                    <div className='set-body'>
-                        <TableSection
-                            columns={tableColumns}
-                            rows={rows}
-                            gridClassName='work-order-choose-table'
-                            getRowKey={(row) => row.id}
-                            isRowActive={(_rowKey, row) => isSelectedWoNumber(row.woNumber)}
-                            onRowActivate={(_rowKey, row) => toggleWoSelection(row)}
-                        />
 
-                        <ActionFooter columns={4}>
-                            <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>
-                                読込
-                            </button>
-                            <button
-                                className='set-btn set-primary'
-                                disabled={selectedWoNumbers.length === 0}
-                                onClick={handleLoad}
-                            >
-                                読込
-                            </button>
-                            <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>
-                                読込
-                            </button>
-                            <button className='set-btn set-warning' onClick={() => navigate(targetPath)}>
-                                戻る
-                            </button>
-                        </ActionFooter>
-                    </div>
-                        </>
-                    )}
+                            <TableSection
+                                columns={tableColumns}
+                                rows={displayRows}
+                                className='inbound-table-landscape-wrap'
+                                gridClassName='work-order-choose-table inbound-table-landscape'
+                                getRowKey={(row) => row.id}
+                                isRowActive={(_rowKey, row) => isSelectedWoNumber(row.woNumber)}
+                                onRowActivate={(_rowKey, row) => toggleWoSelection(row)}
+                            />
+
+                            <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                                <button className='set-btn set-btn-landscape set-success' onClick={() => navigate(targetPath)}>
+                                    戻る
+                                </button>
+                                <div aria-hidden='true' />
+                                <div aria-hidden='true' />
+                                <div aria-hidden='true' />
+                                <button
+                                    className='set-btn set-btn-landscape set-primary'
+                                    disabled={selectedWoNumbers.length === 0}
+                                    onClick={handleLoad}
+                                >
+                                    読込
+                                </button>
+                            </ActionFooter>
+                        </div>
+                    </>
 
                     {showLoadConfirm && (
                         <div className='set-modal-backdrop' role='presentation'>

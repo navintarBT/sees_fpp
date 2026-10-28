@@ -4,9 +4,7 @@ import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
-import {useOrientation, orientationState} from '../../hooks/useOrientation'
 
-const ORIENTATION_KEY = 'bundlePageOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
@@ -160,7 +158,6 @@ const SESSION_KEY = 'bundlePageState'
 
 const BundlePage = () => {
   const navigate = useNavigate()
-  const isLandscape = useOrientation(ORIENTATION_KEY)
   const [rows, setRows] = useState<Row[]>([])
   const [form, setForm] = useState({
     parentWarehouse: '',
@@ -453,285 +450,153 @@ const BundlePage = () => {
 
   return (
     <div className='mockup-page'>
-      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
-          {isLandscape ? (
-            <>
-              <div className='set-header-landscape'>
-                <span className='set-header-title'>販売セット登録</span>
-                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-              </div>
-              <div className='set-body-landscape set-body-landscape-3row'>
-                <div className='set-form-landscape'>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 210, flexShrink: 0}}>FR倉庫</label>
-                      <select
-                        autoFocus
-                        style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}}
-                        value={form.parentWarehouse}
-                        onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                      >
-                        <option value=''></option>
-                        <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0020</option>
-                        <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0021</option>
-                        <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
-                      </select>
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 210, flexShrink: 0}}>TO倉庫</label>
-                      <select
-                        style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}}
-                        value={form.moveWarehouse}
-                        onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                      >
-                        <option value=''></option>
-                        <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                        <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                        <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 210, flexShrink: 0}}>保管場所</label>
-                      <input
-                        style={{boxSizing: 'content-box', width: '20ch', flex: '0 0 auto'}}
-                        value={form.parentItemNo}
-                        onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 210, flexShrink: 0}}>数量</label>
-                      <input
-                        style={{boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right'}}
-                        value={form.qty}
-                        onChange={(e) => setForm({...form, qty: e.target.value})}
-                      />
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 40, paddingLeft: 240}}>
-                        <label style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap'}}>
-                          <input
-                            type='radio'
-                            name='quantityRange-landscape'
-                            checked={quantityRange === 'from'}
-                            onChange={() => setQuantityRange('from')}
-                            style={{width: 28, height: 28}}
-                          />
-                          From
-                        </label>
-                        <label style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap'}}>
-                          <input
-                            type='radio'
-                            name='quantityRange-landscape'
-                            checked={quantityRange === 'to'}
-                            onChange={() => setQuantityRange('to')}
-                            style={{width: 28, height: 28}}
-                          />
-                          To
-                        </label>
-                      </div>
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 210, flexShrink: 0}}>JANコード</label>
-                      <input
-                        ref={janCodeInputRef}
-                        style={{boxSizing: 'content-box', width: '15ch', flex: '0 0 auto'}}
-                        inputMode='numeric'
-                        maxLength={14}
-                        value={form.janCode}
-                        onChange={(e) => handleJanCodeChange(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key !== 'Enter') return
-                          e.preventDefault()
-                          handleJanCodeEnter()
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 210, flexShrink: 0}}>理由</label>
-                      <input
-                        style={{boxSizing: 'content-box', width: '30ch', flex: '0 0 auto'}}
-                        value={form.moveStorage}
-                        onChange={(e) => setForm({...form, moveStorage: e.target.value})}
-                      />
-                    </div>
-                    <div style={{flex: '1 1 0', minWidth: 0}} />
-                  </div>
-                </div>
-
-                <TableSection
-                  columns={tableColumns}
-                  rows={rows}
-                  className='inbound-table-landscape-wrap'
-                  gridClassName='bundle-table inbound-table-landscape'
-                  gridStyle={{
-                    gridTemplateColumns:
-                      '50px 50px 120px minmax(120px, 0.9fr) minmax(140px, 1fr) 100px minmax(130px, 1fr) minmax(140px, 1.1fr) minmax(160px, 1.2fr)',
-                  }}
-                  scrollRef={tableScrollRef}
-                  getRowKey={(row) => row.id}
-                  activeRowKey={activeRowId}
-                  onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
-                />
-
-                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
-                    破棄
-                  </button>
-                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
-                    戻る
-                  </button>
-                  <div aria-hidden='true' />
-                  <button
-                    className='set-btn set-btn-landscape set-primary'
-                    onClick={() => handleReleaseClick({forceHandInput: true})}
-                  >
-                    手入力
-                  </button>
-                  <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowCompleteConfirm(true)}>
-                    完了
-                  </button>
-                </ActionFooter>
-              </div>
-            </>
-          ) : (
-            <>
-          <div className='set-header'>販売セット登録</div>
-          <div className='set-body'>
-            <div className='set-form'>
-              <div className='set-row'>
-                <label>FR倉庫</label>
-                <select
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0020</option>
-                  <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0021</option>
-                  <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
-                </select>
-              </div>
-              <div className='set-row'>
-                <label>TO倉庫</label>
-                <select
-                  value={form.moveWarehouse}
-                  onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
-                  <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
-                  <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
-                </select>
-              </div>
-              <div className='set-row set-row-inline'>
-                <label>保管場所</label>
-                <input
-                  value={form.parentItemNo}
-                  onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
-                  className='set-small'
-                />
-                <span className='set-inline-label'>数量</span>
-                <input
-                  value={form.qty}
-                  onChange={(e) => setForm({...form, qty: e.target.value})}
-                />
-              </div>
-
-              <div className='set-row'>
-                <div className='set-radio-group'>
-                  <label className='set-radio'>
-                    <input
-                      type='radio'
-                      name='quantityRange'
-                      value='from'
-                      checked={quantityRange === 'from'}
-                      onChange={() => setQuantityRange('from')}
-                    />
-                    
-                  </label>
-                  <label className='set-radio'>
-                    <input
-                      type='radio'
-                      name='quantityRange'
-                      value='to'
-                      checked={quantityRange === 'to'}
-                      onChange={() => setQuantityRange('to')}
-                    />
-                    To
-                  </label>
-                </div>
-                <div className='set-row set-row-bundle'>
-                <label>JANコード</label>
-                <input
-                  ref={janCodeInputRef}
-                  inputMode='numeric'
-                  maxLength={14}
-                  value={form.janCode}
-                  onChange={(e) => handleJanCodeChange(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key !== 'Enter') return
-                    e.preventDefault()
-                    handleJanCodeEnter()
-                  }}
-                />
-              </div>
-              </div>
-            
-              <div className='set-row'>
-                <label>理由</label>
-                <input
-                  value={form.moveStorage}
-                  onChange={(e) => setForm({...form, moveStorage: e.target.value})}
-                />
-              </div>
+          <>
+            <div className='set-header-landscape'>
+              <span className='set-header-title'>販売セット登録</span>
+              <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
             </div>
+            <div className='set-body-landscape set-body-landscape-3row'>
+              <div className='set-form-landscape'>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <label style={{width: 210, flexShrink: 0}}>FR倉庫</label>
+                    <select
+                      autoFocus
+                      style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}}
+                      value={form.parentWarehouse}
+                      onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                    >
+                      <option value=''></option>
+                      <option value='羽田製品倉庫：W0040'>羽田製品倉庫：W0020</option>
+                      <option value='羽田製品倉庫：W0041'>羽田製品倉庫：W0021</option>
+                      <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
+                    </select>
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <label style={{width: 210, flexShrink: 0}}>TO倉庫</label>
+                    <select
+                      style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}}
+                      value={form.moveWarehouse}
+                      onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
+                    >
+                      <option value=''></option>
+                      <option value='千葉倉庫（WMS）：W002'>千葉倉庫（WMS）：W002</option>
+                      <option value='千葉倉庫（WMS）：W003'>千葉倉庫（WMS）：W003</option>
+                      <option value='千葉倉庫（WMS）：W004'>千葉倉庫（WMS）：W004</option>
+                    </select>
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <label style={{width: 210, flexShrink: 0}}>保管場所</label>
+                    <input
+                      style={{boxSizing: 'content-box', width: '20ch', flex: '0 0 auto'}}
+                      value={form.parentItemNo}
+                      onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <label style={{width: 210, flexShrink: 0}}>数量</label>
+                    <input
+                      style={{boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right'}}
+                      value={form.qty}
+                      onChange={(e) => setForm({...form, qty: e.target.value})}
+                    />
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <div style={{display: 'flex', alignItems: 'center', gap: 40, paddingLeft: 240}}>
+                      <label style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap'}}>
+                        <input
+                          type='radio'
+                          name='quantityRange-landscape'
+                          checked={quantityRange === 'from'}
+                          onChange={() => setQuantityRange('from')}
+                          style={{width: 28, height: 28}}
+                        />
+                        From
+                      </label>
+                      <label style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap'}}>
+                        <input
+                          type='radio'
+                          name='quantityRange-landscape'
+                          checked={quantityRange === 'to'}
+                          onChange={() => setQuantityRange('to')}
+                          style={{width: 28, height: 28}}
+                        />
+                        To
+                      </label>
+                    </div>
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <label style={{width: 210, flexShrink: 0}}>JANコード</label>
+                    <input
+                      ref={janCodeInputRef}
+                      style={{boxSizing: 'content-box', width: '15ch', flex: '0 0 auto'}}
+                      inputMode='numeric'
+                      maxLength={14}
+                      value={form.janCode}
+                      onChange={(e) => handleJanCodeChange(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter') return
+                        e.preventDefault()
+                        handleJanCodeEnter()
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                    <label style={{width: 210, flexShrink: 0}}>理由</label>
+                    <input
+                      style={{boxSizing: 'content-box', width: '30ch', flex: '0 0 auto'}}
+                      value={form.moveStorage}
+                      onChange={(e) => setForm({...form, moveStorage: e.target.value})}
+                    />
+                  </div>
+                  <div style={{flex: '1 1 0', minWidth: 0}} />
+                </div>
+              </div>
 
-            <TableSection
-              columns={tableColumns}
-              rows={rows}
-              gridClassName='bundle-table'
-              scrollRef={tableScrollRef}
-              getRowKey={(row) => row.id}
-              activeRowKey={activeRowId}
-              onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
-            />
+              <TableSection
+                columns={tableColumns}
+                rows={rows}
+                className='inbound-table-landscape-wrap'
+                gridClassName='bundle-table inbound-table-landscape'
+                gridStyle={{
+                  gridTemplateColumns:
+                    '50px 50px 120px minmax(120px, 0.9fr) minmax(140px, 1fr) 100px minmax(130px, 1fr) minmax(140px, 1.1fr) minmax(160px, 1.2fr)',
+                }}
+                scrollRef={tableScrollRef}
+                getRowKey={(row) => row.id}
+                activeRowKey={activeRowId}
+                onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
+              />
 
-            <ActionFooter columns={4}>
-              <button
-                className='set-btn set-danger'
-                onClick={() => setShowClearConfirm(true)}
-              >
-                破棄
-              </button>
-              <button
-                className='set-btn set-primary'
-                onClick={() => setShowCompleteConfirm(true)}
-              >
-                完了
-              </button>     
-              <button
-                className='set-btn set-primary set-success'
-                onClick={() => handleReleaseClick({forceHandInput: true})}
-              >
-                手入力
-              </button>
-              <button
-                className='set-btn set-warning'
-                onClick={() => setShowBackConfirm(true)}
-              >
-                戻る
-              </button>
-            </ActionFooter>
-          </div>
-            </>
-          )}
+              <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
+                  破棄
+                </button>
+                <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
+                  戻る
+                </button>
+                <div aria-hidden='true' />
+                <button
+                  className='set-btn set-btn-landscape set-primary'
+                  onClick={() => handleReleaseClick({forceHandInput: true})}
+                >
+                  手入力
+                </button>
+                <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowCompleteConfirm(true)}>
+                  完了
+                </button>
+              </ActionFooter>
+            </div>
+          </>
 
             {showHandInputConfirm && (
               <div className='set-modal-backdrop' role='presentation'>
@@ -743,7 +608,7 @@ const BundlePage = () => {
                       className='set-modal-btn set-modal-yes'
                       onClick={() => {
                         setShowHandInputConfirm(false)
-                        navigate('/factory/bundle-hand-input', orientationState(isLandscape))
+                        navigate('/factory/bundle-hand-input')
                       }}
                     >
                       YES

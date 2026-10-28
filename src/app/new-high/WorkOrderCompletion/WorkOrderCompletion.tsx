@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
-import { useOrientation, orientationState } from '../../hooks/useOrientation'
 
-const ORIENTATION_KEY = 'workOrderCompletionOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 // 入力欄の幅を「半角文字 n 文字が収まるサイズ」にする（padding・border は幅の外側に加算）
@@ -56,7 +54,6 @@ const clearPersistedState = () => {
 const WorkOrderCompletion = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const isLandscape = useOrientation(ORIENTATION_KEY)
   // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
   const [persistedState] = useState(loadPersistedState)
   const [woNumber, setWoNumber] = useState(persistedState?.woNumber ?? '')
@@ -193,271 +190,139 @@ const WorkOrderCompletion = () => {
 
   return (
     <div className='mockup-page'>
-      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
-          {isLandscape ? (
-            <>
-              <div className='set-header-landscape'>
-                <span className='set-header-title'>WO完了実績登録</span>
-                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-              </div>
-              <div className='set-body-landscape'>
-                <div className='set-form-landscape'>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>WO番号</label>
-                      <input
-                        autoFocus
-                        style={charWidth(8)}
-                        value={woNumber}
-                        onChange={(e) => {
-                          setWoNumber(e.target.value)
-                          clearWoData()
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') loadWoData()
-                        }}
-                      />
-                      <button
-                        type='button'
-                        className='set-search-btn set-primary'
-                        style={{height: 50, fontSize: 25, flexShrink: 0, width: 210, padding: '0 14px'}}
-                        onClick={() => navigate('/factory/work-order-completion-select-wo', orientationState(isLandscape))}
-                      >
-                        WO検索
-                      </button>
-                    </div>
-                    <div style={{flex: '1 1 0', minWidth: 0}} />
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>WO計画数</label>
-                      <input
-                        disabled
-                        style={{...charWidth(15), textAlign: 'right'}}
-                        value={woData ? String(toCountNumber(plannedCount) - toCountNumber(completedCount)) : ''}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>WO完了済数</label>
-                      <input disabled style={{...charWidth(15), textAlign: 'right'}} value={plannedCount} />
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>WO完了数</label>
-                      <input
-                        disabled={!woData}
-                        style={{...charWidth(15), textAlign: 'right'}}
-                        value={defectiveCount}
-                        onChange={(e) => setDefectiveCount(e.target.value)}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>WO仕損数</label>
-                      <input
-                        ref={completedCountInputRef}
-                        disabled={!woData}
-                        style={{...charWidth(15), textAlign: 'right'}}
-                        value={completedCount}
-                        onChange={(e) => setCompletedCount(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>ロットシリアル</label>
-                      <input
-                        disabled={!woData}
-                        style={charWidth(30)}
-                        value={lotSerial}
-                        onChange={(e) => setLotSerial(e.target.value)}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>製番</label>
-                      <input disabled readOnly style={charWidth(30)} value='' />
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>事業所</label>
-                      <input
-                        disabled={!woData}
-                        style={{flex: 1, minWidth: 0}}
-                        value={officeCode}
-                        onChange={(e) => setOfficeCode(e.target.value)}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 200, flexShrink: 0}}>保管場所</label>
-                      <input
-                        disabled={!woData}
-                        style={charWidth(20)}
-                        value={storageLocation}
-                        onChange={(e) => setStorageLocation(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div />
-
-                <div className='set-printer-row-landscape'>
-                  <label>出力先プリンター</label>
-                  <select
-                    style={{...charWidth(40), paddingRight: 52}}
-                    value={printerDest}
-                    onChange={(e) => setPrinterDest(e.target.value)}
-                  >
-                    <option value=''></option>
-                    <option value='プリンター1'>プリンター1</option>
-                    <option value='プリンター2'>プリンター2</option>
-                    <option value='Printer-3-ABCDE12345'>Printer-3-ABCDE12345</option>
-                  </select>
-                </div>
-
-                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>戻る</button>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
-                  <button type='button' className='set-btn set-btn-landscape set-warning' onClick={handleRegisterClick}>登録</button>
-                </ActionFooter>
-              </div>
-            </>
-          ) : (
-            <>
-          <div className='set-header' style={{ textAlign: 'center' }}>WO完了実績登録</div>
-          <div className='hand-body'>
-            <div className='hand-form'>
-              <div className='hand-row'>
-                <label>WO番号</label>
-                <div style={{ display: 'flex', gap: '15px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    value={woNumber}
-                    onChange={(e) => {
-                      setWoNumber(e.target.value)
-                      clearWoData()
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        loadWoData()
-                      }
-                    }}
-                    style={{ textAlign: 'center', width: '540px' }}
-                  />
-                  <button type='button' className='set-btnnew_high set-primary' onClick={() => navigate("/factory/work-order-completion-select-wo", orientationState(isLandscape))}>WO検索</button>
-                </div>
-              </div>
-              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
-                <label>WO計画数</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    disabled
-                    value={plannedCount}
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
-                    aria-label='WO planned count'
-                  />
-                </div>
-
-              </div>
-              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
-                <label>WO完了済数</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    disabled
-                    value={woData ? String(toCountNumber(plannedCount) - toCountNumber(completedCount)) : ''}
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
-                    aria-label='WO completed remaining count'
-                  />
-                </div>
-
-              </div>
-              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
-                <label>WO完了数</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    ref={completedCountInputRef}
-                    disabled={!woData}
-                    value={completedCount}
-                    onChange={(e) => setCompletedCount(e.target.value)}
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '10px' }}
-                    aria-label='WO completed count'
-                  />
-                </div>
-              </div>
-              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
-                <label>WO仕損数</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    disabled={!woData}
-                    value={defectiveCount}
-                    onChange={(e) => setDefectiveCount(e.target.value)}
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
-                    aria-label='WO defective count'
-                  />
-                </div>
-
-              </div>
-
-              {/* WO読込後の動作が未決のため、製番は常に入力不可（グレー表示）とする */}
-              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
-                <label>製番</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    disabled
-                    value=''
-                    readOnly
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
-                    aria-label='Seiban'
-                  />
-                </div>
-
-              </div>
-
-              {/* 事業所・保管場所は画面初期表示時は入力不可、WO読込後に入力可能とする */}
-              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
-                <label>事業所</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    disabled={!woData}
-                    value={officeCode}
-                    onChange={(e) => setOfficeCode(e.target.value)}
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
-                    aria-label='Office'
-                  />
-                </div>
-
-              </div>
-
-              <div className='hand-row' style={{ marginTop: '-2px', fontSize: '30px' }}>
-                <label>保管場所</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                  <input
-                    disabled={!woData}
-                    value={storageLocation}
-                    onChange={(e) => setStorageLocation(e.target.value)}
-                    style={{ textAlign: 'center', width: '100%', fontSize: '32px', marginTop: '12px' }}
-                    aria-label='Storage location'
-                  />
-                </div>
-
-              </div>
-
+          <>
+            <div className='set-header-landscape'>
+              <span className='set-header-title'>WO完了実績登録</span>
+              <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
             </div>
+            <div className='set-body-landscape'>
+              <div className='set-form-landscape'>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>WO番号</label>
+                    <input
+                      autoFocus
+                      style={charWidth(8)}
+                      value={woNumber}
+                      onChange={(e) => {
+                        setWoNumber(e.target.value)
+                        clearWoData()
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') loadWoData()
+                      }}
+                    />
+                    <button
+                      type='button'
+                      className='set-search-btn set-primary'
+                      style={{height: 50, fontSize: 25, flexShrink: 0, width: 210, padding: '0 14px'}}
+                      onClick={() => navigate('/factory/work-order-completion-select-wo')}
+                    >
+                      WO検索
+                    </button>
+                  </div>
+                  <div style={{flex: '1 1 0', minWidth: 0}} />
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>WO計画数</label>
+                    <input
+                      disabled
+                      style={{...charWidth(15), textAlign: 'right'}}
+                      value={woData ? String(toCountNumber(plannedCount) - toCountNumber(completedCount)) : ''}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>WO完了済数</label>
+                    <input disabled style={{...charWidth(15), textAlign: 'right'}} value={plannedCount} />
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>WO完了数</label>
+                    <input
+                      disabled={!woData}
+                      style={{...charWidth(15), textAlign: 'right'}}
+                      value={defectiveCount}
+                      onChange={(e) => setDefectiveCount(e.target.value)}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>WO仕損数</label>
+                    <input
+                      ref={completedCountInputRef}
+                      disabled={!woData}
+                      style={{...charWidth(15), textAlign: 'right'}}
+                      value={completedCount}
+                      onChange={(e) => setCompletedCount(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>ロットシリアル</label>
+                    <input
+                      disabled={!woData}
+                      style={charWidth(30)}
+                      value={lotSerial}
+                      onChange={(e) => setLotSerial(e.target.value)}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>製番</label>
+                    <input disabled readOnly style={charWidth(30)} value='' />
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>事業所</label>
+                    <input
+                      disabled={!woData}
+                      style={{flex: 1, minWidth: 0}}
+                      value={officeCode}
+                      onChange={(e) => setOfficeCode(e.target.value)}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 200, flexShrink: 0}}>保管場所</label>
+                    <input
+                      disabled={!woData}
+                      style={charWidth(20)}
+                      value={storageLocation}
+                      onChange={(e) => setStorageLocation(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
 
-            <ActionFooter columns={5}>
-              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
-              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
-              <button type='button' className='set-btn set-success' onClick={handleRegisterClick}>{'登録'}</button>
-              <button className='set-btn set-primary' style={{ visibility: 'hidden' }}>{'\u8AAD\u8FBC'}</button>
-              <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>{'戻る'}</button>
-            </ActionFooter>
-          </div>
-            </>
-          )}
+              <div />
+
+              <div className='set-printer-row-landscape'>
+                <label>出力先プリンター</label>
+                <select
+                  style={{...charWidth(40), paddingRight: 52}}
+                  value={printerDest}
+                  onChange={(e) => setPrinterDest(e.target.value)}
+                >
+                  <option value=''></option>
+                  <option value='プリンター1'>プリンター1</option>
+                  <option value='プリンター2'>プリンター2</option>
+                  <option value='Printer-3-ABCDE12345'>Printer-3-ABCDE12345</option>
+                </select>
+              </div>
+
+              <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>戻る</button>
+                <div aria-hidden='true' />
+                <div aria-hidden='true' />
+                <div aria-hidden='true' />
+                <button type='button' className='set-btn set-btn-landscape set-warning' onClick={handleRegisterClick}>登録</button>
+              </ActionFooter>
+            </div>
+          </>
 
             {showWoSelect && (
               <div className='set-modal-backdrop' role='presentation'>

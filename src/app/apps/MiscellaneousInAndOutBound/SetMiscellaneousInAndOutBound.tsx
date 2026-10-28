@@ -4,9 +4,7 @@ import { FaPlay } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
-import { useOrientation, orientationState } from '../../hooks/useOrientation'
 
-const ORIENTATION_KEY = 'miscellaneousInAndOutBoundOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
@@ -74,7 +72,6 @@ const loadStoredForm = (): StoredForm | null => {
 
 const SetMiscellaneousInAndOutBound = () => {
   const navigate = useNavigate()
-  const isLandscape = useOrientation(ORIENTATION_KEY)
 
   const storedForm = loadStoredForm()
 
@@ -338,220 +335,116 @@ const SetMiscellaneousInAndOutBound = () => {
 
   return (
     <div className='mockup-page'>
-      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
-          {isLandscape ? (
-            <>
-              <div className='set-header-landscape'>
-                <span className='set-header-title'>予定なし入出庫</span>
-                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-              </div>
-              <div className='set-body-landscape set-body-landscape-3row'>
-                <div className='set-form-landscape'>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 150, flexShrink: 0 }}>倉庫</label>
-                      <select
-                        ref={warehouseRef}
-                        autoFocus
-                        style={{ boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto' }}
-                        value={form.moveWarehouse}
-                        onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
-                      >
-                        <option value=''></option>
-                        <option value='倉庫A：W0040'>倉庫A：W0040</option>
-                        <option value='倉庫B：W0041'>倉庫B：W0041</option>
-                        <option value='倉庫C：W0042'>倉庫C：W0042</option>
-                      </select>
-                    </div>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 150, flexShrink: 0 }}>保管場所</label>
-                      <input
-                        style={{ boxSizing: 'content-box', width: '20ch', flex: '0 0 auto' }}
-                        value={form.moveStorage}
-                        onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 150, flexShrink: 0 }}>引当数</label>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                        <select className='pg-sign-select' style={{ width: 80, flexShrink: 0, padding: '0 8px' }}>
-                          <option value='+'>+</option>
-                          <option value='-'>-</option>
-                        </select>
-                        <input
-                          value={quantity}
-                          type='number'
-                          style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right' }}
-                          onChange={(e) => setQuantity(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 150, flexShrink: 0 }}>JANコード</label>
-                      <input
-                        ref={janCodeRef}
-                        style={{ boxSizing: 'content-box', width: '14ch', flex: '0 0 auto' }}
-                        value={form.janCode}
-                        onChange={(e) => setForm({ ...form, janCode: e.target.value })}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault()
-                            handleJanCodeEnter()
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <TableSection
-                  columns={tableColumns}
-                  rows={rows}
-                  className='inbound-table-landscape-wrap'
-                  gridClassName='set-table-miscellaneous inbound-table-landscape'
-                  gridStyle={{
-                    gridTemplateColumns:
-                      '50px 50px minmax(140px, 1fr) minmax(180px, 1.2fr) minmax(120px, 0.9fr) minmax(120px, 0.9fr) 110px minmax(180px, 1.2fr)',
-                  }}
-                  scrollRef={tableScrollRef}
-                  getRowKey={(row) => row.id}
-                  activeRowKey={activeRowId}
-                  onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
-                />
-
-                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
-                    破棄
-                  </button>
-                  <button className='set-btn set-btn-landscape set-hand-input-btn' onClick={() => handleReleaseClick()}>
-                    削除
-                  </button>
-                  <button
-                    ref={backBtnRef}
-                    className='set-btn set-btn-landscape set-success'
-                    onClick={() => setShowBackConfirm(true)}
-                  >
-                    戻る
-                  </button>
-                  <button
-                    className='set-btn set-btn-landscape set-primary '
-                    onClick={() => handleReleaseClick({ forceHandInput: true })}
-                  >
-                    手入力
-                  </button>
-                  <button className='set-btn set-btn-landscape set-warning' onClick={handleCompleteClick}>
-                    完了
-                  </button>
-                </ActionFooter>
-              </div>
-            </>
-          ) : (
-            <>
-          <div className='set-header'>予定なし入出庫</div>
-          <div className='set-body'>
-            <div className='set-form'>
-              <div className='set-row'>
-                <label>倉庫</label>
-                <select
-                  ref={warehouseRef}
-                  value={form.moveWarehouse}
-                  onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
-                >
-                  <option value=''></option>
-                  <option value='倉庫A：W0040'>倉庫A：W0040</option>
-                  <option value='倉庫B：W0041'>倉庫B：W0041</option>
-                  <option value='倉庫C：W0042'>倉庫C：W0042</option>
-                </select>
-              </div>
-              <div className='set-row'>
-                <label>保管場所</label>
-                <input
-                  value={form.moveStorage}
-                  onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
-                />
-              </div>
-
-              <div className='set-row'>
-                <label>引当数</label>
-                <div className='pg-sign-group'>
-                  <select className='pg-sign-select'>
-                    <option value='+'>+</option>
-                    <option value='-'>-</option>
-                  </select>
-                  <input
-                    value={quantity}
-                    type='number'
-                    onChange={(e) => setQuantity(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className='set-row'>
-                <label>JANコード</label>
-                <input
-                  ref={janCodeRef}
-                  value={form.janCode}
-                  onChange={(e) => setForm({ ...form, janCode: e.target.value })}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      handleJanCodeEnter()
-                    }
-                  }}
-                />
-              </div>
+          <>
+            <div className='set-header-landscape'>
+              <span className='set-header-title'>予定なし入出庫</span>
+              <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
             </div>
+            <div className='set-body-landscape set-body-landscape-3row'>
+              <div className='set-form-landscape'>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <label style={{ width: 150, flexShrink: 0 }}>倉庫</label>
+                    <select
+                      ref={warehouseRef}
+                      autoFocus
+                      style={{ boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto' }}
+                      value={form.moveWarehouse}
+                      onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
+                    >
+                      <option value=''></option>
+                      <option value='倉庫A：W0040'>倉庫A：W0040</option>
+                      <option value='倉庫B：W0041'>倉庫B：W0041</option>
+                      <option value='倉庫C：W0042'>倉庫C：W0042</option>
+                    </select>
+                  </div>
+                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <label style={{ width: 150, flexShrink: 0 }}>保管場所</label>
+                    <input
+                      style={{ boxSizing: 'content-box', width: '20ch', flex: '0 0 auto' }}
+                      value={form.moveStorage}
+                      onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <label style={{ width: 150, flexShrink: 0 }}>引当数</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+                      <select className='pg-sign-select' style={{ width: 80, flexShrink: 0, padding: '0 8px' }}>
+                        <option value='+'>+</option>
+                        <option value='-'>-</option>
+                      </select>
+                      <input
+                        value={quantity}
+                        type='number'
+                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right' }}
+                        onChange={(e) => setQuantity(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <label style={{ width: 150, flexShrink: 0 }}>JANコード</label>
+                    <input
+                      ref={janCodeRef}
+                      style={{ boxSizing: 'content-box', width: '14ch', flex: '0 0 auto' }}
+                      value={form.janCode}
+                      onChange={(e) => setForm({ ...form, janCode: e.target.value })}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          handleJanCodeEnter()
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
 
-            <TableSection
-              className='set-table-miscellaneous'
-              columns={tableColumns}
-              rows={rows}
-              scrollRef={tableScrollRef}
-              getRowKey={(row) => row.id}
-              activeRowKey={activeRowId}
-              onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
-            />
+              <TableSection
+                columns={tableColumns}
+                rows={rows}
+                className='inbound-table-landscape-wrap'
+                gridClassName='set-table-miscellaneous inbound-table-landscape'
+                gridStyle={{
+                  gridTemplateColumns:
+                    '50px 50px minmax(140px, 1fr) minmax(180px, 1.2fr) minmax(120px, 0.9fr) minmax(120px, 0.9fr) 110px minmax(180px, 1.2fr)',
+                }}
+                scrollRef={tableScrollRef}
+                getRowKey={(row) => row.id}
+                activeRowKey={activeRowId}
+                onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
+              />
 
-            <ActionFooter columns={5}>
-              <button
-                className='set-btn set-danger'
-                onClick={() => setShowClearConfirm(true)}
-              >
-                破棄
-              </button>
-              <button
-                className='set-btn set-primary'
-                onClick={handleCompleteClick}
-              >
-                完了
-              </button>
-              <button
-                className='set-btn set-success'
-                onClick={() => handleReleaseClick()}
-              >
-                削除
-              </button>
-              <button
-                className='set-btn set-primary set-hand-input-btn'
-                onClick={() => handleReleaseClick({ forceHandInput: true })}
-              >
-                手入力
-              </button>
-              <button
-                ref={backBtnRef}
-                className='set-btn set-warning'
-                onClick={() => setShowBackConfirm(true)}
-              >
-                戻る
-              </button>
-            </ActionFooter>
-          </div>
-            </>
-          )}
+              <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
+                  破棄
+                </button>
+                <button className='set-btn set-btn-landscape set-hand-input-btn' onClick={() => handleReleaseClick()}>
+                  削除
+                </button>
+                <button
+                  ref={backBtnRef}
+                  className='set-btn set-btn-landscape set-success'
+                  onClick={() => setShowBackConfirm(true)}
+                >
+                  戻る
+                </button>
+                <button
+                  className='set-btn set-btn-landscape set-primary '
+                  onClick={() => handleReleaseClick({ forceHandInput: true })}
+                >
+                  手入力
+                </button>
+                <button className='set-btn set-btn-landscape set-warning' onClick={handleCompleteClick}>
+                  完了
+                </button>
+              </ActionFooter>
+            </div>
+          </>
 
           {/* Modals */}
           {showHandInputConfirm && (
@@ -564,7 +457,7 @@ const SetMiscellaneousInAndOutBound = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowHandInputConfirm(false)
-                      navigate('/factory/miscellaneous-in-and-out-bound', orientationState(isLandscape))
+                      navigate('/factory/miscellaneous-in-and-out-bound')
                     }}
                   >
                     YES

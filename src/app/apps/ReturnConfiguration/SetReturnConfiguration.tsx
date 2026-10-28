@@ -4,9 +4,7 @@ import { FaPlay } from 'react-icons/fa'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { TableSection, type TableColumn as TFTableColumn } from '../../components/TableSection/TableSection'
 import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
-import { useOrientation, orientationState } from '../../hooks/useOrientation'
 
-const ORIENTATION_KEY = 'returnConfigurationOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
@@ -43,7 +41,6 @@ const loadStoredForm = (): StoredForm | null => {
 
 const SetReturnConfiguration = () => {
   const navigate = useNavigate()
-  const isLandscape = useOrientation(ORIENTATION_KEY)
 
   const storedForm = loadStoredForm()
 
@@ -402,255 +399,126 @@ const SetReturnConfiguration = () => {
 
   return (
     <div className='mockup-page'>
-      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
-          {isLandscape ? (
-            <>
-              <div className='set-header-landscape'>
-                <span className='set-header-title'>セット戻り構成登録</span>
-                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-              </div>
-              <div className='set-body-landscape set-body-landscape-3row'>
-                <div className='set-form-landscape'>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 200, flexShrink: 0 }}>JANコード(親)</label>
-                      <input
-                        ref={parentJanCodeInputRef}
-                        autoFocus
-                        value={parentJanCode}
-                        onChange={(e) => setParentJanCode(e.target.value)}
-                        onBlur={handleParentJanCodeSubmit}
-                        onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
-                        readOnly={!isParentJanCodeEditable}
-                        className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
-                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 100, flexShrink: 0 }}>状態</label>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
-                          <input
-                            type='radio'
-                            name='status-landscape'
-                            checked={parentStatus === ''}
-                            onChange={() => setParentStatus('')}
-                            disabled={hasLoadedData}
-                            style={{ width: 28, height: 28 }}
-                          />
-                          正常
-                        </label>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
-                          <input
-                            type='radio'
-                            name='status-landscape'
-                            checked={parentStatus === '04'}
-                            onChange={() => setParentStatus('04')}
-                            disabled={hasLoadedData}
-                            style={{ width: 28, height: 28 }}
-                          />
-                          調査中
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 200, flexShrink: 0 }}>数量</label>
-                      <input
-                        value={parentQty}
-                        readOnly
-                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right', backgroundColor: '#d9d9d9' }}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                      <label style={{ width: 100, flexShrink: 0 }}>JANコード</label>
-                      <input
-                        value={janCode}
-                        onChange={(e) => {
-                          setJanCode(e.target.value)
-                          setScanError(null)
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault()
-                            handleJanCodeScan()
-                          }
-                        }}
-                        readOnly
-                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', backgroundColor: '#d9d9d9' }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <TableSection
-                  columns={tableColumns}
-                  rows={loadedData}
-                  className='inbound-table-landscape-wrap'
-                  gridClassName='set-return-configuration-table inbound-table-landscape'
-                  gridStyle={{
-                    gridTemplateColumns:
-                      '50px minmax(150px, 1fr) minmax(200px, 1.3fr) 110px 110px minmax(150px, 1fr) minmax(200px, 1.3fr)',
-                  }}
-                  scrollRef={tableScrollRef}
-                  getRowKey={(row) => row.id}
-                  activeRowKey={activeRowId}
-                  onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
-                />
-
-                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-danger' onClick={handleClearClick}>
-                    破棄
-                  </button>
-                  <button
-                    className='set-btn set-btn-landscape set-primary set-hand-input-btn'
-                    onClick={handleDeleteClick}
-                  >
-                    削除
-                  </button>
-                  <button className='set-btn set-btn-landscape set-success' onClick={handleBackClick}>
-                    戻る
-                  </button>
-                  <button className='set-btn set-btn-landscape set-primary' onClick={handleHandInputClick}>
-                    手入力
-                  </button>
-                  <button className='set-btn set-btn-landscape set-warning' onClick={handleCompleteClick}>
-                    完了
-                  </button>
-                </ActionFooter>
-              </div>
-            </>
-          ) : (
-            <>
-          <div className='set-header'>セット戻り構成登録</div>
-          <div className='set-body'>
-            <div className='set-form'>
-              {/* １．JANコード(親) - based on document section 2 */}
-              <div className='set-row'>
-                <label>JANコード(親)</label>
-                <input
-                  ref={parentJanCodeInputRef}
-                  autoFocus
-                  value={parentJanCode}
-                  onChange={(e) => setParentJanCode(e.target.value)}
-                  onBlur={handleParentJanCodeSubmit}
-                  onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
-                  readOnly={!isParentJanCodeEditable}
-                  className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
-                  style={!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}}
-                />
-              </div>
-
-              {/* 状態 - based on document specification */}
-              <div className='rlr-row2'>
-                <label>状態</label>
-                <div className="rlr-qty-group badioBtnFun10">
-                  <label>
-                    <input
-                      type="radio"
-                      name="status"
-                      value="normal"
-                      checked={parentStatus === ''}
-                      onChange={() => setParentStatus('')}
-                      disabled={hasLoadedData}
-                    />
-                    正常
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="status"
-                      value="investigating"
-                      checked={parentStatus === '04'}
-                      onChange={() => setParentStatus('04')}
-                      disabled={hasLoadedData}
-                    />
-                    調査中
-                  </label>
-                </div>
-              </div>
-
-              {/* 数量 - fixed to 1 as per document */}
-              <div className='set-row'>
-                <label>数量</label>
-                <input
-                  value={parentQty}
-                  readOnly
-                  className='set-small set-input-gray'
-                  style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
-                />
-              </div>
-
-              {/* JANコード - editable when has loaded data */}
-              <div className='set-row'>
-                <label>JANコード</label>
-                <input
-                  value={janCode}
-                  onChange={(e) => {
-                    setJanCode(e.target.value)
-                    setScanError(null)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      handleJanCodeScan()
-                    }
-                  }}
-                  readOnly={true}
-                  style={{ backgroundColor: '#d9d9d9', outline: 'none' }}
-                />
-              </div>
+          <>
+            <div className='set-header-landscape'>
+              <span className='set-header-title'>セット戻り構成登録</span>
+              <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
             </div>
+            <div className='set-body-landscape set-body-landscape-3row'>
+              <div className='set-form-landscape'>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <label style={{ width: 200, flexShrink: 0 }}>JANコード(親)</label>
+                    <input
+                      ref={parentJanCodeInputRef}
+                      autoFocus
+                      value={parentJanCode}
+                      onChange={(e) => setParentJanCode(e.target.value)}
+                      onBlur={handleParentJanCodeSubmit}
+                      onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
+                      readOnly={!isParentJanCodeEditable}
+                      className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
+                      style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <label style={{ width: 100, flexShrink: 0 }}>状態</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
+                        <input
+                          type='radio'
+                          name='status-landscape'
+                          checked={parentStatus === ''}
+                          onChange={() => setParentStatus('')}
+                          disabled={hasLoadedData}
+                          style={{ width: 28, height: 28 }}
+                        />
+                        正常
+                      </label>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
+                        <input
+                          type='radio'
+                          name='status-landscape'
+                          checked={parentStatus === '04'}
+                          onChange={() => setParentStatus('04')}
+                          disabled={hasLoadedData}
+                          style={{ width: 28, height: 28 }}
+                        />
+                        調査中
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <label style={{ width: 200, flexShrink: 0 }}>数量</label>
+                    <input
+                      value={parentQty}
+                      readOnly
+                      style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right', backgroundColor: '#d9d9d9' }}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <label style={{ width: 100, flexShrink: 0 }}>JANコード</label>
+                    <input
+                      value={janCode}
+                      onChange={(e) => {
+                        setJanCode(e.target.value)
+                        setScanError(null)
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          handleJanCodeScan()
+                        }
+                      }}
+                      readOnly
+                      style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', backgroundColor: '#d9d9d9' }}
+                    />
+                  </div>
+                </div>
+              </div>
 
-            {/* 明細部 - based on document section "明細部" */}
-            <TableSection
-              columns={tableColumns}
-              rows={loadedData}
-              gridClassName='set-return-configuration-table'
-              scrollRef={tableScrollRef}
-              getRowKey={(row) => row.id}
-              activeRowKey={activeRowId}
-              onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
-            />
+              <TableSection
+                columns={tableColumns}
+                rows={loadedData}
+                className='inbound-table-landscape-wrap'
+                gridClassName='set-return-configuration-table inbound-table-landscape'
+                gridStyle={{
+                  gridTemplateColumns:
+                    '50px minmax(150px, 1fr) minmax(200px, 1.3fr) 110px 110px minmax(150px, 1fr) minmax(200px, 1.3fr)',
+                }}
+                scrollRef={tableScrollRef}
+                getRowKey={(row) => row.id}
+                activeRowKey={activeRowId}
+                onRowActivate={(rowKey) => setActiveRowId(Number(rowKey))}
+              />
 
-            <ActionFooter columns={5}>
-              <button
-                className='set-btn set-danger'
-                onClick={handleClearClick}
-              >
-                破棄
-              </button>
-              <button
-                className='set-btn set-primary'
-                onClick={handleCompleteClick}
-              >
-                完了
-              </button>
-              <button
-                className='set-btn set-success'
-                onClick={handleDeleteClick}
-              >
-                削除
-              </button>
-              <button
-                className='set-btn set-primary set-hand-input-btn'
-                onClick={handleHandInputClick}
-              >
-                手入力
-              </button>
-              <button
-                className='set-btn set-warning'
-                onClick={handleBackClick}
-              >
-                戻る
-              </button>
-            </ActionFooter>
-          </div>
-            </>
-          )}
+              <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                <button className='set-btn set-btn-landscape set-danger' onClick={handleClearClick}>
+                  破棄
+                </button>
+                <button
+                  className='set-btn set-btn-landscape set-primary set-hand-input-btn'
+                  onClick={handleDeleteClick}
+                >
+                  削除
+                </button>
+                <button className='set-btn set-btn-landscape set-success' onClick={handleBackClick}>
+                  戻る
+                </button>
+                <button className='set-btn set-btn-landscape set-primary' onClick={handleHandInputClick}>
+                  手入力
+                </button>
+                <button className='set-btn set-btn-landscape set-warning' onClick={handleCompleteClick}>
+                  完了
+                </button>
+              </ActionFooter>
+            </div>
+          </>
 
           {/* 手入力確認 - based on document 7-1 */}
           {showHandInputConfirm && (
@@ -664,7 +532,7 @@ const SetReturnConfiguration = () => {
                     onClick={() => {
                       setShowHandInputConfirm(false)
                       navigate('/factory/return-configuration', {
-                        state: { parentItemNo: parentJanCode, orientation: isLandscape ? 'landscape' : 'portrait' },
+                        state: { parentItemNo: parentJanCode },
                       })
                     }}
                   >

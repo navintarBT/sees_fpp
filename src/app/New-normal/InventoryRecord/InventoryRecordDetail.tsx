@@ -3,7 +3,6 @@ import {useNavigate, useLocation} from 'react-router-dom'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
-import {useOrientation, orientationState} from '../../hooks/useOrientation'
 import {FaPlay} from 'react-icons/fa'
 
 type Row = {
@@ -85,7 +84,6 @@ const MOCK_DETAIL_MB: Record<number, {productName: string; itemNo: string; rows:
   },
 }
 
-const ORIENTATION_KEY = 'inventoryRecordsOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const InventoryRecordDetail = () => {
@@ -94,7 +92,6 @@ const InventoryRecordDetail = () => {
   const state = location.state as {activeRowId?: number; orderNo?: string; orientation?: 'portrait' | 'landscape'} | null
   const selectedRowId: number = state?.activeRowId ?? 1
   const orderNo: string = state?.orderNo ?? ''
-  const isLandscape = useOrientation(ORIENTATION_KEY)
   const detailMap =
     orderNo === 'OT-12345678' ? MOCK_DETAIL_OT :
     orderNo === '12345678MB123456' ? MOCK_DETAIL_MB :
@@ -163,114 +160,65 @@ const InventoryRecordDetail = () => {
 
   return (
     <div className='mockup-page'>
-      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
-          {isLandscape ? (
-            <>
-              <div className='set-header-landscape'>
-                <span className='set-header-title'>入庫実績登録読込データ参照</span>
-                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-              </div>
-              <div className='set-body-landscape set-body-landscape-3row'>
-                <div className='set-form-landscape'>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape set-field-grow'>
-                      <label style={{width: 200, flexShrink: 0}}>品名</label>
-                      <input value={parentSerial} className='set-input-gray' style={{width: 950, flexShrink: 0, textAlign: 'left'}} readOnly />
-                    </div>
-                    <div className='set-field-landscape set-field-grow'>
-                      <label style={{width: 200, flexShrink: 0}}>品目No.</label>
-                      <input value={parentItem} className='set-input-gray' style={{width: 425, flexShrink: 0, textAlign: 'left'}} readOnly />
-                    </div>
+          <>
+            <div className='set-header-landscape'>
+              <span className='set-header-title'>入庫実績登録読込データ参照</span>
+              <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+            </div>
+            <div className='set-body-landscape set-body-landscape-3row'>
+              <div className='set-form-landscape'>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape set-field-grow'>
+                    <label style={{width: 200, flexShrink: 0}}>品名</label>
+                    <input value={parentSerial} className='set-input-gray' style={{width: 950, flexShrink: 0, textAlign: 'left'}} readOnly />
+                  </div>
+                  <div className='set-field-landscape set-field-grow'>
+                    <label style={{width: 200, flexShrink: 0}}>品目No.</label>
+                    <input value={parentItem} className='set-input-gray' style={{width: 425, flexShrink: 0, textAlign: 'left'}} readOnly />
                   </div>
                 </div>
-
-                <TableSection
-                  columns={tableColumns}
-                  rows={rows}
-                  className='inbound-table-landscape-wrap'
-                  gridClassName='woPartsIssuanceDetail-table inbound-table-landscape'
-                  gridStyle={{gridTemplateColumns: '50px 50px minmax(140px, 1fr) minmax(70px, 0.5fr) minmax(140px, 1.3fr) minmax(150px, 1.2fr) minmax(160px, 1.2fr)'}}
-                  scrollRef={tableScrollRef}
-                  getRowKey={(row) => row.id}
-                  activeRowKey={activeRowId}
-                  onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
-                />
-
-                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button
-                    className='set-btn set-btn-landscape set-danger'
-                    onClick={() => {
-                      if (activeRowId === null) {
-                        setShowNoSelectionConfirm(true)
-                      } else {
-                        setShowDeleteConfirm(true)
-                      }
-                    }}
-                  >
-                    削除
-                  </button>
-                  <button
-                    className='set-btn set-btn-landscape set-success'
-                    onClick={() => setShowBackConfirm(true)}
-                  >
-                    戻る
-                  </button>
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
-                  <div aria-hidden='true' />
-                </ActionFooter>
               </div>
-            </>
-          ) : (
-            <>
-              <div className='set-header'>入庫実績登録読込データ参照</div>
-              <div className='set-body'>
-                <div className='set-form'>
-                  <div className='set-row'>
-                    <label>品名</label>
-                    <input value={parentSerial} className='set-input-gray' style={{textAlign: 'center'}} readOnly />
-                  </div>
-                  <div className='set-row'>
-                    <label>品目No.</label>
-                    <input value={parentItem} className='set-input-gray' style={{textAlign: 'center'}} readOnly />
-                  </div>
-                </div>
 
-                <TableSection
-                  columns={tableColumns}
-                  rows={rows}
-                  gridClassName='woPartsIssuanceDetail-table'
-                  scrollRef={tableScrollRef}
-                  getRowKey={(row) => row.id}
-                  activeRowKey={activeRowId}
-                  onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
-                />
+              <TableSection
+                columns={tableColumns}
+                rows={rows}
+                className='inbound-table-landscape-wrap'
+                gridClassName='woPartsIssuanceDetail-table inbound-table-landscape'
+                gridStyle={{gridTemplateColumns: '50px 50px minmax(140px, 1fr) minmax(70px, 0.5fr) minmax(140px, 1.3fr) minmax(150px, 1.2fr) minmax(160px, 1.2fr)'}}
+                scrollRef={tableScrollRef}
+                getRowKey={(row) => row.id}
+                activeRowKey={activeRowId}
+                onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
+              />
 
-                <ActionFooter columns={4}>
-                  <button className='set-btn set-danger' onClick={() => {
+              <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                <button
+                  className='set-btn set-btn-landscape set-danger'
+                  onClick={() => {
                     if (activeRowId === null) {
                       setShowNoSelectionConfirm(true)
                     } else {
                       setShowDeleteConfirm(true)
                     }
-                  }}>
-                    削除
-                  </button>
-                  <button className='set-btn set-primary' style={{visibility: 'hidden'}}>
-
-                  </button>
-                  <button className='set-btn set-primary' style={{visibility: 'hidden'}}>
-
-                  </button>
-                  <button className='set-btn set-warning' onClick={() => setShowBackConfirm(true)}>
-                    戻る
-                  </button>
-                </ActionFooter>
-              </div>
-            </>
-          )}
+                  }}
+                >
+                  削除
+                </button>
+                <button
+                  className='set-btn set-btn-landscape set-success'
+                  onClick={() => setShowBackConfirm(true)}
+                >
+                  戻る
+                </button>
+                <div aria-hidden='true' />
+                <div aria-hidden='true' />
+                <div aria-hidden='true' />
+              </ActionFooter>
+            </div>
+          </>
 
           {showDeleteConfirm && (
             <div className='set-modal-backdrop' role='presentation'>
@@ -313,7 +261,7 @@ const InventoryRecordDetail = () => {
                     className='set-modal-btn set-modal-yes'
                     onClick={() => {
                       setShowBackConfirm(false)
-                      navigate('/factory/inventory-records', orientationState(isLandscape))
+                      navigate('/factory/inventory-records')
                     }}
                   >
                     YES

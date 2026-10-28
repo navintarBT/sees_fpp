@@ -4,9 +4,7 @@ import {FaPlay} from 'react-icons/fa'
 import {ActionFooter} from '../../components/ActionFooter/ActionFooter'
 import {TableSection, type TableColumn as TFTableColumn} from '../../components/TableSection/TableSection'
 import {ScaleToFit} from '../../components/ScaleToFit/ScaleToFit'
-import {useOrientation} from '../../hooks/useOrientation'
 
-const ORIENTATION_KEY = 'shelfTransferOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 type Row = {
@@ -82,7 +80,6 @@ const clearPersistedState = () => {
 
 const ShelfTransfer = () => {
   const navigate = useNavigate()
-  const isLandscape = useOrientation(ORIENTATION_KEY)
 
   // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
   const [persistedState] = useState(loadPersistedState)
@@ -589,275 +586,137 @@ const ShelfTransfer = () => {
 
   return (
     <div className='mockup-page'>
-      <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-      <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+      <ScaleToFit active designWidth={1920} designHeight={1200}>
+      <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
-          {isLandscape ? (
-            <>
-              <div className='set-header-landscape'>
-                <span className='set-header-title'>棚移動登録{mode === 'source' ? '（移動元）' : '（移動先）'}</span>
-                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-              </div>
-              <div className='set-body-landscape set-body-landscape-3row'>
-                <div className='set-form-landscape'>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>倉庫</label>
-                      <select
-                        ref={warehouseSelectRef}
-                        autoFocus
-                        style={{flex: 1, minWidth: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'left'}}
-                        value={form.parentWarehouse}
-                        onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                        disabled={mode === 'dest'}
-                      >
-                        <option value=''></option>
-                        <option value='千葉工場：F0200'>千葉工場：F0200</option>
-                        <option value='千葉工場：F0201'>千葉工場：F0201</option>
-                        <option value='千葉工場：F0203'>千葉工場：F0203</option>
-                        <option value='千葉工場：F0204'>千葉工場：F0204</option>
-                        <option value='千葉工場：F0205'>千葉工場：F0205</option>
-                        <option value='千葉工場：F0206'>千葉工場：F0206</option>
-                        <option value='千葉工場：F0207'>千葉工場：F0207</option>
-                        <option value='千葉工場：F0208'>千葉工場：F0208</option>
-                        <option value='千葉工場：F0209'>千葉工場：F0209</option>
-                      </select>
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>保管場所</label>
-                      <select
-                        style={{width: 350, flexShrink: 0}}
-                        value={form.parentStorage}
-                        onChange={(e) => setForm({...form, parentStorage: e.target.value})}
-                      >
-                        <option value=''></option>
-                        <option value='保管場所1'>保管場所1</option>
-                        <option value='保管場所2'>保管場所2</option>
-                        <option value='保管場所3'>保管場所3</option>
-                        <option value='保管場所4'>保管場所4</option>
-                        <option value='保管場所5'>保管場所5</option>
-                      </select>
-                      <button
-                        className='set-search-btn set-success'
-                        onClick={handleSearchsource_location}
-                        disabled={isInitialDisplay || mode === 'source'}
-                        style={isInitialDisplay || mode === 'source' ? {...grayFieldStyle, height: 50, fontSize: 25, flexShrink: 0} : {height: 50, fontSize: 25, flexShrink: 0}}
-                      >
-                        一括
-                      </button>
-                    </div>
+          <>
+            <div className='set-header-landscape'>
+              <span className='set-header-title'>棚移動登録{mode === 'source' ? '（移動元）' : '（移動先）'}</span>
+              <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+            </div>
+            <div className='set-body-landscape set-body-landscape-3row'>
+              <div className='set-form-landscape'>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>倉庫</label>
+                    <select
+                      ref={warehouseSelectRef}
+                      autoFocus
+                      style={{flex: 1, minWidth: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'left'}}
+                      value={form.parentWarehouse}
+                      onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
+                      disabled={mode === 'dest'}
+                    >
+                      <option value=''></option>
+                      <option value='千葉工場：F0200'>千葉工場：F0200</option>
+                      <option value='千葉工場：F0201'>千葉工場：F0201</option>
+                      <option value='千葉工場：F0203'>千葉工場：F0203</option>
+                      <option value='千葉工場：F0204'>千葉工場：F0204</option>
+                      <option value='千葉工場：F0205'>千葉工場：F0205</option>
+                      <option value='千葉工場：F0206'>千葉工場：F0206</option>
+                      <option value='千葉工場：F0207'>千葉工場：F0207</option>
+                      <option value='千葉工場：F0208'>千葉工場：F0208</option>
+                      <option value='千葉工場：F0209'>千葉工場：F0209</option>
+                    </select>
                   </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>品目No.</label>
-                      <input
-                        ref={itemNoInputRef}
-                        style={{width: 425, flexShrink: 0}}
-                        value={form.internalLabel}
-                        onChange={(e) => setForm({...form, internalLabel: e.target.value})}
-                        onKeyDown={handleItemNoEnter}
-                      />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>ロットシリアル</label>
-                      <input readOnly style={{width: 500, flexShrink: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.lot_serial_no} />
-                    </div>
-                  </div>
-                  <div className='set-form-landscape-row'>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>品名</label>
-                      <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.shipmentQty} />
-                    </div>
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                      <label style={{width: 180, flexShrink: 0}}>移動数量</label>
-                      <input
-                        readOnly={mode === 'dest'}
-                        style={{width: 275, flexShrink: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'right'}}
-                        value={form.transfer_qty}
-                        onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
-                      />
-                      <button className='set-search-btn set-primary' style={{...grayFieldStyle, height: 50, fontSize: 25, flexShrink: 0, width: 140, padding: '0 14px'}} disabled>
-                        EA
-                      </button>
-                      <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}} onClick={handleAddDetail}>
-                        明細追加
-                      </button>
-                    </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>保管場所</label>
+                    <select
+                      style={{width: 350, flexShrink: 0}}
+                      value={form.parentStorage}
+                      onChange={(e) => setForm({...form, parentStorage: e.target.value})}
+                    >
+                      <option value=''></option>
+                      <option value='保管場所1'>保管場所1</option>
+                      <option value='保管場所2'>保管場所2</option>
+                      <option value='保管場所3'>保管場所3</option>
+                      <option value='保管場所4'>保管場所4</option>
+                      <option value='保管場所5'>保管場所5</option>
+                    </select>
+                    <button
+                      className='set-search-btn set-success'
+                      onClick={handleSearchsource_location}
+                      disabled={isInitialDisplay || mode === 'source'}
+                      style={isInitialDisplay || mode === 'source' ? {...grayFieldStyle, height: 50, fontSize: 25, flexShrink: 0} : {height: 50, fontSize: 25, flexShrink: 0}}
+                    >
+                      一括
+                    </button>
                   </div>
                 </div>
-
-                <TableSection
-                  columns={tableColumns}
-                  rows={displayRows}
-                  className='inbound-table-landscape-wrap'
-                  gridClassName='ShelfTransfer-table inbound-table-landscape'
-                  gridStyle={{
-                    gridTemplateColumns:
-                      '50px minmax(140px, 1fr) minmax(120px, 0.9fr) minmax(150px, 1.1fr) minmax(110px, 0.8fr) minmax(150px, 1.1fr) minmax(140px, 1fr)',
-                  }}
-                  scrollRef={tableScrollRef}
-                  getRowKey={(row) => row.id}
-                  activeRowKey={activeRowId}
-                  onRowActivate={handleRowActivate}
-                />
-
-                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                  <button className='set-btn set-btn-landscape set-danger' onClick={handleDiscard}>
-                    破棄
-                  </button>
-                  <button className='set-btn set-btn-landscape set-primary' onClick={handleDeleteSelected}>
-                    選択削除
-                  </button>
-                  <button className='set-btn set-btn-landscape set-success' onClick={handleBack}>
-                    戻る
-                  </button>
-                  <div aria-hidden='true' />
-                  <button
-                    className='set-btn set-btn-landscape set-warning'
-                    onClick={mode === 'source' ? handleSourceComplete : handleComplete}
-                  >
-                    完了
-                  </button>
-                </ActionFooter>
-              </div>
-            </>
-          ) : (
-            <>
-          <div className='set-header'>
-            棚移動登録{mode === 'source' ? '（移動元）' : '（移動先）'}
-          </div>
-          <div className='set-body'>
-            <div className='set-form'>
-              <div className='set-row'>
-                <label>倉庫</label>
-                <select
-                  ref={warehouseSelectRef}
-                  autoFocus
-                  style={mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
-                  value={form.parentWarehouse}
-                  onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
-                  disabled={mode === 'dest'}
-                >
-                  <option value=''></option>
-                  <option value='千葉工場：F0200'>千葉工場：F0200</option>
-                  <option value='千葉工場：F0201'>千葉工場：F0201</option>
-                  <option value='千葉工場：F0203'>千葉工場：F0203</option>
-                  <option value='千葉工場：F0204'>千葉工場：F0204</option>
-                  <option value='千葉工場：F0205'>千葉工場：F0205</option>
-                  <option value='千葉工場：F0206'>千葉工場：F0206</option>
-                  <option value='千葉工場：F0207'>千葉工場：F0207</option>
-                  <option value='千葉工場：F0208'>千葉工場：F0208</option>
-                  <option value='千葉工場：F0209'>千葉工場：F0209</option>
-                </select>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>品目No.</label>
+                    <input
+                      ref={itemNoInputRef}
+                      style={{width: 425, flexShrink: 0}}
+                      value={form.internalLabel}
+                      onChange={(e) => setForm({...form, internalLabel: e.target.value})}
+                      onKeyDown={handleItemNoEnter}
+                    />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>ロットシリアル</label>
+                    <input readOnly style={{width: 500, flexShrink: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.lot_serial_no} />
+                  </div>
+                </div>
+                <div className='set-form-landscape-row'>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>品名</label>
+                    <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.shipmentQty} />
+                  </div>
+                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
+                    <label style={{width: 180, flexShrink: 0}}>移動数量</label>
+                    <input
+                      readOnly={mode === 'dest'}
+                      style={{width: 275, flexShrink: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'right'}}
+                      value={form.transfer_qty}
+                      onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
+                    />
+                    <button className='set-search-btn set-primary' style={{...grayFieldStyle, height: 50, fontSize: 25, flexShrink: 0, width: 140, padding: '0 14px'}} disabled>
+                      EA
+                    </button>
+                    <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}} onClick={handleAddDetail}>
+                      明細追加
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <div className='set-row set-row-wo'>
-                <label>保管場所</label>
-                <select
-                  style={{textAlign: 'center'}}
-                  value={form.parentStorage}
-                  onChange={(e) => setForm({...form, parentStorage: e.target.value})}
-                >
-                  <option value=''></option>
-                  <option value='保管場所1'>保管場所1</option>
-                  <option value='保管場所2'>保管場所2</option>
-                  <option value='保管場所3'>保管場所3</option>
-                  <option value='保管場所4'>保管場所4</option>
-                  <option value='保管場所5'>保管場所5</option>
-                </select>
+              <TableSection
+                columns={tableColumns}
+                rows={displayRows}
+                className='inbound-table-landscape-wrap'
+                gridClassName='ShelfTransfer-table inbound-table-landscape'
+                gridStyle={{
+                  gridTemplateColumns:
+                    '50px minmax(140px, 1fr) minmax(120px, 0.9fr) minmax(150px, 1.1fr) minmax(110px, 0.8fr) minmax(150px, 1.1fr) minmax(140px, 1fr)',
+                }}
+                scrollRef={tableScrollRef}
+                getRowKey={(row) => row.id}
+                activeRowKey={activeRowId}
+                onRowActivate={handleRowActivate}
+              />
+
+              <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                <button className='set-btn set-btn-landscape set-danger' onClick={handleDiscard}>
+                  破棄
+                </button>
+                <button className='set-btn set-btn-landscape set-primary' onClick={handleDeleteSelected}>
+                  選択削除
+                </button>
+                <button className='set-btn set-btn-landscape set-success' onClick={handleBack}>
+                  戻る
+                </button>
+                <div aria-hidden='true' />
                 <button
-                  className='set-search-btn set-success'
-                  onClick={handleSearchsource_location}
-                  disabled={isInitialDisplay || mode === 'source'}
-                  style={isInitialDisplay || mode === 'source' ? grayFieldStyle : undefined}
+                  className='set-btn set-btn-landscape set-warning'
+                  onClick={mode === 'source' ? handleSourceComplete : handleComplete}
                 >
-                  一括
+                  完了
                 </button>
-              </div>
-
-              <div className='set-row'>
-                <label>品目No.</label>
-                <input
-                  ref={itemNoInputRef}
-                  style={{textAlign: 'center'}}
-                  value={form.internalLabel}
-                  onChange={(e) => setForm({...form, internalLabel: e.target.value})}
-                  onKeyDown={handleItemNoEnter}
-                />
-              </div>
-
-              <div className='set-row'>
-                <label>ロットシリアル</label>
-                <input
-                  readOnly
-                  style={grayFieldStyle}
-                  value={form.lot_serial_no}
-                />
-              </div>
-              <div className='set-row'>
-                <label>品名</label>
-                <input
-                  readOnly
-                  style={grayFieldStyle}
-                  value={form.shipmentQty}
-                />
-              </div>
-              <div className='set-row set-row-qty-add'>
-                <label>移動数量</label>
-                <input
-                  readOnly={mode === 'dest'}
-                  style={mode === 'dest' ? grayFieldStyle : {textAlign: 'center'}}
-                  value={form.transfer_qty}
-                  onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
-                />
-                <button className='set-search-btn set-primary' style={grayFieldStyle} disabled>
-                  EA
-                </button>
-                {/* 明細追加：常時クリック可 */}
-                <button className='set-search-btn set-success' onClick={handleAddDetail}>
-                  明細追加
-                </button>
-              </div>
+              </ActionFooter>
             </div>
-
-            <TableSection
-              columns={tableColumns}
-              rows={displayRows}
-              scrollRef={tableScrollRef}
-              getRowKey={(row) => row.id}
-              activeRowKey={activeRowId}
-              gridClassName='ShelfTransfer-table'
-              onRowActivate={handleRowActivate}
-            />
-
-            <ActionFooter columns={4}>
-              <button className='set-btn set-danger' onClick={handleDiscard}>
-                破棄
-              </button>
-
-              {/* 完了：移動元＝移動先登録へ、移動先＝JDE へ送信して終了 */}
-              <button
-                className='set-btn set-warning'
-                onClick={mode === 'source' ? handleSourceComplete : handleComplete}
-              >
-                完了
-              </button>
-
-              <button
-                className='set-btn set-primary'
-                onClick={handleDeleteSelected}
-                style={{fontSize: '35px'}}
-              >
-                選択削除
-              </button>
-
-              <button className='set-btn set-success' onClick={handleBack}>
-                戻る
-              </button>
-            </ActionFooter>
-          </div>
-            </>
-          )}
+          </>
 
           {/* ① 破棄の確認 */}
           {showDiscardConfirm && (

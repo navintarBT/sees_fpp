@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionFooter } from '../../components/ActionFooter/ActionFooter'
 import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
-import { useOrientation, orientationState } from '../../hooks/useOrientation'
 
-const ORIENTATION_KEY = 'incomingProcessRegistrationOrientation'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 const STORAGE_KEY = 'incomingProcessRegistrationForm'
@@ -34,7 +32,6 @@ const loadStoredForm = (): StoredForm | null => {
 
 const IncomingProcessRegistration = () => {
     const navigate = useNavigate()
-    const isLandscape = useOrientation(ORIENTATION_KEY)
     const [showClearConfirm, setShowClearConfirm] = useState(false)
     const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
     const [showCompleteRegistered, setShowCompleteRegistered] = useState(false)
@@ -216,297 +213,159 @@ const IncomingProcessRegistration = () => {
 
     return (
         <div className='mockup-page'>
-            <ScaleToFit active={isLandscape} designWidth={1920} designHeight={1200}>
-            <div className={isLandscape ? 'mockup-stage mockup-stage-dark mockup-stage-landscape' : 'mockup-stage mockup-stage-dark'}>
+            <ScaleToFit active designWidth={1920} designHeight={1200}>
+            <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
                 <div className='mockup-frame'>
-                    {isLandscape ? (
-                        <>
-                            <div className='set-header-landscape'>
-                                <span className='set-header-title'>入荷工程登録</span>
-                                <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
-                            </div>
-                            <div className='set-body-landscape'>
-                                <div className='set-form-landscape'>
-                                    <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>現品票No.</label>
-                                            <input
-                                                autoFocus
-                                                style={{width: 305, flexShrink: 0}}
-                                                value={productTicketNo}
-                                                onChange={(e) => handleBarcodeScan(e.target.value)}
-                                                onKeyDown={handleBarcodeKeyDown}
-                                            />
-                                        </div>
-                                        <div style={{flex: '1 1 0', minWidth: 0}} />
+                    <>
+                        <div className='set-header-landscape'>
+                            <span className='set-header-title'>入荷工程登録</span>
+                            <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
+                        </div>
+                        <div className='set-body-landscape'>
+                            <div className='set-form-landscape'>
+                                <div className='set-form-landscape-row'>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 200, flexShrink: 0}}>現品票No.</label>
+                                        <input
+                                            autoFocus
+                                            style={{width: 305, flexShrink: 0}}
+                                            value={productTicketNo}
+                                            onChange={(e) => handleBarcodeScan(e.target.value)}
+                                            onKeyDown={handleBarcodeKeyDown}
+                                        />
                                     </div>
-                                    <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>品名</label>
-                                            <input
-                                                style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
-                                                value={productName}
-                                                readOnly
-                                            />
-                                        </div>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>品番</label>
-                                            <input
-                                                style={{width: 425, flexShrink: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
-                                                value={productCode}
-                                                readOnly
-                                            />
-                                        </div>
+                                    <div style={{flex: '1 1 0', minWidth: 0}} />
+                                </div>
+                                <div className='set-form-landscape-row'>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 200, flexShrink: 0}}>品名</label>
+                                        <input
+                                            style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
+                                            value={productName}
+                                            readOnly
+                                        />
                                     </div>
-                                    <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 200, flexShrink: 0}}>品番</label>
+                                        <input
+                                            style={{width: 425, flexShrink: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
+                                            value={productCode}
+                                            readOnly
+                                        />
+                                    </div>
+                                </div>
+                                <div className='set-form-landscape-row'>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
+                                        <input
+                                            style={{width: 500, flexShrink: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                            value={lotSerial}
+                                            onChange={(e) => setLotSerial(e.target.value)}
+                                            readOnly={!fieldsEnabled}
+                                        />
+                                    </div>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 200, flexShrink: 0}}>検査工程</label>
+                                        <input
+                                            style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                            value={inspectionProcess}
+                                            onChange={(e) => setInspectionProcess(e.target.value)}
+                                            readOnly={!fieldsEnabled}
+                                        />
+                                    </div>
+                                </div>
+                                <div className='set-form-landscape-row'>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 200, flexShrink: 0}}>入荷数量</label>
+                                        <input
+                                            style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}}
+                                            value={receivingQuantity}
+                                            onChange={(e) => handleReceivingQuantityChange(e.target.value)}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 200, flexShrink: 0}}>良品数</label>
+                                        <input
+                                            style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                            value={goodQuantity}
+                                            onChange={(e) => handleGoodQuantityChange(e.target.value)}
+                                            type='number'
+                                            readOnly={!fieldsEnabled}
+                                        />
+                                    </div>
+                                </div>
+                                <div className='set-form-landscape-row' style={{alignItems: 'flex-start'}}>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                                        <label style={{width: 200, flexShrink: 0}}>不良数量</label>
+                                        <input
+                                            style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                            value={defectQuantity}
+                                            onChange={(e) => handleDefectQuantityChange(e.target.value)}
+                                            type='number'
+                                            readOnly={!fieldsEnabled}
+                                        />
+                                    </div>
+                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, alignItems: 'flex-start'}}>
+                                        <label style={{width: 200, flexShrink: 0, paddingTop: 12}}>不良理由</label>
+                                        <div style={{display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minWidth: 0}}>
+                                            <select
+                                                style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                value={defectReason}
+                                                onChange={(e) => setDefectReason(e.target.value)}
+                                                disabled={!fieldsEnabled}
+                                            >
+                                                <option value=''></option>
+                                                <option value='キズ'>キズ</option>
+                                                <option value='汚れ・異物付着'>汚れ・異物付着</option>
+                                                <option value='メッキ不良'>メッキ不良</option>
+                                                <option value='寸法不良'>寸法不良</option>
+                                                <option value='穴位置ズレ'>穴位置ズレ</option>
+                                            </select>
                                             <input
-                                                style={{width: 500, flexShrink: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={lotSerial}
-                                                onChange={(e) => setLotSerial(e.target.value)}
+                                                type='text'
+                                                maxLength={30}
+                                                style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                value={defectReasonNote}
+                                                onChange={(e) => setDefectReasonNote(e.target.value)}
                                                 readOnly={!fieldsEnabled}
                                             />
-                                        </div>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>検査工程</label>
-                                            <input
-                                                style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={inspectionProcess}
-                                                onChange={(e) => setInspectionProcess(e.target.value)}
-                                                readOnly={!fieldsEnabled}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className='set-form-landscape-row'>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>入荷数量</label>
-                                            <input
-                                                style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}}
-                                                value={receivingQuantity}
-                                                onChange={(e) => handleReceivingQuantityChange(e.target.value)}
-                                                readOnly
-                                            />
-                                        </div>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>良品数</label>
-                                            <input
-                                                style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={goodQuantity}
-                                                onChange={(e) => handleGoodQuantityChange(e.target.value)}
-                                                type='number'
-                                                readOnly={!fieldsEnabled}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className='set-form-landscape-row' style={{alignItems: 'flex-start'}}>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                            <label style={{width: 200, flexShrink: 0}}>不良数量</label>
-                                            <input
-                                                style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                value={defectQuantity}
-                                                onChange={(e) => handleDefectQuantityChange(e.target.value)}
-                                                type='number'
-                                                readOnly={!fieldsEnabled}
-                                            />
-                                        </div>
-                                        <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, alignItems: 'flex-start'}}>
-                                            <label style={{width: 200, flexShrink: 0, paddingTop: 12}}>不良理由</label>
-                                            <div style={{display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minWidth: 0}}>
-                                                <select
-                                                    style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                    value={defectReason}
-                                                    onChange={(e) => setDefectReason(e.target.value)}
-                                                    disabled={!fieldsEnabled}
-                                                >
-                                                    <option value=''></option>
-                                                    <option value='キズ'>キズ</option>
-                                                    <option value='汚れ・異物付着'>汚れ・異物付着</option>
-                                                    <option value='メッキ不良'>メッキ不良</option>
-                                                    <option value='寸法不良'>寸法不良</option>
-                                                    <option value='穴位置ズレ'>穴位置ズレ</option>
-                                                </select>
-                                                <input
-                                                    type='text'
-                                                    maxLength={30}
-                                                    style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
-                                                    value={defectReasonNote}
-                                                    onChange={(e) => setDefectReasonNote(e.target.value)}
-                                                    readOnly={!fieldsEnabled}
-                                                />
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div />
-
-                                <div className='set-printer-row-landscape'>
-                                    <label>出力先プリンター</label>
-                                    <select
-                                        style={{flex: '0 0 650px'}}
-                                        value={printerDest}
-                                        onChange={(e) => setPrinterDest(e.target.value)}
-                                    >
-                                        <option value=''></option>
-                                        <option value='プリンター1'>プリンター1</option>
-                                        <option value='プリンター2'>プリンター2</option>
-                                        <option value='Printer-3-ABCDE12345'>Printer-3-ABCDE12345</option>
-                                    </select>
-                                </div>
-
-                                <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
-                                    <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
-                                        破棄
-                                    </button>
-                                    <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
-                                        戻る
-                                    </button>
-                                    <div aria-hidden='true' />
-                                    <div aria-hidden='true' />
-                                    <button className='set-btn set-btn-landscape set-warning' onClick={handleComplete}>
-                                        完了
-                                    </button>
-                                </ActionFooter>
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                    <div className='set-header'>入荷工程登録</div>
-                    <div className='set-body'>
-                        <div className='set-form'>
-                            <div className='set-row-incomingapge'>
-                                <label>現品票No.</label>
-                                <input
-                                    ref={barcodeInputRef}
-                                    value={productTicketNo}
-                                    onChange={(e) => handleBarcodeScan(e.target.value)}
-                                    onKeyDown={handleBarcodeKeyDown}
-                                    className='set-small set-input-gray'
-                                    style={{ textAlign: 'center'}}
-                                />
                             </div>
 
-                            <div className='set-row-incomingapge'>
-                                <label>品　　 名</label>
-                                <input
-                                    value={productName}
-                                    readOnly={true}
-                                    required
-                                    className='set-small set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
-                                />
-                            </div>
+                            <div />
 
-                            <div className='set-row-incomingapge'>
-                                <label>品　　 番 </label>
-                                <input
-                                    value={productCode}
-                                    readOnly={true}
-                                    required
-                                    className='set-small set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
-                                />
-                            </div>
-
-                            <div className='set-row-incomingapge'>
-                                <label className='spax-label-incoming'>ロット／シリアル </label>
-                                <input
-                                    value={lotSerial}
-                                    onChange={(e) => setLotSerial(e.target.value)}
-                                    readOnly={!fieldsEnabled}
-                                    required
-                                    className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none' }}
-                                />
-                            </div>
-
-                            <div className='set-row-incomingapge'>
-                                <label>入荷数量 </label>
-                                <input
-                                    value={receivingQuantity}
-                                    onChange={(e) => handleReceivingQuantityChange(e.target.value)}
-                                    readOnly={true}
-                                    required
-                                    className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: '#d9d9d9', outline: 'none' }}
-                                />
-                            </div>
-
-                            <div className='set-row-incomingapge'>
-                                <label>良品数量</label>
-                                <input
-                                    value={goodQuantity}
-                                    onChange={(e) => handleGoodQuantityChange(e.target.value)}
-                                    readOnly={!fieldsEnabled}
-                                    type="number"
-                                    className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none' }}
-                                />
-                            </div>
-
-                            <div className='set-row-incomingapge'>
-                                <label>不良数量</label>
-                                <input
-                                    value={defectQuantity}
-                                    onChange={(e) => handleDefectQuantityChange(e.target.value)}
-                                    readOnly={!fieldsEnabled}
-                                    type="number"
-                                    className='set-input-gray'
-                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none' }}
-                                />
-                            </div>
-
-                            <div className='set-row set-row-incomingapge'>
-                                <label>不良理由</label>
+                            <div className='set-printer-row-landscape'>
+                                <label>出力先プリンター</label>
                                 <select
-                                    value={defectReason}
-                                    onChange={(e) => setDefectReason(e.target.value)}
-                                    // className='set-input-gray'
-                                    disabled={!fieldsEnabled}
-                                    style={{ textAlign: 'center', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                    style={{flex: '0 0 650px'}}
+                                    value={printerDest}
+                                    onChange={(e) => setPrinterDest(e.target.value)}
                                 >
                                     <option value=''></option>
-                                    <option value='キズ'>キズ</option>
-                                    <option value='汚れ・異物付着'>汚れ・異物付着</option>
-                                    <option value='メッキ不良'>メッキ不良</option>
-                                    <option value='寸法不良'>寸法不良</option>
-                                    <option value='穴位置ズレ'>穴位置ズレ</option>
+                                    <option value='プリンター1'>プリンター1</option>
+                                    <option value='プリンター2'>プリンター2</option>
+                                    <option value='Printer-3-ABCDE12345'>Printer-3-ABCDE12345</option>
                                 </select>
                             </div>
 
+                            <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                                <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
+                                    破棄
+                                </button>
+                                <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
+                                    戻る
+                                </button>
+                                <div aria-hidden='true' />
+                                <div aria-hidden='true' />
+                                <button className='set-btn set-btn-landscape set-warning' onClick={handleComplete}>
+                                    完了
+                                </button>
+                            </ActionFooter>
                         </div>
-
-                        <ActionFooter columns={4}>
-                            <button
-                                className='set-btn set-danger'
-                                onClick={() => setShowClearConfirm(true)}
-                            >
-                                破棄
-                            </button>
-                            <button
-                                className='set-btn set-warning'
-                                onClick={handleComplete}
-                            >
-                                完了
-                            </button>
-                            <button
-                                className='set-btn set-primary'
-                                onClick={() => setShowHandInputConfirm(true)}
-                                style={{ visibility: 'hidden' }}
-                            >
-                                手入力
-                            </button>
-                            <button
-                                className='set-btn set-success'
-                                onClick={() => setShowBackConfirm(true)}
-                            >
-                                戻る
-                            </button>
-                        </ActionFooter>
-                    </div>
-                        </>
-                    )}
+                    </>
 
                     {showClearConfirm && (
                         <div className='set-modal-backdrop' role='presentation'>
@@ -632,7 +491,7 @@ const IncomingProcessRegistration = () => {
                                         className='set-modal-btn set-modal-yes'
                                         onClick={() => {
                                             setShowHandInputConfirm(false)
-                                            navigate('/factory/incoming-process-registration-hand-input', orientationState(isLandscape))
+                                            navigate('/factory/incoming-process-registration-hand-input')
                                         }}
                                     >
                                         はい
