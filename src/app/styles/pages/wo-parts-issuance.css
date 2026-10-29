@@ -1,5 +1,5 @@
 /*
- * Page: WO部品出庫 (WOPartsIssuance)
+ * Page: WO部品払出 (WOPartsIssuance)
  * Rules used only by this feature (mostly table column widths / alignment).
  */
 
@@ -8,6 +8,7 @@
    rather than the shared .inbound-table-landscape selector. */
 .woPartsIssuance-table .tf-tableRow .col-reqNumber,
 .woPartsIssuance-table .tf-tableRow .col-numOfShipments,
+.woPartsIssuance-table .tf-tableRow .col-remaining,
 .woPartsIssuanceDetail-table .tf-tableRow .col-numOfShipments {
   justify-content: flex-end;
   text-align: right;
@@ -61,6 +62,10 @@
 }
 
 .woPartsIssuance-table .col-numOfShipments {
+  min-width: 110px;
+}
+
+.woPartsIssuance-table .col-remaining {
   min-width: 110px;
 }
 

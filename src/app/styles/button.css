@@ -94,6 +94,10 @@
   background: linear-gradient(180deg, #ff9ecb 0%, #d63384 100%);
 }
 
+.set-purple {
+  background: linear-gradient(180deg, #c64bb8 0%, #a02b93 100%);
+}
+
 .set-btnnew_high {
   width: 220px !important;
   height: 85px !important;

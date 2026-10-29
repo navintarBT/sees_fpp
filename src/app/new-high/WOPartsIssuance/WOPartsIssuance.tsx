@@ -20,6 +20,7 @@ type Row = {
 
 type InternalLabelPreset = {
   shipmentQty: string
+  stockQty: string
   storage: string
   office: string
   lot: string
@@ -38,9 +39,11 @@ type FormState = {
   woNumber: string
   internalLabel: string
   shipmentQty: string
+  stockQty: string
   storage: string
   office: string
   janCode: string
+  allowOverIssue: boolean
 }
 
 type DetailEntry = {
@@ -68,32 +71,38 @@ const initialForm: FormState = {
   woNumber: '',
   internalLabel: '',
   shipmentQty: '',
+  stockQty: '',
   storage: '',
   office: '',
   janCode: '',
+  allowOverIssue: false,
 }
 
 const INTERNAL_LABEL_PRESETS: Record<string, InternalLabelPreset> = {
   '部品001 LOT-0130': {
     shipmentQty: '8',
+    stockQty: '20',
     storage: 'LOC-001',
     office: 'Fxxx',
     lot: 'LOT-0130',
   },
   '部品001 LOT-0202': {
     shipmentQty: '2',
+    stockQty: '15',
     storage: 'LOC-001',
     office: 'Fxxx',
     lot: '*',
   },
   '部品002 LOT-0130': {
     shipmentQty: '8',
+    stockQty: '20',
     storage: 'LOC-002',
     office: 'Fxxx',
     lot: 'LOT-0130',
   },
   '部品002 LOT-0202': {
     shipmentQty: '2',
+    stockQty: '12',
     storage: 'LOC-003',
     office: 'Fxxx',
     lot: 'LOT-0202',
@@ -246,6 +255,15 @@ const EMPTY_ROW: Row = {
   storage: '',
 }
 
+// 残数 = 必要数 - 出庫数（超過出庫時はマイナスにせず 0 表示）
+const getRemaining = (row: Row): number | null => {
+  if (row.reqNumber === '') return null
+  const req = Number(row.reqNumber)
+  const issued = Number(row.numOfShipments || 0)
+  if (!Number.isFinite(req) || !Number.isFinite(issued)) return null
+  return Math.max(req - issued, 0)
+}
+
 const WOPartsIssuance = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -303,6 +321,7 @@ const WOPartsIssuance = () => {
     setIsInternalLabelLocked(true)
     setIsIssueDetailLocked(true)
     setActiveRowId(null)
+    setDetailHistory({})
     resetTableScroll()
     sessionStorage.removeItem(SESSION_KEY)
     requestAnimationFrame(() => {
@@ -460,6 +479,7 @@ const WOPartsIssuance = () => {
       ...prev,
       internalLabel: '',
       shipmentQty: '',
+      stockQty: '',
       storage: '',
       office: '',
     }))
@@ -506,6 +526,7 @@ const WOPartsIssuance = () => {
     setForm((prev) => ({
       ...prev,
       shipmentQty: preset.shipmentQty,
+      stockQty: preset.stockQty,
       storage: preset.storage,
       office: preset.office,
     }))
@@ -513,6 +534,27 @@ const WOPartsIssuance = () => {
     requestAnimationFrame(() => {
       shipmentQtyInputRef.current?.focus()
     })
+  }
+
+  // 残数合計：読み込んだ庫内ラベルの品番について、表示中の明細の残数を合計
+  const remainingTotal = (() => {
+    if (isIssueDetailLocked) return ''
+    const partNumber = form.internalLabel.trim().substring(0, 5)
+    const targets = rows.filter((row) => row.partNumber.trim() === partNumber)
+    if (targets.length === 0) return ''
+    return String(targets.reduce((sum, row) => sum + (getRemaining(row) ?? 0), 0))
+  })()
+
+  const sortRowsByPartNumber = () => {
+    setRows((prev) => [...prev].sort((a, b) => a.partNumber.localeCompare(b.partNumber) || a.woNumber.localeCompare(b.woNumber)))
+    resetTableScroll()
+  }
+
+  // 残数がある明細を上に（同グループ内は現在の並び順を維持）
+  const sortRowsByRemaining = () => {
+    const hasRemaining = (row: Row) => ((getRemaining(row) ?? 0) > 0 ? 1 : 0)
+    setRows((prev) => [...prev].sort((a, b) => hasRemaining(b) - hasRemaining(a)))
+    resetTableScroll()
   }
 
 
@@ -596,9 +638,10 @@ const WOPartsIssuance = () => {
     {key: 'woNumber', headClassName: 'col-woNumber', cellClassName: 'col-woNumber', header: 'WO番号', render: (row) => row.woNumber},
     {key: 'partNumber', headClassName: 'col-partNumber', cellClassName: 'col-partNumber', header: '品番', render: (row) => row.partNumber},
     {key: 'reqNumber', headClassName: 'col-reqNumber', cellClassName: 'col-reqNumber', header: '必要数', render: (row) => row.reqNumber},
-    {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '保管場所', render: (row) => row.storage},
-    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
     {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '出庫数', render: (row) => row.numOfShipments},
+    {key: 'remaining', headClassName: 'col-remaining', cellClassName: 'col-remaining', header: '残数', render: (row) => getRemaining(row) ?? ''},
+    {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
+    {key: 'storage', headClassName: 'col-storage', cellClassName: 'col-storage', header: '保管場所', render: (row) => row.storage},
     {key: 'office', headClassName: 'col-office', cellClassName: 'col-office', header: '事業所', render: (row) => row.office},
   ]
 
@@ -609,21 +652,24 @@ const WOPartsIssuance = () => {
         <div className='mockup-frame'>
           <>
             <div className='set-header-landscape'>
-              <span className='set-header-title'>WO部品出庫</span>
+              <span className='set-header-title'>WO部品払出</span>
               <span className='set-header-terminal-id'>端末ID：{TERMINAL_ID}</span>
             </div>
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
-                <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape set-field-fill'>
+                <div className='set-form-landscape-row' style={{gap: 40}}>
+                  <div className='set-field-landscape field-col-left'>
                     <label>WO番号</label>
                     <input
+                      ref={woNumberInputRef}
                       autoFocus
                       className='field-wo-no'
                       value={form.woNumber}
                       disabled={isWoNumberLocked}
                       onChange={(e) => setForm({...form, woNumber: e.target.value})}
                     />
+                  </div>
+                  <div className='set-field-landscape field-col-middle'>
                     <button
                       className='set-search-btn set-success'
                       style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}}
@@ -643,12 +689,17 @@ const WOPartsIssuance = () => {
                       onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                       onKeyDown={handleInternalLabelEnter}
                     />
-                    <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 200, padding: '0 14px'}} onClick={handleDecide}>
-                      決定
-                    </button>
                   </div>
                 </div>
-                <div className='set-form-landscape-row'>
+                <div className='set-form-landscape-row' style={{gap: 40}}>
+                  <div className='set-field-landscape field-col-left'>
+                    <label>残数合計</label>
+                    <input className='set-input-gray field-remaining-total' style={{textAlign: 'right'}} value={remainingTotal} readOnly tabIndex={-1} />
+                  </div>
+                  <div className='set-field-landscape field-col-middle'>
+                    <label>在庫数</label>
+                    <input className='set-input-gray field-stock-qty' style={{textAlign: 'right'}} value={form.stockQty} readOnly tabIndex={-1} />
+                  </div>
                   <div className='set-field-landscape set-field-fill'>
                     <label>出庫数</label>
                     <input
@@ -658,8 +709,14 @@ const WOPartsIssuance = () => {
                       value={form.shipmentQty}
                       onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
                     />
+                    <span style={{fontSize: 25, flexShrink: 0}}>個</span>
+                    <button className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 180, padding: '0 14px'}} onClick={handleDecide}>
+                      決定
+                    </button>
                   </div>
-                  <div className='set-field-landscape set-field-fill'>
+                </div>
+                <div className='set-form-landscape-row' style={{gap: 40}}>
+                  <div className='set-field-landscape field-col-left'>
                     <label>保管場所</label>
                     <input
                       className='field-storage'
@@ -668,7 +725,7 @@ const WOPartsIssuance = () => {
                       onChange={(e) => setForm({...form, storage: e.target.value})}
                     />
                   </div>
-                  <div className='set-field-landscape set-field-fill'>
+                  <div className='set-field-landscape field-col-middle'>
                     <label>事業所</label>
                     <input
                       className='field-site'
@@ -677,6 +734,23 @@ const WOPartsIssuance = () => {
                       onChange={(e) => setForm({...form, office: e.target.value})}
                     />
                   </div>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>超過出庫許可</label>
+                    <input
+                      type='checkbox'
+                      className='field-allow-over-issue'
+                      checked={form.allowOverIssue}
+                      onChange={(e) => setForm({...form, allowOverIssue: e.target.checked})}
+                    />
+                  </div>
+                </div>
+                <div className='set-form-landscape-row' style={{gap: 12}}>
+                  <button className='set-search-btn set-purple' style={{height: 50, fontSize: 25, width: 290, padding: '0 14px'}} onClick={sortRowsByPartNumber}>
+                    明細品番昇順
+                  </button>
+                  <button className='set-search-btn set-purple' style={{height: 50, fontSize: 25, width: 290, padding: '0 14px'}} onClick={sortRowsByRemaining}>
+                    明細残数有優先
+                  </button>
                 </div>
               </div>
 
@@ -687,7 +761,7 @@ const WOPartsIssuance = () => {
                 gridClassName='woPartsIssuance-table inbound-table-landscape'
                 gridStyle={{
                   gridTemplateColumns:
-                    '50px minmax(110px, 0.8fr) minmax(110px, 0.8fr) 110px minmax(120px, 0.9fr) minmax(110px, 0.8fr) 110px minmax(110px, 1fr)',
+                    '50px minmax(110px, 0.8fr) minmax(110px, 1fr) 110px 110px 110px minmax(110px, 0.9fr) minmax(120px, 0.9fr) minmax(110px, 0.7fr)',
                 }}
                 scrollRef={tableScrollRef}
                 getRowKey={(row) => row.id}
@@ -700,6 +774,13 @@ const WOPartsIssuance = () => {
               />
 
               <ActionFooter columns={5} gapX={50} className='set-actionfooter-landscape-offset'>
+                <button className='set-btn set-btn-landscape set-danger' onClick={() => setShowClearConfirm(true)}>
+                  破棄
+                </button>
+                <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
+                  戻る
+                </button>
+                <div aria-hidden='true' />
                 <button
                   className='set-btn set-btn-landscape set-primary set-hand-input-btn'
                   onClick={() => {
@@ -712,11 +793,6 @@ const WOPartsIssuance = () => {
                 >
                   明細確認
                 </button>
-                <button className='set-btn set-btn-landscape set-success' onClick={() => setShowBackConfirm(true)}>
-                  戻る
-                </button>
-                <div aria-hidden='true' />
-                <div aria-hidden='true' />
                 <button className='set-btn set-btn-landscape set-warning' onClick={() => setShowRegistration(true)}>
                   出庫登録
                 </button>
@@ -745,6 +821,23 @@ const WOPartsIssuance = () => {
                         setShowHandInputConfirm(false)
                       }}
                     >
+                      いいえ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showClearConfirm && (
+              <div className='set-modal-backdrop' role='presentation'>
+                <div className='set-modal' role='dialog' aria-modal='true'>
+                  <div className='set-modal-header'>確認</div>
+                  <div className='set-modal-body'>{'読み込みデータを破棄します。\n宜しいですか？'}</div>
+                  <div className='set-modal-actions'>
+                    <button className='set-modal-btn set-modal-yes' onClick={resetToInitialDisplay}>
+                      はい
+                    </button>
+                    <button className='set-modal-btn set-modal-no' onClick={() => setShowClearConfirm(false)}>
                       いいえ
                     </button>
                   </div>
