@@ -294,6 +294,7 @@ button:focus {
    rather than the shared .inbound-table-landscape selector. */
 .woPartsIssuance-table .tf-tableRow .col-reqNumber,
 .woPartsIssuance-table .tf-tableRow .col-numOfShipments,
+.woPartsIssuance-table .tf-tableRow .col-remaining,
 .woPartsIssuanceDetail-table .tf-tableRow .col-numOfShipments {
   justify-content: flex-end;
   text-align: right;
@@ -914,6 +915,10 @@ button:focus {
 
 .set-hand-input-btn {
   background: linear-gradient(180deg, #ff9ecb 0%, #d63384 100%);
+}
+
+.set-purple {
+  background: linear-gradient(180deg, #c64bb8 0%, #a02b93 100%);
 }
 
 .set-footer {
@@ -2276,6 +2281,10 @@ input[type='time'].wot-grid-value2 {
 }
 
 .woPartsIssuance-table .col-numOfShipments {
+  min-width: 110px;
+}
+
+.woPartsIssuance-table .col-remaining {
   min-width: 110px;
 }
 
