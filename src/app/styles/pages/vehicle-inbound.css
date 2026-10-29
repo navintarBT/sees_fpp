@@ -1,0 +1,33 @@
+/*
+ * Page: 入庫 / 車両 (VehicleInbound)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+.inbound-table .col-arrow-head,
+.inbound-table .col-arrow {
+  min-width: 50px;
+}
+
+.inbound-table .col-error {
+  min-width: 50px;
+}
+
+.inbound-table .col-item {
+  min-width: 180px;
+}
+
+.inbound-table .col-lot {
+  min-width: 235px;
+}
+
+.inbound-table .col-instruct {
+  min-width: 180px;
+}
+
+.inbound-table .col-components {
+  min-width: 180px;
+}
+
+.inbound-table .col-unlock {
+  min-width: 170px;
+}

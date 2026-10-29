@@ -13,9 +13,9 @@ function Login() {
   return (
     <section style={{ padding: 24 }}>
       <h1>Login</h1>
-      <p>กดปุ่มเพื่อจำลองการล็อกอิน</p>
+      <p>Press the button to simulate a login.</p>
       <button type="button" onClick={handleLogin}>
-        เข้าสู่ระบบ
+        Log in
       </button>
     </section>
   )

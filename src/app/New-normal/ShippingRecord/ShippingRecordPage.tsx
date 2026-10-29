@@ -423,7 +423,7 @@ const ShippingRecordPage = () => {
   ]
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-shipping-records'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -435,11 +435,11 @@ const ShippingRecordPage = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 210, flexShrink: 0}}>出荷指示No.</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>出荷指示No.</label>
                     <input
                       autoFocus
-                      style={{width: 170, flexShrink: 0}}
+                      className='field-ship-instruction-no'
                       value={form.parentItemNo}
                       disabled={isLoaded}
                       onChange={(e) => {
@@ -458,10 +458,10 @@ const ShippingRecordPage = () => {
                   <div style={{flex: '1 1 0', minWidth: 0}} />
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 210, flexShrink: 0}}>倉庫／工場</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>倉庫／工場</label>
                     <select
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-warehouse'
                       value={form.moveWarehouse}
                       onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                       disabled={!isLoaded}
@@ -472,10 +472,10 @@ const ShippingRecordPage = () => {
                       <option value='D工場'>D工場</option>
                     </select>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 270, flexShrink: 0}}>保管場所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-storage-label'>保管場所</label>
                     <input
-                      style={{width: 350, flexShrink: 0}}
+                      className='field-storage'
                       value={form.moveStorage}
                       onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                       disabled={!isLoaded}
@@ -483,10 +483,10 @@ const ShippingRecordPage = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 210, flexShrink: 0}}>数量</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>数量</label>
                     <input
-                      style={{width: 275, flexShrink: 0, textAlign: 'right'}}
+                      className='field-qty' style={{textAlign: 'right'}}
                       value={form.qty}
                       onChange={(e) => setForm({...form, qty: e.target.value})}
                       disabled={!isLoaded}
@@ -500,11 +500,11 @@ const ShippingRecordPage = () => {
                       反映
                     </button>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 270, flexShrink: 0}}>JANコード／品目コード</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-jan-item-label'>JANコード／品目コード</label>
                     <input
                       ref={janCodeRef}
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-jan-item'
                       value={form.janCode}
                       onChange={(e) => setForm({...form, janCode: e.target.value})}
                       onKeyDown={(e) => {
@@ -518,10 +518,10 @@ const ShippingRecordPage = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 210, flexShrink: 0}}>移動先</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>移動先</label>
                     <input
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-move-to'
                       value={form.parentWarehouse}
                       onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                       disabled

@@ -212,7 +212,7 @@ const IncomingProcessRegistration = () => {
     }
 
     return (
-        <div className='mockup-page'>
+        <div className='mockup-page page-incoming-process-registration'>
             <ScaleToFit active designWidth={1920} designHeight={1200}>
             <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
                 <div className='mockup-frame'>
@@ -224,11 +224,11 @@ const IncomingProcessRegistration = () => {
                         <div className='set-body-landscape'>
                             <div className='set-form-landscape'>
                                 <div className='set-form-landscape-row'>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 200, flexShrink: 0}}>現品票No.</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>現品票No.</label>
                                         <input
                                             autoFocus
-                                            style={{width: 305, flexShrink: 0}}
+                                            className='field-tag-no'
                                             value={productTicketNo}
                                             onChange={(e) => handleBarcodeScan(e.target.value)}
                                             onKeyDown={handleBarcodeKeyDown}
@@ -237,37 +237,37 @@ const IncomingProcessRegistration = () => {
                                     <div style={{flex: '1 1 0', minWidth: 0}} />
                                 </div>
                                 <div className='set-form-landscape-row'>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 200, flexShrink: 0}}>品名</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>品名</label>
                                         <input
-                                            style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
+                                            className='field-item-name' style={{backgroundColor: '#d9d9d9', outline: 'none'}}
                                             value={productName}
                                             readOnly
                                         />
                                     </div>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 200, flexShrink: 0}}>品番</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>品番</label>
                                         <input
-                                            style={{width: 425, flexShrink: 0, backgroundColor: '#d9d9d9', outline: 'none'}}
+                                            className='field-part-no' style={{backgroundColor: '#d9d9d9', outline: 'none'}}
                                             value={productCode}
                                             readOnly
                                         />
                                     </div>
                                 </div>
                                 <div className='set-form-landscape-row'>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 200, flexShrink: 0}}>ロット／シリアル</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>ロット／シリアル</label>
                                         <input
-                                            style={{width: 500, flexShrink: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                            className='field-lot-serial' style={{backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                             value={lotSerial}
                                             onChange={(e) => setLotSerial(e.target.value)}
                                             readOnly={!fieldsEnabled}
                                         />
                                     </div>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 200, flexShrink: 0}}>検査工程</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>検査工程</label>
                                         <input
-                                            style={{flex: 1, minWidth: 0, backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                            className='field-inspection' style={{backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                             value={inspectionProcess}
                                             onChange={(e) => setInspectionProcess(e.target.value)}
                                             readOnly={!fieldsEnabled}
@@ -275,19 +275,19 @@ const IncomingProcessRegistration = () => {
                                     </div>
                                 </div>
                                 <div className='set-form-landscape-row'>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 200, flexShrink: 0}}>入荷数量</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>入荷数量</label>
                                         <input
-                                            style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}}
+                                            className='field-received-qty' style={{textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}}
                                             value={receivingQuantity}
                                             onChange={(e) => handleReceivingQuantityChange(e.target.value)}
                                             readOnly
                                         />
                                     </div>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 200, flexShrink: 0}}>良品数</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>良品数</label>
                                         <input
-                                            style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                            className='field-good-qty' style={{textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                             value={goodQuantity}
                                             onChange={(e) => handleGoodQuantityChange(e.target.value)}
                                             type='number'
@@ -296,21 +296,21 @@ const IncomingProcessRegistration = () => {
                                     </div>
                                 </div>
                                 <div className='set-form-landscape-row' style={{alignItems: 'flex-start'}}>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 200, flexShrink: 0}}>不良数量</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>不良数量</label>
                                         <input
-                                            style={{width: 275, flexShrink: 0, textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                            className='field-defect-qty' style={{textAlign: 'right', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                             value={defectQuantity}
                                             onChange={(e) => handleDefectQuantityChange(e.target.value)}
                                             type='number'
                                             readOnly={!fieldsEnabled}
                                         />
                                     </div>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, alignItems: 'flex-start'}}>
-                                        <label style={{width: 200, flexShrink: 0, paddingTop: 12}}>不良理由</label>
+                                    <div className='set-field-landscape set-field-fill' style={{alignItems: 'flex-start'}}>
+                                        <label style={{paddingTop: 12}}>不良理由</label>
                                         <div style={{display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minWidth: 0}}>
                                             <select
-                                                style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                className='field-defect-reason' style={{fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={defectReason}
                                                 onChange={(e) => setDefectReason(e.target.value)}
                                                 disabled={!fieldsEnabled}
@@ -325,7 +325,7 @@ const IncomingProcessRegistration = () => {
                                             <input
                                                 type='text'
                                                 maxLength={30}
-                                                style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
+                                                className='field-defect-reason-text' style={{fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px', backgroundColor: fieldsEnabled ? '#ffffff' : '#d9d9d9', outline: 'none'}}
                                                 value={defectReasonNote}
                                                 onChange={(e) => setDefectReasonNote(e.target.value)}
                                                 readOnly={!fieldsEnabled}
@@ -340,7 +340,7 @@ const IncomingProcessRegistration = () => {
                             <div className='set-printer-row-landscape'>
                                 <label>出力先プリンター</label>
                                 <select
-                                    style={{flex: '0 0 650px'}}
+                                    className='field-printer'
                                     value={printerDest}
                                     onChange={(e) => setPrinterDest(e.target.value)}
                                 >

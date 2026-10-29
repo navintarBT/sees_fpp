@@ -1436,7 +1436,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
   )
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-work-order-time-registration'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -1448,12 +1448,12 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
             <div className='set-body-landscape'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>作業日</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>作業日</label>
                     <div className='hand-date-field-register' style={{width: 230, flexShrink: 0}}>
                       <input
                         readOnly
-                        style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 22px', cursor: 'pointer'}}
+                        className='field-date' style={{fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 22px', cursor: 'pointer'}}
                         value={formatWoDate(woDatePickerValue)}
                         onClick={openWoDatePicker}
                       />
@@ -1508,11 +1508,11 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                 </div>
 
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>作業者</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>作業者</label>
                     <input
                       autoFocus
-                      style={{width: 230, flexShrink: 0}}
+                      className='field-worker-code'
                       ref={parentJanCodeInputRef}
                       value={workerCode}
                       onChange={(e) => setWorkerCode(e.target.value)}
@@ -1523,13 +1523,13 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                         }
                       }}
                     />
-                    <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value={workerName} readOnly />
+                    <input className='field-worker-name' style={{backgroundColor: '#d9d9d9', outline: 'none'}} value={workerName} readOnly />
                   </div>
                   {isCommon || config.showWorkplace ? (
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>作業場</label>
+                    <div className='set-field-landscape set-field-fill'>
+                      <label>作業場</label>
                       <input
-                        style={{width: 230, flexShrink: 0}}
+                        className='field-workplace-code'
                         value={workplaceCode}
                         onChange={(e) => setWorkplaceCode(e.target.value)}
                         onKeyDown={(e) => {
@@ -1539,7 +1539,7 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                           }
                         }}
                       />
-                      <input style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} readOnly value={workplaceName} />
+                      <input className='field-workplace-name' style={{backgroundColor: '#d9d9d9', outline: 'none'}} readOnly value={workplaceName} />
                     </div>
                   ) : (
                     <div style={{flex: '1 1 0', minWidth: 0}} />
@@ -1549,26 +1549,26 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                 {(isCommon || config.showProcessDefaults) && (
                   <>
                     <div className='set-form-landscape-row'>
-                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                        <label style={{width: 150, flexShrink: 0}}>工程状況初期値</label>
-                        <input style={{width: 80, flexShrink: 0}} value={defaultProcessStatus} onChange={(e) => setDefaultProcessStatus(e.target.value)} />
+                      <div className='set-field-landscape set-field-fill'>
+                        <label>工程状況初期値</label>
+                        <input className='field-initial-status' value={defaultProcessStatus} onChange={(e) => setDefaultProcessStatus(e.target.value)} />
                       </div>
-                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                        <label style={{width: 150, flexShrink: 0}}>作業順序</label>
-                        <input style={{width: 125, flexShrink: 0}} value={defaultOpOrder} onChange={(e) => setDefaultOpOrder(e.target.value)} />
+                      <div className='set-field-landscape set-field-fill'>
+                        <label>作業順序</label>
+                        <input className='field-op-order' value={defaultOpOrder} onChange={(e) => setDefaultOpOrder(e.target.value)} />
                       </div>
                     </div>
                     <div className='set-form-landscape-row'>
-                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                        <label style={{width: 150, flexShrink: 0}}>備考</label>
-                        <input style={{flex: 1, minWidth: 0}} value={defaultRemarks} onChange={(e) => setDefaultRemarks(e.target.value)} />
+                      <div className='set-field-landscape set-field-fill'>
+                        <label>備考</label>
+                        <input className='field-remarks' value={defaultRemarks} onChange={(e) => setDefaultRemarks(e.target.value)} />
                         <button type='button' className='set-search-btn set-success' style={{height: 50, fontSize: 25, flexShrink: 0, width: 160}} onClick={applyRemarksToAllRows}>
                           一括反映
                         </button>
                       </div>
-                      <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                        <label style={{width: 150, flexShrink: 0}}>WO番号</label>
-                        <input style={{width: 170, flexShrink: 0}} value={commonWoNumberInput} onChange={(e) => setCommonWoNumberInput(e.target.value)} />
+                      <div className='set-field-landscape set-field-fill'>
+                        <label>WO番号</label>
+                        <input className='field-wo-no' value={commonWoNumberInput} onChange={(e) => setCommonWoNumberInput(e.target.value)} />
                         {woSearchButton}
                       </div>
                     </div>
@@ -1578,9 +1578,9 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                 {!isCommon && config.showWoSearchButton && (
                   <div className='set-form-landscape-row'>
                     <div style={{flex: '1 1 0', minWidth: 0}} />
-                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                      <label style={{width: 150, flexShrink: 0}}>WO番号</label>
-                      <input style={{width: 170, flexShrink: 0}} value={commonWoNumberInput} onChange={(e) => setCommonWoNumberInput(e.target.value)} />
+                    <div className='set-field-landscape set-field-fill'>
+                      <label>WO番号</label>
+                      <input className='field-wo-no' value={commonWoNumberInput} onChange={(e) => setCommonWoNumberInput(e.target.value)} />
                       {woSearchButton}
                     </div>
                   </div>
@@ -1602,11 +1602,11 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
 
               {!isGosen && (
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 100, flexShrink: 0}}>開始</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-start-time-label'>開始</label>
                     <div style={{position: 'relative', width: 250, flexShrink: 0}}>
                       <input
-                        style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px'}}
+                        className='field-start-time' style={{fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px'}}
                         type='text'
                         maxLength={5}
                         value={workStartTime}
@@ -1621,10 +1621,10 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
                         <TimePickerDropdown value={workStartTime} onChange={setWorkStartTime} onClose={() => setShowStartTimePicker(false)} />
                       )}
                     </div>
-                    <label style={{width: 100, flexShrink: 0}}>終了</label>
+                    <label className='field-end-time-label'>終了</label>
                     <div style={{position: 'relative', width: 250, flexShrink: 0}}>
                       <input
-                        style={{width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px'}}
+                        className='field-end-time' style={{fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 16px'}}
                         type='text'
                         maxLength={5}
                         value={workEndTime}
@@ -1646,11 +1646,11 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
               )}
               {isChiba && (
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 100, flexShrink: 0}}>作業時間</label>
-                    <input style={{width: 80, flexShrink: 0, textAlign: 'right'}} value={workDurationHours} readOnly />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-work-time-label'>作業時間</label>
+                    <input className='field-work-time' style={{textAlign: 'right'}} value={workDurationHours} readOnly />
                     <span style={{fontSize: 25, flexShrink: 0}}>時間</span>
-                    <input style={{width: 80, flexShrink: 0, textAlign: 'right'}} value={workDurationMinutes} readOnly />
+                    <input className='field-work-time' style={{textAlign: 'right'}} value={workDurationMinutes} readOnly />
                     <span style={{fontSize: 25, flexShrink: 0}}>分</span>
                   </div>
                   <div style={{flex: '1 1 0', minWidth: 0}} />
@@ -1658,18 +1658,18 @@ const WorkOrderTimeRegistrationScreen = ({ factory }: { factory: Factory }) => {
               )}
               {!isChiba && (
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 100, flexShrink: 0}}>作業時間</label>
-                    <input style={{width: 80, flexShrink: 0, textAlign: 'right'}} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-work-time-label'>作業時間</label>
+                    <input className='field-work-time' style={{textAlign: 'right'}} />
                     <span style={{fontSize: 25, flexShrink: 0}}>時間</span>
-                    <input style={{width: 80, flexShrink: 0, textAlign: 'right'}} />
+                    <input className='field-work-time' style={{textAlign: 'right'}} />
                     <span style={{fontSize: 25, flexShrink: 0}}>分</span>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>目標時間計</label>
-                    <input style={{width: 95, flexShrink: 0, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}} value={totalTargetTimeDisplay.hours} readOnly />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>目標時間計</label>
+                    <input className='field-target-total-hours' style={{textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}} value={totalTargetTimeDisplay.hours} readOnly />
                     <span style={{fontSize: 25, flexShrink: 0}}>時間</span>
-                    <input style={{width: 80, flexShrink: 0, textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}} value={totalTargetTimeDisplay.minutes} readOnly />
+                    <input className='field-target-total-minutes' style={{textAlign: 'right', backgroundColor: '#d9d9d9', outline: 'none'}} value={totalTargetTimeDisplay.minutes} readOnly />
                     <span style={{fontSize: 25, flexShrink: 0}}>分</span>
                   </div>
                 </div>

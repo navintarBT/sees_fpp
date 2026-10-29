@@ -13,7 +13,7 @@ const MiscellaneousInAndOutBound = () => {
   const dateRef = useRef<HTMLInputElement>(null)
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-miscellaneous-in-and-out-bound'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -25,55 +25,55 @@ const MiscellaneousInAndOutBound = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 220, flexShrink: 0 }}>倉庫</label>
-                    <select autoFocus style={{ boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto', appearance: 'auto' }}>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>倉庫</label>
+                    <select autoFocus className='field-warehouse' style={{ appearance: 'auto' }}>
                       <option value=''></option>
                       <option value='倉庫A:W0040'>倉庫A:W0040</option>
                       <option value='倉庫B:W0041'>倉庫B:W0041</option>
                       <option value='倉庫C:W0042'>倉庫C:W0042</option>
                     </select>
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 220, flexShrink: 0 }}>保管場所</label>
-                    <input style={{ boxSizing: 'content-box', width: '20ch', flex: '0 0 auto' }} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>保管場所</label>
+                    <input className='field-storage' />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 220, flexShrink: 0 }}>引当数</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>引当数</label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                      <select style={{ width: 80, flexShrink: 0, appearance: 'auto', padding: '0 8px' }}>
+                      <select className='field-alloc-sign' style={{ appearance: 'auto', padding: '0 8px' }}>
                         <option value='+'>+</option>
                         <option value='-'>-</option>
                       </select>
                       <input
                         value={quantity}
                         type='number'
-                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right' }}
+                        className='field-alloc-qty' style={{ textAlign: 'right' }}
                         onChange={(e) => setQuantity(e.target.value)}
                       />
                     </div>
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 220, flexShrink: 0 }}>品目No.</label>
-                    <input style={{ boxSizing: 'content-box', width: '25ch', flex: '0 0 auto' }} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品目No.</label>
+                    <input className='field-item-no' />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 220, flexShrink: 0 }}>ロット</label>
-                    <input style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto' }} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>ロット</label>
+                    <input className='field-lot' />
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 220, flexShrink: 0 }}>シリアル</label>
-                    <input style={{ boxSizing: 'content-box', width: '25ch', flex: '0 0 auto' }} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>シリアル</label>
+                    <input className='field-serial' />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 220, flexShrink: 0 }}>有効期限(yymm)</label>
-                    <input type='text' ref={dateRef} style={{ width: 110, flexShrink: 0 }} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>有効期限(yymm)</label>
+                    <input type='text' ref={dateRef} className='field-expiry' />
                   </div>
                   <div style={{ flex: '1 1 0', minWidth: 0 }} />
                 </div>

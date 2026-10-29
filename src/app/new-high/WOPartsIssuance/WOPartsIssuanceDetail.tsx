@@ -336,7 +336,7 @@ const WOPartsIssuanceDetail = () => {
   ]
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-wo-parts-issuance-detail'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -348,17 +348,17 @@ const WOPartsIssuanceDetail = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>WO番号</label>
-                    <input value={parentSerial} className='set-input-gray' style={{width: 170, flexShrink: 0}} readOnly />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>WO番号</label>
+                    <input value={parentSerial} className='set-input-gray field-wo-no' readOnly />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>品番</label>
-                    <input value={parentItem} className='set-input-gray' style={{width: 425, flexShrink: 0}} readOnly />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品番</label>
+                    <input value={parentItem} className='set-input-gray field-part-no' readOnly />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>必要数</label>
-                    <input value={moveStorage} className='set-input-gray' style={{width: 275, flexShrink: 0, textAlign: 'right'}} readOnly />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>必要数</label>
+                    <input value={moveStorage} className='set-input-gray field-required-qty' style={{textAlign: 'right'}} readOnly />
                   </div>
                 </div>
               </div>

@@ -1,0 +1,33 @@
+/*
+ * Page: 出庫 / 車両 (VehicleDispatch)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+.dispatch-table .col-arrow-head,
+.dispatch-table .col-arrow {
+  min-width: 50px;
+}
+
+.dispatch-table .col-error {
+  min-width: 50px;
+}
+
+.dispatch-table .col-item {
+  min-width: 180px;
+}
+
+.dispatch-table .col-lot {
+  min-width: 220px;
+}
+
+.dispatch-table .col-instruct {
+  min-width: 180px;
+}
+
+.dispatch-table .col-Load {
+  min-width: 170px;
+}
+
+.dispatch-table .col-ProductName {
+  min-width: 203px;
+}

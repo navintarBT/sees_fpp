@@ -1,0 +1,79 @@
+/*
+ * Page: tables shared by several pages
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+/* WorkOrderTimeRegistration gosen/common table: 計画数・合格数・不良数・目標時間・作業順序 are
+   numeric quantities rendered via an editable <input class="table-cell-input">, whose shared
+   base class defaults to text-align:left — override these columns to right-align. */
+.delivery-table .tf-tableRow .col-qty,
+.delivery-table .tf-tableRow .col-target-time,
+.delivery-table .tf-tableRow .col-op-order {
+  justify-content: flex-end;
+}
+
+.delivery-table .tf-tableCell.col-qty .table-cell-input,
+.delivery-table .tf-tableCell.col-target-time .table-cell-input,
+.delivery-table .tf-tableCell.col-op-order .table-cell-input {
+  text-align: right;
+}
+
+.delivery-table .tf-tableCell.col-item-no {
+  min-width: 80px;
+  width: auto;
+  padding: 0 6px;
+}
+
+.delivery-table .tf-tableCell.col-item-name,
+.delivery-table .tf-tableCell.col-target-time,
+.delivery-table .tf-tableCell.col-qty,
+.delivery-table .tf-tableCell.col-op,
+.delivery-table .tf-tableCell.col-op-order,
+.delivery-table .tf-tableCell.col-process,
+.delivery-table .tf-tableCell.col-remarks {
+  min-width: 80px;
+  width: auto;
+  padding: 0 6px;
+}
+
+.delivery-table .col-situation {
+  min-width: 200px;
+}
+
+.delivery-table .col-item {
+  min-width: 796px;
+}
+
+.woPartsIssuanceDetail-table .col-arrow-head {
+  min-width: 45px;
+}
+
+.woPartsIssuanceDetail-table .col-num {
+  min-width: 200px;
+}
+
+.woPartsIssuanceDetail-table .col-moveStorage {
+  min-width: 235px;
+}
+
+.woPartsIssuanceDetail-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.woPartsIssuanceDetail-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.woPartsIssuanceDetail-table .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}
+
+.col-item-delivery {
+  min-width: 830px;
+}

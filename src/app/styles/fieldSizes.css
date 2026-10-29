@@ -1,0 +1,321 @@
+/*
+ * Field sizes (input / select / textarea) per page - one line per field.
+ *
+ * - In the TSX a field only carries a class named field-<name>, e.g. field-storage = 保管場所.
+ * - Each page root has the class page-<page>; the sizes of that page are in its section below.
+ * - To change the length of a field, edit the values here. No TSX change is needed.
+ * - The #root prefix gives these rules the same priority the former inline styles had
+ *   (they win over the generic rules in globalStyle.css).
+ * - Sizes that are computed at runtime (e.g. from the length of the entered value) stay inline in the TSX.
+ * - Every page section starts with its label column width (and exceptions for labels that differ),
+ *   followed by one line per field.
+ */
+
+/* ===== Shared ===== */
+#root .set-field-fill { flex: 1 1 0; min-width: 0; } /* field box: label + field share the row width equally */
+
+/* ===== 入庫実績登録 — /factory/inventory-records
+         src/app/New-normal/InventoryRecord/InventoryRecordsPage.tsx ===== */
+#root .page-inventory-records .set-field-landscape > label                        { width: 210px; flex-shrink: 0; } /* label column */
+#root .page-inventory-records .set-field-landscape > label.field-storage-label    { width: 270px; }                 /* label: 保管場所 */
+#root .page-inventory-records .set-field-landscape > label.field-lot-status-label { width: 185px; }                 /* label: ロット状況 */
+#root .page-inventory-records .set-field-landscape > label.field-jan-item-label   { width: 270px; }                 /* label: JANコード／品目コード */
+#root .page-inventory-records .set-field-landscape > label.field-move-from-label  { width: 185px; }                 /* label: 移動元（移動先） */
+#root .page-inventory-records .field-order-no                                     { width: 260px; flex-shrink: 0; } /* 出荷No.／発注No. */
+#root .page-inventory-records .field-warehouse                                    { flex: 1; min-width: 0; }        /* 倉庫 */
+#root .page-inventory-records .field-storage                                      { flex: 1; min-width: 0; }        /* 保管場所 */
+#root .page-inventory-records .field-lot-status                                   { flex: 1; min-width: 0; }        /* ロット状況 */
+#root .page-inventory-records .field-qty                                          { flex: 1; min-width: 0; }        /* 数量 */
+#root .page-inventory-records .field-jan-item                                     { flex: 1; min-width: 0; }        /* JANコード／品目コード */
+#root .page-inventory-records .field-move-from                                    { flex: 1; min-width: 0; }        /* 移動元（移動先） */
+#root .page-inventory-records .field-printer                                      { flex: 0 0 650px; }              /* 出力先プリンター */
+
+/* ===== 入庫実績登録 手入力登録 — /factory/inventory-hand-input
+         src/app/New-normal/InventoryRecord/InventoryRecordsHandInputPage.tsx ===== */
+#root .page-inventory-hand-input .set-field-landscape > label { width: 220px; flex-shrink: 0; } /* label column */
+#root .page-inventory-hand-input .field-warehouse             { flex: 1; min-width: 0; }        /* 倉庫 */
+#root .page-inventory-hand-input .field-storage               { width: 350px; flex-shrink: 0; } /* 保管場所 */
+#root .page-inventory-hand-input .field-lot-status            { flex: 1; min-width: 0; }        /* ロット状況 */
+#root .page-inventory-hand-input .field-qty                   { width: 275px; flex-shrink: 0; } /* 数量 */
+#root .page-inventory-hand-input .field-item-no               { width: 425px; flex-shrink: 0; } /* 品目No. */
+#root .page-inventory-hand-input .field-lot                   { width: 500px; flex-shrink: 0; } /* ロット */
+#root .page-inventory-hand-input .field-serial                { width: 425px; flex-shrink: 0; } /* シリアル */
+#root .page-inventory-hand-input .field-expiry                { width: 110px; flex-shrink: 0; } /* 有効期限（yymm） */
+
+/* ===== 入庫実績登録 読込データ参照 — /factory/inventory-detail
+         src/app/New-normal/InventoryRecord/InventoryRecordDetail.tsx ===== */
+#root .page-inventory-detail .set-field-landscape > label { width: 200px; flex-shrink: 0; } /* label column */
+#root .page-inventory-detail .field-item-name             { width: 950px; flex-shrink: 0; } /* 品名 */
+#root .page-inventory-detail .field-item-no               { width: 425px; flex-shrink: 0; } /* 品目No. */
+
+/* ===== 入荷工程登録 — /factory/incoming-process-registration
+         src/app/New-normal/IncomingProcessRegistration/IncomingProcessRegistration.tsx ===== */
+#root .page-incoming-process-registration .set-field-landscape > label { width: 200px; flex-shrink: 0; } /* label column */
+#root .page-incoming-process-registration .field-tag-no                { width: 305px; flex-shrink: 0; } /* 現品票No. */
+#root .page-incoming-process-registration .field-item-name             { flex: 1; min-width: 0; }        /* 品名 */
+#root .page-incoming-process-registration .field-part-no               { width: 425px; flex-shrink: 0; } /* 品番 */
+#root .page-incoming-process-registration .field-lot-serial            { width: 500px; flex-shrink: 0; } /* ロット／シリアル */
+#root .page-incoming-process-registration .field-inspection            { flex: 1; min-width: 0; }        /* 検査工程 */
+#root .page-incoming-process-registration .field-received-qty          { width: 275px; flex-shrink: 0; } /* 入荷数量 */
+#root .page-incoming-process-registration .field-good-qty              { width: 275px; flex-shrink: 0; } /* 良品数 */
+#root .page-incoming-process-registration .field-defect-qty            { width: 275px; flex-shrink: 0; } /* 不良数量 */
+#root .page-incoming-process-registration .field-defect-reason         { width: 100%; height: 50px; }    /* 不良理由 */
+#root .page-incoming-process-registration .field-defect-reason-text    { width: 100%; height: 50px; }    /* 不良理由 (自由入力) */
+#root .page-incoming-process-registration .field-printer               { flex: 0 0 650px; }              /* 出力先プリンター */
+
+/* ===== 入荷工程登録 手入力 — /factory/incoming-process-registration-hand-input
+         src/app/New-normal/IncomingProcessRegistration/IncomingProcessRegistrationHandInputPage.tsx ===== */
+#root .page-incoming-process-registration-hand-input .set-field-landscape > label { width: 200px; flex-shrink: 0; } /* label column */
+#root .page-incoming-process-registration-hand-input .field-item-name             { flex: 1; min-width: 0; }        /* 品名 */
+#root .page-incoming-process-registration-hand-input .field-part-no               { flex: 1; min-width: 0; }        /* 品番 */
+#root .page-incoming-process-registration-hand-input .field-lot-serial            { flex: 1; min-width: 0; }        /* ロット／シリアル */
+#root .page-incoming-process-registration-hand-input .field-received-qty          { flex: 1; min-width: 0; }        /* 入荷数量 */
+#root .page-incoming-process-registration-hand-input .field-good-qty              { flex: 1; min-width: 0; }        /* 良品数量 */
+#root .page-incoming-process-registration-hand-input .field-defect-qty            { flex: 1; min-width: 0; }        /* 不良数量 */
+#root .page-incoming-process-registration-hand-input .field-defect-reason         { flex: 1; min-width: 0; }        /* 不良理由 */
+
+/* ===== 棚移動登録 — /factory/shelf-transfer
+         src/app/New-normal/ShelfTransfer/ShelfTransfer.tsx ===== */
+#root .page-shelf-transfer .set-field-fill              { gap: 12px; }                    /* space between label and field */
+#root .page-shelf-transfer .set-field-landscape > label { width: 180px; flex-shrink: 0; } /* label column */
+#root .page-shelf-transfer .field-warehouse             { flex: 1; min-width: 0; }        /* 倉庫 */
+#root .page-shelf-transfer .field-storage               { width: 350px; flex-shrink: 0; } /* 保管場所 */
+#root .page-shelf-transfer .field-item-no               { width: 425px; flex-shrink: 0; } /* 品目No. */
+#root .page-shelf-transfer .field-lot-serial            { width: 500px; flex-shrink: 0; } /* ロットシリアル */
+#root .page-shelf-transfer .field-item-name             { flex: 1; min-width: 0; }        /* 品名 */
+#root .page-shelf-transfer .field-move-qty              { width: 275px; flex-shrink: 0; } /* 移動数量 */
+
+/* ===== 出庫実績登録 — /factory/shipping-records
+         src/app/New-normal/ShippingRecord/ShippingRecordPage.tsx ===== */
+#root .page-shipping-records .set-field-fill                                   { gap: 12px; }                    /* space between label and field */
+#root .page-shipping-records .set-field-landscape > label                      { width: 210px; flex-shrink: 0; } /* label column */
+#root .page-shipping-records .set-field-landscape > label.field-storage-label  { width: 270px; }                 /* label: 保管場所 */
+#root .page-shipping-records .set-field-landscape > label.field-jan-item-label { width: 270px; }                 /* label: JANコード／品目コード */
+#root .page-shipping-records .field-ship-instruction-no                        { width: 170px; flex-shrink: 0; } /* 出荷指示No. */
+#root .page-shipping-records .field-warehouse                                  { flex: 1; min-width: 0; }        /* 倉庫／工場 */
+#root .page-shipping-records .field-storage                                    { width: 350px; flex-shrink: 0; } /* 保管場所 */
+#root .page-shipping-records .field-qty                                        { width: 275px; flex-shrink: 0; } /* 数量 */
+#root .page-shipping-records .field-jan-item                                   { flex: 1; min-width: 0; }        /* JANコード／品目コード */
+#root .page-shipping-records .field-move-to                                    { flex: 1; min-width: 0; }        /* 移動先 */
+
+/* ===== 出庫実績登録 手入力 — /factory/shipping-hand-input
+         src/app/New-normal/ShippingRecord/ShippingRecordHandInputPage.tsx ===== */
+#root .page-shipping-hand-input .set-field-landscape > label { width: 220px; flex-shrink: 0; } /* label column */
+#root .page-shipping-hand-input .field-warehouse             { flex: 1; min-width: 0; }        /* 倉庫／工場 */
+#root .page-shipping-hand-input .field-storage               { width: 350px; flex-shrink: 0; } /* 保管場所 */
+#root .page-shipping-hand-input .field-qty                   { width: 275px; flex-shrink: 0; } /* 数量 */
+#root .page-shipping-hand-input .field-item-no               { width: 425px; flex-shrink: 0; } /* 品目No. */
+#root .page-shipping-hand-input .field-lot-serial            { width: 500px; flex-shrink: 0; } /* ロットシリアル */
+#root .page-shipping-hand-input .field-expiry                { width: 110px; flex-shrink: 0; } /* 有効期限(yymm) */
+
+/* ===== 出庫実績登録 読込データ参照 — /factory/shipping-detail
+         src/app/New-normal/ShippingRecord/ShippingRecordDetail.tsx ===== */
+#root .page-shipping-detail .set-field-landscape > label { width: 200px; flex-shrink: 0; } /* label column */
+#root .page-shipping-detail .field-item-name             { width: 950px; flex-shrink: 0; } /* 品名 */
+#root .page-shipping-detail .field-item-no               { width: 425px; flex-shrink: 0; } /* 品目No. */
+
+/* ===== WO部品出庫 — /factory/wo-parts-issuance
+         src/app/new-high/WOPartsIssuance/WOPartsIssuance.tsx ===== */
+#root .page-wo-parts-issuance .set-field-fill              { gap: 12px; }                    /* space between label and field */
+#root .page-wo-parts-issuance .set-field-landscape > label { width: 180px; flex-shrink: 0; } /* label column */
+#root .page-wo-parts-issuance .field-wo-no                 { width: 170px; flex-shrink: 0; } /* WO番号 */
+#root .page-wo-parts-issuance .field-location-label        { flex: 1; min-width: 0; }        /* 庫内ラベル */
+#root .page-wo-parts-issuance .field-issue-qty             { width: 275px; flex-shrink: 0; } /* 出庫数 */
+#root .page-wo-parts-issuance .field-storage               { width: 350px; flex-shrink: 0; } /* 保管場所 */
+#root .page-wo-parts-issuance .field-site                  { width: 230px; flex-shrink: 0; } /* 事業所 */
+
+/* ===== WO部品出庫 品番別 — /factory/wo-parts-issuance-hand-input
+         src/app/new-high/WOPartsIssuance/WOPartsIssuanceHandInputPage.tsx ===== */
+#root .page-wo-parts-issuance-hand-input .set-field-landscape > label { width: 150px; flex-shrink: 0; }             /* label column */
+#root .page-wo-parts-issuance-hand-input .field-cell-location-label   { width: 100%; min-width: 0; height: 100%; }  /* 明細: 庫内ラベル */
+#root .page-wo-parts-issuance-hand-input .field-cell-issue-qty        { min-width: 0; height: 100%; width: 120px; } /* 明細: 出庫数 */
+#root .page-wo-parts-issuance-hand-input .field-cell-storage          { min-width: 0; height: 100%; width: 240px; } /* 明細: 保管場所 */
+#root .page-wo-parts-issuance-hand-input .field-cell-site             { min-width: 0; height: 100%; width: 236px; } /* 明細: 事業所 */
+#root .page-wo-parts-issuance-hand-input .field-part-no               { flex: 1; min-width: 0; }                    /* 品番 */
+#root .page-wo-parts-issuance-hand-input .field-wo-no                 { flex: 1; min-width: 0; }                    /* WO番号 */
+#root .page-wo-parts-issuance-hand-input .field-required-qty          { flex: 1; min-width: 0; }                    /* 必要数 */
+
+/* ===== 投入明細確認 — /factory/wo-parts-issuance-detail
+         src/app/new-high/WOPartsIssuance/WOPartsIssuanceDetail.tsx ===== */
+#root .page-wo-parts-issuance-detail .set-field-landscape > label { width: 150px; flex-shrink: 0; } /* label column */
+#root .page-wo-parts-issuance-detail .field-wo-no                 { width: 170px; flex-shrink: 0; } /* WO番号 */
+#root .page-wo-parts-issuance-detail .field-part-no               { width: 425px; flex-shrink: 0; } /* 品番 */
+#root .page-wo-parts-issuance-detail .field-required-qty          { width: 275px; flex-shrink: 0; } /* 必要数 */
+
+/* ===== WO作業時間実績登録 — /factory/work-order-time-registration/(gosen|chiba|common)
+         src/app/new-high/WorkOrderTimeRegistration/WorkOrderTimeRegistration.tsx ===== */
+#root .page-work-order-time-registration .set-field-landscape > label                        { width: 150px; flex-shrink: 0; } /* label column */
+#root .page-work-order-time-registration .set-field-landscape > label.field-start-time-label { width: 100px; }                 /* label: 開始 */
+#root .page-work-order-time-registration .set-field-landscape > label.field-end-time-label   { width: 100px; }                 /* label: 終了 */
+#root .page-work-order-time-registration .set-field-landscape > label.field-work-time-label  { width: 100px; }                 /* label: 作業時間 */
+#root .page-work-order-time-registration .field-date                                         { width: 100%; height: 50px; }    /* 日付 (カレンダー) */
+#root .page-work-order-time-registration .field-worker-code                                  { width: 230px; flex-shrink: 0; } /* 作業者 (コード) */
+#root .page-work-order-time-registration .field-worker-name                                  { flex: 1; min-width: 0; }        /* 作業者 (名称) */
+#root .page-work-order-time-registration .field-workplace-code                               { width: 230px; flex-shrink: 0; } /* 作業場 (コード) */
+#root .page-work-order-time-registration .field-workplace-name                               { flex: 1; min-width: 0; }        /* 作業場 (名称) */
+#root .page-work-order-time-registration .field-initial-status                               { width: 80px; flex-shrink: 0; }  /* 工程状況初期値 */
+#root .page-work-order-time-registration .field-op-order                                     { width: 125px; flex-shrink: 0; } /* 作業順序 */
+#root .page-work-order-time-registration .field-remarks                                      { flex: 1; min-width: 0; }        /* 備考 */
+#root .page-work-order-time-registration .field-wo-no                                        { width: 170px; flex-shrink: 0; } /* WO番号 */
+#root .page-work-order-time-registration .field-start-time                                   { width: 100%; height: 50px; }    /* 開始 */
+#root .page-work-order-time-registration .field-end-time                                     { width: 100%; height: 50px; }    /* 終了 */
+#root .page-work-order-time-registration .field-work-time                                    { width: 80px; flex-shrink: 0; }  /* 作業時間 */
+#root .page-work-order-time-registration .field-target-total-hours                           { width: 95px; flex-shrink: 0; }  /* 目標時間計 (時間) */
+#root .page-work-order-time-registration .field-target-total-minutes                         { width: 80px; flex-shrink: 0; }  /* 目標時間計 (分) */
+
+/* ===== WO検索 — /factory/work-order-time-registration-choose, /factory/work-order-completion-select-wo
+         src/app/new-high/WorkOrderTimeRegistration/WorkOrderTimeChooseGosen.tsx ===== */
+#root .page-wo-search .set-field-landscape > label { width: 150px; flex-shrink: 0; }                         /* label column */
+#root .page-wo-search .field-date                  { width: 100%; height: 50px; }                            /* 日付 (カレンダー) */
+#root .page-wo-search .field-workplace-code        { box-sizing: content-box; width: 12ch; flex: 0 0 auto; } /* 作業場 (コード) */
+#root .page-wo-search .field-workplace-name        { flex: 1; min-width: 0; }                                /* 作業場 (名称) */
+
+/* ===== WO完了実績登録 — /factory/work-order-completion
+         src/app/new-high/WorkOrderCompletion/WorkOrderCompletion.tsx ===== */
+#root .page-work-order-completion .set-field-fill              { gap: 12px; }                                            /* space between label and field */
+#root .page-work-order-completion .set-field-landscape > label { width: 200px; flex-shrink: 0; }                         /* label column */
+#root .page-work-order-completion .field-wo-no                 { box-sizing: content-box; width: 8ch; flex: 0 0 auto; }  /* WO番号 */
+#root .page-work-order-completion .field-wo-planned-qty        { box-sizing: content-box; width: 15ch; flex: 0 0 auto; } /* WO計画数 */
+#root .page-work-order-completion .field-wo-completed-qty      { box-sizing: content-box; width: 15ch; flex: 0 0 auto; } /* WO完了済数 */
+#root .page-work-order-completion .field-wo-complete-qty       { box-sizing: content-box; width: 15ch; flex: 0 0 auto; } /* WO完了数 */
+#root .page-work-order-completion .field-wo-defect-qty         { box-sizing: content-box; width: 15ch; flex: 0 0 auto; } /* WO仕損数 */
+#root .page-work-order-completion .field-lot-serial            { box-sizing: content-box; width: 30ch; flex: 0 0 auto; } /* ロットシリアル */
+#root .page-work-order-completion .field-mfg-no                { box-sizing: content-box; width: 30ch; flex: 0 0 auto; } /* 製番 */
+#root .page-work-order-completion .field-site                  { flex: 1; min-width: 0; }                                /* 事業所 */
+#root .page-work-order-completion .field-storage               { box-sizing: content-box; width: 20ch; flex: 0 0 auto; } /* 保管場所 */
+#root .page-work-order-completion .field-printer               { box-sizing: content-box; width: 40ch; flex: 0 0 auto; } /* 出力先プリンター */
+
+/* ===== 庫内ラベル印刷 — /factory/inventory-label-printing
+         src/app/New-normal/InventoryLabelPrinting/InventoryPrinting.tsx ===== */
+#root .page-inventory-label-printing .set-field-landscape > label { width: 200px; flex-shrink: 0; }              /* label column */
+#root .page-inventory-label-printing .field-location-label        { flex: 1; min-width: 0; }                     /* 庫内ラベル */
+#root .page-inventory-label-printing .field-part-no               { flex: 1; min-width: 0; }                     /* 品番 */
+#root .page-inventory-label-printing .field-item-name-1           { flex: 1; min-width: 0; }                     /* 品名1 */
+#root .page-inventory-label-printing .field-item-name-2           { flex: 1; min-width: 0; }                     /* 品名2 */
+#root .page-inventory-label-printing .field-lot                   { flex: 1; min-width: 0; }                     /* ロットNo. */
+#root .page-inventory-label-printing .field-mfg-no                { flex: 1; min-width: 0; }                     /* 製番 */
+#root .page-inventory-label-printing .field-received-date         { flex: 1; min-width: 0; }                     /* 入荷日 */
+#root .page-inventory-label-printing .field-received-qty          { flex: 1; min-width: 0; }                     /* 入荷数量 */
+#root .page-inventory-label-printing .field-qty-unit              { width: 80px; flex-shrink: 0; }               /* 入荷数量 単位 (EA) */
+#root .page-inventory-label-printing .field-defect                { width: 36px; height: 36px; flex: 0 0 auto; } /* 不良 */
+#root .page-inventory-label-printing .field-defect-reason         { flex: 1; min-width: 0; }                     /* 不良理由 */
+#root .page-inventory-label-printing .field-print-count           { flex: 1; min-width: 0; }                     /* 印刷枚数 */
+
+/* ===== 予定なし入出庫 — /factory/set-miscellaneous-in-and-out-bound
+         src/app/apps/MiscellaneousInAndOutBound/SetMiscellaneousInAndOutBound.tsx ===== */
+#root .page-set-miscellaneous-in-and-out-bound .set-field-landscape > label { width: 150px; flex-shrink: 0; }                                      /* label column */
+#root .page-set-miscellaneous-in-and-out-bound .field-warehouse             { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* 倉庫 */
+#root .page-set-miscellaneous-in-and-out-bound .field-storage               { box-sizing: content-box; width: 20ch; flex: 0 0 auto; }              /* 保管場所 */
+#root .page-set-miscellaneous-in-and-out-bound .field-alloc-sign            { width: 80px; flex-shrink: 0; }                                       /* 引当数 (+/-) */
+#root .page-set-miscellaneous-in-and-out-bound .field-alloc-qty             { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* 引当数 */
+#root .page-set-miscellaneous-in-and-out-bound .field-jan                   { box-sizing: content-box; width: 14ch; flex: 0 0 auto; }              /* JANコード */
+
+/* ===== 予定なし入出庫 手入力 — /factory/miscellaneous-in-and-out-bound
+         src/app/apps/MiscellaneousInAndOutBound/MiscellaneousInAndOutBound.tsx ===== */
+#root .page-miscellaneous-in-and-out-bound .set-field-landscape > label { width: 220px; flex-shrink: 0; }                                      /* label column */
+#root .page-miscellaneous-in-and-out-bound .field-warehouse             { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* 倉庫 */
+#root .page-miscellaneous-in-and-out-bound .field-storage               { box-sizing: content-box; width: 20ch; flex: 0 0 auto; }              /* 保管場所 */
+#root .page-miscellaneous-in-and-out-bound .field-alloc-sign            { width: 80px; flex-shrink: 0; }                                       /* 引当数 (+/-) */
+#root .page-miscellaneous-in-and-out-bound .field-alloc-qty             { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* 引当数 */
+#root .page-miscellaneous-in-and-out-bound .field-item-no               { box-sizing: content-box; width: 25ch; flex: 0 0 auto; }              /* 品目No. */
+#root .page-miscellaneous-in-and-out-bound .field-lot                   { box-sizing: content-box; width: 30ch; flex: 0 0 auto; }              /* ロット */
+#root .page-miscellaneous-in-and-out-bound .field-serial                { box-sizing: content-box; width: 25ch; flex: 0 0 auto; }              /* シリアル */
+#root .page-miscellaneous-in-and-out-bound .field-expiry                { width: 110px; flex-shrink: 0; }                                      /* 有効期限(yymm) */
+
+/* ===== セット構成登録 — /factory/set-register
+         src/app/apps/Registration/SetRegisterPage.tsx ===== */
+#root .page-set-register .set-field-landscape > label { width: 210px; flex-shrink: 0; }                                      /* label column */
+#root .page-set-register .field-parent-warehouse      { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* 倉庫（親） */
+#root .page-set-register .field-parent-jan            { box-sizing: content-box; width: 14ch; flex: 0 0 auto; }              /* JANコード(親) / 品目No.(親) */
+#root .page-set-register .field-move-warehouse        { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* 移動倉庫 */
+#root .page-set-register .field-move-storage          { box-sizing: content-box; width: 20ch; flex: 0 0 auto; }              /* 移動保管場所 */
+#root .page-set-register .field-qty                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* 数量 */
+#root .page-set-register .field-jan                   { box-sizing: content-box; width: 14ch; flex: 0 0 auto; }              /* JANコード */
+
+/* ===== セット構成 手入力 — /factory/set-register/hand-input
+         src/app/apps/Registration/SetRegisterHandInputPage.tsx ===== */
+#root .page-set-register-hand-input .set-field-landscape > label { width: 210px; flex-shrink: 0; }                                      /* label column */
+#root .page-set-register-hand-input .field-parent-warehouse      { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* 倉庫（親） */
+#root .page-set-register-hand-input .field-parent-item-no        { box-sizing: content-box; width: 25ch; flex: 0 0 auto; }              /* 品目No.(親) */
+#root .page-set-register-hand-input .field-parent-serial         { box-sizing: content-box; width: 25ch; flex: 0 0 auto; }              /* シリアル(親) */
+#root .page-set-register-hand-input .field-move-warehouse        { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* 移動倉庫 */
+#root .page-set-register-hand-input .field-move-storage          { box-sizing: content-box; width: 20ch; flex: 0 0 auto; }              /* 移動保管場所 */
+#root .page-set-register-hand-input .field-qty                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* 数量 */
+#root .page-set-register-hand-input .field-item-no               { box-sizing: content-box; width: 25ch; flex: 0 0 auto; }              /* 品目No. */
+#root .page-set-register-hand-input .field-lot                   { box-sizing: content-box; width: 30ch; flex: 0 0 auto; }              /* ロット */
+#root .page-set-register-hand-input .field-serial                { box-sizing: content-box; width: 25ch; flex: 0 0 auto; }              /* シリアル */
+
+/* ===== セット戻り構成登録 — /factory/set-return-configuration
+         src/app/apps/ReturnConfiguration/SetReturnConfiguration.tsx ===== */
+#root .page-set-return-configuration .set-field-landscape > label                    { width: 200px; flex-shrink: 0; }                         /* label column */
+#root .page-set-return-configuration .set-field-landscape > label.field-status-label { width: 100px; }                                         /* label: 状態 */
+#root .page-set-return-configuration .set-field-landscape > label.field-jan-label    { width: 100px; }                                         /* label: JANコード */
+#root .page-set-return-configuration .field-parent-jan                               { box-sizing: content-box; width: 15ch; flex: 0 0 auto; } /* JANコード(親) */
+#root .page-set-return-configuration .field-radio                                    { width: 28px; height: 28px; }                            /* ラジオボタン */
+#root .page-set-return-configuration .field-qty                                      { box-sizing: content-box; width: 15ch; flex: 0 0 auto; } /* 数量 */
+#root .page-set-return-configuration .field-jan                                      { box-sizing: content-box; width: 15ch; flex: 0 0 auto; } /* JANコード */
+
+/* ===== セット戻り構成 手入力 — /factory/return-configuration
+         src/app/apps/ReturnConfiguration/ReturnConfiguration.tsx ===== */
+#root .page-return-configuration .set-field-landscape > label { width: 220px; flex-shrink: 0; }                         /* label column */
+#root .page-return-configuration .field-parent-item-no        { box-sizing: content-box; width: 25ch; flex: 0 0 auto; } /* 品目No.(親) */
+#root .page-return-configuration .field-parent-serial         { box-sizing: content-box; width: 25ch; flex: 0 0 auto; } /* シリアル(親) */
+#root .page-return-configuration .field-qty                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; } /* 数量 */
+#root .page-return-configuration .field-radio                 { width: 28px; height: 28px; }                            /* ラジオボタン */
+#root .page-return-configuration .field-item-no               { box-sizing: content-box; width: 25ch; flex: 0 0 auto; } /* 品目No. */
+#root .page-return-configuration .field-lot                   { box-sizing: content-box; width: 30ch; flex: 0 0 auto; } /* ロット */
+#root .page-return-configuration .field-serial                { box-sizing: content-box; width: 25ch; flex: 0 0 auto; } /* シリアル */
+
+/* ===== 配送伝票登録 — /factory/delivery-slip-registration
+         src/app/apps/DeliverySlipRegistration/DeliverySlipRegistration.tsx ===== */
+#root .page-delivery-slip-registration .set-field-landscape > label                              { width: 150px; flex-shrink: 0; }                         /* label column */
+#root .page-delivery-slip-registration .set-field-landscape > label.field-delivery-slip-no-label { width: 180px; }                                         /* label: 配送伝票No. */
+#root .page-delivery-slip-registration .field-shipment-no                                        { box-sizing: content-box; width: 8ch; flex: 0 0 auto; }  /* 出荷No. */
+#root .page-delivery-slip-registration .field-delivery-slip-no                                   { box-sizing: content-box; width: 30ch; flex: 0 0 auto; } /* 配送伝票No. */
+
+/* ===== 備品振分登録 — /factory/equipment
+         src/app/apps/EquipmentDistribution/Equipment.tsx ===== */
+#root .page-equipment .set-field-landscape > label { width: 210px; flex-shrink: 0; }                                      /* label column */
+#root .page-equipment .field-from-warehouse        { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* FR倉庫 */
+#root .page-equipment .field-to-warehouse          { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* TO倉庫 */
+#root .page-equipment .field-storage               { box-sizing: content-box; width: 20ch; flex: 0 0 auto; }              /* 保管場所 */
+#root .page-equipment .field-qty                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* 数量 */
+#root .page-equipment .field-radio                 { width: 28px; height: 28px; }                                         /* ラジオボタン */
+#root .page-equipment .field-jan                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* JANコード */
+#root .page-equipment .field-reason                { box-sizing: content-box; width: 30ch; flex: 0 0 auto; }              /* 理由 */
+
+/* ===== 備品振分登録 手入力 — /factory/equipment-hand-input
+         src/app/apps/EquipmentDistribution/EquipmentHandInputPage.tsx ===== */
+#root .page-equipment-hand-input .set-field-landscape > label { width: 210px; flex-shrink: 0; }                                      /* label column */
+#root .page-equipment-hand-input .field-yymm-picker           { width: 100%; }                                                       /* 有効日付 YY/MM ピッカー */
+#root .page-equipment-hand-input .field-from-warehouse        { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* FR倉庫 */
+#root .page-equipment-hand-input .field-to-warehouse          { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* TO倉庫 */
+#root .page-equipment-hand-input .field-storage               { box-sizing: content-box; width: 20ch; flex: 0 0 auto; }              /* 保管場所 */
+#root .page-equipment-hand-input .field-qty                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* 数量 */
+#root .page-equipment-hand-input .field-item-no               { box-sizing: content-box; width: 25ch; flex: 0 0 auto; }              /* 品目No. */
+#root .page-equipment-hand-input .field-lot-serial            { box-sizing: content-box; width: 30ch; flex: 0 0 auto; }              /* ロットシリアル */
+#root .page-equipment-hand-input .field-radio                 { width: 28px; height: 28px; }                                         /* ラジオボタン */
+#root .page-equipment-hand-input .field-expiry                { box-sizing: content-box; width: 4ch; flex: 0 0 auto; }               /* 有効日付(yymm) */
+
+/* ===== 販売セット登録 — /factory/bundle-page
+         src/app/apps/BundleRegistration/BundlePage.tsx ===== */
+#root .page-bundle-page .set-field-landscape > label { width: 210px; flex-shrink: 0; }                                      /* label column */
+#root .page-bundle-page .field-from-warehouse        { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* FR倉庫 */
+#root .page-bundle-page .field-to-warehouse          { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* TO倉庫 */
+#root .page-bundle-page .field-storage               { box-sizing: content-box; width: 20ch; flex: 0 0 auto; }              /* 保管場所 */
+#root .page-bundle-page .field-qty                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* 数量 */
+#root .page-bundle-page .field-radio                 { width: 28px; height: 28px; }                                         /* ラジオボタン */
+#root .page-bundle-page .field-jan                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* JANコード */
+#root .page-bundle-page .field-reason                { box-sizing: content-box; width: 30ch; flex: 0 0 auto; }              /* 理由 */
+
+/* ===== 販売セット登録 手入力 — /factory/bundle-hand-input
+         src/app/apps/BundleRegistration/BundleHandInputPage.tsx ===== */
+#root .page-bundle-hand-input .set-field-landscape > label { width: 210px; flex-shrink: 0; }                                      /* label column */
+#root .page-bundle-hand-input .field-from-warehouse        { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* FR倉庫 */
+#root .page-bundle-hand-input .field-to-warehouse          { box-sizing: content-box; width: calc(42ch + 30px); flex: 0 0 auto; } /* TO倉庫 */
+#root .page-bundle-hand-input .field-storage               { box-sizing: content-box; width: 20ch; flex: 0 0 auto; }              /* 保管場所 */
+#root .page-bundle-hand-input .field-qty                   { box-sizing: content-box; width: 15ch; flex: 0 0 auto; }              /* 数量 */
+#root .page-bundle-hand-input .field-item-no               { box-sizing: content-box; width: 25ch; flex: 0 0 auto; }              /* 品目No. */
+#root .page-bundle-hand-input .field-lot-serial            { box-sizing: content-box; width: 30ch; flex: 0 0 auto; }              /* ロットシリアル */
+#root .page-bundle-hand-input .field-radio                 { width: 28px; height: 28px; }                                         /* ラジオボタン */
+#root .page-bundle-hand-input .field-expiry                { box-sizing: content-box; width: 4ch; flex: 0 0 auto; }               /* 有効日付(yymm) */

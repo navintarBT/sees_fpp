@@ -1,0 +1,48 @@
+/*
+ * Page: 棚移動 (ShelfTransfer)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+/* ShelfTransfer: 移動数 (transfer_qty) is a numeric quantity. */
+.ShelfTransfer-table .tf-tableRow .col-storage-shef {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.col-dest_location {
+  min-width: 210px;
+}
+
+.ShelfTransfer-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+}
+
+.ShelfTransfer-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.ShelfTransfer-table .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}
+
+/* 移動数：「移動先」の表示に合わせて 150px を最小幅とする。
+   グリッドは max-content のため、入力文字がこの幅を超えた分だけセルが伸びる。 */
+.col-storage-shef {
+  min-width: 150px;
+}
+
+/* min-width  choose wo */
+/* min-width  col-arrow-head-shelftransfer */
+.col-arrow-head-shelftransfer {
+  min-width: 42px;
+}
+
+.col-lot-shelf {
+  min-width: 210px;
+}

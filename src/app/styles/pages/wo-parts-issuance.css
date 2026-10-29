@@ -1,0 +1,93 @@
+/*
+ * Page: WO部品出庫 (WOPartsIssuance)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+/* WOPartsIssuance: 必要数・出庫数 are numeric quantities. col-reqNumber/col-numOfShipments
+   are reused with non-numeric meanings by other tables, so scope this to this table only
+   rather than the shared .inbound-table-landscape selector. */
+.woPartsIssuance-table .tf-tableRow .col-reqNumber,
+.woPartsIssuance-table .tf-tableRow .col-numOfShipments,
+.woPartsIssuanceDetail-table .tf-tableRow .col-numOfShipments {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* ロット・保管場所 can also render a literal "*" mixed-value indicator, but the
+   client wants both left-aligned regardless. */
+.woPartsIssuance-table .tf-tableRow .col-lot,
+.woPartsIssuance-table .tf-tableRow .col-storage {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.woPartsIssuance-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.woPartsIssuance-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.woPartsIssuance-table .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}
+
+.woPartsIssuance-table .col-woNumber {
+  min-width: 125px;
+}
+
+.woPartsIssuance-table .col-partNumber {
+  min-width: 125px;
+}
+
+.woPartsIssuance-table .col-reqNumber {
+  min-width: 106px;
+}
+
+.woPartsIssuance-table .col-storage {
+  min-width: 150px;
+}
+
+.woPartsIssuance-table .col-lot {
+  min-width: 150px;
+}
+
+.woPartsIssuance-table .col-numOfShipments {
+  min-width: 110px;
+}
+
+.woPartsIssuance-table .col-office {
+  min-width: 150px;
+}
+
+.wOHandInputPage-table .col-Interior {
+  min-width: 410px;
+}
+
+.wOHandInputPage-table .col-lot {
+  min-width: 240px;
+}
+
+.wOHandInputPage-table .col-numOfShipments {
+  min-width: 120px;
+}
+
+.wOHandInputPage-table .col-storage {
+  min-width: 240px;
+}
+
+.wOHandInputPage-table .col-office {
+  min-width: 236px;
+}
+
+.wOHandInputPage-table .col-arrow-head {
+  min-width: 50px;
+}

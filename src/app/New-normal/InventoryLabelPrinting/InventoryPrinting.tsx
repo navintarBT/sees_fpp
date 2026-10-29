@@ -93,7 +93,7 @@ const InventoryPrinting = () => {
   }
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-inventory-label-printing'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -105,111 +105,111 @@ const InventoryPrinting = () => {
             <div className='set-body-landscape'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>庫内ラベル</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>庫内ラベル</label>
                     <input
                       ref={moveStorageRef}
                       autoFocus
-                      style={{flex: 1, minWidth: 0, ...(isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
+                      style={{...(isLabelLocked ? {backgroundColor: '#d9d9d9'} : {})}}
                       value={moveStorage}
                       onChange={(e) => setMoveStorage(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleMoveStorageSubmit()}
                       readOnly={isLabelLocked}
-                      className={isLabelLocked ? 'set-input-gray' : ''}
+                      className={isLabelLocked ? 'set-input-gray field-location-label' : 'field-location-label'}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>品番</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品番</label>
                     <input
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-part-no'
                       value={itemNo}
                       onChange={(e) => setItemNo(e.target.value)}
                     />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>品名1</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品名1</label>
                     <input
                       disabled
                       readOnly
-                      style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9'}}
+                      style={{backgroundColor: '#d9d9d9'}}
                       value={productName1}
-                      className='set-input-gray'
+                      className='set-input-gray field-item-name-1'
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>品名2</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品名2</label>
                     <input
                       disabled
                       readOnly
-                      style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9'}}
+                      style={{backgroundColor: '#d9d9d9'}}
                       value={productName2}
-                      className='set-input-gray'
+                      className='set-input-gray field-item-name-2'
                     />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>ロットNo.</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>ロットNo.</label>
                     <input
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-lot'
                       value={lot}
                       onChange={(e) => setLot(e.target.value)}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>製番</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>製番</label>
                     <input
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-mfg-no'
                       value={serialNumber}
                       onChange={(e) => setSerialNumber(e.target.value)}
                     />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>入荷日</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>入荷日</label>
                     <input
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-received-date'
                       value={arrivalDate}
                       onChange={(e) => setArrivalDate(e.target.value)}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>入荷数量</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>入荷数量</label>
                     <input
-                      style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                      className='field-received-qty' style={{textAlign: 'right'}}
                       value={arrivalQty}
                       onChange={(e) => setArrivalQty(e.target.value)}
                     />
-                    <input disabled readOnly style={{width: 80, flexShrink: 0, marginLeft: -18, textAlign: 'center', backgroundColor: '#d9d9d9'}} value='EA' className='set-input-gray' />
+                    <input disabled readOnly style={{marginLeft: -18, textAlign: 'center', backgroundColor: '#d9d9d9'}} value='EA' className='set-input-gray field-qty-unit' />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>不良</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>不良</label>
                     <input
                       type='checkbox'
-                      style={{width: 36, height: 36, flex: '0 0 auto'}}
+                      className='field-defect'
                       checked={isDefective}
                       onChange={(e) => setIsDefective(e.target.checked)}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>不良理由</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>不良理由</label>
                     <input
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-defect-reason'
                       value={defectReason}
                       onChange={(e) => setDefectReason(e.target.value)}
                     />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 200, flexShrink: 0}}>印刷枚数</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>印刷枚数</label>
                     <input
-                      style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                      className='field-print-count' style={{textAlign: 'right'}}
                       value={qty}
                       onChange={(e) => setQty(e.target.value)}
                     />

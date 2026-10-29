@@ -1,0 +1,78 @@
+/*
+ * Page: 入庫実績登録 (InventoryRecord)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+/* Align ロットシリアル values to the left without affecting other columns.
+   (The header used to have its own left-align override here too, but headers are now
+   centered app-wide via the shared .tf-tableHead .tf-tableCell rule — removed so it
+   inherits that instead.) */
+.inventory-table .tf-tableRow .col-lot,
+.woPartsIssuanceDetail-table .tf-tableRow .col-lot {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.inventory-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.inventory-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.inventory-table .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}
+
+.inventory-table .col-item {
+  min-width: 100px;
+}
+
+.inventory-table .col-lot {
+  min-width: 120px;
+  justify-content: center;
+}
+
+.inventory-table .col-lot2 {
+  min-width: 50px;
+  justify-content: center;
+}
+
+.inventory-table .tf-tableHead .col-lot {
+  border-right: none;
+}
+
+.inventory-table .tf-tableHead .col-lot2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -16px;
+  bottom: 0;
+  width: 16px;
+  background: white;
+  z-index: 1;
+}
+
+.inventory-table .col-instruct {
+  min-width: 120px;
+}
+
+.inventory-table .col-Load {
+  min-width: 120px;
+}
+
+.inventory-table .col-productName {
+  min-width: 120px;
+}
+
+.inventory-table .col-rowNo {
+  min-width: 115px;
+}

@@ -1,0 +1,122 @@
+/*
+ * Buttons: .set-btn and its colour variants, search / detail / small buttons.
+ */
+
+.inbound-detail-btn {
+  width: 74px;
+  height: 30px;
+  padding: 0;
+  border-radius: 6px;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.set-search-btn {
+  height: 78px;
+  min-width: 130px;
+  padding: 0 22px;
+  border-radius: 14px;
+  border: none;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.set-btn {
+  height: 140px;
+  border-radius: 24px;
+  font-size: 40px;
+  font-weight: 400;
+  color: #ffffff;
+  border: none;
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.22),
+    inset 0 2px 0 rgba(255, 255, 255, 0.18);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.04em;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+.set-btn-landscape {
+  height: 130px;
+  border-radius: 24px;
+  font-size: 35px;
+}
+
+.set-actionfooter-landscape-offset {
+  margin-top: 40px;
+}
+
+.set-btn:hover {
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.22),
+    inset 0 2px 0 rgba(255, 255, 255, 0.8);
+}
+
+.set-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.7);
+}
+
+.set-danger {
+  background: linear-gradient(180deg, #ff5a65 0%, #d31728 100%);
+}
+
+.set-primary {
+  background: linear-gradient(180deg, #56b4ff 0%, #2a5bd6 100%);
+}
+
+.set-success {
+  background: var(--gradient-green);
+}
+
+.set-warning {
+  background: linear-gradient(180deg, #f7bb45 0%, #c67a18 100%);
+}
+
+.set-hand-input-btn {
+  background: linear-gradient(180deg, #ff9ecb 0%, #d63384 100%);
+}
+
+.set-btnnew_high {
+  width: 220px !important;
+  height: 85px !important;
+  font-size: 30px !important;
+  border-radius: 16px !important;
+  color: white;
+  border: none;
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.22),
+    inset 0 2px 0 rgba(255, 255, 255, 0.18);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.04em;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+.set-btnnew_high:active {
+  transform: translateY(-1px) !important;
+}
+
+.set-delete-btn-size {
+  font-size: 35px;
+}

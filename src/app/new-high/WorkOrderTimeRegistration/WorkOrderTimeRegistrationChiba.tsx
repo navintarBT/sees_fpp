@@ -34,10 +34,10 @@ const formatDuration = (minutes: number) => {
   const mins = minutes % 60
 
   return {
-    // ถ้าน้อยกว่า 1 ชั่วโมงให้ว่าง
+    // Empty when less than 1 hour
     hours: hours > 0 ? hours.toString() : '',
 
-    // ไม่ต้องเติม 0 ด้านหน้า
+    // No leading zero
     minutes: mins.toString(),
   }
 }

@@ -449,7 +449,7 @@ const InventoryRecordsPage = () => {
   ]
 
   return (
-    <div className='mockup-page' style={{textAlign: 'center'}}>
+    <div className='mockup-page page-inventory-records' style={{textAlign: 'center'}}>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -461,11 +461,11 @@ const InventoryRecordsPage = () => {
             <div className='set-body-landscape'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>出荷No.／発注No.</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>出荷No.／発注No.</label>
                     <input
                       ref={parentItemNoRef}
-                      style={{width: 260, flexShrink: 0}}
+                      className='field-order-no'
                       value={form.parentItemNo}
                       disabled={isLoaded}
                       onChange={(e) => {
@@ -483,10 +483,10 @@ const InventoryRecordsPage = () => {
                   <div style={{flex: '1 1 0', minWidth: 0}} />
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>倉庫</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>倉庫</label>
                     <select
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-warehouse'
                       value={form.parentWarehouse}
                       onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                       disabled={!isLoaded}
@@ -497,19 +497,19 @@ const InventoryRecordsPage = () => {
                       <option value='D事業所'>D事業所</option>
                     </select>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 270, flexShrink: 0}}>保管場所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-storage-label'>保管場所</label>
                     <input
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-storage'
                       value={form.moveStorage}
                       onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                       disabled={!isLoaded}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 185, flexShrink: 0}}>ロット状況</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-lot-status-label'>ロット状況</label>
                     <select
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-lot-status'
                       value={form.moveWarehouse}
                       onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                       disabled
@@ -520,11 +520,11 @@ const InventoryRecordsPage = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>数量</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>数量</label>
                     <div style={{display: 'flex', alignItems: 'center', gap: 14, flex: 1, minWidth: 0}}>
                       <input
-                        style={{flex: 1, minWidth: 0, textAlign: 'right'}}
+                        className='field-qty' style={{textAlign: 'right'}}
                         value={form.qty}
                         onChange={(e) => setForm({...form, qty: e.target.value})}
                         disabled={!isLoaded}
@@ -545,11 +545,11 @@ const InventoryRecordsPage = () => {
                       </button>
                     </div>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 270, flexShrink: 0}}>JANコード／品目コード</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-jan-item-label'>JANコード／品目コード</label>
                     <input
                       ref={janCodeRef}
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-jan-item'
                       value={form.janCode}
                       onChange={(e) => setForm({...form, janCode: e.target.value})}
                       disabled={!isLoaded || janCodeDisabled}
@@ -561,10 +561,10 @@ const InventoryRecordsPage = () => {
                       }}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 185, flexShrink: 0}}>移動元（移動先）</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-move-from-label'>移動元（移動先）</label>
                     <input
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-move-from'
                       value={form.source}
                       onChange={(e) => setForm({...form, source: e.target.value})}
                       disabled
@@ -588,7 +588,7 @@ const InventoryRecordsPage = () => {
               <div className='set-printer-row-landscape'>
                 <label>出力先プリンター</label>
                 <select
-                  style={{flex: '0 0 650px'}}
+                  className='field-printer'
                   value={printerDest}
                   onChange={(e) => setPrinterDest(e.target.value)}
                 >

@@ -103,10 +103,10 @@ const clearPersistedState = () => {
 const DeliverySlipRegistration = () => {
   const navigate = useNavigate();
 
-  // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
+  // Load the snapshot (if any) only once, on mount
   const [persistedState] = useState(loadPersistedState);
 
-  // ── ① เริ่มต้น rows ว่าง ────────────────────────────────────────────────
+  // ── ① Start with empty rows ────────────────────────────────────────────────
   const [rows, setRows] = useState<Row[]>(persistedState?.rows ?? []);
 
   const [form, setForm] = useState(persistedState?.form ?? { ...DEFAULT_FORM });
@@ -186,7 +186,7 @@ const DeliverySlipRegistration = () => {
       janCode: "",
     });
 
-  // บันทึก snapshot ปัจจุบันไว้ก่อนกลับเมนู (ใช้ตอนกด NO)
+  // Save the current snapshot before going back to the menu (used when NO is pressed)
   const saveStateForBack = () => {
     try {
       sessionStorage.setItem(
@@ -419,7 +419,7 @@ const DeliverySlipRegistration = () => {
     }
   };
 
-  // เก็บ snapshot ต่อเนื่องทุกครั้งที่ข้อมูลเปลี่ยน เพื่อให้รีเฟรช/กลับมาแล้วข้อมูลยังอยู่
+  // Save the snapshot on every data change so the data survives a refresh or coming back
   useEffect(() => {
     saveStateForBack();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -503,7 +503,7 @@ const DeliverySlipRegistration = () => {
   ];
 
   return (
-    <div className="mockup-page">
+    <div className="mockup-page page-delivery-slip-registration">
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className="mockup-stage mockup-stage-dark mockup-stage-landscape">
         <div className="mockup-frame">
@@ -515,12 +515,12 @@ const DeliverySlipRegistration = () => {
             <div className="set-body-landscape set-body-landscape-3row">
               <div className="set-form-landscape">
                 <div className="set-form-landscape-row">
-                  <div className="set-field-landscape" style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 150, flexShrink: 0 }}>出荷No.</label>
+                  <div className="set-field-landscape set-field-fill">
+                    <label>出荷No.</label>
                     <input
                       ref={parentItemNoInputRef}
                       autoFocus
-                      style={{ boxSizing: 'content-box', width: '8ch', flex: '0 0 auto' }}
+                      className="field-shipment-no"
                       value={form.parentItemNo}
                       maxLength={8}
                       inputMode="numeric"
@@ -544,14 +544,14 @@ const DeliverySlipRegistration = () => {
                       onKeyDown={handleParentItemNoKeyDown}
                     />
                   </div>
-                  <div className="set-field-landscape" style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 180, flexShrink: 0 }}>配送伝票No.</label>
+                  <div className="set-field-landscape set-field-fill">
+                    <label className="field-delivery-slip-no-label">配送伝票No.</label>
                     <input
                       ref={deliverySlipNoInputRef}
                       readOnly={!isEnabled}
                       disabled={showErrorConfirm}
                       value={form.deliverySlipNo}
-                      style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto', backgroundColor: isEnabled ? "white" : "#d9d9d9" }}
+                      className="field-delivery-slip-no" style={{ backgroundColor: isEnabled ? "white" : "#d9d9d9" }}
                       inputMode="numeric"
                       pattern="[0-9]*"
                       maxLength={30}
@@ -825,7 +825,7 @@ const DeliverySlipRegistration = () => {
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
                       setShowBackConfirm(false);
-                      // YES = ทิ้งข้อมูล: ล้าง snapshot แล้วกลับเมนู
+                      // YES = discard the data: clear the snapshot and go back to the menu
                       clearPersistedState();
                       navigate("/factory");
                     }}
@@ -836,7 +836,7 @@ const DeliverySlipRegistration = () => {
                     className="set-modal-btn set-modal-no"
                     onClick={() => {
                       setShowBackConfirm(false);
-                      // NO = เก็บข้อมูลไว้: บันทึก snapshot แล้วกลับเมนู กลับมาข้อมูลยังอยู่
+                      // NO = keep the data: save the snapshot and go back to the menu; it is still there when coming back
                       saveStateForBack();
                       navigate("/factory");
                     }}

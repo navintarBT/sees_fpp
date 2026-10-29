@@ -1,0 +1,274 @@
+/*
+ * Page: WO作業時間実績登録 / WO検索 (WorkOrderTimeRegistration)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+/* WorkOrderTimeRegistration 共通（レイアウト確認用）: client wants the opposite alignment
+   from 五泉/千葉 for this review-only screen — text columns right-aligned, quantity/order
+   columns left-aligned. Scoped to .delivery-table-common (common only) so it doesn't
+   affect 五泉's real production table, which shares .delivery-table with it. */
+.delivery-table-common .tf-tableRow .col-wo,
+.delivery-table-common .tf-tableRow .col-item-no,
+.delivery-table-common .tf-tableRow .col-item-name,
+.delivery-table-common .tf-tableRow .col-op,
+.delivery-table-common .tf-tableRow .col-process,
+.delivery-table-common .tf-tableRow .col-remarks {
+  justify-content: flex-end;
+}
+
+.delivery-table-common .tf-tableCell.col-wo .table-cell-input,
+.delivery-table-common .tf-tableCell.col-item-no .table-cell-input,
+.delivery-table-common .tf-tableCell.col-item-name .table-cell-input,
+.delivery-table-common .tf-tableCell.col-op .table-cell-input,
+.delivery-table-common .tf-tableCell.col-process .table-cell-input,
+.delivery-table-common .tf-tableCell.col-remarks .table-cell-input {
+  text-align: right;
+}
+
+.delivery-table-common .tf-tableRow .col-qty,
+.delivery-table-common .tf-tableRow .col-target-time,
+.delivery-table-common .tf-tableRow .col-op-order {
+  justify-content: flex-start;
+}
+
+.delivery-table-common .tf-tableCell.col-qty .table-cell-input,
+.delivery-table-common .tf-tableCell.col-target-time .table-cell-input,
+.delivery-table-common .tf-tableCell.col-op-order .table-cell-input {
+  text-align: left;
+}
+
+.WorkOrderTimeRegistrationChiba-table {
+  width: 102%;
+}
+
+.WorkOrderTimeRegistrationChiba-table .col-check {
+  min-width: 56px;
+  width: 56px;
+  padding: 0;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableCell {
+  min-width: 0;
+}
+
+/* WOT Header Layout */
+.wot-header-container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.wot-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.box-padding-innput {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wot-grid-value1,
+.wot-grid-value2 {
+  background-color: #fff;
+  font-family: inherit;
+  border: 2px solid var(--color-input-border);
+  border-radius: 14px;
+  font-size: 30px;
+  font-weight: 400;
+  transition: all 0.2s;
+  height: 78px;
+  padding: 0 22px;
+  box-sizing: border-box;
+  min-height: 0;
+  display: inline-block;
+}
+
+.wot-grid-value1 {
+  width: 100%;
+}
+
+.wot-grid-value2 {
+  width: 71%;
+}
+
+.wot-grid-value3 {
+  width: 80%;
+  margin-left: -40px;
+}
+
+.wot-bg-span {
+  margin-left: -50px;
+}
+
+.wot-bg-span2 {
+  margin-left: -8px;
+}
+
+.wot-grid-value-chiba {
+  width: 79%;
+  margin-left: -40px;
+}
+
+.wot-grid-label {
+  padding: 15px 25px;
+  background-color: #fff;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+/* Force 24-hour time format */
+input[type='time'].wot-grid-value2 {
+  font-variant-numeric: tabular-nums;
+}
+
+.wot-header-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex-shrink: 0;
+}
+
+/* 備考の「一括反映」ボタン（備考入力欄の右側セルに収める） */
+/* 入力欄と同じく行の上端に揃える（中央寄せだと入力欄より数px下がる） */
+.wot-bulk-apply-btn {
+  width: 100% !important;
+  height: 78px !important;
+  align-self: start;
+}
+
+.wot-radio-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 30px 0 10px 0;
+  border-radius: 16px;
+}
+
+.wot-radio-title {
+  font-size: 25px;
+  color: black;
+}
+
+.wot-radio-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 25px;
+  cursor: pointer;
+  color: #495057;
+}
+
+.wot-radio-item input {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.wot-grid-label {
+  font-size: 33px;
+}
+
+/* Footer Summary Section */
+.wot-footer-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  gap: 20px;
+  margin-top: -20px;
+}
+
+.wot-footer-label {
+  font-size: 28px;
+}
+
+.wot-footer-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.WorkOrderTimeRegistrationChiba-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}
+
+.wot-radio-group {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  height: 50px;
+  gap: 30px;
+}
+
+.wot-radio-items-box {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.wot-radio-items-box .wot-radio-item {
+  display: flex;
+  align-items: center;
+  width: 130px;
+}
+
+.wot-top-row {
+  text-align: right;
+}
+
+.work-order-choose-table {
+  min-width: 1056px;
+  grid-template-columns: 45px repeat(9, minmax(max-content, 1fr));
+}
+
+.work-order-choose-table .tf-tableCell {
+  min-width: 0;
+}
+
+.work-order-choose-table .col-arrow-head {
+  min-width: 45px;
+}
+
+.work-order-choose-table .tf-tableRow .col-arrow {
+  min-width: 45px;
+}
+
+.WorkOrderTimeRegistrationChiba-table .tf-tableRow .tf-tableCell.col-wo {
+  background-color: #e5e7eb !important;
+}
+
+/* WO検索 明細部（WO作業時間実績登録／WO完了実績登録で共通） */
+.col-wo-search {
+  min-width: 180px;
+  padding: 0 10px;
+  justify-content: flex-start;
+}
+
+/* WO完了実績登録のWO検索: 作業順序だけ右寄せ（他は col-wo-search のまま左寄せ） */
+.col-op-order-search {
+  min-width: 180px;
+  padding: 0 10px;
+  justify-content: flex-end;
+}

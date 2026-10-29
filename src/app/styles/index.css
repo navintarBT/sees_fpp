@@ -1,0 +1,29 @@
+/*
+ * Entry point for all global styles. The import order is the cascade order - keep it.
+ *   tokens -> shared components -> pages/* -> overrides -> shell -> fieldSizes
+ */
+@import './tokens.css';
+@import './base.css';
+@import './layout.css';
+@import './form.css';
+@import './button.css';
+@import './table.css';
+@import './modal.css';
+@import './picker.css';
+@import './hand-form.css';
+@import './pages/common-tables.css';
+@import './pages/inventory-records.css';
+@import './pages/shelf-transfer.css';
+@import './pages/shipping-records.css';
+@import './pages/wo-parts-issuance.css';
+@import './pages/work-order-time.css';
+@import './pages/miscellaneous.css';
+@import './pages/set-register.css';
+@import './pages/return-configuration.css';
+@import './pages/equipment.css';
+@import './pages/bundle.css';
+@import './pages/vehicle-dispatch.css';
+@import './pages/vehicle-inbound.css';
+@import './overrides.css';
+@import './shell.css';
+@import './fieldSizes.css';

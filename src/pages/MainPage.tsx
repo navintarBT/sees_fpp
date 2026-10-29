@@ -1,5 +1,4 @@
 ﻿import { Route, Routes, Outlet } from 'react-router-dom'
-import './mainPage.scss'
 import { SetRegisterPage } from '../app/apps/Registration/SetRegisterPage'
 import { SetRegisterHandInputPage } from '../app/apps/Registration/SetRegisterHandInputPage'
 import { DispatchPage } from '../app/apps/VehicleDispatch/DispatchPage'

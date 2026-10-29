@@ -449,7 +449,7 @@ const BundlePage = () => {
   ];
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-bundle-page'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -461,11 +461,11 @@ const BundlePage = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>FR倉庫</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>FR倉庫</label>
                     <select
                       autoFocus
-                      style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}}
+                      className='field-from-warehouse'
                       value={form.parentWarehouse}
                       onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                     >
@@ -475,10 +475,10 @@ const BundlePage = () => {
                       <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0022</option>
                     </select>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>TO倉庫</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>TO倉庫</label>
                     <select
-                      style={{boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto'}}
+                      className='field-to-warehouse'
                       value={form.moveWarehouse}
                       onChange={(e) => setForm({...form, moveWarehouse: e.target.value})}
                     >
@@ -490,25 +490,25 @@ const BundlePage = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>保管場所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>保管場所</label>
                     <input
-                      style={{boxSizing: 'content-box', width: '20ch', flex: '0 0 auto'}}
+                      className='field-storage'
                       value={form.parentItemNo}
                       onChange={(e) => setForm({...form, parentItemNo: e.target.value})}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>数量</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>数量</label>
                     <input
-                      style={{boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right'}}
+                      className='field-qty' style={{textAlign: 'right'}}
                       value={form.qty}
                       onChange={(e) => setForm({...form, qty: e.target.value})}
                     />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
+                  <div className='set-field-landscape set-field-fill'>
                     <div style={{display: 'flex', alignItems: 'center', gap: 40, paddingLeft: 240}}>
                       <label style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap'}}>
                         <input
@@ -516,7 +516,7 @@ const BundlePage = () => {
                           name='quantityRange-landscape'
                           checked={quantityRange === 'from'}
                           onChange={() => setQuantityRange('from')}
-                          style={{width: 28, height: 28}}
+                          className='field-radio'
                         />
                         From
                       </label>
@@ -526,17 +526,17 @@ const BundlePage = () => {
                           name='quantityRange-landscape'
                           checked={quantityRange === 'to'}
                           onChange={() => setQuantityRange('to')}
-                          style={{width: 28, height: 28}}
+                          className='field-radio'
                         />
                         To
                       </label>
                     </div>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>JANコード</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>JANコード</label>
                     <input
                       ref={janCodeInputRef}
-                      style={{boxSizing: 'content-box', width: '15ch', flex: '0 0 auto'}}
+                      className='field-jan'
                       inputMode='numeric'
                       maxLength={14}
                       value={form.janCode}
@@ -550,10 +550,10 @@ const BundlePage = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 210, flexShrink: 0}}>理由</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>理由</label>
                     <input
-                      style={{boxSizing: 'content-box', width: '30ch', flex: '0 0 auto'}}
+                      className='field-reason'
                       value={form.moveStorage}
                       onChange={(e) => setForm({...form, moveStorage: e.target.value})}
                     />

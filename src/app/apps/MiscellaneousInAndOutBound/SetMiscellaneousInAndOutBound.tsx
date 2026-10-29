@@ -334,7 +334,7 @@ const SetMiscellaneousInAndOutBound = () => {
   ]
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-set-miscellaneous-in-and-out-bound'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -346,12 +346,12 @@ const SetMiscellaneousInAndOutBound = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 150, flexShrink: 0 }}>倉庫</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>倉庫</label>
                     <select
                       ref={warehouseRef}
                       autoFocus
-                      style={{ boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto' }}
+                      className='field-warehouse'
                       value={form.moveWarehouse}
                       onChange={(e) => setForm({ ...form, moveWarehouse: e.target.value })}
                     >
@@ -361,36 +361,36 @@ const SetMiscellaneousInAndOutBound = () => {
                       <option value='倉庫C：W0042'>倉庫C：W0042</option>
                     </select>
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 150, flexShrink: 0 }}>保管場所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>保管場所</label>
                     <input
-                      style={{ boxSizing: 'content-box', width: '20ch', flex: '0 0 auto' }}
+                      className='field-storage'
                       value={form.moveStorage}
                       onChange={(e) => setForm({ ...form, moveStorage: e.target.value })}
                     />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 150, flexShrink: 0 }}>引当数</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>引当数</label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                      <select className='pg-sign-select' style={{ width: 80, flexShrink: 0, padding: '0 8px' }}>
+                      <select className='pg-sign-select field-alloc-sign' style={{ padding: '0 8px' }}>
                         <option value='+'>+</option>
                         <option value='-'>-</option>
                       </select>
                       <input
                         value={quantity}
                         type='number'
-                        style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right' }}
+                        className='field-alloc-qty' style={{ textAlign: 'right' }}
                         onChange={(e) => setQuantity(e.target.value)}
                       />
                     </div>
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 150, flexShrink: 0 }}>JANコード</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>JANコード</label>
                     <input
                       ref={janCodeRef}
-                      style={{ boxSizing: 'content-box', width: '14ch', flex: '0 0 auto' }}
+                      className='field-jan'
                       value={form.janCode}
                       onChange={(e) => setForm({ ...form, janCode: e.target.value })}
                       onKeyDown={(e) => {

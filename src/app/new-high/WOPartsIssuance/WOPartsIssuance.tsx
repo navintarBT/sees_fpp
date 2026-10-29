@@ -603,7 +603,7 @@ const WOPartsIssuance = () => {
   ]
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-wo-parts-issuance'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -615,11 +615,11 @@ const WOPartsIssuance = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>WO番号</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>WO番号</label>
                     <input
                       autoFocus
-                      style={{width: 170, flexShrink: 0}}
+                      className='field-wo-no'
                       value={form.woNumber}
                       disabled={isWoNumberLocked}
                       onChange={(e) => setForm({...form, woNumber: e.target.value})}
@@ -633,11 +633,11 @@ const WOPartsIssuance = () => {
                       WO部品リスト表示
                     </button>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>庫内ラベル</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>庫内ラベル</label>
                     <input
                       ref={internalLabelInputRef}
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-location-label'
                       disabled={isInternalLabelLocked}
                       value={form.internalLabel}
                       onChange={(e) => setForm({...form, internalLabel: e.target.value})}
@@ -649,29 +649,29 @@ const WOPartsIssuance = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>出庫数</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>出庫数</label>
                     <input
                       ref={shipmentQtyInputRef}
-                      style={{width: 275, flexShrink: 0, textAlign: 'right'}}
+                      className='field-issue-qty' style={{textAlign: 'right'}}
                       disabled={isIssueDetailLocked}
                       value={form.shipmentQty}
                       onChange={(e) => setForm({...form, shipmentQty: e.target.value})}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>保管場所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>保管場所</label>
                     <input
-                      style={{width: 350, flexShrink: 0}}
+                      className='field-storage'
                       disabled={isIssueDetailLocked}
                       value={form.storage}
                       onChange={(e) => setForm({...form, storage: e.target.value})}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>事業所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>事業所</label>
                     <input
-                      style={{width: 230, flexShrink: 0}}
+                      className='field-site'
                       disabled={isIssueDetailLocked}
                       value={form.office}
                       onChange={(e) => setForm({...form, office: e.target.value})}

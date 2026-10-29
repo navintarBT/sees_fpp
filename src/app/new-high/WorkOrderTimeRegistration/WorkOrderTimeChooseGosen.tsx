@@ -152,7 +152,7 @@ const DateField = ({
         <div ref={wrapperRef} className='hand-date-field-register' style={{ flex: 1, minWidth: 0 }}>
             <input
                 readOnly
-                style={{ width: '100%', height: 50, fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 22px', cursor: 'pointer' }}
+                className='field-date' style={{ fontSize: 25, borderRadius: 14, border: '2px solid #5b6d86', padding: '0 22px', cursor: 'pointer' }}
                 value={value}
                 onClick={openPicker}
                 placeholder='yyyy/mm/dd'
@@ -346,7 +346,7 @@ const WorkOrderTimeRegistrationChoose = () => {
     ]
 
     return (
-        <div className='mockup-page'>
+        <div className='mockup-page page-wo-search'>
             <ScaleToFit active designWidth={1920} designHeight={1200}>
             <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
                 <div className='mockup-frame'>
@@ -358,20 +358,20 @@ const WorkOrderTimeRegistrationChoose = () => {
                         <div className='set-body-landscape set-body-landscape-3row'>
                             <div className='set-form-landscape'>
                                 <div className='set-form-landscape-row'>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 150, flexShrink: 0}}>作業場</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>作業場</label>
                                         <input
-                                            style={{boxSizing: 'content-box', width: '12ch', flex: '0 0 auto'}}
+                                            className='field-workplace-code'
                                             value={workplaceFilter}
                                             onChange={(e) => setWorkplaceFilter(e.target.value)}
                                         />
-                                        <input disabled readOnly style={{flex: 1, minWidth: 0, backgroundColor: '#d9d9d9', outline: 'none'}} value='' />
+                                        <input disabled readOnly className='field-workplace-name' style={{backgroundColor: '#d9d9d9', outline: 'none'}} value='' />
                                     </div>
                                     <div style={{flex: '1 1 0', minWidth: 0}} />
                                 </div>
                                 <div className='set-form-landscape-row'>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 150, flexShrink: 0}}>要求日</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>要求日</label>
                                         <DateField
                                             value={requestDateFrom}
                                             onChange={setRequestDateFrom}
@@ -386,8 +386,8 @@ const WorkOrderTimeRegistrationChoose = () => {
                                             onToggle={(open) => setOpenDateField(open ? 'requestTo' : null)}
                                         />
                                     </div>
-                                    <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                                        <label style={{width: 150, flexShrink: 0}}>開始日</label>
+                                    <div className='set-field-landscape set-field-fill'>
+                                        <label>開始日</label>
                                         <DateField
                                             value={startDateFrom}
                                             onChange={setStartDateFrom}

@@ -366,7 +366,7 @@ const SetReturnConfiguration = () => {
       return
     }
 
-    // สำหรับทดสอบ: ถ้าพิมพ์ตัวเลขธรรมดา ให้ค้นหาจาก itemNo
+    // For testing: a plain number is looked up by itemNo
     const matchedRow = loadedData.find(row =>
       row.itemNo === janCode ||
       row.lotSerial === janCode
@@ -378,14 +378,14 @@ const SetReturnConfiguration = () => {
       return
     }
 
-    // ตรวจสอบจำนวน
+    // Check the quantity
     if (matchedRow.returnQty + 1 > matchedRow.buildQty) {
       setScanError('構成数を超えています。')
       setJanCode('')
       return
     }
 
-    // อัปเดต
+    // Update
     setLoadedData(prev =>
       prev.map(row =>
         row.id === matchedRow.id
@@ -398,7 +398,7 @@ const SetReturnConfiguration = () => {
   }
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-set-return-configuration'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -410,8 +410,8 @@ const SetReturnConfiguration = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 200, flexShrink: 0 }}>JANコード(親)</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>JANコード(親)</label>
                     <input
                       ref={parentJanCodeInputRef}
                       autoFocus
@@ -420,12 +420,12 @@ const SetReturnConfiguration = () => {
                       onBlur={handleParentJanCodeSubmit}
                       onKeyDown={(e) => e.key === 'Enter' && handleParentJanCodeSubmit()}
                       readOnly={!isParentJanCodeEditable}
-                      className={!isParentJanCodeEditable ? 'set-input-gray' : ''}
-                      style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
+                      className={!isParentJanCodeEditable ? 'set-input-gray field-parent-jan' : 'field-parent-jan'}
+                      style={{ ...(!isParentJanCodeEditable ? { backgroundColor: '#d9d9d9' } : {}) }}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 100, flexShrink: 0 }}>状態</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-status-label'>状態</label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
                       <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
                         <input
@@ -434,7 +434,7 @@ const SetReturnConfiguration = () => {
                           checked={parentStatus === ''}
                           onChange={() => setParentStatus('')}
                           disabled={hasLoadedData}
-                          style={{ width: 28, height: 28 }}
+                          className='field-radio'
                         />
                         正常
                       </label>
@@ -445,7 +445,7 @@ const SetReturnConfiguration = () => {
                           checked={parentStatus === '04'}
                           onChange={() => setParentStatus('04')}
                           disabled={hasLoadedData}
-                          style={{ width: 28, height: 28 }}
+                          className='field-radio'
                         />
                         調査中
                       </label>
@@ -453,16 +453,16 @@ const SetReturnConfiguration = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 200, flexShrink: 0 }}>数量</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>数量</label>
                     <input
                       value={parentQty}
                       readOnly
-                      style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right', backgroundColor: '#d9d9d9' }}
+                      className='field-qty' style={{ textAlign: 'right', backgroundColor: '#d9d9d9' }}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 100, flexShrink: 0 }}>JANコード</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label className='field-jan-label'>JANコード</label>
                     <input
                       value={janCode}
                       onChange={(e) => {
@@ -476,7 +476,7 @@ const SetReturnConfiguration = () => {
                         }
                       }}
                       readOnly
-                      style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', backgroundColor: '#d9d9d9' }}
+                      className='field-jan' style={{ backgroundColor: '#d9d9d9' }}
                     />
                   </div>
                 </div>

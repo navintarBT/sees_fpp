@@ -51,7 +51,7 @@ const DEFAULT_FORM = {
   dest_location: '',
 }
 
-// เก็บ snapshot ของหน้าจอเพื่อให้กด NO / รีเฟรชแล้วข้อมูลยังอยู่เหมือนเดิม
+// Keep a snapshot of the screen so the data is still there after pressing NO or refreshing
 const BACK_STATE_KEY = 'ShelfTransfer:backState'
 
 type PersistedState = {
@@ -81,7 +81,7 @@ const clearPersistedState = () => {
 const ShelfTransfer = () => {
   const navigate = useNavigate()
 
-  // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
+  // Load the snapshot (if any) only once, on mount
   const [persistedState] = useState(loadPersistedState)
 
   const [rows, setRows] = useState<Row[]>(persistedState?.rows ?? [])
@@ -143,7 +143,7 @@ const ShelfTransfer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // เก็บ snapshot ต่อเนื่องทุกครั้งที่ข้อมูลเปลี่ยน เพื่อให้รีเฟรช/กลับมาแล้วข้อมูลยังอยู่
+  // Save the snapshot on every data change so the data survives a refresh or coming back
   useEffect(() => {
     try {
       sessionStorage.setItem(
@@ -585,7 +585,7 @@ const ShelfTransfer = () => {
   ]
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-shelf-transfer'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -597,12 +597,12 @@ const ShelfTransfer = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>倉庫</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>倉庫</label>
                     <select
                       ref={warehouseSelectRef}
                       autoFocus
-                      style={{flex: 1, minWidth: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'left'}}
+                      className='field-warehouse' style={{...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'left'}}
                       value={form.parentWarehouse}
                       onChange={(e) => setForm({...form, parentWarehouse: e.target.value})}
                       disabled={mode === 'dest'}
@@ -619,10 +619,10 @@ const ShelfTransfer = () => {
                       <option value='千葉工場：F0209'>千葉工場：F0209</option>
                     </select>
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>保管場所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>保管場所</label>
                     <select
-                      style={{width: 350, flexShrink: 0}}
+                      className='field-storage'
                       value={form.parentStorage}
                       onChange={(e) => setForm({...form, parentStorage: e.target.value})}
                     >
@@ -644,31 +644,31 @@ const ShelfTransfer = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>品目No.</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品目No.</label>
                     <input
                       ref={itemNoInputRef}
-                      style={{width: 425, flexShrink: 0}}
+                      className='field-item-no'
                       value={form.internalLabel}
                       onChange={(e) => setForm({...form, internalLabel: e.target.value})}
                       onKeyDown={handleItemNoEnter}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>ロットシリアル</label>
-                    <input readOnly style={{width: 500, flexShrink: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.lot_serial_no} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>ロットシリアル</label>
+                    <input readOnly className='field-lot-serial' style={{...grayFieldStyle, textAlign: 'left'}} value={form.lot_serial_no} />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>品名</label>
-                    <input readOnly style={{flex: 1, minWidth: 0, ...grayFieldStyle, textAlign: 'left'}} value={form.shipmentQty} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品名</label>
+                    <input readOnly className='field-item-name' style={{...grayFieldStyle, textAlign: 'left'}} value={form.shipmentQty} />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 180, flexShrink: 0}}>移動数量</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>移動数量</label>
                     <input
                       readOnly={mode === 'dest'}
-                      style={{width: 275, flexShrink: 0, ...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'right'}}
+                      className='field-move-qty' style={{...(mode === 'dest' ? grayFieldStyle : {}), textAlign: 'right'}}
                       value={form.transfer_qty}
                       onChange={(e) => setForm({...form, transfer_qty: e.target.value})}
                     />
@@ -928,7 +928,7 @@ const ShelfTransfer = () => {
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
                       setShowBackConfirm(false);
-                      // YES = ทิ้งข้อมูล: ล้าง snapshot แล้วกลับเมนู
+                      // YES = discard the data: clear the snapshot and go back to the menu
                       clearPersistedState();
                       navigate("/factory/factory");
                     }}
@@ -939,7 +939,7 @@ const ShelfTransfer = () => {
                     className="set-modal-btn set-modal-no"
                     onClick={() => {
                       setShowBackConfirm(false);
-                      // NO = เก็บข้อมูลไว้ (snapshot ถูกบันทึกต่อเนื่องอยู่แล้ว) กลับมาข้อมูลยังอยู่
+                      // NO = keep the data (the snapshot is already saved continuously); it is still there when coming back
                       navigate("/factory/factory");
                     }}
                   >

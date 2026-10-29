@@ -1,0 +1,52 @@
+/*
+ * Page: 出庫実績登録 (ShippingRecord)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+.shipping-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.shipping-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.shipping-table .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}
+
+.shipping-table .col-lot {
+  min-width: 120px;
+}
+
+/* Scoped to row cells only so the header keeps the shared centered alignment. */
+.shipping-table .tf-tableRow .col-lot {
+  justify-content: flex-start;
+}
+
+.shipping-table .col-lot2 {
+  min-width: 120px;
+  justify-content: center;
+}
+
+.shipping-table .tf-tableHead .col-lot {
+  border-right: none;
+}
+
+.shipping-table .tf-tableHead .col-lot2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -16px;
+  bottom: 0;
+  width: 16px;
+  background: white;
+  z-index: 1;
+}

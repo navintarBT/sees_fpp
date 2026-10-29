@@ -44,7 +44,7 @@ const YymmDatePicker = ({
         placeholder='YY/MM'
         value={display}
         onClick={() => setOpen((o) => !o)}
-        style={{ cursor: 'pointer', width: '100%' }}
+        className='field-yymm-picker' style={{ cursor: 'pointer' }}
       />
       {open && (
         <>
@@ -178,7 +178,7 @@ const EquipmentHandInputPage = () => {
   const itemNoInputRef = useRef<HTMLInputElement | null>(null)
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-equipment-hand-input'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -190,11 +190,11 @@ const EquipmentHandInputPage = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 210, flexShrink: 0 }}>FR倉庫</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>FR倉庫</label>
                     <select
                       autoFocus
-                      style={{ boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto' }}
+                      className='field-from-warehouse'
                       value={parentWarehouse}
                       onChange={(e) => setParentWarehouse(e.target.value)}
                     >
@@ -204,10 +204,10 @@ const EquipmentHandInputPage = () => {
                       <option value='羽田製品倉庫：W0042'>羽田製品倉庫：W0042</option>
                     </select>
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 210, flexShrink: 0 }}>TO倉庫</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>TO倉庫</label>
                     <select
-                      style={{ boxSizing: 'content-box', width: 'calc(42ch + 30px)', flex: '0 0 auto' }}
+                      className='field-to-warehouse'
                       value={parentItem}
                       onChange={(e) => setParentItem(e.target.value)}
                     >
@@ -220,29 +220,29 @@ const EquipmentHandInputPage = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 210, flexShrink: 0 }}>保管場所</label>
-                    <input style={{ boxSizing: 'content-box', width: '20ch', flex: '0 0 auto' }} value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>保管場所</label>
+                    <input className='field-storage' value={parentSerial} onChange={(e) => setParentSerial(e.target.value)} />
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 210, flexShrink: 0 }}>数量</label>
-                    <input style={{ boxSizing: 'content-box', width: '15ch', flex: '0 0 auto', textAlign: 'right' }} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>数量</label>
+                    <input className='field-qty' style={{ textAlign: 'right' }} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 210, flexShrink: 0 }}>品目No.</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品目No.</label>
                     <input
                       ref={itemNoInputRef}
-                      style={{ boxSizing: 'content-box', width: '25ch', flex: '0 0 auto' }}
+                      className='field-item-no'
                       value={moveStorage}
                       onChange={(e) => setMoveStorage(e.target.value)}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 210, flexShrink: 0 }}>ロットシリアル</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>ロットシリアル</label>
                     <input
-                      style={{ boxSizing: 'content-box', width: '30ch', flex: '0 0 auto' }}
+                      className='field-lot-serial'
                       value={lotSerial}
                       onChange={(e) => setLotSerial(e.target.value)}
                       placeholder=' '
@@ -250,7 +250,7 @@ const EquipmentHandInputPage = () => {
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
+                  <div className='set-field-landscape set-field-fill'>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 40, paddingLeft: 240 }}>
                       <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 25, whiteSpace: 'nowrap' }}>
                         <input
@@ -258,7 +258,7 @@ const EquipmentHandInputPage = () => {
                           name='quantityRange-landscape'
                           checked={quantityRange === 'from'}
                           onChange={() => setQuantityRange('from')}
-                          style={{ width: 28, height: 28 }}
+                          className='field-radio'
                         />
                         From
                       </label>
@@ -268,15 +268,15 @@ const EquipmentHandInputPage = () => {
                           name='quantityRange-landscape'
                           checked={quantityRange === 'to'}
                           onChange={() => setQuantityRange('to')}
-                          style={{ width: 28, height: 28 }}
+                          className='field-radio'
                         />
                         To
                       </label>
                     </div>
                   </div>
-                  <div className='set-field-landscape' style={{ flex: '1 1 0', minWidth: 0 }}>
-                    <label style={{ width: 210, flexShrink: 0 }}>有効日付(yymm)</label>
-                    <input placeholder=' ' style={{ boxSizing: 'content-box', width: '4ch', flex: '0 0 auto' }} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>有効日付(yymm)</label>
+                    <input placeholder=' ' className='field-expiry' />
                   </div>
                 </div>
               </div>

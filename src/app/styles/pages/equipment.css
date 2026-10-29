@@ -1,0 +1,51 @@
+/*
+ * Page: 備品振分登録 (EquipmentDistribution)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+.equipment-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.equipment-table .col-item {
+  min-width: 170px;
+}
+
+.equipment-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.equipment-table .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}
+
+.col-error-equipment {
+  min-width: 37px;
+}
+
+.col-warehouse-equipment {
+  min-width: 140px;
+}
+
+.col-storage-equipment {
+  min-width: 150px;
+}
+
+.col-quantity-equipment {
+  min-width: 90px;
+}
+
+.col-item-equipment {
+  min-width: 150px;
+}
+
+.col-productName-equipment {
+  min-width: 95px;
+}

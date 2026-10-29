@@ -1,0 +1,27 @@
+/*
+ * Page: 予定なし入出庫 (MiscellaneousInAndOutBound)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+.col-move-SetMis {
+  min-width: 130px;
+}
+
+.set-table-miscellaneous .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.set-table-miscellaneous .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.set-table-miscellaneous .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}

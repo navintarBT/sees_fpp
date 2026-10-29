@@ -6,7 +6,6 @@ import { ScaleToFit } from '../../components/ScaleToFit/ScaleToFit'
 const TERMINAL_ID = 'ABCDEFGHIJ'
 
 // 入力欄の幅を「半角文字 n 文字が収まるサイズ」にする（padding・border は幅の外側に加算）
-const charWidth = (n: number) => ({ boxSizing: 'content-box' as const, width: `${n}ch`, flex: '0 0 auto' })
 
 const WO_MOCKUP_DATA: Record<string, { planned: number; completed: number; defective: number }> = {
   'WO-001': { planned: 10, completed: 9, defective: 1 },
@@ -21,7 +20,7 @@ const WO_MOCKUP_DATA: Record<string, { planned: number; completed: number; defec
   'WO-010': { planned: 10, completed: 5, defective: 5 },
 }
 
-// เก็บ snapshot ของหน้าจอเพื่อให้กด NO / รีเฟรชแล้วข้อมูลยังอยู่เหมือนเดิม
+// Keep a snapshot of the screen so the data is still there after pressing NO or refreshing
 const BACK_STATE_KEY = 'WorkOrderCompletion:backState'
 
 type WoData = { planned: number; completed: number; defective: number }
@@ -54,7 +53,7 @@ const clearPersistedState = () => {
 const WorkOrderCompletion = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  // โหลด snapshot (ถ้ามี) แค่ครั้งเดียวตอน mount
+  // Load the snapshot (if any) only once, on mount
   const [persistedState] = useState(loadPersistedState)
   const [woNumber, setWoNumber] = useState(persistedState?.woNumber ?? '')
   const [woData, setWoData] = useState<WoData | null>(persistedState?.woData ?? null)
@@ -112,7 +111,7 @@ const WorkOrderCompletion = () => {
     applyWoData(selectedWoNumber)
   }, [location.state])
 
-  // เก็บ snapshot ต่อเนื่องทุกครั้งที่ข้อมูลเปลี่ยน เพื่อให้รีเฟรช/กลับมาแล้วข้อมูลยังอยู่
+  // Save the snapshot on every data change so the data survives a refresh or coming back
   useEffect(() => {
     try {
       sessionStorage.setItem(
@@ -189,7 +188,7 @@ const WorkOrderCompletion = () => {
   }
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-work-order-completion'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -201,11 +200,11 @@ const WorkOrderCompletion = () => {
             <div className='set-body-landscape'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>WO番号</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>WO番号</label>
                     <input
                       autoFocus
-                      style={charWidth(8)}
+                      className='field-wo-no'
                       value={woNumber}
                       onChange={(e) => {
                         setWoNumber(e.target.value)
@@ -227,70 +226,70 @@ const WorkOrderCompletion = () => {
                   <div style={{flex: '1 1 0', minWidth: 0}} />
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>WO計画数</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>WO計画数</label>
                     <input
                       disabled
-                      style={{...charWidth(15), textAlign: 'right'}}
+                      className='field-wo-planned-qty' style={{textAlign: 'right'}}
                       value={woData ? String(toCountNumber(plannedCount) - toCountNumber(completedCount)) : ''}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>WO完了済数</label>
-                    <input disabled style={{...charWidth(15), textAlign: 'right'}} value={plannedCount} />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>WO完了済数</label>
+                    <input disabled className='field-wo-completed-qty' style={{textAlign: 'right'}} value={plannedCount} />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>WO完了数</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>WO完了数</label>
                     <input
                       disabled={!woData}
-                      style={{...charWidth(15), textAlign: 'right'}}
+                      className='field-wo-complete-qty' style={{textAlign: 'right'}}
                       value={defectiveCount}
                       onChange={(e) => setDefectiveCount(e.target.value)}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>WO仕損数</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>WO仕損数</label>
                     <input
                       ref={completedCountInputRef}
                       disabled={!woData}
-                      style={{...charWidth(15), textAlign: 'right'}}
+                      className='field-wo-defect-qty' style={{textAlign: 'right'}}
                       value={completedCount}
                       onChange={(e) => setCompletedCount(e.target.value)}
                     />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>ロットシリアル</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>ロットシリアル</label>
                     <input
                       disabled={!woData}
-                      style={charWidth(30)}
+                      className='field-lot-serial'
                       value={lotSerial}
                       onChange={(e) => setLotSerial(e.target.value)}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>製番</label>
-                    <input disabled readOnly style={charWidth(30)} value='' />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>製番</label>
+                    <input disabled readOnly className='field-mfg-no' value='' />
                   </div>
                 </div>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>事業所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>事業所</label>
                     <input
                       disabled={!woData}
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-site'
                       value={officeCode}
                       onChange={(e) => setOfficeCode(e.target.value)}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0, gap: 12}}>
-                    <label style={{width: 200, flexShrink: 0}}>保管場所</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>保管場所</label>
                     <input
                       disabled={!woData}
-                      style={charWidth(20)}
+                      className='field-storage'
                       value={storageLocation}
                       onChange={(e) => setStorageLocation(e.target.value)}
                     />
@@ -303,7 +302,7 @@ const WorkOrderCompletion = () => {
               <div className='set-printer-row-landscape'>
                 <label>出力先プリンター</label>
                 <select
-                  style={{...charWidth(40), paddingRight: 52}}
+                  className='field-printer' style={{paddingRight: 52}}
                   value={printerDest}
                   onChange={(e) => setPrinterDest(e.target.value)}
                 >
@@ -529,7 +528,7 @@ const WorkOrderCompletion = () => {
                     className="set-modal-btn set-modal-yes"
                     onClick={() => {
                       setShowBackConfirm(false);
-                      // はい = ล้างข้อมูลในฟอร์ม + snapshot แล้วกลับเมนู
+                      // はい = clear the form data and the snapshot, then go back to the menu
                       resetInitialDisplay();
                       clearPersistedState();
                       navigate("/factory/factory");

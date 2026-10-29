@@ -92,7 +92,7 @@ const ShippingRecordDetail = () => {
   ]
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-shipping-detail'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -105,12 +105,12 @@ const ShippingRecordDetail = () => {
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
                   <div className='set-field-landscape set-field-grow'>
-                    <label style={{width: 200, flexShrink: 0}}>品名</label>
-                    <input value={parentSerial} className='set-input-gray' style={{width: 950, flexShrink: 0, textAlign: 'left'}} readOnly />
+                    <label>品名</label>
+                    <input value={parentSerial} className='set-input-gray field-item-name' style={{textAlign: 'left'}} readOnly />
                   </div>
                   <div className='set-field-landscape set-field-grow'>
-                    <label style={{width: 200, flexShrink: 0}}>品目No.</label>
-                    <input value={parentItem} className='set-input-gray' style={{width: 425, flexShrink: 0, textAlign: 'left'}} readOnly />
+                    <label>品目No.</label>
+                    <input value={parentItem} className='set-input-gray field-item-no' style={{textAlign: 'left'}} readOnly />
                   </div>
                 </div>
               </div>

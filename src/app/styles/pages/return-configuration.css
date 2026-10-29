@@ -1,0 +1,27 @@
+/*
+ * Page: セット戻り構成登録 (ReturnConfiguration)
+ * Rules used only by this feature (mostly table column widths / alignment).
+ */
+
+.set-return-configuration-table .col-arrow-head {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: white;
+  min-width: 45px;
+}
+
+.set-return-configuration-table .tf-tableRow .col-arrow {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.set-return-configuration-table .tf-tableRowActive .col-arrow {
+  background: var(--color-row-active);
+}
+
+.set-return-configuration-table .col-lot {
+  min-width: 300px;
+}

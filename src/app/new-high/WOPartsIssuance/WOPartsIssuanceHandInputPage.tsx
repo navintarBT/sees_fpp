@@ -36,9 +36,6 @@ const STORAGE_OPTIONS = ['LOC-001', 'LOC-014', 'LOC-015', 'LOC-016', 'LOC-017', 
 const OFFICE_OPTIONS = ['Fxxx']
 
 const inputStyle: React.CSSProperties = {
-  width: '100%',
-  minWidth: 0,
-  height: '100%',
   border: 0,
   outline: 'none',
   boxShadow: 'none',
@@ -305,7 +302,7 @@ const WOPartsIssuanceHandInputPage = () => {
             ref={(el) => {
               interiorInputRefs.current[row.id] = el
             }}
-            style={{
+            className='field-cell-location-label' style={{
               ...inputStyle,
               background: 'transparent',
               cursor: isLocked ? 'default' : 'text',
@@ -333,7 +330,7 @@ const WOPartsIssuanceHandInputPage = () => {
       header: '出庫数',
       render: (row) => (
         <input
-          style={{...inputStyle, width: '120px', textAlign: 'right'}}
+          className='field-cell-issue-qty' style={{...inputStyle, textAlign: 'right'}}
           value={row.numOfShipments}
           onChange={(e) => updateRow(row.id, {numOfShipments: e.target.value})}
           onClick={(e) => e.stopPropagation()}
@@ -353,7 +350,7 @@ const WOPartsIssuanceHandInputPage = () => {
         //   onChange={(value) => updateRow(row.id, {storage: value})}
         // />
         <input
-          style={{...inputStyle, width: '240px', textAlign: 'left'}}
+          className='field-cell-storage' style={{...inputStyle, textAlign: 'left'}}
           value={row.storage}
           onChange={(e) => updateRow(row.id, {storage: e.target.value})}
           onClick={(e) => e.stopPropagation()}
@@ -373,7 +370,7 @@ const WOPartsIssuanceHandInputPage = () => {
         //   onChange={(value) => updateRow(row.id, {office: value})}
         // />
         <input
-          style={{...inputStyle, width: '236px', textAlign: 'left'}}
+          className='field-cell-site' style={{...inputStyle, textAlign: 'left'}}
           value={row.office}
           onChange={(e) => updateRow(row.id, {office: e.target.value})}
           onClick={(e) => e.stopPropagation()}
@@ -383,7 +380,7 @@ const WOPartsIssuanceHandInputPage = () => {
   ]
 
   return (
-    <div className='mockup-page'>
+    <div className='mockup-page page-wo-parts-issuance-hand-input'>
       <ScaleToFit active designWidth={1920} designHeight={1200}>
       <div className='mockup-stage mockup-stage-dark mockup-stage-landscape'>
         <div className='mockup-frame'>
@@ -395,12 +392,12 @@ const WOPartsIssuanceHandInputPage = () => {
             <div className='set-body-landscape set-body-landscape-3row'>
               <div className='set-form-landscape'>
                 <div className='set-form-landscape-row'>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>品番</label>
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>品番</label>
                     <input
                       ref={itemInputRef}
                       autoFocus
-                      style={{flex: 1, minWidth: 0}}
+                      className='field-part-no'
                       value={parentItem}
                       disabled={parentItemLocked}
                       onChange={(e) => setParentItem(e.target.value)}
@@ -412,13 +409,13 @@ const WOPartsIssuanceHandInputPage = () => {
                       }}
                     />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>WO番号</label>
-                    <input style={{flex: 1, minWidth: 0}} value={parentSerial} disabled />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>WO番号</label>
+                    <input className='field-wo-no' value={parentSerial} disabled />
                   </div>
-                  <div className='set-field-landscape' style={{flex: '1 1 0', minWidth: 0}}>
-                    <label style={{width: 150, flexShrink: 0}}>必要数</label>
-                    <input style={{flex: 1, minWidth: 0, textAlign: 'right'}} value={moveStorage} disabled />
+                  <div className='set-field-landscape set-field-fill'>
+                    <label>必要数</label>
+                    <input className='field-required-qty' style={{textAlign: 'right'}} value={moveStorage} disabled />
                   </div>
                 </div>
               </div>
