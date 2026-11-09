@@ -3,10 +3,11 @@
  * Rules used only by this feature (mostly table column widths / alignment).
  */
 
-/* WOPartsIssuance: 必要数・出庫数 are numeric quantities. col-reqNumber/col-numOfShipments
+/* WOPartsIssuance: 必要数・既出庫数・出庫数 are numeric quantities. col-reqNumber/col-numOfShipments
    are reused with non-numeric meanings by other tables, so scope this to this table only
    rather than the shared .inbound-table-landscape selector. */
 .woPartsIssuance-table .tf-tableRow .col-reqNumber,
+.woPartsIssuance-table .tf-tableRow .col-issuedNumber,
 .woPartsIssuance-table .tf-tableRow .col-numOfShipments,
 .woPartsIssuance-table .tf-tableRow .col-remaining,
 .woPartsIssuanceDetail-table .tf-tableRow .col-numOfShipments {
@@ -51,6 +52,10 @@
 
 .woPartsIssuance-table .col-reqNumber {
   min-width: 106px;
+}
+
+.woPartsIssuance-table .col-issuedNumber {
+  min-width: 120px;
 }
 
 .woPartsIssuance-table .col-storage {

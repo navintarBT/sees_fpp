@@ -118,7 +118,7 @@
          src/app/new-high/WOPartsIssuance/WOPartsIssuance.tsx ===== */
 #root .page-wo-parts-issuance .set-field-fill              { gap: 12px; }                                 /* space between label and field */
 #root .page-wo-parts-issuance .field-col-left              { flex: 0 0 600px; min-width: 0; gap: 12px; }  /* left column boxes (WO番号 / 残数合計 / 保管場所) */
-#root .page-wo-parts-issuance .field-col-middle            { flex: 0 0 420px; min-width: 0; gap: 12px; }  /* middle column boxes (WO部品リスト表示 / 在庫数 / 事業所) */
+#root .page-wo-parts-issuance .field-col-middle            { flex: 0 0 420px; min-width: 0; gap: 12px; }  /* middle column boxes (在庫数 / 事業所) */
 #root .page-wo-parts-issuance .set-field-landscape > label { width: 180px; flex-shrink: 0; }              /* label column */
 #root .page-wo-parts-issuance .field-wo-no                 { flex: 1; min-width: 0; }                     /* WO番号 */
 #root .page-wo-parts-issuance .field-location-label        { width: 300px; flex-shrink: 0; }              /* 庫内ラベル */
@@ -127,7 +127,6 @@
 #root .page-wo-parts-issuance .field-issue-qty             { width: 300px; flex-shrink: 0; }              /* 出庫数 */
 #root .page-wo-parts-issuance .field-storage               { flex: 1; min-width: 0; }                     /* 保管場所 */
 #root .page-wo-parts-issuance .field-site                  { width: 220px; flex-shrink: 0; }              /* 事業所 */
-#root .page-wo-parts-issuance .field-allow-over-issue      { width: 36px; height: 36px; flex: 0 0 auto; } /* 超過出庫許可 */
 
 /* ===== WO部品出庫 品番別 — /factory/wo-parts-issuance-hand-input
          src/app/new-high/WOPartsIssuance/WOPartsIssuanceHandInputPage.tsx ===== */

@@ -12,6 +12,7 @@ type Row = {
   woNumber: string
   partNumber: string
   reqNumber: string
+  issuedNumber: string // 既出庫数（過去の登録で出庫済みの数量）
   lot: string
   numOfShipments: string
   office: string
@@ -43,7 +44,6 @@ type FormState = {
   storage: string
   office: string
   janCode: string
-  allowOverIssue: boolean
 }
 
 type DetailEntry = {
@@ -75,7 +75,6 @@ const initialForm: FormState = {
   storage: '',
   office: '',
   janCode: '',
-  allowOverIssue: false,
 }
 
 const INTERNAL_LABEL_PRESETS: Record<string, InternalLabelPreset> = {
@@ -115,6 +114,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-001',
     partNumber: '部品001',
     reqNumber: '10',
+    issuedNumber: '2',
     storage: 'LOC-001',
     lot: '',
     numOfShipments: '',
@@ -125,6 +125,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-001',
     partNumber: '部品002',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-002',
     lot: '',
     numOfShipments: '',
@@ -135,6 +136,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-002',
     partNumber: '部品002',
     reqNumber: '10',
+    issuedNumber: '4',
     storage: 'LOC-002',
     lot: '',
     numOfShipments: '',
@@ -145,6 +147,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-003',
     partNumber: '部品003',
     reqNumber: '10',
+    issuedNumber: '10',
     storage: 'LOC-003',
     lot: '',
     numOfShipments: '',
@@ -155,6 +158,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-004',
     partNumber: '部品004',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-004',
     lot: '',
     numOfShipments: '',
@@ -165,6 +169,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-005',
     partNumber: '部品005',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-005',
     lot: '',
     numOfShipments: '',
@@ -175,6 +180,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-006',
     partNumber: '部品006',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-006',
     lot: '',
     numOfShipments: '',
@@ -185,6 +191,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-007',
     partNumber: '部品007',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-007',
     lot: '',
     numOfShipments: '',
@@ -195,6 +202,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-008',
     partNumber: '部品008',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-008',
     lot: '',
     numOfShipments: '',
@@ -205,6 +213,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-009',
     partNumber: '部品009',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-009',
     lot: '',
     numOfShipments: '',
@@ -215,6 +224,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-010',
     partNumber: '部品010',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-010',
     lot: '',
     numOfShipments: '',
@@ -225,6 +235,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-011',
     partNumber: '部品011',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-011',
     lot: '',
     numOfShipments: '',
@@ -235,6 +246,7 @@ const initialRows: Row[] = [
     woNumber: 'WO-012',
     partNumber: '部品012',
     reqNumber: '10',
+    issuedNumber: '0',
     storage: 'LOC-012',
     lot: '',
     numOfShipments: '',
@@ -249,19 +261,21 @@ const EMPTY_ROW: Row = {
   woNumber: '',
   partNumber: '',
   reqNumber: '',
+  issuedNumber: '',
   lot: '',
   numOfShipments: '',
   office: '',
   storage: '',
 }
 
-// 残数 = 必要数 - 出庫数（超過出庫時はマイナスにせず 0 表示）
+// 残数 = 必要数 - 既出庫数 - 出庫数（超過出庫時はマイナスにせず 0 表示）
 const getRemaining = (row: Row): number | null => {
   if (row.reqNumber === '') return null
   const req = Number(row.reqNumber)
+  const alreadyIssued = Number(row.issuedNumber || 0)
   const issued = Number(row.numOfShipments || 0)
-  if (!Number.isFinite(req) || !Number.isFinite(issued)) return null
-  return Math.max(req - issued, 0)
+  if (!Number.isFinite(req) || !Number.isFinite(alreadyIssued) || !Number.isFinite(issued)) return null
+  return Math.max(req - alreadyIssued - issued, 0)
 }
 
 const WOPartsIssuance = () => {
@@ -516,6 +530,13 @@ const WOPartsIssuance = () => {
     detailHistory,
   }
 
+  // WO番号入力後の Enter で WO部品リストを表示（「WO部品リスト表示」ボタン廃止に伴う）
+  const handleWoNumberEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+    event.preventDefault()
+    handleSearchWoNumber()
+  }
+
   const handleInternalLabelEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
     event.preventDefault()
@@ -638,6 +659,7 @@ const WOPartsIssuance = () => {
     {key: 'woNumber', headClassName: 'col-woNumber', cellClassName: 'col-woNumber', header: 'WO番号', render: (row) => row.woNumber},
     {key: 'partNumber', headClassName: 'col-partNumber', cellClassName: 'col-partNumber', header: '品番', render: (row) => row.partNumber},
     {key: 'reqNumber', headClassName: 'col-reqNumber', cellClassName: 'col-reqNumber', header: '必要数', render: (row) => row.reqNumber},
+    {key: 'issuedNumber', headClassName: 'col-issuedNumber', cellClassName: 'col-issuedNumber', header: '既出庫数', render: (row) => row.issuedNumber},
     {key: 'numOfShipments', headClassName: 'col-numOfShipments', cellClassName: 'col-numOfShipments', header: '出庫数', render: (row) => row.numOfShipments},
     {key: 'remaining', headClassName: 'col-remaining', cellClassName: 'col-remaining', header: '残数', render: (row) => getRemaining(row) ?? ''},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロット', render: (row) => row.lot},
@@ -667,18 +689,10 @@ const WOPartsIssuance = () => {
                       value={form.woNumber}
                       disabled={isWoNumberLocked}
                       onChange={(e) => setForm({...form, woNumber: e.target.value})}
+                      onKeyDown={handleWoNumberEnter}
                     />
                   </div>
-                  <div className='set-field-landscape field-col-middle'>
-                    <button
-                      className='set-search-btn set-success'
-                      style={{height: 50, fontSize: 25, flexShrink: 0, minWidth: 0, padding: '0 14px'}}
-                      onClick={handleSearchWoNumber}
-                      disabled={isWoNumberLocked}
-                    >
-                      WO部品リスト表示
-                    </button>
-                  </div>
+                  {/* 庫内ラベルは2列目（在庫数・事業所と同じ位置）に配置 */}
                   <div className='set-field-landscape set-field-fill'>
                     <label>庫内ラベル</label>
                     <input
@@ -734,15 +748,6 @@ const WOPartsIssuance = () => {
                       onChange={(e) => setForm({...form, office: e.target.value})}
                     />
                   </div>
-                  <div className='set-field-landscape set-field-fill'>
-                    <label>超過出庫許可</label>
-                    <input
-                      type='checkbox'
-                      className='field-allow-over-issue'
-                      checked={form.allowOverIssue}
-                      onChange={(e) => setForm({...form, allowOverIssue: e.target.checked})}
-                    />
-                  </div>
                 </div>
                 <div className='set-form-landscape-row' style={{gap: 12}}>
                   <button className='set-search-btn set-purple' style={{height: 50, fontSize: 25, width: 290, padding: '0 14px'}} onClick={sortRowsByPartNumber}>
@@ -761,7 +766,7 @@ const WOPartsIssuance = () => {
                 gridClassName='woPartsIssuance-table inbound-table-landscape'
                 gridStyle={{
                   gridTemplateColumns:
-                    '50px minmax(110px, 0.8fr) minmax(110px, 1fr) 110px 110px 110px minmax(110px, 0.9fr) minmax(120px, 0.9fr) minmax(110px, 0.7fr)',
+                    '50px minmax(110px, 0.8fr) minmax(110px, 1fr) 110px 120px 110px 110px minmax(110px, 0.9fr) minmax(120px, 0.9fr) minmax(110px, 0.7fr)',
                 }}
                 scrollRef={tableScrollRef}
                 getRowKey={(row) => row.id}
