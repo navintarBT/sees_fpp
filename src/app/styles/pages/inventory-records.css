@@ -65,8 +65,24 @@
   min-width: 120px;
 }
 
+.inventory-table .col-processed {
+  min-width: 120px;
+}
+
 .inventory-table .col-Load {
   min-width: 120px;
+}
+
+.inventory-table .col-remaining {
+  min-width: 120px;
+}
+
+/* 既処理数 / 残数 are quantities: right-align values like 指示数 / 読込数
+   (those two use the shared rule in table.css). Headers stay centered. */
+.inventory-table .tf-tableRow .col-processed,
+.inventory-table .tf-tableRow .col-remaining {
+  justify-content: flex-end;
+  text-align: right;
 }
 
 .inventory-table .col-productName {

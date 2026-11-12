@@ -15,6 +15,7 @@ type Row = {
   lot2: string
   status: string
   build: string
+  processed: string
   release: string
   move: string
   moveStorage: string
@@ -30,10 +31,21 @@ const EMPTY_ROW: Row = {
   lot2: '',
   status: '',
   build: '',
+  processed: '',
   release: '',
   move: '',
   moveStorage: '',
   name: '',
+}
+
+// 残数 = 指示数 - 既処理数 - 読込数（超過時はマイナスにせず 0 表示）
+const getRemaining = (row: Row): number | null => {
+  if (row.build === '') return null
+  const instructed = Number(row.build)
+  const processed = Number(row.processed || 0)
+  const loaded = Number(row.release || 0)
+  if (!Number.isFinite(instructed) || !Number.isFinite(processed) || !Number.isFinite(loaded)) return null
+  return Math.max(instructed - processed - loaded, 0)
 }
 
 const SESSION_KEY = 'shippingRecordPageState'
@@ -58,6 +70,7 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot2: '',
         status: 'JDE基本保管場所',
         build: '1',
+        processed: '0',
         release: '0',
         move: '',
         moveStorage: '',
@@ -71,6 +84,7 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot2: '*',
         status: 'JDE基本保管場所',
         build: '2',
+        processed: '0',
         release: '2',
         move: '',
         moveStorage: '保管場所B',
@@ -84,6 +98,7 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot2: '',
         status: 'JDE基本保管場所',
         build: '3',
+        processed: '0',
         release: '3',
         move: '',
         moveStorage: '保管場所C',
@@ -105,6 +120,7 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot2: '*',
         status: '3',
         build: '2',
+        processed: '0',
         release: '10',
         move: '',
         moveStorage: 'A-01-01',
@@ -118,6 +134,7 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot2: '*',
         status: '5',
         build: '7',
+        processed: '0',
         release: '10',
         move: '',
         moveStorage: 'A-01-01',
@@ -131,6 +148,7 @@ const MOCK_SHIPPING: Record<string, {moveWarehouse: string; moveStorage: string;
         lot2: '*',
         status: '6',
         build: '3',
+        processed: '0',
         release: '10',
         move: '',
         moveStorage: 'A-01-01',
@@ -228,11 +246,6 @@ const ShippingRecordPage = () => {
       setIsLoaded(false)
       setActiveRowId(null)
     }
-  }
-
-  const handleReflect = () => {
-    if (!form.qty.trim()) return
-    setRows((prev) => prev.map((row, index) => (index === 0 ? {...row, release: form.qty} : row)))
   }
 
   const handleJanCodeScan = () => {
@@ -384,8 +397,10 @@ const ShippingRecordPage = () => {
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
     {key: 'lot2', headClassName: 'col-lot2', cellClassName: 'col-lot2', header: '', render: (row) => row.lot2},
     {key: 'status', headClassName: 'col-status', cellClassName: 'col-status', header: '基本保管場所', render: (row) => row.status},
-    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '指示', render: (row) => row.build},
-    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込', render: (row) => row.release},
+    {key: 'build', headClassName: 'col-num', cellClassName: 'col-num', header: '指示数', render: (row) => row.build},
+    {key: 'processed', headClassName: 'col-num', cellClassName: 'col-num', header: '既処理数', render: (row) => row.processed},
+    {key: 'release', headClassName: 'col-num', cellClassName: 'col-num', header: '読込数', render: (row) => row.release},
+    {key: 'remaining', headClassName: 'col-num', cellClassName: 'col-num', header: '残数', render: (row) => getRemaining(row) ?? ''},
     {key: 'name', headClassName: 'col-name-ship', cellClassName: 'col-name-ship', header: '品名', render: (row) => row.name},
     {key: 'moveStorage', headClassName: 'col-moveStorage-ship', cellClassName: 'col-moveStorage-ship', header: '保管場所', render: (row) => row.moveStorage},
 
@@ -491,14 +506,6 @@ const ShippingRecordPage = () => {
                       onChange={(e) => setForm({...form, qty: e.target.value})}
                       disabled={!isLoaded}
                     />
-                    <button
-                      className='set-search-btn set-success'
-                      disabled={!isLoaded}
-                      onClick={handleReflect}
-                      style={!isLoaded ? {background: '#d9d9d9', color: '#666', flexShrink: 0} : {flexShrink: 0}}
-                    >
-                      反映
-                    </button>
                   </div>
                   <div className='set-field-landscape set-field-fill'>
                     <label className='field-jan-item-label'>JANコード／品目コード</label>
@@ -538,7 +545,7 @@ const ShippingRecordPage = () => {
                 gridClassName='shipping-table inbound-table-landscape'
                 gridStyle={{
                   gridTemplateColumns:
-                    '90px 50px 50px minmax(110px, 1fr) minmax(140px, 1.1fr) 30px minmax(180px, 1fr) minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(150px, 1.1fr) minmax(130px, 1fr)',
+                    '90px 50px 50px minmax(110px, 1fr) minmax(140px, 1.1fr) 30px minmax(180px, 1fr) minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(90px, 0.7fr) minmax(150px, 1.1fr) minmax(130px, 1fr)',
                 }}
                 scrollRef={tableScrollRef}
                 getRowKey={(row) => row.id}

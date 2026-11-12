@@ -16,6 +16,7 @@ type Row = {
   inspection: string
   rowNo: string
   instruct: string
+  processed: string
   Load: string
   productName: string
 }
@@ -29,8 +30,19 @@ const EMPTY_ROW: Row = {
   inspection: '',
   rowNo: '',
   instruct: '',
+  processed: '',
   Load: '' ,
   productName: '',
+}
+
+// 残数 = 指示数 - 既処理数 - 読込数（超過時はマイナスにせず 0 表示）
+const getRemaining = (row: Row): number | null => {
+  if (row.instruct === '') return null
+  const instruct = Number(row.instruct)
+  const processed = Number(row.processed || 0)
+  const loaded = Number(row.Load || 0)
+  if (!Number.isFinite(instruct) || !Number.isFinite(processed) || !Number.isFinite(loaded)) return null
+  return Math.max(instruct - processed - loaded, 0)
 }
 
 const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: string; qty: string; janCode: string; janCodeDisabled?: boolean; rows: Row[]}> = {
@@ -49,6 +61,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         inspection: '',
         rowNo: '',
         instruct: '3',
+        processed: '1',
         Load: '0',
         productName: '品名001',
       },
@@ -61,6 +74,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         inspection: '',
         rowNo: '',
         instruct: '2',
+        processed: '0',
         Load: '2',
         productName: '品名002',
       },
@@ -73,6 +87,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         inspection: '全数検査',
         rowNo: '123.456',
         instruct: '12345',
+        processed: '0',
         Load: '12345',
         productName: 'PRODUCT-NAME-01',
       },
@@ -93,6 +108,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         inspection: '',
         rowNo: '',
         instruct: '3',
+        processed: '1',
         Load: '0',
         productName: '品名001',
       },
@@ -105,6 +121,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         inspection: '',
         rowNo: '',
         instruct: '2',
+        processed: '0',
         Load: '2',
         productName: '品名002',
       },
@@ -117,6 +134,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         inspection: '全数検査',
         rowNo: '123.456',
         instruct: '12345',
+        processed: '0',
         Load: '12345',
         productName: 'PRODUCT-NAME-01',
       },
@@ -138,6 +156,7 @@ const MOCK_INVENTORY: Record<string, {parentWarehouse: string; moveStorage: stri
         inspection: '',
         rowNo: '123456',
         instruct: '3',
+        processed: '0',
         Load: '3',
         productName: '品名005',
       },
@@ -222,6 +241,7 @@ const InventoryRecordsPage = () => {
           inspection: '',
           rowNo: '',
           instruct: qty,
+          processed: '0',
           Load: qty,
           productName: MOCK_ITEM_NAMES[itemNo] ?? '',
         }
@@ -420,8 +440,10 @@ const InventoryRecordsPage = () => {
     {key: 'item', headClassName: 'col-item', cellClassName: 'col-item', header: '品目No.', render: (row) => row.item},
     {key: 'lot', headClassName: 'col-lot', cellClassName: 'col-lot', header: 'ロットシリアル', render: (row) => row.lot},
     {key: 'lot2', headClassName: 'col-lot2', cellClassName: 'col-lot2', header: '', render: (row) => row.lot2},
-    {key: 'instruct', headClassName: 'col-instruct', cellClassName: 'col-instruct', header: '指示', render: (row) => row.instruct},
-    {key: 'Load', headClassName: 'col-Load', cellClassName: 'col-Load', header: '読込', render: (row) => row.Load},
+    {key: 'instruct', headClassName: 'col-instruct', cellClassName: 'col-instruct', header: '指示数', render: (row) => row.instruct},
+    {key: 'processed', headClassName: 'col-processed', cellClassName: 'col-processed', header: '既処理数', render: (row) => row.processed},
+    {key: 'Load', headClassName: 'col-Load', cellClassName: 'col-Load', header: '読込数', render: (row) => row.Load},
+    {key: 'remaining', headClassName: 'col-remaining', cellClassName: 'col-remaining', header: '残数', render: (row) => getRemaining(row) ?? ''},
     {key: 'productName', headClassName: 'col-productName', cellClassName: 'col-productName', header: '品名', render: (row) => row.productName},
     {key: 'inspection', headClassName: 'col-inspection', cellClassName: 'col-inspection', header: '検査', render: (row) => row.inspection},
     {key: 'rowNo', headClassName: 'col-rowNo', cellClassName: 'col-rowNo', header: '行番号', render: (row) => row.rowNo},
@@ -579,7 +601,7 @@ const InventoryRecordsPage = () => {
                 scrollRef={tableScrollRef}
                 className='inbound-table-landscape-wrap'
                 gridClassName='inventory-table inbound-table-landscape'
-                gridStyle={{gridTemplateColumns: '90px 50px 50px minmax(110px, 1.13fr) minmax(110px, 1.13fr) 30px minmax(80px, 0.5fr) minmax(80px, 0.5fr) minmax(110px, 1.13fr) minmax(90px, 0.8fr) minmax(90px, 0.6fr)'}}
+                gridStyle={{gridTemplateColumns: '90px 50px 50px minmax(110px, 1.13fr) minmax(110px, 1.13fr) 30px minmax(120px, 0.5fr) minmax(120px, 0.5fr) minmax(120px, 0.5fr) minmax(120px, 0.5fr) minmax(110px, 1.13fr) minmax(90px, 0.8fr) minmax(90px, 0.6fr)'}}
                 getRowKey={(row) => row.id}
                 activeRowKey={activeRowId}
                 onRowActivate={(rowKey) => handleRowClick(Number(rowKey))}
