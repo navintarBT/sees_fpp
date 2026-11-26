@@ -30,7 +30,7 @@ const initialRows: Row[] = [
     NumOfConfig: 2,
     NumOfCancel: 1,
     moveWarehouse: 'W001',
-    moveStorage: '',
+    moveStorage: 'S001',
     name: '品目1',
   },
   {
@@ -42,7 +42,7 @@ const initialRows: Row[] = [
     NumOfConfig: 1,
     NumOfCancel: 0,
     moveWarehouse: 'W002',
-    moveStorage: '',
+    moveStorage: 'S002',
     name: '品目2',
   },
   {
@@ -54,7 +54,7 @@ const initialRows: Row[] = [
     NumOfConfig: 3,
     NumOfCancel: 2,
     moveWarehouse: 'W003',
-    moveStorage: '',
+    moveStorage: 'S003',
     name: '品目3',
   },
   {
@@ -66,7 +66,7 @@ const initialRows: Row[] = [
     NumOfConfig: 4,
     NumOfCancel: 1,
     moveWarehouse: 'W004',
-    moveStorage: '',
+    moveStorage: 'S004',
     name: '品目4',
   },
   {
@@ -78,7 +78,7 @@ const initialRows: Row[] = [
     NumOfConfig: 2,
     NumOfCancel: 0,
     moveWarehouse: 'W005',
-    moveStorage: '',
+    moveStorage: 'S005',
     name: '品目5',
   },
   {
@@ -90,7 +90,7 @@ const initialRows: Row[] = [
     NumOfConfig: 5,
     NumOfCancel: 3,
     moveWarehouse: 'W006',
-    moveStorage: '',
+    moveStorage: 'S006',
     name: '品目6',
   },
   {
@@ -102,7 +102,7 @@ const initialRows: Row[] = [
     NumOfConfig: 1,
     NumOfCancel: 0,
     moveWarehouse: 'W007',
-    moveStorage: '',
+    moveStorage: 'S007',
     name: '品目7',
   },
   {
@@ -114,7 +114,7 @@ const initialRows: Row[] = [
     NumOfConfig: 3,
     NumOfCancel: 1,
     moveWarehouse: 'W008',
-    moveStorage: '',
+    moveStorage: 'S008',
     name: '品目8',
   },
   {
@@ -126,7 +126,7 @@ const initialRows: Row[] = [
     NumOfConfig: 2,
     NumOfCancel: 2,
     moveWarehouse: 'W009',
-    moveStorage: '',
+    moveStorage: 'S009',
     name: '品目9',
   },
   {
@@ -138,7 +138,7 @@ const initialRows: Row[] = [
     NumOfConfig: 6,
     NumOfCancel: 2,
     moveWarehouse: 'W010',
-    moveStorage: '',
+    moveStorage: 'S010',
     name: '品目10',
   },
 ]
@@ -463,15 +463,8 @@ const SetRegisterPage = () => {
     {key: 'NumOfConfig', headClassName: 'col-NumOfConfig', cellClassName: 'col-NumOfConfig', header: '構成数', render: (row) => row.NumOfConfig},
     {key: 'NumOfCancel', headClassName: 'col-NumOfCancel', cellClassName: 'col-NumOfCancel', header: '解除数', render: (row) => row.NumOfCancel},
     {key: 'moveWarehouse', headClassName: 'col-move', cellClassName: 'col-move', header: '移動倉庫', render: (row) => row.moveWarehouse},
-    // {
-    //   key: 'moveStorage',
-    //   headClassName: 'col-move',
-    //   cellClassName: 'col-move',
-    //   header: '移動保管場所',
-    //   render: (row) => row.moveStorage,
-    // },
-    // {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
-
+    {key: 'moveStorage', headClassName: 'col-move', cellClassName: 'col-move', header: '移動保管場所', render: (row) => row.moveStorage},
+    {key: 'name', headClassName: 'col-name', cellClassName: 'col-name', header: '品名', render: (row) => row.name},
   ]
 
   return (
@@ -588,7 +581,7 @@ const SetRegisterPage = () => {
                 gridClassName='set-register-table inbound-table-landscape'
                 gridStyle={{
                   gridTemplateColumns:
-                    '50px 50px minmax(120px, 1.3fr) minmax(140px, 1.5fr) minmax(110px, 1.2fr) 100px 100px minmax(120px, 1.3fr)',
+                    '50px 50px minmax(120px, 1.3fr) minmax(140px, 1.5fr) minmax(110px, 1.2fr) 100px 100px minmax(120px, 1.3fr) minmax(150px, 1.5fr) minmax(160px, 1.8fr)',
                 }}
                 scrollRef={tableScrollRef}
                 getRowKey={(row) => row.id}
